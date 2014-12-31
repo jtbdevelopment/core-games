@@ -25,9 +25,9 @@ class SocialService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("apis")
     Map<String, String> apiInfo() {
-        def apis = [:]
+        Map<String, String> apis = [:]
         if (facebookProperties && "NOTSET" != facebookProperties.clientID) {
-            apis["facebookAppId"] = facebookProperties.clientID
+            apis['facebookAppId'] = facebookProperties.clientID
         }
         apis
     }
