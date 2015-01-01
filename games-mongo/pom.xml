@@ -3,7 +3,7 @@
     <parent>
         <artifactId>core-games</artifactId>
         <groupId>com.jtbdevelopment.core-games</groupId>
-        <version>0.5</version>
+        <version>0.6-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,7 +14,7 @@
         <dependency>
             <groupId>com.jtbdevelopment.core-games</groupId>
             <artifactId>games</artifactId>
-            <version>0.5</version>
+            <version>0.6-SNAPSHOT</version>
         </dependency>
 
         <dependency>
