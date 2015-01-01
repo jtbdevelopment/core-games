@@ -10,9 +10,9 @@ import groovy.transform.CompileStatic
 @CompileStatic
 interface SourceBasedFriendFinder<ID extends Serializable> {
     static final String FRIENDS_KEY = "friends";
-    static final String MASKED_FRIENDS_KEY = "masked_friends";
-    static final String INVITABLE_FRIENDS_KEY = "invitable";
-    static final String NOT_FOUND_KEY = "notfound";
+    static final String MASKED_FRIENDS_KEY = "maskedFriends";
+    static final String INVITABLE_FRIENDS_KEY = "invitableFriends";
+    static final String NOT_FOUND_KEY = "notFoundFriends";
 
     boolean handlesSource(final String source);
 
