@@ -28,19 +28,24 @@ class AutoConnectionSignUp implements ConnectionSignUp {
 
     @Override
     String execute(final Connection<?> connection) {
-        Player player = playerRepository.findBySourceAndSourceId(connection.key.providerId, connection.key.providerUserId)
-        if (player) {
-            return player.id
-        } else {
-            Player p = playerFactory.newPlayer()
-            p.disabled = false;
-            p.displayName = connection.fetchUserProfile().name
-            p.source = connection.key.providerId
-            p.sourceId = connection.key.providerUserId
-            p.profileUrl = connection.profileUrl
-            p.imageUrl = connection.imageUrl
-            p = playerRepository.save(p);
-            return p.idAsString
+        try {
+            Player player = playerRepository.findBySourceAndSourceId(connection.key.providerId, connection.key.providerUserId)
+            if (player) {
+                return player.id
+            } else {
+                Player p = playerFactory.newPlayer()
+                p.disabled = false;
+                p.displayName = connection.fetchUserProfile().name
+                p.source = connection.key.providerId
+                p.sourceId = connection.key.providerUserId
+                p.profileUrl = connection.profileUrl
+                p.imageUrl = connection.imageUrl
+                p = playerRepository.save(p);
+                return p?.idAsString
+            }
+        } catch (Exception e) {
+            logger.warn("Experienced exception in AutoConnectionSignUp", e)
+            return null
         }
     }
 }
