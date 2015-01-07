@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="Spring" name="Spring">
+      <configuration>
+        <fileset id="fileset" name="Spring Application Context" removed="false">
+          <file>file://$MODULE_DIR$/src/main/groovy/com/jtbdevelopment/games/mongo/dao/MongoConfiguration.groovy</file>
+        </fileset>
+      </configuration>
+    </facet>
+  </component>
   <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
@@ -10,6 +19,12 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-web-mongo:0.7" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-web:0.7" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-web:3.2.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-core:3.2.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-web:4.1.1.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.social:spring-social-core:1.1.0.RELEASE" level="project" />
     <orderEntry type="module" module-name="games" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.10" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:1.9.1.RELEASE" level="project" />

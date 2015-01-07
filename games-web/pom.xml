@@ -13,7 +13,7 @@
         <dependency>
             <groupId>com.jtbdevelopment.core-common</groupId>
             <artifactId>core-spring-web</artifactId>
-            <version>0.5</version>
+            <version>0.7</version>
         </dependency>
         <dependency>
             <groupId>com.jtbdevelopment.core-games</groupId>
