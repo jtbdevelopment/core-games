@@ -5,7 +5,6 @@ import com.jtbdevelopment.games.players.AbstractPlayer
 import com.jtbdevelopment.games.players.PlayerFactory
 import org.springframework.social.connect.Connection
 import org.springframework.social.connect.ConnectionKey
-import org.springframework.social.connect.UserProfile
 import org.springframework.social.connect.UserProfileBuilder
 
 /**

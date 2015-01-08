@@ -50,7 +50,7 @@ class AbstractGameTest extends GroovyTestCase {
     }
 
     void testEquals() {
-        StringGame game = new StringGame(id:'TEST')
+        StringGame game = new StringGame(id: 'TEST')
         assert game.equals(new StringGame(id: game.id))
         assert game.equals(new DerivedStringGame(id: game.id, anotherField: 'X'))
         assert game.equals(new ComplexStringIdGame(id: game.id))
