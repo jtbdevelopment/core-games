@@ -30,7 +30,7 @@ class FacebookFriendFinder implements SourceBasedFriendFinder {
 
     @Override
     boolean handlesSource(final String source) {
-        return "facebook" == source
+        return "facebook" == source && facebook != null
     }
 
     @Override
@@ -42,9 +42,12 @@ class FacebookFriendFinder implements SourceBasedFriendFinder {
         ]
 
         PagedList<Reference> friends = facebook.friendOperations().friends
+        List<String> friendSourceIds = friends.collect { Reference it -> it.id }
+        List<Player> players = playerRepository.findBySourceAndSourceIdsIn("facebook", friendSourceIds)
+        Map<String, Player> sourceIdPlayerMap = players.collectEntries { Player p -> return [(p.sourceId): p] }
         friends.each {
             Reference it ->
-                Player p = playerRepository.findBySourceAndSourceId("facebook", it.id)
+                Player p = sourceIdPlayerMap[it.id]
                 if (p) {
                     results[FRIENDS_KEY].add(p)
                 } else {

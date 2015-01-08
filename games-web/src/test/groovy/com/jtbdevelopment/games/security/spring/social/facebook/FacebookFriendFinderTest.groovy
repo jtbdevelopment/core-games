@@ -13,7 +13,9 @@ import org.springframework.social.facebook.api.*
 class FacebookFriendFinderTest extends GameCoreTestCase {
     FacebookFriendFinder friendFinder = new FacebookFriendFinder()
 
-    void testHandlesSource() {
+    void testHandlesSourceWhenFacebookAvailableAndIsSourceFacebook() {
+        assert !friendFinder.handlesSource("facebook")
+        friendFinder.facebook = [] as Facebook
         assert friendFinder.handlesSource("facebook")
         assert !friendFinder.handlesSource(ManualPlayer.MANUAL_SOURCE)
         assert !friendFinder.handlesSource("twitter")
@@ -23,6 +25,7 @@ class FacebookFriendFinderTest extends GameCoreTestCase {
         def R1 = new Reference("1")
         def R2 = new Reference("2")
         def R3 = new Reference("4")
+        def PTHREE_REF = new Reference(PTHREE.sourceId)
         def facebook = [
                 friendOperations: {
                     return [
@@ -31,6 +34,7 @@ class FacebookFriendFinderTest extends GameCoreTestCase {
                                         [
                                                 new Reference(PTWO.sourceId),
                                                 new Reference(PFOUR.sourceId),
+                                                PTHREE_REF,
                                                 new Reference(PINACTIVE1.sourceId),
                                         ],
                                         new PagingParameters(0, 0, 0, 0),
@@ -57,18 +61,11 @@ class FacebookFriendFinderTest extends GameCoreTestCase {
                 }
         ] as Facebook
         def repo = [
-                findBySourceAndSourceId: {
-                    String source, String sourceId ->
+                findBySourceAndSourceIdsIn: {
+                    String source, Collection<String> sourceIds ->
                         assert source == "facebook"
-                        switch (sourceId) {
-                            case PTWO.sourceId:
-                                return PTWO
-                            case PFOUR.sourceId:
-                                return PFOUR
-                            case PINACTIVE1.sourceId:
-                                return PINACTIVE1
-                        }
-                        fail("Unknown sourceId")
+                        assert sourceIds.toSet() == [PTWO.sourceId, PTHREE.sourceId, PFOUR.sourceId, PINACTIVE1.sourceId] as Set
+                        return [PTWO, PFOUR, PINACTIVE1] // leaving out PTHREE as not found
                 }
         ] as AbstractPlayerRepository
 
@@ -79,7 +76,7 @@ class FacebookFriendFinderTest extends GameCoreTestCase {
         def friends = friendFinder.findFriends(PONE)
         assert friends == [
                 (SourceBasedFriendFinder.FRIENDS_KEY)          : [PTWO, PFOUR, PINACTIVE1] as Set,
-                (SourceBasedFriendFinder.NOT_FOUND_KEY)        : [] as Set,
+                (SourceBasedFriendFinder.NOT_FOUND_KEY)        : [PTHREE_REF] as Set,
                 (SourceBasedFriendFinder.INVITABLE_FRIENDS_KEY): [R1, R2, R3] as Set
         ]
     }
