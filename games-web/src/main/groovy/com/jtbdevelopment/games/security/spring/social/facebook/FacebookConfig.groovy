@@ -27,6 +27,7 @@ class FacebookConfig {
 
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.INTERFACES)
+    @Autowired
     public Facebook facebook(ConnectionRepository connectionRepository) {
         Connection<Facebook> connection = connectionRepository.findPrimaryConnection(Facebook.class)
         return connection?.api

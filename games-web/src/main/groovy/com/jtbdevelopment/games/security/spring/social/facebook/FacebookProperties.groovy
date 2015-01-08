@@ -16,14 +16,19 @@ import javax.annotation.PostConstruct
 @Component
 class FacebookProperties {
     private static final Logger logger = LoggerFactory.getLogger(FacebookProperties.class)
+
     @Value('${facebook.clientID:NOTSET}')
     String clientID;
     @Value('${facebook.clientSecret:NOTSET}')
     String clientSecret;
 
+    //  Primarily for testing, but may be useful elsewhere
+    boolean warnings = false
+
     @PostConstruct
     public void testDefaults() {
         if (clientID == 'NOTSET' || clientSecret == 'NOTSET') {
+            warnings = true
             logger.warn('----------------------------------------------------------------------------------------------')
             logger.warn('----------------------------------------------------------------------------------------------')
             logger.warn('----------------------------------------------------------------------------------------------')
