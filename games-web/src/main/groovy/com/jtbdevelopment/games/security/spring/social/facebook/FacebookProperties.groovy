@@ -5,6 +5,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import org.springframework.util.StringUtils
 
 import javax.annotation.PostConstruct
 
@@ -23,11 +24,11 @@ class FacebookProperties {
     String clientSecret;
 
     //  Primarily for testing, but may be useful elsewhere
-    boolean warnings = false
+    boolean warnings = true
 
     @PostConstruct
     public void testDefaults() {
-        if (clientID == 'NOTSET' || clientSecret == 'NOTSET') {
+        if (StringUtils.isEmpty(clientID) || clientID == 'NOTSET' || StringUtils.isEmpty(clientSecret) || clientSecret == 'NOTSET') {
             warnings = true
             logger.warn('----------------------------------------------------------------------------------------------')
             logger.warn('----------------------------------------------------------------------------------------------')
@@ -36,6 +37,8 @@ class FacebookProperties {
             logger.warn('----------------------------------------------------------------------------------------------')
             logger.warn('----------------------------------------------------------------------------------------------')
             logger.warn('----------------------------------------------------------------------------------------------')
+        } else {
+            warnings = false;
         }
     }
 }

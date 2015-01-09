@@ -26,7 +26,7 @@ class SocialService {
     @Path("apis")
     Map<String, String> apiInfo() {
         Map<String, String> apis = [:]
-        if (facebookProperties && "NOTSET" != facebookProperties.clientID) {
+        if (facebookProperties && !facebookProperties.warnings) {
             apis['facebookAppId'] = facebookProperties.clientID
         }
         apis

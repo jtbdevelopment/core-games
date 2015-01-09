@@ -28,6 +28,20 @@ class FacebookPropertiesTest extends GroovyTestCase {
                 value() == '${facebook.clientSecret:NOTSET}'
     }
 
+    void testGeneratesWarningOnBothNull() {
+        properties.clientSecret = null
+        properties.clientID = null
+        properties.testDefaults()
+        assert properties.warnings
+    }
+
+    void testGeneratesWarningOnBothBlank() {
+        properties.clientSecret = ''
+        properties.clientID = ''
+        properties.testDefaults()
+        assert properties.warnings
+    }
+
     void testGeneratesWarningOnBoth() {
         properties.clientSecret = 'NOTSET'
         properties.clientID = 'NOTSET'
