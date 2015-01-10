@@ -19,8 +19,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-web-mongo:0.7" level="project" />
-    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-web:0.7" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-web-mongo:0.8" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-web:0.8" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring:0.8" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-web:3.2.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-core:3.2.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-web:4.1.1.RELEASE" level="project" />
