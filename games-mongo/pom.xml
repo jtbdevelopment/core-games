@@ -34,5 +34,13 @@
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.jtbdevelopment.core-common</groupId>
+            <artifactId>core-spring-web-mongo</artifactId>
+            <version>${core.common.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
