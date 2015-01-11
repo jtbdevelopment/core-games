@@ -77,12 +77,12 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoIntegration {
         SimpleSinglePlayerGame initial, update, updated, loaded
         initial = new SimpleSinglePlayerGame(intValue: 5, stringValue: 'X', player: player1)
         initial = gameRepository.save(initial)
+
         update = gameRepository.findOne(initial.id)
         update.stringValue = update.stringValue + 'Z'
         update.completedTimestamp = ZonedDateTime.now()
         update.intValue = update.intValue * 2
         updated = gameRepository.save(update)
-
         assert updated
         assert updated.id == initial.id
         assert updated.lastUpdate.withZoneSameInstant(GMT).compareTo(initial.lastUpdate.withZoneSameInstant(GMT)) > 0
@@ -103,5 +103,24 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoIntegration {
         assert loaded.completedTimestamp.withZoneSameInstant(GMT) == updated.completedTimestamp.withZoneSameInstant(GMT)
 
         assert gameRepository.count() == 1
+    }
+
+    @Test
+    void testFindGamesByPlayer() {
+        SimpleSinglePlayerGame p1g1 = gameRepository.save(new SimpleSinglePlayerGame(intValue: 5, stringValue: 'X', player: player1))
+        SimpleSinglePlayerGame p1g2 = gameRepository.save(new SimpleSinglePlayerGame(intValue: 10, stringValue: 'X', player: player1))
+        SimpleSinglePlayerGame p1g3 = gameRepository.save(new SimpleSinglePlayerGame(intValue: 15, stringValue: '2', player: player1))
+        SimpleSinglePlayerGame p2g1 = gameRepository.save(new SimpleSinglePlayerGame(intValue: 20, stringValue: '2', player: player2))
+
+        List<SimpleSinglePlayerGame> p1g = gameRepository.findByPlayerId(player1.id)
+        assert p1g.size() == 3
+        assert p1g.contains(p1g1)
+        assert p1g.contains(p1g2)
+        assert p1g.contains(p1g3)
+        List<SimpleSinglePlayerGame> p2g = gameRepository.findByPlayerId(player2.id)
+        assert p2g.size() == 1
+        assert p2g.contains(p2g1)
+
+        assert gameRepository.findAll().size() == 4
     }
 }
