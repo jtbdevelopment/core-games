@@ -1,9 +1,9 @@
-package com.jtbdevelopment.games.mongo.integration
+package com.jtbdevelopment.games.mongo.games
 
 import com.jtbdevelopment.core.mongo.spring.AbstractMongoIntegration
 import com.jtbdevelopment.games.dao.AbstractSinglePlayerGameRepository
 import com.jtbdevelopment.games.mongo.dao.MongoPlayerRepository
-import com.jtbdevelopment.games.mongo.integration.games.SimpleSinglePlayerGame
+import com.jtbdevelopment.games.mongo.games.utility.SimpleSinglePlayerGame
 import com.jtbdevelopment.games.mongo.players.MongoPlayer
 import com.mongodb.DBCollection
 import org.junit.Before

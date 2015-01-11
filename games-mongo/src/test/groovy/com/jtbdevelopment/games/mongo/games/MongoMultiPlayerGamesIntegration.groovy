@@ -1,10 +1,10 @@
-package com.jtbdevelopment.games.mongo.integration
+package com.jtbdevelopment.games.mongo.games
 
 import com.jtbdevelopment.core.mongo.spring.AbstractMongoIntegration
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.games.PlayerState
 import com.jtbdevelopment.games.mongo.dao.MongoPlayerRepository
-import com.jtbdevelopment.games.mongo.integration.games.SimpleMultiPlayerGame
+import com.jtbdevelopment.games.mongo.games.utility.SimpleMultiPlayerGame
 import com.jtbdevelopment.games.mongo.players.MongoPlayer
 import com.mongodb.DBCollection
 import org.junit.Before
@@ -19,7 +19,6 @@ import java.time.ZonedDateTime
  */
 class MongoMultiPlayerGamesIntegration extends AbstractMongoIntegration {
     private static final String GAMES_COLLECTION_NAME = 'multi'
-    private static final String PLAYER_COLLECTION_NAME = 'player'
     private DBCollection collection
     private ZoneId GMT = ZoneId.of("GMT")
 

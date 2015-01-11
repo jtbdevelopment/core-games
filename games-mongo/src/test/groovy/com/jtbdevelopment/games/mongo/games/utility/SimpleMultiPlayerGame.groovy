@@ -1,4 +1,4 @@
-package com.jtbdevelopment.games.mongo.integration.games
+package com.jtbdevelopment.games.mongo.games.utility
 
 import com.jtbdevelopment.games.mongo.games.AbstractMongoMultiPlayerGame
 import org.springframework.data.mongodb.core.index.Indexed

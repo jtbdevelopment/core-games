@@ -22,4 +22,10 @@ class AbstractMongoMultiPlayerGameTest extends GroovyTestCase {
         assert id.is(game.id)
         assert id.toHexString() == game.idAsString
     }
+
+    void testIdAsStringNullId() {
+        AGame game = new AGame()
+        assertNull game.id
+        assertNull game.idAsString
+    }
 }
