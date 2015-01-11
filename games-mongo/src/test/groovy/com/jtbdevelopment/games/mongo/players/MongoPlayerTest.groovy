@@ -8,6 +8,17 @@ import org.bson.types.ObjectId
  * Time: 3:44 PM
  */
 class MongoPlayerTest extends MongoGameCoreTestCase {
+
+    void testIdAsString() {
+        assert PONE.id.toHexString() == PONE.idAsString
+    }
+
+    void testIdAsStringNullId() {
+        MongoPlayer p = makeSimplePlayer("677")
+        p.id = null
+        assertNull p.idAsString
+    }
+
     void testEquals() {
         assert PONE.equals(PONE)
         assertFalse PONE.equals(PTWO)
@@ -16,18 +27,11 @@ class MongoPlayerTest extends MongoGameCoreTestCase {
         assertFalse PONE.equals(null)
     }
 
-    void testChangingSourceFails() {
-        String originalSource = PONE.source
-        PONE.source = originalSource + "XYZ"
-        assert originalSource == PONE.source
-    }
-
     void testHashCode() {
         def SOMEID = new ObjectId("1234".padRight(24, "0"))
         MongoPlayer player = new MongoPlayer(id: SOMEID)
         assert SOMEID.toHexString().hashCode() == player.hashCode()
     }
-
 
     void testToString() {
         assert new MongoPlayer(

@@ -36,6 +36,6 @@ abstract class AbstractGame<ID extends Serializable> implements Game<ID> {
     }
 
     int hashCode() {
-        return idAsString.hashCode()
+        return idAsString ? idAsString.hashCode() : 0
     }
 }

@@ -61,7 +61,7 @@ class FacebookFriendFinderTest extends GameCoreTestCase {
                 }
         ] as Facebook
         def repo = [
-                findBySourceAndSourceIdsIn: {
+                findBySourceAndSourceIdIn: {
                     String source, Collection<String> sourceIds ->
                         assert source == "facebook"
                         assert sourceIds.toSet() == [PTWO.sourceId, PTHREE.sourceId, PFOUR.sourceId, PINACTIVE1.sourceId] as Set

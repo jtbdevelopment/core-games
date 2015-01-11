@@ -59,6 +59,10 @@ class AbstractGameTest extends GroovyTestCase {
         assertFalse game.equals(null)
     }
 
+    void testHashCodeNullId() {
+        assert new StringGame().hashCode() == 0
+    }
+
     void testHashCodeUsesIdAsString() {
         ComplexStringIdGame game = new ComplexStringIdGame(id: 'TEST')
         assert game.hashCode() == 'TESTXYZ'.hashCode()

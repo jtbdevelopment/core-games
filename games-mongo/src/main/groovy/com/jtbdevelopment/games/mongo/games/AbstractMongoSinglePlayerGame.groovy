@@ -21,6 +21,6 @@ abstract class AbstractMongoSinglePlayerGame extends AbstractSinglePlayerGame<Ob
     ObjectId id
 
     String getIdAsString() {
-        return id.toHexString()
+        return id?.toHexString()
     }
 }

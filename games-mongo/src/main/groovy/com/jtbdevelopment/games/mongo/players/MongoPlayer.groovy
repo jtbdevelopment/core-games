@@ -32,7 +32,7 @@ class MongoPlayer extends AbstractPlayer<ObjectId> implements Cloneable {
     private String md5
 
     String getIdAsString() {
-        return id.toHexString()
+        return id?.toHexString()
     }
 
     void setId(final ObjectId id) {

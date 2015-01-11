@@ -18,8 +18,13 @@ abstract class GameCoreTestCase extends GroovyTestCase {
     protected static final Player<String> PINACTIVE2 = makeSimplePlayer("A2", true)
 
     public static class StringPlayer extends AbstractPlayer<String> {
-        String md5
+        private String md5
         String id
+
+        void setId(final String id) {
+            this.id = id
+            computeMD5Hex()
+        }
 
         @Override
         protected void setMd5(final String md5) {

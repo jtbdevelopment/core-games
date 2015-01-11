@@ -31,7 +31,7 @@ abstract class AbstractPlayer<ID extends Serializable> implements Cloneable, Pla
     }
 
     int hashCode() {
-        return idAsString.hashCode()
+        return idAsString ? idAsString.hashCode() : 0
     }
 
     void setSource(final String source) {
@@ -75,7 +75,7 @@ abstract class AbstractPlayer<ID extends Serializable> implements Cloneable, Pla
 
     protected void computeMD5Hex() {
         String md5
-        if (id == null || source == null || displayName == null || sourceId == null) {
+        if (idAsString == null || source == null || displayName == null || sourceId == null) {
             md5 = ""
         } else {
             String key = idAsString + source + displayName + sourceId
