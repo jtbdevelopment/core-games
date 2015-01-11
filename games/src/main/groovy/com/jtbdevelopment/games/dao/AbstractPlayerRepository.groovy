@@ -19,7 +19,7 @@ interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSor
 
     Player<ID> findBySourceAndSourceId(final String source, final String sourceId);
 
-    List<Player<ID>> findBySourceAndSourceIdsIn(final String source, final Collection<String> sourceIds);
+    List<Player<ID>> findBySourceAndSourceIdIn(final String source, final Collection<String> sourceId);
 
     List<Player<ID>> findBySourceAndDisabled(final String source, final boolean disabled);
 }

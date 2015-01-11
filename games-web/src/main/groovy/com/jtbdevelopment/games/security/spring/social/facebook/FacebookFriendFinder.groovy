@@ -43,7 +43,7 @@ class FacebookFriendFinder implements SourceBasedFriendFinder {
 
         PagedList<Reference> friends = facebook.friendOperations().friends
         List<String> friendSourceIds = friends.collect { Reference it -> it.id }
-        List<Player> players = playerRepository.findBySourceAndSourceIdsIn("facebook", friendSourceIds)
+        List<Player> players = playerRepository.findBySourceAndSourceIdIn("facebook", friendSourceIds)
         Map<String, Player> sourceIdPlayerMap = players.collectEntries { Player p -> return [(p.sourceId): p] }
         friends.each {
             Reference it ->
