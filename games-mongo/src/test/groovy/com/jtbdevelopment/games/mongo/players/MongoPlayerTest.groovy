@@ -1,13 +1,42 @@
 package com.jtbdevelopment.games.mongo.players
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.jtbdevelopment.games.mongo.MongoGameCoreTestCase
+import com.jtbdevelopment.games.mongo.json.ObjectIdDeserializer
+import com.jtbdevelopment.games.mongo.json.ObjectIdSerializer
 import org.bson.types.ObjectId
+import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.index.Indexed
+import org.springframework.data.mongodb.core.mapping.Document
+
+import java.lang.reflect.Field
 
 /**
  * Date: 11/9/14
  * Time: 3:44 PM
  */
 class MongoPlayerTest extends MongoGameCoreTestCase {
+
+    void testClassAnnotations() {
+        assert MongoPlayer.class.isAnnotationPresent(Document.class)
+        assert MongoPlayer.class.getAnnotation(Document.class).collection() == 'player'
+        assert MongoPlayer.class.isAnnotationPresent(JsonIgnoreProperties.class)
+        assert MongoPlayer.class.getAnnotation(JsonIgnoreProperties.class).value() == ['idAsString']
+    }
+
+    void testIdAnnotations() {
+        Field f = MongoPlayer.getDeclaredField('id')
+        assert f.getAnnotation(Id.class)
+        assert f.getAnnotation(JsonDeserialize.class).using() == ObjectIdDeserializer.class
+        assert f.getAnnotation(JsonSerialize.class).using() == ObjectIdSerializer.class
+    }
+
+    void testMd5Annotations() {
+        Field f = MongoPlayer.getDeclaredField('md5')
+        assert f.getAnnotation(Indexed.class)
+    }
 
     void testIdAsString() {
         assert PONE.id.toHexString() == PONE.idAsString
