@@ -9,7 +9,7 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 class FailedToFindPlayersException extends GameSystemException {
-    public final static String VALID_PLAYERS = "Not all players in this game are valid anymore."
+    public final static String VALID_PLAYERS = 'Not all players in this game are valid anymore.'
 
     public FailedToFindPlayersException() {
         super(VALID_PLAYERS);
