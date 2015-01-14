@@ -194,4 +194,9 @@ class ObjectIdDeserializerTest extends GroovyTestCase {
 
         assert objectIdDeserializer.deserialize(jparse, null) == start
     }
+
+    void testGetRegisterForClass() {
+        assert ObjectId.class.is(objectIdDeserializer.registerForClass())
+    }
 }
+

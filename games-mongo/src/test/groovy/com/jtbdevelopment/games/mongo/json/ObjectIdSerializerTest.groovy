@@ -20,4 +20,8 @@ class ObjectIdSerializerTest extends GroovyTestCase {
         ] as JsonGenerator
         serializer.serialize(id, jgen, null)
     }
+
+    void testGetRegisterForClass() {
+        assert ObjectId.class.is(serializer.registerForClass())
+    }
 }

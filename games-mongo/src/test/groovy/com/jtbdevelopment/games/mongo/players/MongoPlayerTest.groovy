@@ -1,11 +1,7 @@
 package com.jtbdevelopment.games.mongo.players
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.jtbdevelopment.games.mongo.MongoGameCoreTestCase
-import com.jtbdevelopment.games.mongo.json.ObjectIdDeserializer
-import com.jtbdevelopment.games.mongo.json.ObjectIdSerializer
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed
@@ -29,8 +25,6 @@ class MongoPlayerTest extends MongoGameCoreTestCase {
     void testIdAnnotations() {
         Field f = MongoPlayer.getDeclaredField('id')
         assert f.getAnnotation(Id.class)
-        assert f.getAnnotation(JsonDeserialize.class).using() == ObjectIdDeserializer.class
-        assert f.getAnnotation(JsonSerialize.class).using() == ObjectIdSerializer.class
     }
 
     void testMd5Annotations() {

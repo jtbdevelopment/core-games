@@ -1,8 +1,10 @@
 package com.jtbdevelopment.games.mongo.players
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.jtbdevelopment.core.mongo.spring.AbstractMongoIntegration
 import com.jtbdevelopment.games.mongo.dao.MongoPlayerRepository
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.spring.jackson.ObjectMapperFactory
 import com.mongodb.DBCollection
 import org.junit.Before
 import org.junit.Test
@@ -89,4 +91,26 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
         assert players.contains(player3)
         assert players.contains(systemPlayer)
     }
+
+    @Test
+    void testSerialization() {
+        ObjectMapper mapper = context.getBean(ObjectMapperFactory.class).objectMapper
+        assert mapper.writeValueAsString(player1) == '{"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","disabled":false,"adminUser":false,"id":"' + player1.idAsString + '","md5":"' + player1.md5 + '"}'
+
+        //
+    }
+
+    @Test
+    void testDeserialization() {
+        ObjectMapper mapper = context.getBean(ObjectMapperFactory.class).objectMapper
+        MongoPlayer player = mapper.readValue(
+                '{"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","disabled":false,"adminUser":false,"id":"54b656dba826d455d3eaa8a4","md5":"94026ad238c04d23e4fd1fe7efeebabf"}',
+                MongoPlayer.class
+        )
+        assert player
+        assert player.idAsString == '54b656dba826d455d3eaa8a4'
+        assert player.md5 == '94026ad238c04d23e4fd1fe7efeebabf'
+    }
 }
+
+

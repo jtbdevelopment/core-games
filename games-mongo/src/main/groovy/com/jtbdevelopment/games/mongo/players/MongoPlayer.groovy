@@ -1,10 +1,6 @@
 package com.jtbdevelopment.games.mongo.players
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.jtbdevelopment.games.mongo.json.ObjectIdDeserializer
-import com.jtbdevelopment.games.mongo.json.ObjectIdSerializer
 import com.jtbdevelopment.games.players.AbstractPlayer
 import groovy.transform.CompileStatic
 import org.bson.types.ObjectId
@@ -24,8 +20,6 @@ import org.springframework.data.mongodb.core.mapping.Document
 @JsonIgnoreProperties(["idAsString"])
 class MongoPlayer extends AbstractPlayer<ObjectId> implements Cloneable {
     @Id
-    @JsonSerialize(using = ObjectIdSerializer.class)
-    @JsonDeserialize(using = ObjectIdDeserializer.class)
     ObjectId id = new ObjectId()
 
     @Indexed
