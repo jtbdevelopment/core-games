@@ -8,7 +8,7 @@ games
 - Defines a base player and variants, as well as abstract spring-data repository
 - Defines base exceptions
 - Defines base interfaces for finding socially linked players
-- Defines base interface for interacting with Sesison
+- Defines base interface for interacting with Session
 
 games-mongo
 ===========
