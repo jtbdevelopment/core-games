@@ -18,6 +18,7 @@ abstract class AbstractPlayer<ID extends Serializable> implements Cloneable, Pla
     String profileUrl
     boolean disabled = false
     boolean adminUser = false
+    PlayerPayLevel payLevel = PlayerPayLevel.FreeToPlay
 
     boolean equals(final o) {
         if (this.is(o)) return true

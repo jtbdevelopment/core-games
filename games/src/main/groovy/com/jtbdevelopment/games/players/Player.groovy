@@ -9,44 +9,48 @@ import org.springframework.data.annotation.Transient
  */
 @CompileStatic
 interface Player<ID extends Serializable> {
-    ID getId();
+    ID getId()
 
-    void setId(final ID id);
+    void setId(final ID id)
 
     @Transient
-    String getIdAsString();
+    String getIdAsString()
 
-    String getSource();
+    String getSource()
 
-    void setSource(final String source);
+    void setSource(final String source)
 
-    String getSourceId();
+    String getSourceId()
 
-    void setSourceId(final String sourceId);
+    void setSourceId(final String sourceId)
 
-    String getDisplayName();
+    String getDisplayName()
 
-    void setDisplayName(final String displayName);
+    void setDisplayName(final String displayName)
 
-    String getImageUrl();
+    String getImageUrl()
 
-    void setImageUrl(String imageUrl);
+    void setImageUrl(String imageUrl)
 
-    String getProfileUrl();
+    String getProfileUrl()
 
-    void setProfileUrl(String profileUrl);
+    void setProfileUrl(String profileUrl)
 
-    boolean getDisabled();
+    boolean getDisabled()
 
-    boolean isDisabled();
+    boolean isDisabled()
 
-    void setDisabled(boolean disabled);
+    void setDisabled(boolean disabled)
 
-    boolean getAdminUser();
+    PlayerPayLevel getPayLevel()
 
-    boolean isAdminUser();
+    void setPayLevel(final PlayerPayLevel payLevel)
 
-    void setAdminUser(boolean adminUser);
+    boolean getAdminUser()
+
+    boolean isAdminUser()
+
+    void setAdminUser(boolean adminUser)
 
     String getMd5();
 }

@@ -4,12 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.jtbdevelopment.core.mongo.spring.AbstractMongoIntegration
 import com.jtbdevelopment.games.mongo.dao.MongoPlayerRepository
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.players.PlayerPayLevel
 import com.jtbdevelopment.spring.jackson.ObjectMapperFactory
 import com.mongodb.DBCollection
 import org.junit.Before
 import org.junit.Test
-
-import java.time.ZoneId
 
 /**
  * Date: 1/11/15
@@ -18,7 +17,6 @@ import java.time.ZoneId
 class MongoPlayerIntegration extends AbstractMongoIntegration {
     private static final String PLAYER_COLLECTION_NAME = 'player'
     private DBCollection collection
-    private ZoneId GMT = ZoneId.of("GMT")
 
     MongoPlayerRepository playerRepository
     MongoPlayer player1, player2, player3, player4
@@ -44,6 +42,7 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
         playerRepository.deleteAll()
 
         player1 = makeSimplePlayer('1')
+        player1.payLevel = PlayerPayLevel.PremiumPlayer
         player2 = makeSimplePlayer('2')
         player3 = makeSimplePlayer('3', true)
         player4 = makeSimplePlayer('4')
@@ -95,7 +94,7 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
     @Test
     void testSerialization() {
         ObjectMapper mapper = context.getBean(ObjectMapperFactory.class).objectMapper
-        assert mapper.writeValueAsString(player1) == '{"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","disabled":false,"adminUser":false,"id":"' + player1.idAsString + '","md5":"' + player1.md5 + '"}'
+        assert mapper.writeValueAsString(player1) == '{"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","disabled":false,"adminUser":false,"payLevel":"PremiumPlayer","id":"' + player1.idAsString + '","md5":"' + player1.md5 + '"}'
 
         //
     }
@@ -104,12 +103,16 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
     void testDeserialization() {
         ObjectMapper mapper = context.getBean(ObjectMapperFactory.class).objectMapper
         MongoPlayer player = mapper.readValue(
-                '{"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","disabled":false,"adminUser":false,"id":"54b656dba826d455d3eaa8a4","md5":"94026ad238c04d23e4fd1fe7efeebabf"}',
+                '{"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","disabled":false,"adminUser":true,"id":"54b656dba826d455d3eaa8a4","md5":"94026ad238c04d23e4fd1fe7efeebabf", "payLevel": "PremiumPlayer"}',
                 MongoPlayer.class
         )
         assert player
         assert player.idAsString == '54b656dba826d455d3eaa8a4'
         assert player.md5 == '94026ad238c04d23e4fd1fe7efeebabf'
+        assert player.payLevel == PlayerPayLevel.PremiumPlayer
+        assert player.adminUser
+        assert player.profileUrl == "http://somewhere.com/profile/1"
+        assert player.imageUrl == "http://somewhere.com/image/1"
     }
 }
 
