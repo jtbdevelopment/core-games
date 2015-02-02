@@ -94,9 +94,7 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
     @Test
     void testSerialization() {
         ObjectMapper mapper = context.getBean(ObjectMapperFactory.class).objectMapper
-        assert mapper.writeValueAsString(player1) == '{"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","disabled":false,"adminUser":false,"payLevel":"PremiumPlayer","id":"' + player1.idAsString + '","md5":"' + player1.md5 + '"}'
-
-        //
+        assert mapper.writeValueAsString(player1) == '{"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","disabled":false,"adminUser":false,"payLevel":"PremiumPlayer","gameSpecificPlayerAttributes":null,"id":"' + player1.idAsString + '","md5":"' + player1.md5 + '"}'
     }
 
     @Test

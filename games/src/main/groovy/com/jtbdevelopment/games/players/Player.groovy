@@ -9,6 +9,11 @@ import org.springframework.data.annotation.Transient
  */
 @CompileStatic
 interface Player<ID extends Serializable> {
+    public <T extends GameSpecificPlayerAttributes> T getGameSpecificPlayerAttributes()
+
+    public <T extends GameSpecificPlayerAttributes> void setGameSpecificPlayerAttributes(
+            final T gameSpecificPlayerAttributes)
+
     ID getId()
 
     void setId(final ID id)
@@ -52,5 +57,6 @@ interface Player<ID extends Serializable> {
 
     void setAdminUser(boolean adminUser)
 
-    String getMd5();
+    String getMd5()
+
 }

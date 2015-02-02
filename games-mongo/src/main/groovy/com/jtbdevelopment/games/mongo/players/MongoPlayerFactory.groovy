@@ -1,9 +1,11 @@
 package com.jtbdevelopment.games.mongo.players
 
+import com.jtbdevelopment.games.players.GameSpecificPlayerAttributesFactory
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.PlayerFactory
 import groovy.transform.CompileStatic
 import org.bson.types.ObjectId
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 /**
@@ -13,18 +15,33 @@ import org.springframework.stereotype.Component
 @Component
 @CompileStatic
 class MongoPlayerFactory implements PlayerFactory<ObjectId> {
+    @Autowired(required = false)
+    GameSpecificPlayerAttributesFactory gameSpecificPlayerAttributesFactory
+
     @Override
     Player<ObjectId> newPlayer() {
-        return new MongoPlayer()
+        def player = new MongoPlayer()
+        if (gameSpecificPlayerAttributesFactory) {
+            player.gameSpecificPlayerAttributes = gameSpecificPlayerAttributesFactory.newPlayerAttributes()
+        }
+        return player
     }
 
     @Override
     Player<ObjectId> newManualPlayer() {
-        return new MongoManualPlayer()
+        def player = new MongoManualPlayer()
+        if (gameSpecificPlayerAttributesFactory) {
+            player.gameSpecificPlayerAttributes = gameSpecificPlayerAttributesFactory.newManualPlayerAttributes()
+        }
+        return player
     }
 
     @Override
     Player<ObjectId> newSystemPlayer() {
-        return new MongoSystemPlayer()
+        def player = new MongoSystemPlayer()
+        if (gameSpecificPlayerAttributesFactory) {
+            player.gameSpecificPlayerAttributes = gameSpecificPlayerAttributesFactory.newSystemPlayerAttributes()
+        }
+        return player
     }
 }

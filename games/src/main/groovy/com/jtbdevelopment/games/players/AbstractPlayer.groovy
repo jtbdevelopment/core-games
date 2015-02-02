@@ -19,6 +19,7 @@ abstract class AbstractPlayer<ID extends Serializable> implements Cloneable, Pla
     boolean disabled = false
     boolean adminUser = false
     PlayerPayLevel payLevel = PlayerPayLevel.FreeToPlay
+    GameSpecificPlayerAttributes gameSpecificPlayerAttributes
 
     boolean equals(final o) {
         if (this.is(o)) return true
