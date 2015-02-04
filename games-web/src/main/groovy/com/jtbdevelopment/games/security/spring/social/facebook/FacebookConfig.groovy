@@ -22,7 +22,10 @@ class FacebookConfig {
     @Bean
     @Autowired
     FacebookAuthenticationService facebookAuthenticationService(final FacebookProperties facebookProperties) {
-        return new FacebookAuthenticationService(facebookProperties.getClientID(), facebookProperties.getClientSecret());
+        def service = new FacebookAuthenticationService(facebookProperties.getClientID(), facebookProperties.getClientSecret())
+        //  TODO - parameterize
+        service.setDefaultScope("public_profile,email,user_friends")
+        return service;
     }
 
     @Bean
