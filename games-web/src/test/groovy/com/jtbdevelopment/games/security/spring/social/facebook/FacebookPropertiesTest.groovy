@@ -26,6 +26,10 @@ class FacebookPropertiesTest extends GroovyTestCase {
                 getDeclaredField('clientSecret')?.
                 getAnnotation(Value.class)?.
                 value() == '${facebook.clientSecret:NOTSET}'
+        assert FacebookProperties.class.
+                getDeclaredField('permissions')?.
+                getAnnotation(Value.class)?.
+                value() == '${facebook.permissions:public_profile,email,user_friends}'
     }
 
     void testGeneratesWarningOnBothNull() {

@@ -23,8 +23,7 @@ class FacebookConfig {
     @Autowired
     FacebookAuthenticationService facebookAuthenticationService(final FacebookProperties facebookProperties) {
         def service = new FacebookAuthenticationService(facebookProperties.getClientID(), facebookProperties.getClientSecret())
-        //  TODO - parameterize
-        service.setDefaultScope("public_profile,email,user_friends")
+        service.setDefaultScope(facebookProperties.permissions)
         return service;
     }
 

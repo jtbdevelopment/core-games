@@ -19,9 +19,11 @@ class FacebookProperties {
     private static final Logger logger = LoggerFactory.getLogger(FacebookProperties.class)
 
     @Value('${facebook.clientID:NOTSET}')
-    String clientID;
+    String clientID
     @Value('${facebook.clientSecret:NOTSET}')
-    String clientSecret;
+    String clientSecret
+    @Value('${facebook.permissions:public_profile,email,user_friends}')
+    String permissions
 
     //  Primarily for testing, but may be useful elsewhere
     boolean warnings = true

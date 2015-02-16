@@ -52,7 +52,8 @@ class SocialServiceTest extends GroovyTestCase {
         service.facebookProperties = new FacebookProperties()
         service.facebookProperties.clientID = 'ID'
         service.facebookProperties.clientSecret = 'PROPS'
+        service.facebookProperties.permissions = 'X,Y,Z'
         service.facebookProperties.testDefaults()
-        assert ['facebookAppId': 'ID'] == service.apiInfo()
+        assert ['facebookAppId': 'ID', 'facebookPermissions': 'X,Y,Z'] == service.apiInfo()
     }
 }

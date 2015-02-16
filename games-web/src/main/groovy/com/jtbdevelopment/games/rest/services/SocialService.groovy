@@ -28,6 +28,7 @@ class SocialService {
         Map<String, String> apis = [:]
         if (facebookProperties && !facebookProperties.warnings) {
             apis['facebookAppId'] = facebookProperties.clientID
+            apis['facebookPermissions'] = facebookProperties.permissions
         }
         apis
     }

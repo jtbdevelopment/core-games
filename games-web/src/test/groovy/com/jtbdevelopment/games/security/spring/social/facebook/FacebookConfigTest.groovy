@@ -15,6 +15,7 @@ import org.springframework.social.facebook.connect.FacebookOAuth2Template
 import org.springframework.social.facebook.connect.FacebookServiceProvider
 import org.springframework.social.facebook.security.FacebookAuthenticationService
 import org.springframework.social.oauth2.OAuth2Template
+import org.springframework.social.security.provider.OAuth2AuthenticationService
 
 import java.lang.reflect.Field
 import java.lang.reflect.Method
@@ -34,6 +35,7 @@ class FacebookConfigTest extends GroovyTestCase {
         FacebookProperties properties = new FacebookProperties()
         properties.clientID = 'APRODUCT'
         properties.clientSecret = 'ASECRET'
+        properties.permissions = 'PERMS'
         FacebookAuthenticationService service = config.facebookAuthenticationService(properties)
         assert service
         FacebookConnectionFactory factory = service.getConnectionFactory()
@@ -47,6 +49,9 @@ class FacebookConfigTest extends GroovyTestCase {
         f = OAuth2Template.class.getDeclaredField('clientSecret')
         f.accessible = true
         assert properties.clientSecret == f.get(template)
+        f = OAuth2AuthenticationService.class.getDeclaredField('defaultScope')
+        f.accessible = true
+        assert properties.permissions == f.get(service)
     }
 
     void testFacebookAuthenticationServiceAnnotations() {
