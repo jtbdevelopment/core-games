@@ -1,7 +1,6 @@
 package com.jtbdevelopment.games.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.jtbdevelopment.spring.jackson.ObjectMapperFactory
 
 import javax.ws.rs.ext.Provider
 
@@ -14,12 +13,7 @@ class ObjectMapperContextResolverTest extends GroovyTestCase {
 
     void testGetContext() {
         def mapper = [] as ObjectMapper
-        def factory = [
-                getObjectMapper: {
-                    return mapper
-                }
-        ] as ObjectMapperFactory
-        resolver.objectMapperFactory = factory
+        resolver.objectMapper = mapper
 
         assert mapper.is(resolver.getContext(null))
     }

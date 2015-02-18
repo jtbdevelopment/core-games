@@ -5,7 +5,6 @@ import com.jtbdevelopment.core.mongo.spring.AbstractMongoIntegration
 import com.jtbdevelopment.games.mongo.dao.MongoPlayerRepository
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.PlayerPayLevel
-import com.jtbdevelopment.spring.jackson.ObjectMapperFactory
 import com.mongodb.DBCollection
 import org.junit.Before
 import org.junit.Test
@@ -93,13 +92,13 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
 
     @Test
     void testSerialization() {
-        ObjectMapper mapper = context.getBean(ObjectMapperFactory.class).objectMapper
+        ObjectMapper mapper = context.getBean(ObjectMapper.class)
         assert mapper.writeValueAsString(player1) == '{"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","disabled":false,"adminUser":false,"payLevel":"PremiumPlayer","gameSpecificPlayerAttributes":null,"id":"' + player1.idAsString + '","md5":"' + player1.md5 + '"}'
     }
 
     @Test
     void testDeserialization() {
-        ObjectMapper mapper = context.getBean(ObjectMapperFactory.class).objectMapper
+        ObjectMapper mapper = context.getBean(ObjectMapper.class)
         MongoPlayer player = mapper.readValue(
                 '{"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","disabled":false,"adminUser":true,"id":"54b656dba826d455d3eaa8a4","md5":"94026ad238c04d23e4fd1fe7efeebabf", "payLevel": "PremiumPlayer"}',
                 MongoPlayer.class
