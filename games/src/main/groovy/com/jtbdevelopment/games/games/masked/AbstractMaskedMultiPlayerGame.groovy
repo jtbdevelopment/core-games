@@ -1,13 +1,14 @@
 package com.jtbdevelopment.games.games.masked
 
-import com.jtbdevelopment.games.games.Game
 import com.jtbdevelopment.games.games.PlayerState
+import groovy.transform.CompileStatic
 
 /**
  * Date: 2/18/15
  * Time: 6:55 PM
  */
-abstract class AbstractMaskedMultiPlayerGame<FEATURES> implements Game<String, Long, FEATURES> {
+@CompileStatic
+abstract class AbstractMaskedMultiPlayerGame<FEATURES> implements MaskedMultiPlayerGame<FEATURES> {
     String maskedForPlayerID
     String maskedForPlayerMD5
 
