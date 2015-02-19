@@ -8,7 +8,7 @@ import groovy.transform.CompileStatic
  * Time: 5:16 PM
  */
 @CompileStatic
-interface SinglePlayerGame<ID extends Serializable> extends Game<ID> {
+interface SinglePlayerGame<ID extends Serializable, TIMESTAMP> extends Game<ID, TIMESTAMP> {
     Player<ID> getPlayer()
 
     void setPlayer(final Player<ID> player)

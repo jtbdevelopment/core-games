@@ -3,8 +3,6 @@ package com.jtbdevelopment.games.games
 import com.jtbdevelopment.games.players.Player
 import groovy.transform.CompileStatic
 
-import java.time.ZonedDateTime
-
 /**
  * Date: 12/31/2014
  * Time: 5:07 PM
@@ -13,7 +11,7 @@ import java.time.ZonedDateTime
  * It just has the potential to be played by more than one
  */
 @CompileStatic
-interface MultiPlayerGame<ID extends Serializable> extends Game<ID> {
+interface MultiPlayerGame<ID extends Serializable, TIMESTAMP> extends Game<ID, TIMESTAMP> {
     ID getInitiatingPlayer()
 
     void setInitiatingPlayer(final ID initiatingPlayer)
@@ -27,7 +25,7 @@ interface MultiPlayerGame<ID extends Serializable> extends Game<ID> {
 
     void setPlayerStates(final Map<ID, PlayerState> playerState)
 
-    ZonedDateTime getDeclinedTimestamp()
+    TIMESTAMP getDeclinedTimestamp()
 
-    void setDeclinedTimestamp(final ZonedDateTime declinedTimestamp)
+    void setDeclinedTimestamp(final TIMESTAMP declinedTimestamp)
 }

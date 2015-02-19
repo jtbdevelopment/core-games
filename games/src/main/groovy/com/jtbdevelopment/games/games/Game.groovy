@@ -2,14 +2,12 @@ package com.jtbdevelopment.games.games
 
 import groovy.transform.CompileStatic
 
-import java.time.ZonedDateTime
-
 /**
  * Date: 12/31/2014
  * Time: 4:56 PM
  */
 @CompileStatic
-interface Game<ID extends Serializable> {
+interface Game<ID extends Serializable, TIMESTAMP> {
     ID getId()
 
     void setId(final ID id)
@@ -20,15 +18,15 @@ interface Game<ID extends Serializable> {
 
     void setVersion(final Integer version);
 
-    ZonedDateTime getCreated()
+    TIMESTAMP getCreated()
 
-    void setCreated(final ZonedDateTime created)
+    void setCreated(final TIMESTAMP created)
 
-    ZonedDateTime getLastUpdate()
+    TIMESTAMP getLastUpdate()
 
-    void setLastUpdate(final ZonedDateTime lastUpdate)
+    void setLastUpdate(final TIMESTAMP lastUpdate)
 
-    ZonedDateTime getCompletedTimestamp()
+    TIMESTAMP getCompletedTimestamp()
 
-    void setCompletedTimestamp(final ZonedDateTime completed)
+    void setCompletedTimestamp(final TIMESTAMP completed)
 }
