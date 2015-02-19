@@ -10,7 +10,7 @@ import java.time.ZonedDateTime
  * Time: 5:30 PM
  */
 @CompileStatic
-abstract class AbstractMultiPlayerGame<ID extends Serializable> extends AbstractGame<ID> implements MultiPlayerGame<ID, ZonedDateTime> {
+abstract class AbstractMultiPlayerGame<ID extends Serializable, FEATURES> extends AbstractGame<ID, FEATURES> implements MultiPlayerGame<ID, ZonedDateTime, FEATURES> {
     ID initiatingPlayer
     List<Player<ID>> players = []
     Map<ID, PlayerState> playerStates = [:]

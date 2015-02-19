@@ -7,7 +7,7 @@ import com.jtbdevelopment.games.games.PlayerState
  * Date: 2/18/15
  * Time: 6:55 PM
  */
-abstract class AbstractMaskedMultiPlayerGame implements Game<String, Long> {
+abstract class AbstractMaskedMultiPlayerGame<FEATURES> implements Game<String, Long, FEATURES> {
     String maskedForPlayerID
     String maskedForPlayerMD5
 
@@ -17,6 +17,7 @@ abstract class AbstractMaskedMultiPlayerGame implements Game<String, Long> {
     Long created
     Long lastUpdate
     Long completedTimestamp
+    Long declinedTimestamp
 
     String initiatingPlayer
     Map<String, String> players = [:]  //  players will be hashed down to an md5 key + displayName
@@ -24,7 +25,8 @@ abstract class AbstractMaskedMultiPlayerGame implements Game<String, Long> {
     Map<String, String> playerImages = [:] // key will be md5
     Map<String, String> playerProfiles = [:] // key will be md5
 
-    Long declinedTimestamp
+    Set<FEATURES> features = [] as Set
+    Map<FEATURES, Object> featureData = [:]
 
     @Override
     String getIdAsString() {

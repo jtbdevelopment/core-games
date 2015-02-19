@@ -14,5 +14,5 @@ import org.springframework.data.repository.PagingAndSortingRepository
  */
 @CompileStatic
 @NoRepositoryBean
-interface AbstractGameRepository<ID extends Serializable, TIMESTAMP, IMPL extends Game<ID, TIMESTAMP>> extends PagingAndSortingRepository<IMPL, ID> {
+interface AbstractGameRepository<ID extends Serializable, TIMESTAMP, FEATURES, IMPL extends Game<ID, TIMESTAMP, FEATURES>> extends PagingAndSortingRepository<IMPL, ID> {
 }

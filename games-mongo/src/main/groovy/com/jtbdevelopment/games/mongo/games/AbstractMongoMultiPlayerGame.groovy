@@ -10,7 +10,7 @@ import org.springframework.data.annotation.Id
  * Time: 10:21 PM
  */
 @CompileStatic
-abstract class AbstractMongoMultiPlayerGame extends AbstractMultiPlayerGame<ObjectId> {
+abstract class AbstractMongoMultiPlayerGame<FEATURES> extends AbstractMultiPlayerGame<ObjectId, FEATURES> {
     @Id
     ObjectId id
 

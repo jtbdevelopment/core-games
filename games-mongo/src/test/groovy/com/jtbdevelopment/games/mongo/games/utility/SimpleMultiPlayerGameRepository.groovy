@@ -8,5 +8,5 @@ import groovy.transform.CompileStatic
  * Time: 2:42 PM
  */
 @CompileStatic
-interface SimpleMultiPlayerGameRepository extends AbstractMongoMultiPlayerGameRepository<SimpleMultiPlayerGame> {
+interface SimpleMultiPlayerGameRepository extends AbstractMongoMultiPlayerGameRepository<String, SimpleMultiPlayerGame> {
 }

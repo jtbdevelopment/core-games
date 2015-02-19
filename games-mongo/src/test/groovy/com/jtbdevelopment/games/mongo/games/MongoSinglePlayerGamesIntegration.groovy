@@ -43,7 +43,7 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoIntegration {
     @Test
     void testCanCreateGameAndReloadIt() {
         SimpleSinglePlayerGame save, saved, loaded
-        save = new SimpleSinglePlayerGame(intValue: 5, stringValue: 'X', player: player1)
+        save = new SimpleSinglePlayerGame(intValue: 5, stringValue: 'X', player: player1, featureData: ['H': 'LON'], features: ['GG', 'A'])
         assert save.id == null
         assert save.created == null
         assert save.lastUpdate == null
@@ -57,6 +57,9 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoIntegration {
         assert saved.stringValue == save.stringValue
         assert saved.player == save.player
         assert saved.completedTimestamp == null
+        assert saved.featureData == save.featureData
+        assert saved.features == save.features
+
 
         loaded = gameRepository.findOne(saved.id)
         assert loaded
@@ -67,6 +70,8 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoIntegration {
         assert loaded.stringValue == save.stringValue
         assert loaded.player == save.player
         assert loaded.completedTimestamp == null
+        assert loaded.featureData == save.featureData
+        assert loaded.features == save.features
 
         assert gameRepository.count() == 1
     }
@@ -81,6 +86,8 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoIntegration {
         update.stringValue = update.stringValue + 'Z'
         update.completedTimestamp = ZonedDateTime.now()
         update.intValue = update.intValue * 2
+        update.features.addAll(['HG', '34'])
+        update.featureData.put('rr', new Long(3))
         updated = gameRepository.save(update)
         assert updated
         assert updated.id == initial.id
@@ -90,6 +97,8 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoIntegration {
         assert updated.stringValue == update.stringValue
         assert updated.player == update.player
         assert updated.completedTimestamp == update.completedTimestamp
+        assert updated.featureData == update.featureData
+        assert updated.features == update.features
 
         loaded = gameRepository.findOne(update.id)
         assert loaded
@@ -100,6 +109,8 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoIntegration {
         assert loaded.stringValue == updated.stringValue
         assert loaded.player == updated.player
         assert loaded.completedTimestamp.withZoneSameInstant(GMT) == updated.completedTimestamp.withZoneSameInstant(GMT)
+        assert updated.featureData == update.featureData
+        assert updated.features == update.features
 
         assert gameRepository.count() == 1
     }

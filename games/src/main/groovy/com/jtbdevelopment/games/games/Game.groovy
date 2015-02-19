@@ -7,7 +7,7 @@ import groovy.transform.CompileStatic
  * Time: 4:56 PM
  */
 @CompileStatic
-interface Game<ID extends Serializable, TIMESTAMP> {
+interface Game<ID extends Serializable, TIMESTAMP, FEATURES> {
     ID getId()
 
     void setId(final ID id)
@@ -29,4 +29,12 @@ interface Game<ID extends Serializable, TIMESTAMP> {
     TIMESTAMP getCompletedTimestamp()
 
     void setCompletedTimestamp(final TIMESTAMP completed)
+
+    Set<FEATURES> getFeatures()
+
+    void setFeatures(final Set<FEATURES> features)
+
+    Map<FEATURES, Object> getFeatureData()
+
+    void setFeatureData(final Map<FEATURES, Object> featureData)
 }

@@ -11,7 +11,7 @@ import groovy.transform.CompileStatic
  * It just has the potential to be played by more than one
  */
 @CompileStatic
-interface MultiPlayerGame<ID extends Serializable, TIMESTAMP> extends Game<ID, TIMESTAMP> {
+interface MultiPlayerGame<ID extends Serializable, TIMESTAMP, FEATURES> extends Game<ID, TIMESTAMP, FEATURES> {
     ID getInitiatingPlayer()
 
     void setInitiatingPlayer(final ID initiatingPlayer)

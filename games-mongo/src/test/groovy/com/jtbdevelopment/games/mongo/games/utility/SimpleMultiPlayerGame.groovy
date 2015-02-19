@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document
  * Time: 2:40 PM
  */
 @Document(collection = 'multi')
-class SimpleMultiPlayerGame extends AbstractMongoMultiPlayerGame {
+class SimpleMultiPlayerGame extends AbstractMongoMultiPlayerGame<String> {
     @Indexed
     int intValue
     String stringValue

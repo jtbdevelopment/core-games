@@ -14,5 +14,5 @@ import java.time.ZonedDateTime
  */
 @CompileStatic
 @NoRepositoryBean
-interface AbstractMongoMultiPlayerGameRepository<IMPL extends AbstractMongoMultiPlayerGame> extends AbstractMultiPlayerGameRepository<ObjectId, ZonedDateTime, IMPL> {
+interface AbstractMongoMultiPlayerGameRepository<FEATURES, IMPL extends AbstractMongoMultiPlayerGame<FEATURES>> extends AbstractMultiPlayerGameRepository<ObjectId, ZonedDateTime, FEATURES, IMPL> {
 }

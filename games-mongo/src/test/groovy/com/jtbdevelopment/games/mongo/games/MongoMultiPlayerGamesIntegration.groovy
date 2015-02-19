@@ -51,7 +51,9 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoIntegration {
                 stringValue: 'X',
                 initiatingPlayer: player1.id,
                 players: [player1, player2],
-                playerStates: [(player1.id): PlayerState.Accepted, (player2.id): PlayerState.Pending])
+                playerStates: [(player1.id): PlayerState.Accepted, (player2.id): PlayerState.Pending],
+                features: ['Y', 'Z'],
+                featureData: ['Y': new Integer(3)])
         assert save.id == null
         assert save.created == null
         assert save.lastUpdate == null
@@ -69,6 +71,8 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoIntegration {
         assert saved.initiatingPlayer == save.initiatingPlayer
         assert saved.completedTimestamp == null
         assert saved.declinedTimestamp == null
+        assert saved.featureData == save.featureData
+        assert saved.features == save.features
 
         loaded = gameRepository.findOne(saved.id)
         assert loaded
@@ -77,11 +81,13 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoIntegration {
         assert loaded.created.withZoneSameInstant(GMT) == save.created.withZoneSameInstant(GMT)
         assert loaded.intValue == save.intValue
         assert loaded.stringValue == save.stringValue
-        assert saved.players == save.players
-        assert saved.playerStates == save.playerStates
-        assert saved.initiatingPlayer == save.initiatingPlayer
-        assert saved.declinedTimestamp == null
+        assert loaded.players == save.players
+        assert loaded.playerStates == save.playerStates
+        assert loaded.initiatingPlayer == save.initiatingPlayer
+        assert loaded.declinedTimestamp == null
         assert loaded.completedTimestamp == null
+        assert loaded.featureData == save.featureData
+        assert loaded.features == save.features
 
         assert gameRepository.count() == 1
     }
@@ -99,6 +105,8 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoIntegration {
 
         update = gameRepository.findOne(initial.id)
         update.stringValue = update.stringValue + 'Z'
+        update.features.add('23')
+        update.featureData.put('23', '23')
         update.completedTimestamp = ZonedDateTime.now()
         update.intValue = update.intValue * 2
         update.initiatingPlayer = player2.id
@@ -117,6 +125,8 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoIntegration {
         assert updated.initiatingPlayer == update.initiatingPlayer
         assert updated.declinedTimestamp.withZoneSameInstant(GMT) == update.declinedTimestamp.withZoneSameInstant(GMT)
         assert updated.completedTimestamp == update.completedTimestamp
+        assert updated.featureData == update.featureData
+        assert updated.features == updated.features
 
         loaded = gameRepository.findOne(update.id)
         assert loaded
@@ -130,6 +140,8 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoIntegration {
         assert loaded.initiatingPlayer == updated.initiatingPlayer
         assert loaded.declinedTimestamp.withZoneSameInstant(GMT) == updated.declinedTimestamp.withZoneSameInstant(GMT)
         assert loaded.completedTimestamp.withZoneSameInstant(GMT) == updated.completedTimestamp.withZoneSameInstant(GMT)
+        assert loaded.featureData == update.featureData
+        assert loaded.features == updated.features
 
         assert gameRepository.count() == 1
     }

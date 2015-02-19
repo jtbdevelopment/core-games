@@ -12,7 +12,7 @@ import java.time.ZonedDateTime
  * Time: 5:25 PM
  */
 @CompileStatic
-abstract class AbstractGame<ID extends Serializable> implements Game<ID, ZonedDateTime> {
+abstract class AbstractGame<ID extends Serializable, FEATURES> implements Game<ID, ZonedDateTime, FEATURES> {
     @Version
     Integer version
 
@@ -23,6 +23,9 @@ abstract class AbstractGame<ID extends Serializable> implements Game<ID, ZonedDa
     ZonedDateTime lastUpdate
 
     ZonedDateTime completedTimestamp
+
+    Set<FEATURES> features = [] as Set
+    Map<FEATURES, Object> featureData = [:]
 
     boolean equals(final o) {
         if (this.is(o)) return true

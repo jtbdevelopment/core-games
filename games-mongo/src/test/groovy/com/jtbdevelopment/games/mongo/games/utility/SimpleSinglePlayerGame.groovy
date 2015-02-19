@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document
  * Time: 2:36 PM
  */
 @Document(collection = 'single')
-class SimpleSinglePlayerGame extends AbstractMongoSinglePlayerGame {
+class SimpleSinglePlayerGame extends AbstractMongoSinglePlayerGame<String> {
     @Indexed
     int intValue
     String stringValue

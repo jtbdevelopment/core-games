@@ -5,7 +5,7 @@ package com.jtbdevelopment.games.games
  * Time: 6:54 AM
  */
 class AbstractMultiPlayerGameTest extends GroovyTestCase {
-    private static class IntegerMultiPlayerGame extends AbstractMultiPlayerGame<Integer> {
+    private static class IntegerMultiPlayerGame extends AbstractMultiPlayerGame<Integer, Object> {
         Integer id
 
         @Override

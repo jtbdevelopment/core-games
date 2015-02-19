@@ -5,7 +5,7 @@ package com.jtbdevelopment.games.games
  * Time: 6:57 AM
  */
 class AbstractSinglePlayerGameTest extends GroovyTestCase {
-    private static class FloatSinglePlayerGame extends AbstractSinglePlayerGame<Float> {
+    private static class FloatSinglePlayerGame extends AbstractSinglePlayerGame<Float, Object> {
         Float id
 
         @Override

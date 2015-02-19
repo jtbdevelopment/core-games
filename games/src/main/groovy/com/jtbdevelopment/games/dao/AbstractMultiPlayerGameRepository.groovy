@@ -13,6 +13,6 @@ import org.springframework.data.repository.NoRepositoryBean
  */
 @CompileStatic
 @NoRepositoryBean
-interface AbstractMultiPlayerGameRepository<ID extends Serializable, TIMESTAMP, IMPL extends MultiPlayerGame<ID, TIMESTAMP>> extends AbstractGameRepository<ID, TIMESTAMP, IMPL> {
-    List<MultiPlayerGame<ID, TIMESTAMP>> findByPlayersId(final ID id);
+interface AbstractMultiPlayerGameRepository<ID extends Serializable, TIMESTAMP, FEATURES, IMPL extends MultiPlayerGame<ID, TIMESTAMP, FEATURES>> extends AbstractGameRepository<ID, TIMESTAMP, FEATURES, IMPL> {
+    List<MultiPlayerGame<ID, TIMESTAMP, FEATURES>> findByPlayersId(final ID id);
 }

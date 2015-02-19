@@ -11,7 +11,7 @@ import java.lang.reflect.Field
  * Time: 6:40 AM
  */
 class AbstractGameTest extends GroovyTestCase {
-    private static class StringGame extends AbstractGame<String> {
+    private static class StringGame extends AbstractGame<String, Object> {
         String id
 
         @Override
@@ -74,5 +74,7 @@ class AbstractGameTest extends GroovyTestCase {
         assert game.lastUpdate == null
         assert game.created == null
         assert game.completedTimestamp == null
+        assert game.featureData.isEmpty()
+        assert game.features.isEmpty()
     }
 }
