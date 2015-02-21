@@ -33,4 +33,8 @@ abstract class AbstractMaskedMultiPlayerGame<FEATURES> implements MaskedMultiPla
     String getIdAsString() {
         return id
     }
+
+    void setIdAsString(final String id) {
+
+    }
 }

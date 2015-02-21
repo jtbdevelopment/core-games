@@ -44,7 +44,6 @@ class AbstractMultiPlayerGameMaskerTest extends GroovyTestCase {
     private static class MaskedIntGame extends AbstractMaskedMultiPlayerGame<Features> {
     }
 
-    private
     static class MaskedIntGameMasker extends AbstractMultiPlayerGameMasker<Integer, Features, IntGame, MaskedIntGame> {
         @Override
         protected MaskedIntGame newMaskedGame() {
@@ -62,15 +61,15 @@ class AbstractMultiPlayerGameMaskerTest extends GroovyTestCase {
                 id: id,
                 source: "MADEUP",
                 sourceId: "MADEUP" + id,
-                displayName: id,
+                displayName: id.toString(),
                 disabled: disabled,
                 imageUrl: "http://somewhere.com/image/" + id,
                 profileUrl: "http://somewhere.com/profile/" + id)
     }
 
     MaskedIntGameMasker masker = new MaskedIntGameMasker()
-    private static PONE = makeSimplePlayer(1)
-    private static PTWO = makeSimplePlayer(1)
+    private static IntPlayer PONE = makeSimplePlayer(1)
+    private static IntPlayer PTWO = makeSimplePlayer(1)
 
     public void testMaskingSinglePlayerGame() {
         IntGame game = new IntGame(
@@ -79,7 +78,7 @@ class AbstractMultiPlayerGameMaskerTest extends GroovyTestCase {
                 completedTimestamp: ZonedDateTime.now(),
                 declinedTimestamp: ZonedDateTime.now(),
                 featureData: [(Features.FeatureA): ""],
-                features: [Features.FeatureA, Features.FeatureB],
+                features: [Features.FeatureA, Features.FeatureB] as Set,
                 id: 101,
                 initiatingPlayer: PONE.id,
                 lastUpdate: ZonedDateTime.now(),
@@ -107,7 +106,7 @@ class AbstractMultiPlayerGameMaskerTest extends GroovyTestCase {
                 completedTimestamp: ZonedDateTime.now(),
                 declinedTimestamp: ZonedDateTime.now(),
                 featureData: [(Features.FeatureA): "", (Features.FeatureB): PTWO.id],
-                features: [Features.FeatureA, Features.FeatureB],
+                features: [Features.FeatureA, Features.FeatureB] as Set,
                 id: 105,
                 initiatingPlayer: PTWO.id,
                 lastUpdate: ZonedDateTime.now(),

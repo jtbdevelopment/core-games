@@ -34,7 +34,10 @@ abstract class AbstractMultiPlayerGameMasker<ID extends Serializable, FEATURES, 
 
     @SuppressWarnings("GroovyUnusedDeclaration")
     protected void copyMaskedData(
-            final U game, final Player<ID> player, final M playerMaskedGame, Map<ID, Player<ID>> idMap) {
+            final MultiPlayerGame<ID, ZonedDateTime, FEATURES> game,
+            final Player<ID> player,
+            final MaskedMultiPlayerGame<FEATURES> playerMaskedGame,
+            final Map<ID, Player<ID>> idMap) {
         game.players.each {
             Player<ID> p ->
                 playerMaskedGame.players[p.md5] = p.displayName
@@ -56,7 +59,20 @@ abstract class AbstractMultiPlayerGameMasker<ID extends Serializable, FEATURES, 
         }
     }
 
-    protected static Map<ID, Player<ID>> createIDMap(final U game) {
+    @SuppressWarnings("GrMethodMayBeStatic")
+    protected void copyUnmaskedData(
+            final MultiPlayerGame<ID, ZonedDateTime, FEATURES> game,
+            final MaskedMultiPlayerGame<FEATURES> playerMaskedGame) {
+        playerMaskedGame.completedTimestamp = convertTime(game.completedTimestamp)
+        playerMaskedGame.created = convertTime(game.created)
+        playerMaskedGame.declinedTimestamp = convertTime(game.declinedTimestamp)
+        playerMaskedGame.lastUpdate = convertTime(game.lastUpdate)
+        playerMaskedGame.features.addAll(game.features)
+        playerMaskedGame.id = game.idAsString
+    }
+
+    @SuppressWarnings("GrMethodMayBeStatic")
+    protected Map<ID, Player<ID>> createIDMap(final U game) {
         Map<ID, Player<ID>> idmap = [:]
         game.players.each {
             Player<ID> p ->
@@ -66,16 +82,7 @@ abstract class AbstractMultiPlayerGameMasker<ID extends Serializable, FEATURES, 
     }
 
     @SuppressWarnings("GrMethodMayBeStatic")
-    protected void copyUnmaskedData(final U game, final M playerMaskedGame) {
-        playerMaskedGame.completedTimestamp = convertTime((ZonedDateTime) game.completedTimestamp)
-        playerMaskedGame.created = convertTime((ZonedDateTime) game.created)
-        playerMaskedGame.declinedTimestamp = convertTime((ZonedDateTime) game.declinedTimestamp)
-        playerMaskedGame.lastUpdate = convertTime((ZonedDateTime) game.lastUpdate)
-        playerMaskedGame.features.addAll(game.features)
-        playerMaskedGame.id = game.idAsString
-    }
-
-    protected static Long convertTime(final ZonedDateTime value) {
+    protected Long convertTime(final ZonedDateTime value) {
         value ? value.toInstant().toEpochMilli() : null
     }
 }
