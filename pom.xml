@@ -12,6 +12,7 @@
         <module>games-dictionaries</module>
         <module>games-web</module>
         <module>games-mongo</module>
+        <module>games-events</module>
     </modules>
 
     <properties>

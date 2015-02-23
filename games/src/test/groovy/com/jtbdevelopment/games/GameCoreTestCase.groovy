@@ -1,5 +1,6 @@
 package com.jtbdevelopment.games
 
+import com.jtbdevelopment.games.games.AbstractGame
 import com.jtbdevelopment.games.players.AbstractPlayer
 import com.jtbdevelopment.games.players.ManualPlayer
 import com.jtbdevelopment.games.players.Player
@@ -16,6 +17,15 @@ abstract class GameCoreTestCase extends GroovyTestCase {
     protected static final Player<String> PFIVE = makeSimplePlayer("5")
     protected static final Player<String> PINACTIVE1 = makeSimplePlayer("A1", true)
     protected static final Player<String> PINACTIVE2 = makeSimplePlayer("A2", true)
+
+    public static class StringGame extends AbstractGame<String, Object> {
+        String id
+
+        @Override
+        String getIdAsString() {
+            return id
+        }
+    }
 
     public static class StringPlayer extends AbstractPlayer<String> {
         private String md5
@@ -76,4 +86,7 @@ abstract class GameCoreTestCase extends GroovyTestCase {
                 profileUrl: "http://somewhere.com/profile/" + id)
     }
 
+    protected static StringGame makeSimpleGame(final String id) {
+        return new StringGame(id: id)
+    }
 }
