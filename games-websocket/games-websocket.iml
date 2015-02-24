@@ -20,6 +20,8 @@
     <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-jackson:1.2-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.3.2" level="project" />
     <orderEntry type="module" module-name="games" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-aspects:4.1.1.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.aspectj:aspectjweaver:1.8.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-core:3.2.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: aopalliance:aopalliance:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.social:spring-social-security:1.1.0.RELEASE" level="project" />
