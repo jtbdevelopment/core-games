@@ -7,7 +7,6 @@ import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.publish.GamePublisher
 import com.jtbdevelopment.games.publish.PlayerPublisher
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Component
 
 /**
  * Date: 2/17/15
@@ -15,8 +14,7 @@ import org.springframework.stereotype.Component
  *
  * TODO - actually hook up to something
  */
-@Component
-class UpdatesFromClusterListener {
+abstract class AbstractUpdatesFromClusterListener {
     @Autowired
     GamePublisher gamePublisher
 
@@ -29,12 +27,12 @@ class UpdatesFromClusterListener {
     @Autowired
     AbstractGameRepository gameRepository
 
-    void receivePublishAllPlayers() {
+    protected void receivePublishAllPlayers() {
         //  TODO - clear cache
         playerPublisher.publishAll(false)
     }
 
-    void receivePublishPlayer(final String id) {
+    protected void receivePublishPlayer(final String id) {
         //  TODO - clear cache
         Player p = (Player) playerRepository.findOne(id)
         if (p) {
@@ -42,7 +40,7 @@ class UpdatesFromClusterListener {
         }
     }
 
-    void receivePublishGame(final String gameId, final String playerId) {
+    protected void receivePublishGame(final String gameId, final String playerId) {
         //  TODO - clear cache
         Player p = (Player) playerRepository.findOne(playerId)
         Game g = (Game) gameRepository.findOne(gameId)

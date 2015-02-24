@@ -12,8 +12,8 @@ import com.jtbdevelopment.games.publish.PlayerPublisher
  * Date: 2/21/15
  * Time: 6:24 PM
  */
-class UpdatesFromClusterListenerTest extends GameCoreTestCase {
-    private UpdatesFromClusterListener listener = new UpdatesFromClusterListener()
+class AbstractUpdatesFromClusterListenerTest extends GameCoreTestCase {
+    private AbstractUpdatesFromClusterListener listener = new AbstractUpdatesFromClusterListener() {}
 
     void testReceivePublishAllPlayers() {
         boolean published = false

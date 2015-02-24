@@ -4,32 +4,36 @@ import com.jtbdevelopment.games.games.Game
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.publish.GameListener
 import com.jtbdevelopment.games.publish.PlayerListener
-import org.springframework.stereotype.Component
 
 /**
  * Date: 2/17/15
  * Time: 7:10 AM
  */
-@Component
-class UpdatesToClusterPublisher implements GameListener, PlayerListener {
+abstract class AbstractUpdatesToClusterPublisher implements GameListener, PlayerListener {
+    abstract protected void internalGameChanged(final Game game, final Player initiatingPlayer)
+
+    abstract protected void internalPlayerChanged(final Player player)
+
+    abstract protected void internalAllPlayersChanged()
+
     @Override
     void gameChanged(final Game game, final Player initiatingPlayer, final boolean initiatingServer) {
         if (initiatingServer) {
-            //  TODO - publish
+            internalGameChanged(game, initiatingPlayer)
         }
     }
 
     @Override
     void playerChanged(final Player player, final boolean initiatingServer) {
         if (initiatingServer) {
-            //  TODO - publish
+            internalPlayerChanged(player)
         }
     }
 
     @Override
     void allPlayersChanged(final boolean initiatingServer) {
         if (initiatingServer) {
-            //  TODO - publish
+            internalAllPlayersChanged()
         }
     }
 }
