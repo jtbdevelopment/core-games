@@ -2,6 +2,7 @@ package com.jtbdevelopment.games.datagrid.hazelcast.cachemanagement
 
 import com.hazelcast.core.HazelcastInstance
 import com.hazelcast.core.IMap
+import com.jtbdevelopment.games.datagrid.ListHandlingCache
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.Cache
@@ -13,14 +14,17 @@ import java.util.concurrent.ConcurrentHashMap
 /**
  * Date: 2/25/15
  * Time: 7:13 AM
+ *
+ * Create cache from hazelcast - if ends in LHC, wrap in ListHandlingCache as well
  */
 @Component
 @CompileStatic
 class HazelCastCacheManager implements CacheManager {
+    public static final String LIST_HANDLING_CACHE_SUFFIX = 'LHC'
     @Autowired
     HazelcastInstance hazelCastInstance
 
-    private ConcurrentHashMap<String, HazelCastCache> caches = new ConcurrentHashMap<>()
+    private ConcurrentHashMap<String, Cache> caches = new ConcurrentHashMap<>()
 
     @Override
     Cache getCache(final String name) {
@@ -29,7 +33,10 @@ class HazelCastCacheManager implements CacheManager {
             if (map == null) {
                 throw new IllegalStateException('Could not get hazelcast map')
             }
-            HazelCastCache wrapper = new HazelCastCache(name, map)
+            Cache wrapper = new HazelCastCache(name, map)
+            if (name.endsWith(LIST_HANDLING_CACHE_SUFFIX)) {
+                wrapper = new ListHandlingCache(wrapper)
+            }
             caches.putIfAbsent(name, wrapper)
         }
         return caches[name]

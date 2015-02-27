@@ -2,6 +2,7 @@ package com.jtbdevelopment.games.datagrid.hazelcast.cachemanagement
 
 import com.hazelcast.core.HazelcastInstance
 import com.hazelcast.core.IMap
+import com.jtbdevelopment.games.datagrid.ListHandlingCache
 import org.springframework.cache.Cache
 
 /**
@@ -28,6 +29,23 @@ class HazelCastCacheManagerTest extends GroovyTestCase {
         assert c.nativeCache.is(map)
     }
 
+    public void testGetsNewLHCMap() {
+        String name = 'namedLHC'
+        IMap map = [] as IMap
+        manager.hazelCastInstance = [
+                getMap: {
+                    String n ->
+                        assert name == n
+                        return map
+                }
+        ] as HazelcastInstance
+
+        Cache c = manager.getCache(name)
+        assert c
+        assert c instanceof ListHandlingCache
+        assert c.getNativeCache().is(map)
+    }
+
     public void testRepeatMapGets() {
         String name = 'named'
         IMap map = [] as IMap
@@ -49,7 +67,7 @@ class HazelCastCacheManagerTest extends GroovyTestCase {
     }
 
     void testGetMapNames() {
-        def names = ['name1', 'name2', 'name3'] as Set
+        def names = ['name1', 'name2', 'name3LHC'] as Set
         manager.hazelCastInstance = [
                 getMap: {
                     String n ->
