@@ -12,7 +12,7 @@ import java.time.ZonedDateTime
  * Time: 5:25 PM
  */
 @CompileStatic
-abstract class AbstractGame<ID extends Serializable, FEATURES> implements Game<ID, ZonedDateTime, FEATURES> {
+abstract class AbstractGame<ID extends Serializable, FEATURES> implements Game<ID, ZonedDateTime, FEATURES>, Serializable {
     @Version
     Integer version
 
