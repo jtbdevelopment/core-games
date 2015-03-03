@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap
 @Component
 @CompileStatic
 class HazelCastCacheManager implements CacheManager {
-    public static final String LIST_HANDLING_CACHE_SUFFIX = 'LHC'
+    public static final String LIST_HANDLING_CACHE_SUFFIX = '-LHC'
     @Autowired
     HazelcastInstance hazelCastInstance
 

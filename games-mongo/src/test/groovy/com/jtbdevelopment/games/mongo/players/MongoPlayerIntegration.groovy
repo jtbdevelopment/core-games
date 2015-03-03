@@ -6,13 +6,19 @@ import com.jtbdevelopment.games.mongo.dao.MongoPlayerRepository
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.PlayerPayLevel
 import com.mongodb.DBCollection
+import groovy.transform.CompileStatic
 import org.junit.Before
 import org.junit.Test
+import org.springframework.cache.CacheManager
+import org.springframework.data.mongodb.core.MongoOperations
+import org.springframework.data.mongodb.core.query.Criteria
+import org.springframework.data.mongodb.core.query.Query
 
 /**
  * Date: 1/11/15
  * Time: 3:09 PM
  */
+@CompileStatic
 class MongoPlayerIntegration extends AbstractMongoIntegration {
     private static final String PLAYER_COLLECTION_NAME = 'player'
     private DBCollection collection
@@ -21,9 +27,10 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
     MongoPlayer player1, player2, player3, player4
     MongoManualPlayer manualPlayer
     MongoSystemPlayer systemPlayer
+    CacheManager cacheManager
 
     protected MongoPlayer makeSimplePlayer(final String id, final boolean disabled = false) {
-        return playerRepository.save(new MongoPlayer(
+        return (MongoPlayer) playerRepository.save(new MongoPlayer(
                 source: "MADEUP",
                 sourceId: "MADEUP" + id,
                 displayName: id,
@@ -45,14 +52,15 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
         player2 = makeSimplePlayer('2')
         player3 = makeSimplePlayer('3', true)
         player4 = makeSimplePlayer('4')
-        manualPlayer = playerRepository.save(new MongoManualPlayer(
+        manualPlayer = (MongoManualPlayer) playerRepository.save(new MongoManualPlayer(
                 sourceId: "MADEUP" + "M",
                 displayName: "M",
                 disabled: false))
-        systemPlayer = playerRepository.save(new MongoSystemPlayer(
+        systemPlayer = (MongoSystemPlayer) playerRepository.save(new MongoSystemPlayer(
                 sourceId: "MADEUP" + "S",
                 displayName: "S",
                 disabled: false))
+        cacheManager = context.getBean(CacheManager.class)
     }
 
     @Test
@@ -83,7 +91,7 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
 
     @Test
     void testFindByMD5() {
-        List<Player> players = playerRepository.findByMd5In([player1.md5, player3.md5, systemPlayer.md5, 'JUNK'])
+        List<Player> players = playerRepository.findByMd5In([player1.md5, player3.md5, systemPlayer.md5])//, 'JUNK'])
         assert players.size() == 3
         assert players.contains(player1)
         assert players.contains(player3)
@@ -110,6 +118,140 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
         assert player.adminUser
         assert player.profileUrl == "http://somewhere.com/profile/1"
         assert player.imageUrl == "http://somewhere.com/image/1"
+    }
+
+    @Test
+    void testCacheLookupFromInitialSaves() {
+        def cache = cacheManager.getCache('playerID-LHC')
+        assert cache.get(player1.id).get() == player1
+        assert cache.get(player2.id).get() == player2
+        assert cache.get('JUNK') == null
+        cache = cacheManager.getCache('playerMD5-LHC')
+        assert cache.get(player1.md5).get() == player1
+        assert cache.get(player2.md5).get() == player2
+        assert cache.get('JUNK') == null
+        cache = cacheManager.getCache('playerSSID-LHC')
+        assert cache.get(player1.source + "/" + player1.sourceId).get() == player1
+        assert cache.get(player2.source + "/" + player2.sourceId).get() == player2
+        assert cache.get('JUNK') == null
+    }
+
+    @Test
+    void testCacheLookupFromBulkSaves() {
+        def cache = cacheManager.getCache('playerID-LHC')
+        cache.clear()
+        assert cache.get(player1.id) == null
+        cache = cacheManager.getCache('playerMD5-LHC')
+        cache.clear()
+        assert cache.get(player1.md5) == null
+        cache = cacheManager.getCache('playerSSID-LHC')
+        cache.clear()
+        assert cache.get(player1.source + "/" + player1.sourceId) == null
+
+        playerRepository.save([player1, player2] as List<Player>)
+
+        cache = cacheManager.getCache('playerID-LHC')
+        assert cache.get(player1.id).get() == player1
+        assert cache.get(player2.id).get() == player2
+        assert cache.get('JUNK') == null
+        cache = cacheManager.getCache('playerMD5-LHC')
+        assert cache.get(player1.md5).get() == player1
+        assert cache.get(player2.md5).get() == player2
+        assert cache.get('JUNK') == null
+        cache = cacheManager.getCache('playerSSID-LHC')
+        assert cache.get(player1.source + "/" + player1.sourceId).get() == player1
+        assert cache.get(player2.source + "/" + player2.sourceId).get() == player2
+        assert cache.get('JUNK') == null
+    }
+
+    @Test
+    void testCacheDeleteAll() {
+        def cache = cacheManager.getCache('playerID-LHC')
+        assert cache.get(player1.id).get() == player1
+        cache = cacheManager.getCache('playerMD5-LHC')
+        assert cache.get(player1.md5).get() == player1
+        cache = cacheManager.getCache('playerSSID-LHC')
+        assert cache.get(player1.source + "/" + player1.sourceId).get() == player1
+
+        playerRepository.deleteAll()
+
+        cache = cacheManager.getCache('playerID-LHC')
+        assert cache.get(player1.id) == null
+        cache = cacheManager.getCache('playerMD5-LHC')
+        assert cache.get(player2.md5) == null
+        cache = cacheManager.getCache('playerSSID-LHC')
+        assert cache.get(player1.source + "/" + player1.sourceId) == null
+    }
+
+    @Test
+    void testCacheDeleteSingly() {
+        def cache = cacheManager.getCache('playerID-LHC')
+        assert cache.get(player1.id).get() == player1
+        cache = cacheManager.getCache('playerMD5-LHC')
+        assert cache.get(player2.md5).get() == player2
+        cache = cacheManager.getCache('playerSSID-LHC')
+        assert cache.get(player1.source + "/" + player1.sourceId).get() == player1
+
+        playerRepository.delete(player1.id)
+        playerRepository.delete(player2)
+
+        cache = cacheManager.getCache('playerID-LHC')
+        assert cache.get(player1.id) == null
+        assert cache.get(player3.id).get() == player3
+        cache = cacheManager.getCache('playerMD5-LHC')
+        assert cache.get(player2.md5) == null
+        assert cache.get(player3.md5).get() == player3
+        cache = cacheManager.getCache('playerSSID-LHC')
+        assert cache.get(player1.source + "/" + player1.sourceId) == null
+        assert cache.get(player3.source + "/" + player3.sourceId).get() == player3
+    }
+
+    @Test
+    void testCacheDeleteMulti() {
+        def cache = cacheManager.getCache('playerID-LHC')
+        assert cache.get(player1.id).get() == player1
+        cache = cacheManager.getCache('playerMD5-LHC')
+        assert cache.get(player2.md5).get() == player2
+        cache = cacheManager.getCache('playerSSID-LHC')
+        assert cache.get(player1.source + "/" + player1.sourceId).get() == player1
+
+        playerRepository.delete([player2, player1] as List<Player>)
+
+        cache = cacheManager.getCache('playerID-LHC')
+        assert cache.get(player1.id) == null
+        assert cache.get(player3.id).get() == player3
+        cache = cacheManager.getCache('playerMD5-LHC')
+        assert cache.get(player2.md5) == null
+        assert cache.get(player3.md5).get() == player3
+        cache = cacheManager.getCache('playerSSID-LHC')
+        assert cache.get(player1.source + "/" + player1.sourceId) == null
+        assert cache.get(player3.source + "/" + player3.sourceId).get() == player3
+    }
+
+    @Test
+    void testFindCaching() {
+        //  Delete data underneath the cache to show still being pulled from caches
+        MongoOperations operations = context.getBean(MongoOperations)
+        operations.remove(Query.query(Criteria.where('source').is(player1.source)), 'player')
+
+        assert playerRepository.findOne(player1.id) == player1
+        assert playerRepository.findBySourceAndSourceId(player2.source, player2.sourceId) == player2
+        assert playerRepository.findByMd5In([player3.md5, player4.md5]) as Set == [player3, player4] as Set
+        assert playerRepository.findBySourceAndSourceIdIn(player2.source, [player2.sourceId, player1.sourceId]) as Set == [player2, player1] as Set
+
+        //  Not cached
+        assert playerRepository.findBySourceAndDisabled(player2.source, false).isEmpty()
+
+        def cache = cacheManager.getCache('playerID-LHC')
+        cache.clear()
+        assert playerRepository.findOne(player1.id) == null
+        cache = cacheManager.getCache('playerSSID-LHC')
+        cache.clear()
+        assert playerRepository.findBySourceAndSourceId(player2.source, player2.sourceId) == null
+        assert playerRepository.findBySourceAndSourceIdIn(player2.source, [player2.sourceId, player1.sourceId]).isEmpty()
+        cache = cacheManager.getCache('playerMD5-LHC')
+        cache.clear()
+        assert playerRepository.findByMd5In([player3.md5, player4.md5]).isEmpty()
     }
 }
 

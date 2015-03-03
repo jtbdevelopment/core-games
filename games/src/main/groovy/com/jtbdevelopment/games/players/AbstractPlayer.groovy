@@ -9,7 +9,7 @@ import org.springframework.util.StringUtils
  * Time: 6:53 AM
  */
 @CompileStatic
-abstract class AbstractPlayer<ID extends Serializable> implements Cloneable, Player<ID> {
+abstract class AbstractPlayer<ID extends Serializable> implements Cloneable, Player<ID>, Serializable {
 
     String source
     String sourceId

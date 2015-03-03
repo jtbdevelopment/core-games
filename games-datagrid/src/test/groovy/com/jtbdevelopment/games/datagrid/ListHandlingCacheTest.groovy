@@ -127,9 +127,7 @@ class ListHandlingCacheTest extends GroovyTestCase {
     }
 
     void testPutListSizesDoNotMatch() {
-        shouldFail(IllegalArgumentException.class, {
-            cache.put(['4', '5', '6'], [10, 'X', 32.5, 'extra'])
-        });
+        cache.put(['4', '5', '6'], [10, 'X', 32.5, 'extra'])
         assert cache.getNativeCache().isEmpty()
     }
 
@@ -141,9 +139,7 @@ class ListHandlingCacheTest extends GroovyTestCase {
     }
 
     void testPutArraySizesDoNotMatch() {
-        shouldFail(IllegalArgumentException.class, {
-            cache.put(['4', '5', '6'].toArray(), [10, 'X', 32.5, 'extra'].toArray())
-        });
+        cache.put(['4', '5', '6'].toArray(), [10, 'X', 32.5, 'extra'].toArray())
         assert cache.getNativeCache().isEmpty()
     }
 
@@ -185,9 +181,7 @@ class ListHandlingCacheTest extends GroovyTestCase {
     }
 
     void testPutIfAbsentListSizesDoNotMatch() {
-        shouldFail(IllegalArgumentException.class, {
-            cache.putIfAbsent(['4', '5', '6'], [10, 'X', 32.5, 'extra'])
-        });
+        cache.putIfAbsent(['4', '5', '6'], [10, 'X', 32.5, 'extra'])
         assert cache.getNativeCache().isEmpty()
     }
 
@@ -201,9 +195,7 @@ class ListHandlingCacheTest extends GroovyTestCase {
     }
 
     void testPutIfAbsentArraySizesDoNotMatch() {
-        shouldFail(IllegalArgumentException.class, {
-            cache.putIfAbsent(['4', '5', '6'].toArray(), [10, 'X', 32.5, 'extra'].toArray())
-        });
+        cache.putIfAbsent(['4', '5', '6'].toArray(), [10, 'X', 32.5, 'extra'].toArray())
         assert cache.getNativeCache().isEmpty()
     }
 

@@ -1,6 +1,8 @@
 package com.jtbdevelopment.games.datagrid
 
 import groovy.transform.CompileStatic
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.cache.Cache
 import org.springframework.cache.support.SimpleValueWrapper
 
@@ -18,6 +20,8 @@ import org.springframework.cache.support.SimpleValueWrapper
  */
 @CompileStatic
 class ListHandlingCache implements Cache {
+    private static Logger logger = LoggerFactory.getLogger(ListHandlingCache.class)
+
     private final Cache wrapped
 
     public ListHandlingCache(final Cache wrapped) {
@@ -79,16 +83,18 @@ class ListHandlingCache implements Cache {
     void put(final Object key, final Object value) {
         if (key instanceof Collection && value instanceof Collection) {
             if (key.size() != value.size()) {
-                throw new IllegalArgumentException('Key size of ' + key.size() + ' != to value size ' + value.size())
+                logger.warn('Skipping put for mismatch on keys/values ' + key + '/' + value)
+                return
             }
             putElements(key, value)
         } else if (key instanceof Collection && !(value instanceof Collection)) {
-            throw new IllegalArgumentException('keys are collection but not values')
+            throw new IllegalArgumentException('keys are collection but not values ' + key + '/' + value)
         } else if (key instanceof Object[] && value instanceof Object[]) {
             List keys = Arrays.asList((Object[]) key)
             List values = Arrays.asList((Object[]) value)
             if (keys.size() != values.size()) {
-                throw new IllegalArgumentException('Key size of ' + keys.size() + ' != to value size ' + values.size())
+                logger.warn('Skipping put for mismatch on keys/values ' + keys + '/' + values)
+                return
             }
             putElements(keys, values)
         } else if (key instanceof Object[] && !(value instanceof Object[])) {
@@ -103,7 +109,8 @@ class ListHandlingCache implements Cache {
     Cache.ValueWrapper putIfAbsent(final Object key, final Object value) {
         if (key instanceof Collection && value instanceof Collection) {
             if (key.size() != value.size()) {
-                throw new IllegalArgumentException('Key size of ' + key.size() + ' != to value size ' + value.size())
+                logger.warn('Skipping putIfAbsent for mismatch on keys/values ' + key + '/' + value)
+                return null
             }
             return putElementsIfAbsent(key, value)
         } else if (key instanceof Collection && !(value instanceof Collection)) {
@@ -112,7 +119,8 @@ class ListHandlingCache implements Cache {
             List keys = Arrays.asList((Object[]) key)
             List values = Arrays.asList((Object[]) value)
             if (keys.size() != values.size()) {
-                throw new IllegalArgumentException('Key size of ' + keys.size() + ' != to value size ' + values.size())
+                logger.warn('Skipping putIfAbsent for mismatch on keys/values ' + key + '/' + value)
+                return null
             }
             return putElementsIfAbsent(keys, values)
         } else if (key instanceof Object[] && !(value instanceof Object[])) {
