@@ -30,7 +30,7 @@ class HazelCastCacheManagerTest extends GroovyTestCase {
     }
 
     public void testGetsNewLHCMap() {
-        String name = 'namedLHC'
+        String name = 'named-LHC'
         IMap map = [] as IMap
         manager.hazelCastInstance = [
                 getMap: {
@@ -67,7 +67,7 @@ class HazelCastCacheManagerTest extends GroovyTestCase {
     }
 
     void testGetMapNames() {
-        def names = ['name1', 'name2', 'name3LHC'] as Set
+        def names = ['name1', 'name2', 'name3-LHC'] as Set
         manager.hazelCastInstance = [
                 getMap: {
                     String n ->

@@ -66,11 +66,11 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
     @Test
     void testFindBySourceAndDisabled() {
         assert playerRepository.findBySourceAndDisabled(systemPlayer.source, true).isEmpty()
-        assert playerRepository.findBySourceAndDisabled(systemPlayer.source, false) == [systemPlayer]
+        assert playerRepository.findBySourceAndDisabled(systemPlayer.source, false) == [systemPlayer] as List<Player>
         assert playerRepository.findBySourceAndDisabled(manualPlayer.source, true).isEmpty()
-        assert playerRepository.findBySourceAndDisabled(manualPlayer.source, false) == [manualPlayer]
+        assert playerRepository.findBySourceAndDisabled(manualPlayer.source, false) == [manualPlayer] as List<Player>
         assert playerRepository.findBySourceAndDisabled(player1.source, false) as Set == [player1, player2, player4] as Set
-        assert playerRepository.findBySourceAndDisabled(player1.source, true) == [player3]
+        assert playerRepository.findBySourceAndDisabled(player1.source, true) == [player3] as List<Player>
     }
 
     @Test

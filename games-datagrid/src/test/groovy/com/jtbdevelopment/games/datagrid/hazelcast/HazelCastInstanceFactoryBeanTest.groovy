@@ -7,13 +7,14 @@ import com.hazelcast.core.HazelcastInstance
  * Time: 7:00 PM
  */
 class HazelCastInstanceFactoryBeanTest extends GroovyTestCase {
-    HazelCastInstanceFactoryBean factoryBean = new HazelCastInstanceFactoryBean()
+    static HazelCastInstanceFactoryBean factoryBean = new HazelCastInstanceFactoryBean()
 
     void testGetObject() {
         assert factoryBean.object
     }
 
     void testGetObjectIsSame() {
+        factoryBean.setup()
         assert factoryBean.object.is(factoryBean.object)
     }
 
