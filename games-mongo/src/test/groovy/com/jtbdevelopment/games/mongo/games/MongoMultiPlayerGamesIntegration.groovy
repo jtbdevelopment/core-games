@@ -48,10 +48,10 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoIntegration {
         gameRepository.deleteAll()
         playerRepository.deleteAll()
 
-        player1 = (MongoPlayer) playerRepository.save(new MongoPlayer())
-        player2 = (MongoPlayer) playerRepository.save(new MongoPlayer())
-        player3 = (MongoPlayer) playerRepository.save(new MongoPlayer())
-        player4 = (MongoPlayer) playerRepository.save(new MongoPlayer())
+        player1 = (MongoPlayer) playerRepository.save(new MongoPlayer(source: "M", sourceId: "2"))
+        player2 = (MongoPlayer) playerRepository.save(new MongoPlayer(source: "M", sourceId: "1"))
+        player3 = (MongoPlayer) playerRepository.save(new MongoPlayer(source: "X", sourceId: "3"))
+        player4 = (MongoPlayer) playerRepository.save(new MongoPlayer(source: "Y", sourceId: "2"))
 
         cacheManager = context.getBean(CacheManager.class)
         cache = cacheManager.getCache('game-LHC')

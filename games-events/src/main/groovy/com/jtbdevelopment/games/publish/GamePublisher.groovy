@@ -1,10 +1,12 @@
 package com.jtbdevelopment.games.publish
 
 import com.jtbdevelopment.games.games.Game
+import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.players.Player
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
 
 import javax.annotation.PostConstruct
@@ -16,6 +18,7 @@ import java.util.concurrent.Executors
  * Time: 6:40 PM
  */
 @Component
+@Lazy
 @CompileStatic
 class GamePublisher {
     @Autowired(required = false)
@@ -27,7 +30,7 @@ class GamePublisher {
     ExecutorService service;
 
     //  Returns game primarily to allow easy chaining
-    Game publish(final Game game, final Player initiatingPlayer, boolean initiatingServer = true) {
+    Game publish(final MultiPlayerGame game, final Player initiatingPlayer, boolean initiatingServer = true) {
         service.submit(new Runnable() {
             @Override
             void run() {

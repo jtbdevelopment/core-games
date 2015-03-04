@@ -1,6 +1,6 @@
 package com.jtbdevelopment.games.publish.cluster
 
-import com.jtbdevelopment.games.games.Game
+import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.players.Player
 
 /**
@@ -9,83 +9,59 @@ import com.jtbdevelopment.games.players.Player
  */
 class AbstractUpdatesToClusterPublisherTest extends GroovyTestCase {
     private static class ClusterPublisher extends AbstractUpdatesToClusterPublisher {
-        Player player = null
-        Game game = null
-        boolean allPlayers = false
-
+        ClusterMessage clusterMessage = null
         @Override
-        protected void internalGameChanged(final Game game, final Player initiatingPlayer) {
-            this.game = game
-            this.player = initiatingPlayer
-            this.allPlayers = false
+        protected void internalPublish(final ClusterMessage clusterMessage) {
+            this.clusterMessage = clusterMessage
         }
 
-        @Override
-        protected void internalPlayerChanged(final Player player) {
-            this.game = null
-            this.player = player
-            this.allPlayers = false
-        }
-
-        @Override
-        protected void internalAllPlayersChanged() {
-            this.game = null
-            this.player = null
-            this.allPlayers = true
-        }
     }
 
     ClusterPublisher publisher = new ClusterPublisher()
 
     void testPublishGameFromThisServer() {
-        Game g = [] as Game
-        Player p = [] as Player
+        MultiPlayerGame g = [getIdAsString: { return 'G' }] as MultiPlayerGame
+        Player p = [getIdAsString: { return 'TTT' }] as Player
 
         publisher.gameChanged(g, p, true)
-        assert publisher.game.is(g)
-        assert publisher.player.is(p)
-        assertFalse publisher.allPlayers
+        assert publisher.clusterMessage.gameId == g.idAsString
+        assert publisher.clusterMessage.playerId == p.idAsString
+        assert publisher.clusterMessage.clusterMessageType == ClusterMessage.ClusterMessageType.GameUpdate
     }
 
     void testPublishGameNotFromThisServer() {
-        Game g = [] as Game
-        Player p = [] as Player
+        MultiPlayerGame g = [getIdAsString: { return 'G' }] as MultiPlayerGame
+        Player p = [getIdAsString: { return 'TTT' }] as Player
 
         publisher.gameChanged(g, p, false)
-        assertNull publisher.game
-        assertNull publisher.player
-        assertFalse publisher.allPlayers
+        assertNull publisher.clusterMessage
     }
 
     void testPublishPlayerFromThisServer() {
-        Player p = [] as Player
+        Player p = [getIdAsString: { return 'TTT' }] as Player
 
         publisher.playerChanged(p, true)
-        assertNull publisher.game
-        assert publisher.player.is(p)
-        assertFalse publisher.allPlayers
+        assertNull publisher.clusterMessage.gameId
+        assert publisher.clusterMessage.playerId == p.idAsString
+        assert publisher.clusterMessage.clusterMessageType == ClusterMessage.ClusterMessageType.PlayerUpdate
     }
 
     void testPublishPlayerNotFromThisServer() {
         Player p = [] as Player
 
         publisher.playerChanged(p, false)
-        assertNull publisher.game
-        assertNull publisher.player
-        assertFalse publisher.allPlayers
+        assertNull publisher.clusterMessage
     }
 
     void testPublishAllPlayerFromThisServer() {
         publisher.allPlayersChanged(true)
-        assertNull publisher.game
-        assertNull publisher.player
-        assert publisher.allPlayers
+        assertNull publisher.clusterMessage.gameId
+        assertNull publisher.clusterMessage.playerId
+        assert publisher.clusterMessage.clusterMessageType == ClusterMessage.ClusterMessageType.ClearPlayerCache
     }
 
     void testPublishAllPlayerNotFromThisServer() {
         publisher.allPlayersChanged(false)
-        assertNull publisher.game
-        assertNull publisher.player
-        assertFalse publisher.allPlayers
+        assertNull publisher.clusterMessage
     }
 }

@@ -1,7 +1,6 @@
 package com.jtbdevelopment.games.websocket
 
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
-import com.jtbdevelopment.games.games.Game
 import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.games.masked.MultiPlayerGameMasker
 import com.jtbdevelopment.games.players.Player
@@ -30,25 +29,21 @@ class AtmosphereListener implements GameListener, PlayerListener {
     BroadcasterFactory broadcasterFactory
 
     @Override
-    void gameChanged(final Game game, final Player initiatingPlayer, final boolean initiatingServer) {
-        if (game instanceof MultiPlayerGame) {
-            game.players.findAll {
-                Player p ->
-                    p != initiatingPlayer
-            }.each {
-                Player publish ->
-                    Broadcaster broadcaster = getBroadcasterFactory().lookup(LiveFeedService.PATH_ROOT + publish.idAsString)
-                    if (broadcaster != null) {
-                        broadcaster.broadcast(
-                                new WebSocketMessage(
-                                        messageType: WebSocketMessage.MessageType.Game,
-                                        game: gameMasker.maskGameForPlayer((MultiPlayerGame) game, publish)
-                                )
-                        )
-                    }
-            }
-        } else {
-            //  TODO
+    void gameChanged(final MultiPlayerGame game, final Player initiatingPlayer, final boolean initiatingServer) {
+        game.players.findAll {
+            Player p ->
+                p != initiatingPlayer
+        }.each {
+            Player publish ->
+                Broadcaster broadcaster = getBroadcasterFactory().lookup(LiveFeedService.PATH_ROOT + publish.idAsString)
+                if (broadcaster != null) {
+                    broadcaster.broadcast(
+                            new WebSocketMessage(
+                                    messageType: WebSocketMessage.MessageType.Game,
+                                    game: gameMasker.maskGameForPlayer((MultiPlayerGame) game, publish)
+                            )
+                    )
+                }
         }
     }
 

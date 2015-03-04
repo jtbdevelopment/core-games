@@ -2,6 +2,7 @@ package com.jtbdevelopment.games.publish
 
 import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.games.Game
+import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.players.Player
 
 import java.util.concurrent.Callable
@@ -33,8 +34,8 @@ class GamePublisherTest extends GameCoreTestCase {
         publisher.threads = 1
         publisher.setUp()
 
-        Game g1 = makeSimpleGame("1")
-        Game g2 = makeSimpleGame("2")
+        MultiPlayerGame g1 = makeSimpleMPGame("1")
+        MultiPlayerGame g2 = makeSimpleMPGame("2")
         Player p1 = PONE
         Player p2 = PTWO
 
@@ -71,8 +72,8 @@ class GamePublisherTest extends GameCoreTestCase {
 
         publisher.subscribers = [gl1, gl2]
 
-        Game g1 = makeSimpleGame("1")
-        Game g2 = makeSimpleGame("2")
+        MultiPlayerGame g1 = makeSimpleMPGame("1")
+        MultiPlayerGame g2 = makeSimpleMPGame("2")
         Player p1 = PONE
         Player p2 = PTWO
 
@@ -109,8 +110,8 @@ class GamePublisherTest extends GameCoreTestCase {
 
         publisher.subscribers = [gl1, gl2]
 
-        Game g1 = makeSimpleGame("1")
-        Game g2 = makeSimpleGame("2")
+        MultiPlayerGame g1 = makeSimpleMPGame("1")
+        MultiPlayerGame g2 = makeSimpleMPGame("2")
         Player p1 = PONE
         Player p2 = PTWO
 
@@ -147,8 +148,8 @@ class GamePublisherTest extends GameCoreTestCase {
 
         publisher.subscribers = [gl1, gl2]
 
-        Game g1 = makeSimpleGame("1")
-        Game g2 = makeSimpleGame("2")
+        MultiPlayerGame g1 = makeSimpleMPGame("1")
+        MultiPlayerGame g2 = makeSimpleMPGame("2")
         Player p1 = PONE
         Player p2 = PTWO
 

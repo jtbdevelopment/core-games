@@ -28,7 +28,7 @@ interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSor
     @Cacheable(value = 'playerMD5-LHC')
     List<Player<ID>> findByMd5In(final Collection<String> md5s);
 
-    @Cacheable(value = 'playerSSID-LHC', key = '#p0 + "/" + #p1')
+    @Cacheable(value = 'playerSSID-LHC', key = 'T(com.jtbdevelopment.games.players.AbstractPlayer).getSourceAndSourceId(#p0, #p1)')
     Player<ID> findBySourceAndSourceId(final String source, final String sourceId);
 
     @Cacheable(value = 'playerSSID-LHC', key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectSourceAndSourceIDs(#p0, #p1)')
@@ -41,7 +41,7 @@ interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSor
             put = [
                     @CachePut(value = 'playerID-LHC', key = '#result.id'),
                     @CachePut(value = 'playerMD5-LHC', key = '#result.md5'),
-                    @CachePut(value = 'playerSSID-LHC', key = '#result.source+"/"+#result.sourceId')
+                    @CachePut(value = 'playerSSID-LHC', key = '#result.sourceAndSourceId')
             ]
     )
     Player<ID> save(Player<ID> entity)
@@ -70,7 +70,7 @@ interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSor
             evict = [
                     @CacheEvict(value = 'playerID-LHC', key = '#p0.id'),
                     @CacheEvict(value = 'playerMD5-LHC', key = '#p0.md5'),
-                    @CacheEvict(value = 'playerSSID-LHC', key = '#p0.source+"/"+#p0.sourceId')
+                    @CacheEvict(value = 'playerSSID-LHC', key = '#p0.sourceAndSourceId')
             ]
     )
     void delete(Player<ID> entity)

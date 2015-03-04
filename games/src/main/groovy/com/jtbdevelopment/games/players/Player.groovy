@@ -59,4 +59,5 @@ interface Player<ID extends Serializable> {
 
     String getMd5()
 
+    String getSourceAndSourceId()
 }

@@ -19,7 +19,7 @@ class MongoPlayerTest extends MongoGameCoreTestCase {
         assert MongoPlayer.class.isAnnotationPresent(Document.class)
         assert MongoPlayer.class.getAnnotation(Document.class).collection() == 'player'
         assert MongoPlayer.class.isAnnotationPresent(JsonIgnoreProperties.class)
-        assert MongoPlayer.class.getAnnotation(JsonIgnoreProperties.class).value() == ['idAsString']
+        assert MongoPlayer.class.getAnnotation(JsonIgnoreProperties.class).value() == ['idAsString', 'sourceAndSourceId']
     }
 
     void testIdAnnotations() {

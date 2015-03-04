@@ -1,6 +1,6 @@
 package com.jtbdevelopment.games.publish
 
-import com.jtbdevelopment.games.games.Game
+import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.players.Player
 import groovy.transform.CompileStatic
 
@@ -10,5 +10,5 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 interface GameListener {
-    void gameChanged(final Game game, final Player initiatingPlayer, final boolean initiatingServer)
+    void gameChanged(final MultiPlayerGame game, final Player initiatingPlayer, final boolean initiatingServer)
 }

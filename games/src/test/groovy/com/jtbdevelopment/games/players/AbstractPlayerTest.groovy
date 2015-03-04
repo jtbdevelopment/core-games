@@ -73,5 +73,28 @@ class AbstractPlayerTest extends GameCoreTestCase {
                 source: "BIG HERO 6").toString() == "Player{id='XYZ', source='BIG HERO 6', sourceId='BAYMAX', displayName='BAYMAX', disabled=false}"
     }
 
+    void testSourceAndSourceIdString() {
+        assert new StringPlayer(
+                id: 'XYZ',
+                disabled: false,
+                displayName: "BAYMAX",
+                sourceId: "BAYMAX",
+                source: "BIG HERO 6").getSourceAndSourceId() == 'BIG HERO 6/BAYMAX'
+    }
 
+    void testSourceAndSourceIdStringWhenOneIsNull() {
+        assert new StringPlayer(
+                id: 'XYZ',
+                disabled: false,
+                displayName: "BAYMAX",
+                sourceId: null,
+                source: "BIG HERO 6").getSourceAndSourceId() == null
+        assert new StringPlayer(
+                id: 'XYZ',
+                disabled: false,
+                displayName: "BAYMAX",
+                sourceId: "BAYMAX",
+                source: null).getSourceAndSourceId() == null
+
+    }
 }

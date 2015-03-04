@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.dao.caching
 
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
+import com.jtbdevelopment.games.players.AbstractPlayer
 import com.jtbdevelopment.games.players.Player
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
@@ -38,14 +39,14 @@ class PlayerKeyUtility<ID extends Serializable> {
         if (!players) {
             return Collections.<String> emptyList()
         }
-        return players.collect { Player<ID> p -> (p.source + "/" + p.sourceId) }
+        return players.collect { Player<ID> p -> (p.sourceAndSourceId) }
     }
 
     static List<String> collectSourceAndSourceIDs(final String source, final Iterable<String> sourceIds) {
         if (!sourceIds || !source) {
             return Collections.<String> emptyList()
         }
-        return sourceIds.collect { String sourceId -> (source + "/" + sourceId) }
+        return sourceIds.collect { String sourceId -> (AbstractPlayer.getSourceAndSourceId(source, sourceId)) }
     }
 
     static String md5FromID(final ID id) {
@@ -55,7 +56,7 @@ class PlayerKeyUtility<ID extends Serializable> {
     static String sourceAndSourceIDFromID(final ID id) {
         Player<ID> player = playerRepository.findOne(id)
         if (player) {
-            return player.source + "/" + player.sourceId
+            return player.sourceAndSourceId
         }
         return null
     }

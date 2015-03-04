@@ -85,4 +85,13 @@ abstract class AbstractPlayer<ID extends Serializable> implements Cloneable, Pla
         }
         setMd5(md5)
     }
+
+    @Override
+    String getSourceAndSourceId() {
+        return getSourceAndSourceId(this.source, sourceId)
+    }
+
+    static String getSourceAndSourceId(final String source, final String sourceId) {
+        return (source && sourceId) ? (source + "/" + sourceId) : null
+    }
 }

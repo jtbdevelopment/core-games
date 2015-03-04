@@ -4,6 +4,7 @@ import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.games.Game
+import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.publish.GamePublisher
 import com.jtbdevelopment.games.publish.PlayerPublisher
@@ -24,7 +25,7 @@ class AbstractUpdatesFromClusterListenerTest extends GameCoreTestCase {
                         published = true
                 }
         ] as PlayerPublisher
-        listener.receivePublishAllPlayers()
+        listener.receiveClusterMessage(new ClusterMessage(clusterMessageType: ClusterMessage.ClusterMessageType.ClearPlayerCache))
         assert published
     }
 
@@ -45,14 +46,17 @@ class AbstractUpdatesFromClusterListenerTest extends GameCoreTestCase {
                         published = true
                 }
         ] as PlayerPublisher
-        listener.receivePublishPlayer(PTWO.idAsString)
+        listener.receiveClusterMessage(new ClusterMessage(
+                clusterMessageType: ClusterMessage.ClusterMessageType.PlayerUpdate,
+                playerId: PTWO.idAsString)
+        )
         assert published
     }
 
     void testReceivePublishGame() {
         String gameId = 'GID'
         boolean published = false
-        Game game = [] as Game
+        MultiPlayerGame game = [] as MultiPlayerGame
         listener.playerRepository = [
                 findOne: {
                     String id ->
@@ -77,7 +81,41 @@ class AbstractUpdatesFromClusterListenerTest extends GameCoreTestCase {
                         return g
                 }
         ] as GamePublisher
-        listener.receivePublishGame(gameId, PTHREE.idAsString)
+        listener.receiveClusterMessage(new ClusterMessage(
+                clusterMessageType: ClusterMessage.ClusterMessageType.GameUpdate,
+                playerId: PTHREE.idAsString,
+                gameId: gameId)
+        )
         assert published
+    }
+
+    void testReceivePublishGameWithNoRepository() {
+        String gameId = 'GID'
+        boolean published = false
+        MultiPlayerGame game = [] as MultiPlayerGame
+        listener.playerRepository = [
+                findOne: {
+                    String id ->
+                        assert id == PTHREE.idAsString
+                        return PTHREE
+                }
+        ] as AbstractPlayerRepository
+        listener.gameRepository = null
+        listener.gamePublisher = [
+                publish: {
+                    Game g, Player p, boolean fromServer ->
+                        assert p.is(PTHREE)
+                        assert g.is(game)
+                        assertFalse fromServer
+                        published = true
+                        return g
+                }
+        ] as GamePublisher
+        listener.receiveClusterMessage(new ClusterMessage(
+                clusterMessageType: ClusterMessage.ClusterMessageType.GameUpdate,
+                playerId: PTHREE.idAsString,
+                gameId: gameId)
+        )
+        assertFalse published
     }
 }

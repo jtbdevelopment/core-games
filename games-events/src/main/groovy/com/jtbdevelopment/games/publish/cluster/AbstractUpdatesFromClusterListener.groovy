@@ -1,8 +1,8 @@
 package com.jtbdevelopment.games.publish.cluster
 
-import com.jtbdevelopment.games.dao.AbstractGameRepository
+import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
-import com.jtbdevelopment.games.games.Game
+import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.publish.GamePublisher
 import com.jtbdevelopment.games.publish.PlayerPublisher
@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired
 /**
  * Date: 2/17/15
  * Time: 6:56 AM
- *
- * TODO - actually hook up to something
  */
 abstract class AbstractUpdatesFromClusterListener {
     @Autowired
@@ -24,16 +22,28 @@ abstract class AbstractUpdatesFromClusterListener {
     @Autowired
     AbstractPlayerRepository playerRepository
 
-    @Autowired
-    AbstractGameRepository gameRepository
+    @Autowired(required = false)
+    AbstractMultiPlayerGameRepository gameRepository
+
+    protected void receiveClusterMessage(final ClusterMessage clusterMessage) {
+        switch (clusterMessage.clusterMessageType) {
+            case ClusterMessage.ClusterMessageType.GameUpdate:
+                receivePublishGame(clusterMessage.gameId, clusterMessage.playerId)
+                break;
+            case ClusterMessage.ClusterMessageType.PlayerUpdate:
+                receivePublishPlayer(clusterMessage.playerId)
+                break;
+            case ClusterMessage.ClusterMessageType.ClearPlayerCache:
+                receivePublishAllPlayers()
+                break;
+        }
+    }
 
     protected void receivePublishAllPlayers() {
-        //  TODO - clear cache
         playerPublisher.publishAll(false)
     }
 
     protected void receivePublishPlayer(final String id) {
-        //  TODO - clear cache
         Player p = (Player) playerRepository.findOne(id)
         if (p) {
             playerPublisher.publish(p, false)
@@ -41,11 +51,12 @@ abstract class AbstractUpdatesFromClusterListener {
     }
 
     protected void receivePublishGame(final String gameId, final String playerId) {
-        //  TODO - clear cache
-        Player p = (Player) playerRepository.findOne(playerId)
-        Game g = (Game) gameRepository.findOne(gameId)
-        if (p != null && g != null) {
-            gamePublisher.publish(g, p, false)
+        if (gameRepository) {
+            Player p = (Player) playerRepository.findOne(playerId)
+            MultiPlayerGame g = (MultiPlayerGame) gameRepository.findOne(gameId)
+            if (p != null && g != null) {
+                gamePublisher.publish(g, p, false)
+            }
         }
     }
 }

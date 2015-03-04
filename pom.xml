@@ -10,11 +10,11 @@
     <modules>
         <module>games</module>
         <module>games-dictionaries</module>
-        <module>games-web</module>
-        <module>games-mongo</module>
         <module>games-events</module>
         <module>games-websocket</module>
         <module>games-datagrid</module>
+        <module>games-web</module>
+        <module>games-mongo</module>
     </modules>
 
     <properties>

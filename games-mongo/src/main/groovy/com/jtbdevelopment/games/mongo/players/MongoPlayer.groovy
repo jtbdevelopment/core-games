@@ -17,7 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 //@CompoundIndex(unique = true, name = "id_source", def = "{'sourceId':1, 'source':1}")
 @Document(collection = "player")
 @CompileStatic
-@JsonIgnoreProperties(["idAsString"])
+@JsonIgnoreProperties(['idAsString', 'sourceAndSourceId'])
 class MongoPlayer extends AbstractPlayer<ObjectId> implements Cloneable {
     @Id
     ObjectId id = new ObjectId()

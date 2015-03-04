@@ -36,9 +36,9 @@ class PlayerKeyUtilityTest extends GroovyTestCase {
 
     void testCollectPlayerSourceAndSourceIDs() {
         assert PlayerKeyUtility.collectPlayerSourceAndSourceIDs([
-                [getSourceId: { 'X' }, getSource: { 'S1' }] as Player,
-                [getSourceId: { '1' }, getSource: { 'S2' }] as Player,
-                [getSourceId: { 'B3' }, getSource: { 'S3' }] as Player
+                [getSourceAndSourceId: { 'S1/X' }] as Player,
+                [getSourceAndSourceId: { 'S2/1' }] as Player,
+                [getSourceAndSourceId: { 'S3/B3' }] as Player
         ] as Set) as Set == ['S1/X', 'S2/1', 'S3/B3'] as Set
     }
 
@@ -87,16 +87,15 @@ class PlayerKeyUtilityTest extends GroovyTestCase {
 
     void testSourceAndSourceIDFromID() {
         String ID = 'ANID'
-        String s = 'SOURCE'
-        String sid = 'SID'
+        String ssid = 'XSID'
         playerKeyUtility.playerRepository = [
                 findOne: {
                     Serializable id ->
                         assert id.is(ID)
-                        return [getSource: { s }, getSourceId: { sid }] as Player
+                        return [getSourceAndSourceId: { ssid }] as Player
                 }
         ] as AbstractPlayerRepository
-        assert PlayerKeyUtility.sourceAndSourceIDFromID(ID) == s + "/" + sid
+        assert PlayerKeyUtility.sourceAndSourceIDFromID(ID) == ssid
     }
 
     void testSourceAndSourceIDFromIDWithNull() {

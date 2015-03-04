@@ -140,7 +140,7 @@ class AtmosphereListenerTest extends GameCoreTestCase {
     }
 
     void testPublishGameToConnectedNonInitiatingPlayers() {
-        Game game = [
+        MultiPlayerGame game = [
                 getPlayers: {
                     [PONE, PTWO, PTHREE, PFOUR]
                 }

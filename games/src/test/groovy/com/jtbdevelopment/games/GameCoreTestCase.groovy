@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games
 
 import com.jtbdevelopment.games.games.AbstractGame
+import com.jtbdevelopment.games.games.AbstractMultiPlayerGame
 import com.jtbdevelopment.games.players.AbstractPlayer
 import com.jtbdevelopment.games.players.ManualPlayer
 import com.jtbdevelopment.games.players.Player
@@ -19,6 +20,15 @@ abstract class GameCoreTestCase extends GroovyTestCase {
     protected static final Player<String> PINACTIVE2 = makeSimplePlayer("A2", true)
 
     public static class StringGame extends AbstractGame<String, Object> {
+        String id
+
+        @Override
+        String getIdAsString() {
+            return id
+        }
+    }
+
+    public static class StringMPGame extends AbstractMultiPlayerGame<String, Object> {
         String id
 
         @Override
@@ -88,5 +98,9 @@ abstract class GameCoreTestCase extends GroovyTestCase {
 
     protected static StringGame makeSimpleGame(final String id) {
         return new StringGame(id: id)
+    }
+
+    protected static StringMPGame makeSimpleMPGame(final String id) {
+        return new StringMPGame(id: id)
     }
 }

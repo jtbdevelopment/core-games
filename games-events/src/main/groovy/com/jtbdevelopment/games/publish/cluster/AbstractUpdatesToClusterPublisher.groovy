@@ -1,6 +1,6 @@
 package com.jtbdevelopment.games.publish.cluster
 
-import com.jtbdevelopment.games.games.Game
+import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.publish.GameListener
 import com.jtbdevelopment.games.publish.PlayerListener
@@ -10,30 +10,36 @@ import com.jtbdevelopment.games.publish.PlayerListener
  * Time: 7:10 AM
  */
 abstract class AbstractUpdatesToClusterPublisher implements GameListener, PlayerListener {
-    abstract protected void internalGameChanged(final Game game, final Player initiatingPlayer)
 
-    abstract protected void internalPlayerChanged(final Player player)
-
-    abstract protected void internalAllPlayersChanged()
+    abstract protected void internalPublish(final ClusterMessage clusterMessage)
 
     @Override
-    void gameChanged(final Game game, final Player initiatingPlayer, final boolean initiatingServer) {
+    void gameChanged(final MultiPlayerGame game, final Player initiatingPlayer, final boolean initiatingServer) {
         if (initiatingServer) {
-            internalGameChanged(game, initiatingPlayer)
+            internalPublish(new ClusterMessage(
+                    gameId: game.idAsString,
+                    playerId: initiatingPlayer.idAsString,
+                    clusterMessageType: ClusterMessage.ClusterMessageType.GameUpdate)
+            )
         }
     }
 
     @Override
     void playerChanged(final Player player, final boolean initiatingServer) {
         if (initiatingServer) {
-            internalPlayerChanged(player)
+            internalPublish(new ClusterMessage(
+                    playerId: player.idAsString,
+                    clusterMessageType: ClusterMessage.ClusterMessageType.PlayerUpdate)
+            )
         }
     }
 
     @Override
     void allPlayersChanged(final boolean initiatingServer) {
         if (initiatingServer) {
-            internalAllPlayersChanged()
+            internalPublish(new ClusterMessage(
+                    clusterMessageType: ClusterMessage.ClusterMessageType.ClearPlayerCache)
+            )
         }
     }
 }

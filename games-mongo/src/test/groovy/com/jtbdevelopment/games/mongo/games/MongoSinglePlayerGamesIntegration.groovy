@@ -46,8 +46,8 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoIntegration {
         gameRepository.deleteAll()
         playerRepository.deleteAll()
 
-        player1 = (MongoPlayer) playerRepository.save(new MongoPlayer())
-        player2 = (MongoPlayer) playerRepository.save(new MongoPlayer())
+        player1 = (MongoPlayer) playerRepository.save(new MongoPlayer(source: "MANUAL", sourceId: "MAN1"))
+        player2 = (MongoPlayer) playerRepository.save(new MongoPlayer(source: "MANUAL", sourceId: "MAN2"))
 
         cacheManager = context.getBean(CacheManager.class)
         cache = cacheManager.getCache('game-LHC')
