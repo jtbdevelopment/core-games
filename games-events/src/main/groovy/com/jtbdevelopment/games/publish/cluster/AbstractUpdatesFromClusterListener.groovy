@@ -6,12 +6,14 @@ import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.publish.GamePublisher
 import com.jtbdevelopment.games.publish.PlayerPublisher
+import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 
 /**
  * Date: 2/17/15
  * Time: 6:56 AM
  */
+@CompileStatic
 abstract class AbstractUpdatesFromClusterListener {
     @Autowired
     GamePublisher gamePublisher
@@ -33,7 +35,7 @@ abstract class AbstractUpdatesFromClusterListener {
             case ClusterMessage.ClusterMessageType.PlayerUpdate:
                 receivePublishPlayer(clusterMessage.playerId)
                 break;
-            case ClusterMessage.ClusterMessageType.ClearPlayerCache:
+            case ClusterMessage.ClusterMessageType.AllPlayersUpdate:
                 receivePublishAllPlayers()
                 break;
         }

@@ -4,11 +4,13 @@ import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.publish.GameListener
 import com.jtbdevelopment.games.publish.PlayerListener
+import groovy.transform.CompileStatic
 
 /**
  * Date: 2/17/15
  * Time: 7:10 AM
  */
+@CompileStatic
 abstract class AbstractUpdatesToClusterPublisher implements GameListener, PlayerListener {
 
     abstract protected void internalPublish(final ClusterMessage clusterMessage)
@@ -38,7 +40,7 @@ abstract class AbstractUpdatesToClusterPublisher implements GameListener, Player
     void allPlayersChanged(final boolean initiatingServer) {
         if (initiatingServer) {
             internalPublish(new ClusterMessage(
-                    clusterMessageType: ClusterMessage.ClusterMessageType.ClearPlayerCache)
+                    clusterMessageType: ClusterMessage.ClusterMessageType.AllPlayersUpdate)
             )
         }
     }

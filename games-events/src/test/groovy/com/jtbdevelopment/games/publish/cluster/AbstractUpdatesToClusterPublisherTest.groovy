@@ -57,7 +57,7 @@ class AbstractUpdatesToClusterPublisherTest extends GroovyTestCase {
         publisher.allPlayersChanged(true)
         assertNull publisher.clusterMessage.gameId
         assertNull publisher.clusterMessage.playerId
-        assert publisher.clusterMessage.clusterMessageType == ClusterMessage.ClusterMessageType.ClearPlayerCache
+        assert publisher.clusterMessage.clusterMessageType == ClusterMessage.ClusterMessageType.AllPlayersUpdate
     }
 
     void testPublishAllPlayerNotFromThisServer() {

@@ -25,7 +25,7 @@ class AbstractUpdatesFromClusterListenerTest extends GameCoreTestCase {
                         published = true
                 }
         ] as PlayerPublisher
-        listener.receiveClusterMessage(new ClusterMessage(clusterMessageType: ClusterMessage.ClusterMessageType.ClearPlayerCache))
+        listener.receiveClusterMessage(new ClusterMessage(clusterMessageType: ClusterMessage.ClusterMessageType.AllPlayersUpdate))
         assert published
     }
 
