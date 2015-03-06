@@ -13,6 +13,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.jtbdevelopment.core-common</groupId>
+            <artifactId>core-spring-datagrid</artifactId>
+            <version>${core.common.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.jtbdevelopment.core-games</groupId>
             <artifactId>games</artifactId>
             <version>0.9-SNAPSHOT</version>
@@ -30,34 +36,6 @@
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast</artifactId>
-            <version>3.4.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-spring</artifactId>
-            <version>3.4.1</version>
-        </dependency>
-        <!--
-<dependency>
-    <groupId>com.hazelcast</groupId>
-    <artifactId>hazelcast-client</artifactId>
-    <version>3.4.1</version>
-</dependency>
-<dependency>
-    <groupId>com.hazelcast</groupId>
-    <artifactId>hazelcast-cloud</artifactId>
-    <version>3.4.1</version>
-</dependency>
-<dependency>
-    <groupId>javax.cache</groupId>
-    <artifactId>cache-api</artifactId>
-    <version>1.0.0</version>
-</dependency>
--->
 
     </dependencies>
 
