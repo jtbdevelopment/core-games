@@ -2,6 +2,7 @@ package com.jtbdevelopment.games.websocket
 
 import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
+import com.jtbdevelopment.games.dao.StringToIDConverter
 import com.jtbdevelopment.games.games.Game
 import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.games.masked.MaskedMultiPlayerGame
@@ -20,6 +21,17 @@ class AtmosphereListenerTest extends GameCoreTestCase {
 
     //  Initiating Server Flag irrelevant here
     boolean initiatingServer = new Random().nextBoolean()
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp()
+        listener.stringToIDConverter = new StringToIDConverter<String>() {
+            @Override
+            String convert(final String source) {
+                return source?.reverse()
+            }
+        }
+    }
 
     void testPublishPlayerToConnectedPlayer() {
         boolean p2pub = false;
@@ -123,13 +135,13 @@ class AtmosphereListenerTest extends GameCoreTestCase {
         listener.playerRepository = [
                 findOne: {
                     String id ->
-                        if (id == PTWO.idAsString) {
+                        if (id == PTWO.idAsString.reverse()) {
                             return PTWO
                         }
-                        if (id == PFOUR.idAsString) {
+                        if (id == PFOUR.idAsString.reverse()) {
                             return PFOUR
                         }
-                        if (id == 'JUNK') {
+                        if (id == 'JUNK'.reverse()) {
                             return null
                         }
                         fail('unknown id')

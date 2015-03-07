@@ -2,6 +2,7 @@ package com.jtbdevelopment.games.publish.cluster
 
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
+import com.jtbdevelopment.games.dao.StringToIDConverter
 import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.publish.GamePublisher
@@ -23,6 +24,9 @@ abstract class AbstractUpdatesFromClusterListener {
 
     @Autowired
     AbstractPlayerRepository playerRepository
+
+    @Autowired
+    StringToIDConverter<? extends Serializable> stringToIDConverter
 
     @Autowired(required = false)
     AbstractMultiPlayerGameRepository gameRepository
@@ -46,7 +50,7 @@ abstract class AbstractUpdatesFromClusterListener {
     }
 
     protected void receivePublishPlayer(final String id) {
-        Player p = (Player) playerRepository.findOne(id)
+        Player p = (Player) playerRepository.findOne((Serializable) stringToIDConverter.convert(id))
         if (p) {
             playerPublisher.publish(p, false)
         }
@@ -54,8 +58,8 @@ abstract class AbstractUpdatesFromClusterListener {
 
     protected void receivePublishGame(final String gameId, final String playerId) {
         if (gameRepository) {
-            Player p = (Player) playerRepository.findOne(playerId)
-            MultiPlayerGame g = (MultiPlayerGame) gameRepository.findOne(gameId)
+            Player p = (Player) playerRepository.findOne(stringToIDConverter.convert(playerId))
+            MultiPlayerGame g = (MultiPlayerGame) gameRepository.findOne(stringToIDConverter.convert(gameId))
             if (p != null && g != null) {
                 gamePublisher.publish(g, p, false)
             }

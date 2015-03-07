@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.security.spring.social.security
 
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
+import com.jtbdevelopment.games.dao.StringToIDConverter
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.security.spring.PlayerUserDetails
 import org.springframework.social.security.SocialUserDetails
@@ -12,13 +13,24 @@ import org.springframework.social.security.SocialUserDetails
 class PlayerSocialUserDetailsServiceTest extends GroovyTestCase {
     PlayerSocialUserDetailsService service = new PlayerSocialUserDetailsService()
 
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp()
+        service.stringToIDConverter = new StringToIDConverter<String>() {
+            @Override
+            String convert(final String source) {
+                return source?.reverse()
+            }
+        }
+    }
+
     void testReturnsWrappedPlayerIfFound() {
         String id = 'ANID'
         Player player = [] as Player
         service.playerRepository = [
                 findOne: {
                     String it ->
-                        assert it == id
+                        assert it == id.reverse()
                         return player
                 }
         ] as AbstractPlayerRepository
@@ -34,7 +46,7 @@ class PlayerSocialUserDetailsServiceTest extends GroovyTestCase {
         service.playerRepository = [
                 findOne: {
                     String it ->
-                        assert it == id
+                        assert it == id.reverse()
                         return null
                 }
         ] as AbstractPlayerRepository

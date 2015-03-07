@@ -3,6 +3,7 @@ package com.jtbdevelopment.games.publish.cluster
 import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
+import com.jtbdevelopment.games.dao.StringToIDConverter
 import com.jtbdevelopment.games.games.Game
 import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.players.Player
@@ -15,6 +16,18 @@ import com.jtbdevelopment.games.publish.PlayerPublisher
  */
 class AbstractUpdatesFromClusterListenerTest extends GameCoreTestCase {
     private AbstractUpdatesFromClusterListener listener = new AbstractUpdatesFromClusterListener() {}
+
+    private static class StringToStringConverter implements StringToIDConverter<String> {
+        @Override
+        String convert(final String source) {
+            return source?.reverse()
+        }
+    }
+
+    @Override
+    protected void setUp() throws Exception {
+        listener.stringToIDConverter = new StringToStringConverter()
+    }
 
     void testReceivePublishAllPlayers() {
         boolean published = false
@@ -34,7 +47,7 @@ class AbstractUpdatesFromClusterListenerTest extends GameCoreTestCase {
         listener.playerRepository = [
                 findOne: {
                     String id ->
-                        assert id == PTWO.idAsString
+                        assert id == PTWO.idAsString.reverse()
                         return PTWO
                 }
         ] as AbstractPlayerRepository
@@ -60,14 +73,14 @@ class AbstractUpdatesFromClusterListenerTest extends GameCoreTestCase {
         listener.playerRepository = [
                 findOne: {
                     String id ->
-                        assert id == PTHREE.idAsString
+                        assert id == PTHREE.idAsString.reverse()
                         return PTHREE
                 }
         ] as AbstractPlayerRepository
         listener.gameRepository = [
                 findOne: {
                     String id ->
-                        assert id == gameId
+                        assert id == gameId.reverse()
                         return game
                 }
         ] as AbstractMultiPlayerGameRepository

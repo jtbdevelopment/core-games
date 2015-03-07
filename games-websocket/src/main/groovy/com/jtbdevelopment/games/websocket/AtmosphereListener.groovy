@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.websocket
 
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
+import com.jtbdevelopment.games.dao.StringToIDConverter
 import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.games.masked.MultiPlayerGameMasker
 import com.jtbdevelopment.games.players.Player
@@ -24,6 +25,9 @@ class AtmosphereListener implements GameListener, PlayerListener {
 
     @Autowired
     AbstractPlayerRepository playerRepository
+
+    @Autowired
+    StringToIDConverter<? extends Serializable> stringToIDConverter
 
     //  TODO - injectable in theory when 2.3 comes out, currently only a RC.  Replace getBroadcasterFactory then
     BroadcasterFactory broadcasterFactory
@@ -64,7 +68,7 @@ class AtmosphereListener implements GameListener, PlayerListener {
     void allPlayersChanged(final boolean initiatingServer) {
         getBroadcasterFactory().lookupAll().each {
             Broadcaster broadcaster ->
-                Player p = (Player) playerRepository.findOne(broadcaster.ID.replace('/livefeed/', ''))
+                Player p = (Player) playerRepository.findOne(stringToIDConverter.convert(broadcaster.ID.replace('/livefeed/', '')))
                 if (p) {
                     broadcaster.broadcast(new WebSocketMessage(messageType: WebSocketMessage.MessageType.Player, player: p))
                 }

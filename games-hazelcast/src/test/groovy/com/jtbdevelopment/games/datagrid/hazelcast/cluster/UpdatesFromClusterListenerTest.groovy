@@ -6,6 +6,7 @@ import com.hazelcast.core.ITopic
 import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
+import com.jtbdevelopment.games.dao.StringToIDConverter
 import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.publish.GamePublisher
@@ -83,9 +84,9 @@ class UpdatesFromClusterListenerTest extends GameCoreTestCase {
             findOne: {
                 String id ->
                     switch (id) {
-                        case game1.idAsString:
+                        case game1.idAsString.reverse():
                             return game1
-                        case game2.idAsString:
+                        case game2.idAsString.reverse():
                             return game2
                     }
                     return null
@@ -95,13 +96,13 @@ class UpdatesFromClusterListenerTest extends GameCoreTestCase {
             findOne: {
                 String id ->
                     switch (id) {
-                        case PONE.idAsString:
+                        case PONE.idAsString.reverse():
                             return PONE
-                        case PTWO.idAsString:
+                        case PTWO.idAsString.reverse():
                             return PTWO
-                        case PTHREE.idAsString:
+                        case PTHREE.idAsString.reverse():
                             return PTHREE
-                        case PFOUR.idAsString:
+                        case PFOUR.idAsString.reverse():
                             return PFOUR
                     }
                     return null
@@ -109,22 +110,30 @@ class UpdatesFromClusterListenerTest extends GameCoreTestCase {
     ] as AbstractPlayerRepository
     ITopic topicFrom1
     ITopic topicFrom2
+    def static converter = new StringToIDConverter<String>() {
+        @Override
+        String convert(final String source) {
+            return source?.reverse()
+        }
+    }
 
     @Override
     protected void setUp() throws Exception {
         super.setUp()
-        listener1.hazelcastInstance = hazelcastInstance1
-        listener1.setup()
-        listener2.hazelcastInstance = hazelcastInstance2
-        listener2.setup()
         topicFrom1 = hazelcastInstance1.getTopic(UpdatesToClusterPublisher.PUB_SUB_TOPIC)
         topicFrom2 = hazelcastInstance2.getTopic(UpdatesToClusterPublisher.PUB_SUB_TOPIC)
+        listener2.setStringToIDConverter(converter)
+        listener1.setStringToIDConverter(converter)
         listener1.playerPublisher = playerPublisher1
         listener2.playerPublisher = playerPublisher2
         listener1.gamePublisher = gamePublisher1
         listener2.gamePublisher = gamePublisher2
         listener1.gameRepository = gameRepository
         listener2.gameRepository = gameRepository
+        listener1.hazelcastInstance = hazelcastInstance1
+        listener1.setup()
+        listener2.hazelcastInstance = hazelcastInstance2
+        listener2.setup()
     }
 
     void testClearPlayers() {
@@ -142,6 +151,8 @@ class UpdatesFromClusterListenerTest extends GameCoreTestCase {
 
         listener2.playerRepository = playerRepository
         listener1.playerRepository = playerRepository
+        listener2.stringToIDConverter = converter
+        listener1.stringToIDConverter = converter
         topicFrom1.publish(new ClusterMessage(clusterMessageType: ClusterMessage.ClusterMessageType.PlayerUpdate, playerId: PONE.idAsString))
         topicFrom2.publish(new ClusterMessage(clusterMessageType: ClusterMessage.ClusterMessageType.PlayerUpdate, playerId: PTWO.idAsString))
         //  Bad one should be skipped
@@ -157,6 +168,8 @@ class UpdatesFromClusterListenerTest extends GameCoreTestCase {
 
         listener2.playerRepository = playerRepository
         listener1.playerRepository = playerRepository
+        listener2.stringToIDConverter = converter
+        listener1.stringToIDConverter = converter
         //  Bad one should be skipped
         topicFrom1.publish(new ClusterMessage(clusterMessageType: ClusterMessage.ClusterMessageType.GameUpdate, playerId: PONE.idAsString, gameId: 'JUNK'))
         topicFrom1.publish(new ClusterMessage(clusterMessageType: ClusterMessage.ClusterMessageType.GameUpdate, playerId: PONE.idAsString, gameId: game1.idAsString))

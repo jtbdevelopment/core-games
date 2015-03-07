@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.security.spring.social.security
 
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
+import com.jtbdevelopment.games.dao.StringToIDConverter
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.security.spring.PlayerUserDetails
 import groovy.transform.CompileStatic
@@ -20,11 +21,14 @@ import org.springframework.stereotype.Component
 @CompileStatic
 class PlayerSocialUserDetailsService implements SocialUserDetailsService {
     @Autowired
-    AbstractPlayerRepository playerRepository;
+    AbstractPlayerRepository playerRepository
+
+    @Autowired
+    StringToIDConverter<? extends Serializable> stringToIDConverter
 
     @Override
     SocialUserDetails loadUserByUserId(final String userId) throws UsernameNotFoundException, DataAccessException {
-        Player p = (Player) playerRepository.findOne(userId);
+        Player p = (Player) playerRepository.findOne(stringToIDConverter.convert(userId));
         return (p != null ? new PlayerUserDetails(p) : null);
     }
 }
