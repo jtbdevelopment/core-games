@@ -9,6 +9,8 @@ import org.springframework.cache.annotation.Caching
 import org.springframework.data.repository.NoRepositoryBean
 import org.springframework.data.repository.PagingAndSortingRepository
 
+import static com.jtbdevelopment.games.dao.caching.CacheConstants.*
+
 /**
  * Date: 12/30/2014
  * Time: 11:07 AM
@@ -22,16 +24,16 @@ import org.springframework.data.repository.PagingAndSortingRepository
 @NoRepositoryBean
 interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSortingRepository<Player<ID>, ID> {
 
-    @Cacheable(value = 'playerID-LHC')
+    @Cacheable(value = PLAYER_ID_CACHE)
     Player<ID> findOne(ID id)
 
-    @Cacheable(value = 'playerMD5-LHC')
+    @Cacheable(value = PLAYER_MD5_CACHE)
     List<Player<ID>> findByMd5In(final Collection<String> md5s);
 
-    @Cacheable(value = 'playerSSID-LHC', key = 'T(com.jtbdevelopment.games.players.AbstractPlayer).getSourceAndSourceId(#p0, #p1)')
+    @Cacheable(value = PLAYER_S_AND_SID_CACHE, key = 'T(com.jtbdevelopment.games.players.AbstractPlayer).getSourceAndSourceId(#p0, #p1)')
     Player<ID> findBySourceAndSourceId(final String source, final String sourceId);
 
-    @Cacheable(value = 'playerSSID-LHC', key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectSourceAndSourceIDs(#p0, #p1)')
+    @Cacheable(value = PLAYER_S_AND_SID_CACHE, key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectSourceAndSourceIDs(#p0, #p1)')
     List<Player<ID>> findBySourceAndSourceIdIn(final String source, final Collection<String> sourceId);
 
     //  Not caching - currently only used by manual players for testing
@@ -39,18 +41,18 @@ interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSor
 
     @Caching(
             put = [
-                    @CachePut(value = 'playerID-LHC', key = '#result.id'),
-                    @CachePut(value = 'playerMD5-LHC', key = '#result.md5'),
-                    @CachePut(value = 'playerSSID-LHC', key = '#result.sourceAndSourceId')
+                    @CachePut(value = PLAYER_ID_CACHE, key = '#result.id'),
+                    @CachePut(value = PLAYER_MD5_CACHE, key = '#result.md5'),
+                    @CachePut(value = PLAYER_S_AND_SID_CACHE, key = '#result.sourceAndSourceId')
             ]
     )
     Player<ID> save(Player<ID> entity)
 
     @Caching(
             put = [
-                    @CachePut(value = 'playerID-LHC', key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectPlayerIDs(#result)'),
-                    @CachePut(value = 'playerMD5-LHC', key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectPlayerMD5s(#result)'),
-                    @CachePut(value = 'playerSSID-LHC', key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectPlayerSourceAndSourceIDs(#result)')
+                    @CachePut(value = PLAYER_ID_CACHE, key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectPlayerIDs(#result)'),
+                    @CachePut(value = PLAYER_MD5_CACHE, key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectPlayerMD5s(#result)'),
+                    @CachePut(value = PLAYER_S_AND_SID_CACHE, key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectPlayerSourceAndSourceIDs(#result)')
             ]
     )
     Iterable<Player<ID>> save(Iterable<Player<ID>> entities)
@@ -58,9 +60,9 @@ interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSor
     @Override
     @Caching(
             evict = [
-                    @CacheEvict(value = 'playerID-LHC', key = '#p0'),
-                    @CacheEvict(value = 'playerMD5-LHC', key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).md5FromID(#p0)', beforeInvocation = true),
-                    @CacheEvict(value = 'playerSSID-LHC', key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).sourceAndSourceIDFromID(#p0)', beforeInvocation = true)
+                    @CacheEvict(value = PLAYER_ID_CACHE, key = '#p0'),
+                    @CacheEvict(value = PLAYER_MD5_CACHE, key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).md5FromID(#p0)', beforeInvocation = true),
+                    @CacheEvict(value = PLAYER_S_AND_SID_CACHE, key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).sourceAndSourceIDFromID(#p0)', beforeInvocation = true)
             ]
     )
     void delete(ID id)
@@ -68,9 +70,9 @@ interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSor
     @Override
     @Caching(
             evict = [
-                    @CacheEvict(value = 'playerID-LHC', key = '#p0.id'),
-                    @CacheEvict(value = 'playerMD5-LHC', key = '#p0.md5'),
-                    @CacheEvict(value = 'playerSSID-LHC', key = '#p0.sourceAndSourceId')
+                    @CacheEvict(value = PLAYER_ID_CACHE, key = '#p0.id'),
+                    @CacheEvict(value = PLAYER_MD5_CACHE, key = '#p0.md5'),
+                    @CacheEvict(value = PLAYER_S_AND_SID_CACHE, key = '#p0.sourceAndSourceId')
             ]
     )
     void delete(Player<ID> entity)
@@ -78,9 +80,9 @@ interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSor
     @Override
     @Caching(
             evict = [
-                    @CacheEvict(value = 'playerID-LHC', key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectPlayerIDs(#p0)'),
-                    @CacheEvict(value = 'playerMD5-LHC', key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectPlayerMD5s(#p0)'),
-                    @CacheEvict(value = 'playerSSID-LHC', key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectPlayerSourceAndSourceIDs(#p0)')
+                    @CacheEvict(value = PLAYER_ID_CACHE, key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectPlayerIDs(#p0)'),
+                    @CacheEvict(value = PLAYER_MD5_CACHE, key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectPlayerMD5s(#p0)'),
+                    @CacheEvict(value = PLAYER_S_AND_SID_CACHE, key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectPlayerSourceAndSourceIDs(#p0)')
             ]
     )
     void delete(Iterable<? extends Player<ID>> entities)
@@ -88,9 +90,9 @@ interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSor
     @Override
     @Caching(
             evict = [
-                    @CacheEvict(value = 'playerID-LHC', allEntries = true),
-                    @CacheEvict(value = 'playerMD5-LHC', allEntries = true),
-                    @CacheEvict(value = 'playerSSID-LHC', allEntries = true)
+                    @CacheEvict(value = PLAYER_ID_CACHE, allEntries = true),
+                    @CacheEvict(value = PLAYER_MD5_CACHE, allEntries = true),
+                    @CacheEvict(value = PLAYER_S_AND_SID_CACHE, allEntries = true)
             ]
     )
     void deleteAll()

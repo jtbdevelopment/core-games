@@ -12,7 +12,7 @@
         <module>games-dictionaries</module>
         <module>games-events</module>
         <module>games-websocket</module>
-        <module>games-datagrid</module>
+        <module>games-hazelcast</module>
         <module>games-web</module>
         <module>games-mongo</module>
     </modules>

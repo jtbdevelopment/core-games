@@ -2,6 +2,7 @@ package com.jtbdevelopment.games.mongo.games
 
 import com.jtbdevelopment.core.mongo.spring.AbstractMongoIntegration
 import com.jtbdevelopment.games.dao.AbstractSinglePlayerGameRepository
+import com.jtbdevelopment.games.dao.caching.CacheConstants
 import com.jtbdevelopment.games.games.Game
 import com.jtbdevelopment.games.mongo.dao.MongoPlayerRepository
 import com.jtbdevelopment.games.mongo.games.utility.SimpleSinglePlayerGame
@@ -50,7 +51,7 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoIntegration {
         player2 = (MongoPlayer) playerRepository.save(new MongoPlayer(source: "MANUAL", sourceId: "MAN2"))
 
         cacheManager = context.getBean(CacheManager.class)
-        cache = cacheManager.getCache('game-LHC')
+        cache = cacheManager.getCache(CacheConstants.GAME_ID_CACHE)
     }
 
     @Test

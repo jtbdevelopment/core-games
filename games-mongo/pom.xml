@@ -49,7 +49,7 @@
         </dependency>
         <dependency>
             <groupId>com.jtbdevelopment.core-games</groupId>
-            <artifactId>games-datagrid</artifactId>
+            <artifactId>games-hazelcast</artifactId>
             <version>0.9-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>

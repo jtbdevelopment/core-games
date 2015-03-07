@@ -9,12 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>games-datagrid</artifactId>
+    <artifactId>games-hazelcast</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.jtbdevelopment.core-common</groupId>
-            <artifactId>core-spring-datagrid</artifactId>
+            <artifactId>core-spring-hazelcast</artifactId>
             <version>${core.common.version}</version>
         </dependency>
 
