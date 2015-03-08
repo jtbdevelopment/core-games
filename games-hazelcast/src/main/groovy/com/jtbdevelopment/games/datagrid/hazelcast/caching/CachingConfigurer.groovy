@@ -2,7 +2,7 @@ package com.jtbdevelopment.games.datagrid.hazelcast.caching
 
 import com.hazelcast.config.Config
 import com.hazelcast.config.MapConfig
-import com.jtbdevelopment.datagrid.hazelcast.HazelcastConfigurer
+import com.jtbdevelopment.core.hazelcast.HazelcastConfigurer
 import com.jtbdevelopment.games.dao.caching.CacheConstants
 import groovy.transform.CompileStatic
 import org.springframework.stereotype.Component
