@@ -6,8 +6,6 @@ import org.springframework.stereotype.Component
 /**
  * Date: 11/26/14
  * Time: 8:51 PM
- *
- * TODO - rename classes and packages
  */
 @Component
 @CompileStatic
