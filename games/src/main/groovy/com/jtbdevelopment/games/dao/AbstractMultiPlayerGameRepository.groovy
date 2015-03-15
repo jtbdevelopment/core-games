@@ -7,9 +7,6 @@ import org.springframework.data.repository.NoRepositoryBean
 /**
  * Date: 12/31/2014
  * Time: 5:33 PM
- *
- * TODO - cache
- *
  */
 @CompileStatic
 @NoRepositoryBean

@@ -10,8 +10,6 @@ import org.atmosphere.interceptor.SuspendTrackerInterceptor
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-//  TODO - a lot of the websocket stuff can be ge generified and moved to core
-
 @ManagedService(
         path = "/livefeed/{id: [a-zA-Z][a-zA-Z_0-9]*}",
         interceptors = [

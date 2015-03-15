@@ -12,9 +12,6 @@ import static com.jtbdevelopment.games.dao.caching.CacheConstants.GAME_ID_CACHE
 /**
  * Date: 12/31/2014
  * Time: 5:32 PM
- *
- *  TODO - cache
- *
  */
 @CompileStatic
 @NoRepositoryBean
