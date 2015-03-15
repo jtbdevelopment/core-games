@@ -2,16 +2,17 @@ package com.jtbdevelopment.games.players.friendfinder
 
 import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
+import com.jtbdevelopment.games.players.ManualPlayer
 
 /**
  * Date: 11/26/14
  * Time: 1:12 PM
  */
-class AbstractManualFriendFinderTest extends GameCoreTestCase {
-    AbstractManualFriendFinder finder = new AbstractManualFriendFinder()
+class ManualFriendFinderTest extends GameCoreTestCase {
+    ManualFriendFinder finder = new ManualFriendFinder()
 
     void testHandlesSource() {
-        assert finder.handlesSource(AbstractManualFriendFinder.MANUAL)
+        assert finder.handlesSource(ManualPlayer.MANUAL_SOURCE)
         assertFalse finder.handlesSource("Facebook")
     }
 
@@ -24,7 +25,7 @@ class AbstractManualFriendFinderTest extends GameCoreTestCase {
         finder.playerRepository = [
                 findBySourceAndDisabled: {
                     String source, boolean disabled ->
-                        assert source == AbstractManualFriendFinder.MANUAL
+                        assert source == ManualPlayer.MANUAL_SOURCE
                         assertFalse disabled
                         return ps
                 }

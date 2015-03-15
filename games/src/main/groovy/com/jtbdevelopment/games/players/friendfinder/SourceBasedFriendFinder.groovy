@@ -8,7 +8,7 @@ import groovy.transform.CompileStatic
  * Time: 12:03 PM
  */
 @CompileStatic
-interface SourceBasedFriendFinder<ID extends Serializable> {
+interface SourceBasedFriendFinder {
     static final String FRIENDS_KEY = "friends";
     static final String MASKED_FRIENDS_KEY = "maskedFriends";
     static final String INVITABLE_FRIENDS_KEY = "invitableFriends";
@@ -18,8 +18,8 @@ interface SourceBasedFriendFinder<ID extends Serializable> {
 
     /*
         Return a set of data regarding friends
-            At a minimu, the FRIENDS_KEY needs to be provided with a list of Players
+            At a minimum, the FRIENDS_KEY needs to be provided with a list of Players
      */
 
-    Map<String, Set<Object>> findFriends(final Player<ID> player);
+    Map<String, Set<Object>> findFriends(final Player player);
 }

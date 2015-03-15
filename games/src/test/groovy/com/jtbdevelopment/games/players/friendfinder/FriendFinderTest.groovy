@@ -5,13 +5,23 @@ import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.exceptions.system.FailedToFindPlayersException
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.PlayerMasker
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.context.annotation.Scope
+import org.springframework.context.annotation.ScopedProxyMode
 
 /**
  * Date: 11/26/14
  * Time: 4:18 PM
  */
-class AbstractFriendFinderTest extends GameCoreTestCase {
-    AbstractFriendFinder<String> finder = new AbstractFriendFinder<String>() {};
+class FriendFinderTest extends GameCoreTestCase {
+    FriendFinder<String> finder = new FriendFinder<String>() {};
+
+    void testClassAnnotations() {
+        Scope scope = FriendFinder.class.getAnnotation(Scope.class)
+        assert scope
+        assert scope.proxyMode() == ScopedProxyMode.INTERFACES
+        assert scope.value() == ConfigurableBeanFactory.SCOPE_PROTOTYPE
+    }
 
     void testSumOfSourceBasedFinders() {
         def f1 = [
