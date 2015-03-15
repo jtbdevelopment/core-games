@@ -24,7 +24,7 @@ class FacebookFriendFinder implements SourceBasedFriendFinder {
     @Autowired
     AbstractPlayerRepository playerRepository
 
-    //  TODO - primarily for integration tests - code needs re-org
+    //  required = false - primarily for integration tests
     @Autowired(required = false)
     Facebook facebook
 
