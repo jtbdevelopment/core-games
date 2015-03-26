@@ -1,5 +1,6 @@
 package com.jtbdevelopment.games
 
+import com.jtbdevelopment.games.dao.StringToIDConverter
 import com.jtbdevelopment.games.games.AbstractGame
 import com.jtbdevelopment.games.games.AbstractMultiPlayerGame
 import com.jtbdevelopment.games.players.AbstractPlayer
@@ -18,6 +19,13 @@ abstract class GameCoreTestCase extends GroovyTestCase {
     protected static final Player<String> PFIVE = makeSimplePlayer("5")
     protected static final Player<String> PINACTIVE1 = makeSimplePlayer("A1", true)
     protected static final Player<String> PINACTIVE2 = makeSimplePlayer("A2", true)
+
+    public static class StringToStringConverter implements StringToIDConverter<String> {
+        @Override
+        String convert(final String source) {
+            return source?.reverse()
+        }
+    }
 
     public static class StringGame extends AbstractGame<String, Object> {
         String id

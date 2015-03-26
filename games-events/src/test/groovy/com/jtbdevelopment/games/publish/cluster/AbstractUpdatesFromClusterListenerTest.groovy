@@ -3,7 +3,6 @@ package com.jtbdevelopment.games.publish.cluster
 import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
-import com.jtbdevelopment.games.dao.StringToIDConverter
 import com.jtbdevelopment.games.games.Game
 import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.players.Player
@@ -17,16 +16,9 @@ import com.jtbdevelopment.games.publish.PlayerPublisher
 class AbstractUpdatesFromClusterListenerTest extends GameCoreTestCase {
     private AbstractUpdatesFromClusterListener listener = new AbstractUpdatesFromClusterListener() {}
 
-    private static class StringToStringConverter implements StringToIDConverter<String> {
-        @Override
-        String convert(final String source) {
-            return source?.reverse()
-        }
-    }
-
     @Override
     protected void setUp() throws Exception {
-        listener.stringToIDConverter = new StringToStringConverter()
+        listener.stringToIDConverter = new GameCoreTestCase.StringToStringConverter()
     }
 
     void testReceivePublishAllPlayers() {
