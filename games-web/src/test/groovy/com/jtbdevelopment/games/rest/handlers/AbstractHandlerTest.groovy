@@ -14,6 +14,30 @@ class AbstractHandlerTest extends GameCoreTestCase {
     }
     TestHandler handler = new TestHandler()
 
+    public void testLoadPlayerMD5s() {
+        handler.playerRepository = [
+                findByMd5In: {
+                    Collection<String> it ->
+                        assert it as List == [PTWO.md5, PFOUR.md5, PTHREE.md5]
+                        return [PTWO, PTHREE, PFOUR]
+                }
+        ] as AbstractPlayerRepository
+        assert handler.loadPlayerMD5s([PTWO.md5, PFOUR.md5, PTHREE.md5]) == [PTWO, PTHREE, PFOUR] as Set
+    }
+
+    public void testLoadPlayerMD5sWithPartialLoad() {
+        handler.playerRepository = [
+                findByMd5In: {
+                    Collection<String> it ->
+                        assert it as List == [PTWO.md5, PFOUR.md5, PTHREE.md5]
+                        return [PTWO, PFOUR]
+                }
+        ] as AbstractPlayerRepository
+        shouldFail(FailedToFindPlayersException.class, {
+            handler.loadPlayerMD5s([PTWO.md5, PFOUR.md5, PTHREE.md5])
+
+        })
+    }
 
     public void testLoadPlayer() {
         handler.playerRepository = [

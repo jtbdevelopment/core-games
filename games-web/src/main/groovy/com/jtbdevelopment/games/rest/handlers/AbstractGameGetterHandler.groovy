@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired
  * Date: 11/19/14
  * Time: 7:01 AM
  *
- * TODO - tests
  */
 @CompileStatic
 class AbstractGameGetterHandler<ID extends Serializable> extends AbstractHandler {
