@@ -3,6 +3,7 @@ package com.jtbdevelopment.games
 import com.jtbdevelopment.games.dao.StringToIDConverter
 import com.jtbdevelopment.games.games.AbstractGame
 import com.jtbdevelopment.games.games.AbstractMultiPlayerGame
+import com.jtbdevelopment.games.games.AbstractSinglePlayerGame
 import com.jtbdevelopment.games.players.AbstractPlayer
 import com.jtbdevelopment.games.players.ManualPlayer
 import com.jtbdevelopment.games.players.Player
@@ -28,6 +29,15 @@ abstract class GameCoreTestCase extends GroovyTestCase {
     }
 
     public static class StringGame extends AbstractGame<String, Object> {
+        String id
+
+        @Override
+        String getIdAsString() {
+            return id
+        }
+    }
+
+    public static class StringSPGame extends AbstractSinglePlayerGame<String, Object> {
         String id
 
         @Override
