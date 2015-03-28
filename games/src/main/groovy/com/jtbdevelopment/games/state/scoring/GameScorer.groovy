@@ -1,4 +1,4 @@
-package com.jtbdevelopment.games.scoring
+package com.jtbdevelopment.games.state.scoring
 
 import com.jtbdevelopment.games.state.Game
 import groovy.transform.CompileStatic
@@ -9,5 +9,5 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 interface GameScorer<IMPL extends Game> {
-    public IMPL scoreGame(final IMPL game)
+    IMPL scoreGame(final IMPL game)
 }

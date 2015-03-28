@@ -4,8 +4,8 @@ import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.state.Game
-import com.jtbdevelopment.games.state.masked.AbstractMaskedMultiPlayerGame
-import com.jtbdevelopment.games.state.masked.MultiPlayerGameMasker
+import com.jtbdevelopment.games.state.masking.AbstractMaskedMultiPlayerGame
+import com.jtbdevelopment.games.state.masking.MultiPlayerGameMasker
 
 /**
  * Date: 11/17/14

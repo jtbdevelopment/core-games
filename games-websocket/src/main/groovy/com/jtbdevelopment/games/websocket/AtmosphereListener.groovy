@@ -6,7 +6,7 @@ import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.publish.GameListener
 import com.jtbdevelopment.games.publish.PlayerListener
 import com.jtbdevelopment.games.state.MultiPlayerGame
-import com.jtbdevelopment.games.state.masked.MultiPlayerGameMasker
+import com.jtbdevelopment.games.state.masking.MultiPlayerGameMasker
 import groovy.transform.CompileStatic
 import org.atmosphere.cpr.Broadcaster
 import org.atmosphere.cpr.BroadcasterFactory

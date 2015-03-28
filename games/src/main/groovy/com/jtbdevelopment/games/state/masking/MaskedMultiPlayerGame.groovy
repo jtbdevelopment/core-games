@@ -1,4 +1,4 @@
-package com.jtbdevelopment.games.state.masked
+package com.jtbdevelopment.games.state.masking
 
 import com.jtbdevelopment.games.state.Game
 import com.jtbdevelopment.games.state.PlayerState

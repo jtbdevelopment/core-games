@@ -1,7 +1,7 @@
 package com.jtbdevelopment.games.mongo.dao
 
 import com.jtbdevelopment.games.dao.AbstractSinglePlayerGameRepository
-import com.jtbdevelopment.games.mongo.games.AbstractMongoSinglePlayerGame
+import com.jtbdevelopment.games.mongo.state.AbstractMongoSinglePlayerGame
 import groovy.transform.CompileStatic
 import org.bson.types.ObjectId
 import org.springframework.data.repository.NoRepositoryBean

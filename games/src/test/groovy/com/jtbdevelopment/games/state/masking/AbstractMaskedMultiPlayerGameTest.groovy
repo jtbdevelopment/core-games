@@ -1,4 +1,4 @@
-package com.jtbdevelopment.games.state.masked
+package com.jtbdevelopment.games.state.masking
 
 /**
  * Date: 2/19/15

@@ -1,4 +1,4 @@
-package com.jtbdevelopment.games.mongo.games.utility
+package com.jtbdevelopment.games.mongo.state.utility
 
 import com.jtbdevelopment.games.mongo.dao.AbstractMongoMultiPlayerGameRepository
 import groovy.transform.CompileStatic

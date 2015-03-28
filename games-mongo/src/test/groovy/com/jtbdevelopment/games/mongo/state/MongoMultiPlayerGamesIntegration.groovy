@@ -1,11 +1,11 @@
-package com.jtbdevelopment.games.mongo.games
+package com.jtbdevelopment.games.mongo.state
 
 import com.jtbdevelopment.core.mongo.spring.AbstractMongoIntegration
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.caching.CacheConstants
 import com.jtbdevelopment.games.mongo.dao.MongoPlayerRepository
-import com.jtbdevelopment.games.mongo.games.utility.SimpleMultiPlayerGame
 import com.jtbdevelopment.games.mongo.players.MongoPlayer
+import com.jtbdevelopment.games.mongo.state.utility.SimpleMultiPlayerGame
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.Game
 import com.jtbdevelopment.games.state.PlayerState

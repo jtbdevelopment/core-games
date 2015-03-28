@@ -1,19 +1,19 @@
-package com.jtbdevelopment.games.mongo.games
+package com.jtbdevelopment.games.mongo.state
 
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 
 /**
  * Date: 1/9/15
- * Time: 10:41 PM
+ * Time: 10:47 PM
  */
-class AbstractMongoMultiPlayerGameTest extends GroovyTestCase {
-    private static class AGame extends AbstractMongoMultiPlayerGame {
+class AbstractMongoSinglePlayerGameTest extends GroovyTestCase {
+    private static class AGame extends AbstractMongoSinglePlayerGame {
 
     }
 
     void testIdAnnotation() {
-        assert AbstractMongoMultiPlayerGame.class.getDeclaredField('id').isAnnotationPresent(Id.class)
+        assert AbstractMongoSinglePlayerGame.class.getDeclaredField('id').isAnnotationPresent(Id.class)
     }
 
     void testIdAsString() {

@@ -1,8 +1,8 @@
-package com.jtbdevelopment.games.mongo.games.masked
+package com.jtbdevelopment.games.mongo.state.masking
 
-import com.jtbdevelopment.games.mongo.games.AbstractMongoMultiPlayerGame
-import com.jtbdevelopment.games.state.masked.AbstractMultiPlayerGameMasker
-import com.jtbdevelopment.games.state.masked.MaskedMultiPlayerGame
+import com.jtbdevelopment.games.mongo.state.AbstractMongoMultiPlayerGame
+import com.jtbdevelopment.games.state.masking.AbstractMultiPlayerGameMasker
+import com.jtbdevelopment.games.state.masking.MaskedMultiPlayerGame
 import org.bson.types.ObjectId
 
 /**

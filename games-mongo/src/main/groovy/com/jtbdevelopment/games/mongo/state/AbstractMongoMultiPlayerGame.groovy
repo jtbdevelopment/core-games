@@ -1,16 +1,16 @@
-package com.jtbdevelopment.games.mongo.games
+package com.jtbdevelopment.games.mongo.state
 
-import com.jtbdevelopment.games.state.AbstractSinglePlayerGame
+import com.jtbdevelopment.games.state.AbstractMultiPlayerGame
 import groovy.transform.CompileStatic
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 
 /**
  * Date: 1/9/15
- * Time: 10:19 PM
+ * Time: 10:21 PM
  */
 @CompileStatic
-abstract class AbstractMongoSinglePlayerGame<FEATURES> extends AbstractSinglePlayerGame<ObjectId, FEATURES> {
+abstract class AbstractMongoMultiPlayerGame<FEATURES> extends AbstractMultiPlayerGame<ObjectId, FEATURES> {
     @Id
     ObjectId id
 
