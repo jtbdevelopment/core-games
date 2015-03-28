@@ -14,11 +14,11 @@ import org.springframework.stereotype.Component
  */
 @Component
 @CompileStatic
-class GameGetterHandler<ID extends Serializable> extends AbstractGameGetterHandler<ID> {
+class GameGetterHandler extends AbstractGameGetterHandler {
     @Autowired(required = false)
-    protected MultiPlayerGameMasker gameMasker
+    MultiPlayerGameMasker gameMasker
 
-    Game getGame(final ID playerID, final ID gameID) {
+    Game getGame(final Serializable playerID, final Serializable gameID) {
         Player player = loadPlayer(playerID)
         Game game = loadGame(gameID)
         validatePlayerForGame(game, player)

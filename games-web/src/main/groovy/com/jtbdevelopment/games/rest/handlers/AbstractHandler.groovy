@@ -13,14 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired
  * Time: 9:54 PM
  */
 @CompileStatic
-abstract class AbstractHandler<ID extends Serializable> {
+abstract class AbstractHandler {
     private static final Logger logger = LoggerFactory.getLogger(AbstractHandler.class)
 
     @Autowired
-    protected AbstractPlayerRepository playerRepository
+    AbstractPlayerRepository playerRepository
 
-    protected Set<Player<ID>> loadPlayerMD5s(final Collection<String> playerMD5s) {
-        LinkedHashSet<Player<ID>> players = new LinkedHashSet<>(playerRepository.findByMd5In(playerMD5s).collect { Player<ID> it -> it })
+    protected Set<Player> loadPlayerMD5s(final Collection<String> playerMD5s) {
+        LinkedHashSet<Player> players = new LinkedHashSet<>(playerRepository.findByMd5In(playerMD5s).collect { Player it -> it })
         if (players.size() != playerMD5s.size()) {
             logger.info("Not all players were loaded " + playerMD5s + " vs. " + players)
             throw new FailedToFindPlayersException()
@@ -28,7 +28,7 @@ abstract class AbstractHandler<ID extends Serializable> {
         players
     }
 
-    protected Player loadPlayer(final ID playerID) {
+    protected Player loadPlayer(final Serializable playerID) {
         Player player = playerRepository.findOne(playerID)
         if (player == null) {
             logger.info("Player was not loaded " + playerID.toString())

@@ -18,11 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired
  *
  */
 @CompileStatic
-class AbstractGameGetterHandler<ID extends Serializable> extends AbstractHandler {
+class AbstractGameGetterHandler extends AbstractHandler {
     private static final Logger logger = LoggerFactory.getLogger(AbstractGameGetterHandler.class)
 
     @Autowired
-    protected AbstractGameRepository gameRepository
+    AbstractGameRepository gameRepository
 
     @SuppressWarnings("GrMethodMayBeStatic")
     protected void validatePlayerForGame(final Game game, final Player player) {
@@ -37,7 +37,7 @@ class AbstractGameGetterHandler<ID extends Serializable> extends AbstractHandler
         }
     }
 
-    protected Game loadGame(final ID gameID) {
+    protected Game loadGame(final Serializable gameID) {
         Game game = gameRepository.findOne(gameID)
         if (game == null) {
             logger.info("Game was not loaded " + gameID)
