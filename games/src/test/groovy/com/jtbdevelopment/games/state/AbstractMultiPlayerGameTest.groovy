@@ -1,4 +1,4 @@
-package com.jtbdevelopment.games.games
+package com.jtbdevelopment.games.state
 
 /**
  * Date: 1/7/15

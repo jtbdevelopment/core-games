@@ -1,7 +1,7 @@
 package com.jtbdevelopment.games.publish.cluster
 
-import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.state.MultiPlayerGame
 
 /**
  * Date: 2/24/15

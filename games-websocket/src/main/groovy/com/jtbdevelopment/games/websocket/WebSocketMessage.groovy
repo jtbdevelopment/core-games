@@ -1,7 +1,7 @@
 package com.jtbdevelopment.games.websocket
 
-import com.jtbdevelopment.games.games.masked.MaskedMultiPlayerGame
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.state.masked.MaskedMultiPlayerGame
 import groovy.transform.CompileStatic
 
 /**

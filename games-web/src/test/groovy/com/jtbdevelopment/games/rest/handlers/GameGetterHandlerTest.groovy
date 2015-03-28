@@ -3,9 +3,9 @@ package com.jtbdevelopment.games.rest.handlers
 import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
-import com.jtbdevelopment.games.games.Game
-import com.jtbdevelopment.games.games.masked.AbstractMaskedMultiPlayerGame
-import com.jtbdevelopment.games.games.masked.MultiPlayerGameMasker
+import com.jtbdevelopment.games.state.Game
+import com.jtbdevelopment.games.state.masked.AbstractMaskedMultiPlayerGame
+import com.jtbdevelopment.games.state.masked.MultiPlayerGameMasker
 
 /**
  * Date: 11/17/14

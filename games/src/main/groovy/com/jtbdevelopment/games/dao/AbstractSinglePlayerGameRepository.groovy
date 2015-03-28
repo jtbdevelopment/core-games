@@ -1,6 +1,6 @@
 package com.jtbdevelopment.games.dao
 
-import com.jtbdevelopment.games.games.SinglePlayerGame
+import com.jtbdevelopment.games.state.SinglePlayerGame
 import groovy.transform.CompileStatic
 import org.springframework.data.repository.NoRepositoryBean
 

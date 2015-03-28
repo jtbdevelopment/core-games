@@ -1,6 +1,6 @@
 package com.jtbdevelopment.games.dao
 
-import com.jtbdevelopment.games.games.Game
+import com.jtbdevelopment.games.state.Game
 import groovy.transform.CompileStatic
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.CachePut

@@ -1,8 +1,8 @@
 package com.jtbdevelopment.games.rest.services
 
 import com.jtbdevelopment.games.GameCoreTestCase
-import com.jtbdevelopment.games.games.masked.AbstractMaskedMultiPlayerGame
 import com.jtbdevelopment.games.rest.handlers.GameGetterHandler
+import com.jtbdevelopment.games.state.masked.AbstractMaskedMultiPlayerGame
 import groovy.transform.TypeChecked
 
 import javax.ws.rs.GET

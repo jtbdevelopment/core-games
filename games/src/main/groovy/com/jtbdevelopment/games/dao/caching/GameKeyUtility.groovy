@@ -1,6 +1,6 @@
 package com.jtbdevelopment.games.dao.caching
 
-import com.jtbdevelopment.games.games.Game
+import com.jtbdevelopment.games.state.Game
 import groovy.transform.CompileStatic
 import org.springframework.stereotype.Component
 

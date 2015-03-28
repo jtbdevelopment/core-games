@@ -3,11 +3,11 @@ package com.jtbdevelopment.games.websocket
 import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.dao.StringToIDConverter
-import com.jtbdevelopment.games.games.Game
-import com.jtbdevelopment.games.games.MultiPlayerGame
-import com.jtbdevelopment.games.games.masked.MaskedMultiPlayerGame
-import com.jtbdevelopment.games.games.masked.MultiPlayerGameMasker
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.state.Game
+import com.jtbdevelopment.games.state.MultiPlayerGame
+import com.jtbdevelopment.games.state.masked.MaskedMultiPlayerGame
+import com.jtbdevelopment.games.state.masked.MultiPlayerGameMasker
 import org.atmosphere.cpr.Broadcaster
 import org.atmosphere.cpr.BroadcasterFactory
 

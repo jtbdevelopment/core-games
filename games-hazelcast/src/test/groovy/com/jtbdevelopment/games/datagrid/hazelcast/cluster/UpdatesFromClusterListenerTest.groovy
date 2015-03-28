@@ -7,11 +7,11 @@ import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.dao.StringToIDConverter
-import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.publish.GamePublisher
 import com.jtbdevelopment.games.publish.PlayerPublisher
 import com.jtbdevelopment.games.publish.cluster.ClusterMessage
+import com.jtbdevelopment.games.state.MultiPlayerGame
 
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit

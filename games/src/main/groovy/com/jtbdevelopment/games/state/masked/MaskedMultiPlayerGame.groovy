@@ -1,7 +1,7 @@
-package com.jtbdevelopment.games.games.masked
+package com.jtbdevelopment.games.state.masked
 
-import com.jtbdevelopment.games.games.Game
-import com.jtbdevelopment.games.games.PlayerState
+import com.jtbdevelopment.games.state.Game
+import com.jtbdevelopment.games.state.PlayerState
 import groovy.transform.CompileStatic
 
 /**

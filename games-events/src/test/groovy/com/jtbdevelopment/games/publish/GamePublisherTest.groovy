@@ -1,9 +1,9 @@
 package com.jtbdevelopment.games.publish
 
 import com.jtbdevelopment.games.GameCoreTestCase
-import com.jtbdevelopment.games.games.Game
-import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.state.Game
+import com.jtbdevelopment.games.state.MultiPlayerGame
 
 import java.util.concurrent.Callable
 import java.util.concurrent.ThreadPoolExecutor

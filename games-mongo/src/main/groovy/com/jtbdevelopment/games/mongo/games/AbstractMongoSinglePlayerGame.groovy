@@ -1,6 +1,6 @@
 package com.jtbdevelopment.games.mongo.games
 
-import com.jtbdevelopment.games.games.AbstractSinglePlayerGame
+import com.jtbdevelopment.games.state.AbstractSinglePlayerGame
 import groovy.transform.CompileStatic
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id

@@ -1,12 +1,12 @@
 package com.jtbdevelopment.games
 
 import com.jtbdevelopment.games.dao.StringToIDConverter
-import com.jtbdevelopment.games.games.AbstractGame
-import com.jtbdevelopment.games.games.AbstractMultiPlayerGame
-import com.jtbdevelopment.games.games.AbstractSinglePlayerGame
 import com.jtbdevelopment.games.players.AbstractPlayer
 import com.jtbdevelopment.games.players.ManualPlayer
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.state.AbstractGame
+import com.jtbdevelopment.games.state.AbstractMultiPlayerGame
+import com.jtbdevelopment.games.state.AbstractSinglePlayerGame
 
 /**
  * Date: 11/8/14

@@ -1,8 +1,8 @@
 package com.jtbdevelopment.games.publish
 
-import com.jtbdevelopment.games.games.Game
-import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.state.Game
+import com.jtbdevelopment.games.state.MultiPlayerGame
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value

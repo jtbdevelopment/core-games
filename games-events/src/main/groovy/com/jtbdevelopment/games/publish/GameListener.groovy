@@ -1,7 +1,7 @@
 package com.jtbdevelopment.games.publish
 
-import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.state.MultiPlayerGame
 import groovy.transform.CompileStatic
 
 /**

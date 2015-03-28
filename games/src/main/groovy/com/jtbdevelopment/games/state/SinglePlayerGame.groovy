@@ -1,4 +1,4 @@
-package com.jtbdevelopment.games.games
+package com.jtbdevelopment.games.state
 
 import com.jtbdevelopment.games.players.Player
 import groovy.transform.CompileStatic

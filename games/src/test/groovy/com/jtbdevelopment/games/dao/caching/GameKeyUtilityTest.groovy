@@ -1,6 +1,6 @@
 package com.jtbdevelopment.games.dao.caching
 
-import com.jtbdevelopment.games.games.Game
+import com.jtbdevelopment.games.state.Game
 
 /**
  * Date: 3/2/15

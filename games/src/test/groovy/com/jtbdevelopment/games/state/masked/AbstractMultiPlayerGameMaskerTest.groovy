@@ -1,8 +1,8 @@
-package com.jtbdevelopment.games.games.masked
+package com.jtbdevelopment.games.state.masked
 
-import com.jtbdevelopment.games.games.AbstractMultiPlayerGame
-import com.jtbdevelopment.games.games.PlayerState
 import com.jtbdevelopment.games.players.AbstractPlayer
+import com.jtbdevelopment.games.state.AbstractMultiPlayerGame
+import com.jtbdevelopment.games.state.PlayerState
 
 import java.time.ZonedDateTime
 

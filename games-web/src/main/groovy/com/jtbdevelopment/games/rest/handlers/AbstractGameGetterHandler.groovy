@@ -3,10 +3,10 @@ package com.jtbdevelopment.games.rest.handlers
 import com.jtbdevelopment.games.dao.AbstractGameRepository
 import com.jtbdevelopment.games.exceptions.input.PlayerNotPartOfGameException
 import com.jtbdevelopment.games.exceptions.system.FailedToFindGameException
-import com.jtbdevelopment.games.games.Game
-import com.jtbdevelopment.games.games.MultiPlayerGame
-import com.jtbdevelopment.games.games.SinglePlayerGame
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.state.Game
+import com.jtbdevelopment.games.state.MultiPlayerGame
+import com.jtbdevelopment.games.state.SinglePlayerGame
 import groovy.transform.CompileStatic
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

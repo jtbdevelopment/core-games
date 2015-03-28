@@ -1,9 +1,9 @@
 package com.jtbdevelopment.games.publish.cluster
 
-import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.publish.GameListener
 import com.jtbdevelopment.games.publish.PlayerListener
+import com.jtbdevelopment.games.state.MultiPlayerGame
 import groovy.transform.CompileStatic
 
 /**

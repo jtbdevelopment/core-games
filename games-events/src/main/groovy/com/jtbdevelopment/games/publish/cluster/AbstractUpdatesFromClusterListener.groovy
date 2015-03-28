@@ -3,10 +3,10 @@ package com.jtbdevelopment.games.publish.cluster
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.dao.StringToIDConverter
-import com.jtbdevelopment.games.games.MultiPlayerGame
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.publish.GamePublisher
 import com.jtbdevelopment.games.publish.PlayerPublisher
+import com.jtbdevelopment.games.state.MultiPlayerGame
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 
