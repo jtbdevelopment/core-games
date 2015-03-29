@@ -26,7 +26,7 @@ class AbstractGameActionHandlerTest extends GameCoreTestCase {
     private final GameCoreTestCase.StringMPGame gameParam = new GameCoreTestCase.StringMPGame()
     private final String gameId = "238njcn33"
 
-    private class TestHandler extends AbstractGameActionHandler<String> {
+    private class TestHandler extends AbstractGameActionHandler<String, Game> {
         boolean checkEligibility = false
         boolean internalException = false
 
@@ -49,7 +49,7 @@ class AbstractGameActionHandlerTest extends GameCoreTestCase {
 
 
     void testDefaultRequiresEligibility() {
-        assertFalse new AbstractGameActionHandler<String>() {
+        assertFalse new AbstractGameActionHandler<String, Game>() {
             protected Game handleActionInternal(final Player player, final Game game, final String param) {
             }
         }.requiresEligibilityCheck(null)

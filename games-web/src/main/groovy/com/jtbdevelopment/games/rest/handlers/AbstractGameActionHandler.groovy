@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired
  * Time: 8:36 PM
  */
 @CompileStatic
-abstract class AbstractGameActionHandler<T> extends AbstractGameGetterHandler {
+abstract class AbstractGameActionHandler<T, IMPL extends Game> extends AbstractGameGetterHandler {
     private static final Logger logger = LoggerFactory.getLogger(AbstractGameActionHandler.class)
 
     @Autowired
@@ -32,11 +32,11 @@ abstract class AbstractGameActionHandler<T> extends AbstractGameGetterHandler {
     @Autowired(required = false)
     protected MultiPlayerGameMasker gameMasker
 
-    abstract protected Game handleActionInternal(final Player player, final Game game, final T param)
+    abstract protected IMPL handleActionInternal(final Player player, final IMPL game, final T param)
 
-    public Game handleAction(final Serializable playerID, final Serializable gameID, T param = null) {
+    public Game handleAction(final Serializable playerID, final Serializable gameID, final T param = null) {
         Player player = loadPlayer(playerID)
-        Game game = (Game) loadGame(gameID)
+        IMPL game = (IMPL) loadGame(gameID)
         validatePlayerForGame(game, player)
         Game updatedGame = updateGameWithEligibilityWrapper(player, game, param)
 
@@ -50,7 +50,7 @@ abstract class AbstractGameActionHandler<T> extends AbstractGameGetterHandler {
         }
     }
 
-    protected Game updateGameWithEligibilityWrapper(Player player, Game game, T param) {
+    protected Game updateGameWithEligibilityWrapper(final Player player, final IMPL game, final T param) {
         Game updatedGame
         PlayerGameEligibilityResult eligibilityResult = null
         if (gameTracker && requiresEligibilityCheck(param)) {
@@ -75,7 +75,7 @@ abstract class AbstractGameActionHandler<T> extends AbstractGameGetterHandler {
         updatedGame
     }
 
-    protected Game updateGame(Player player, Game game, T param) {
+    protected Game updateGame(final Player player, final IMPL game, final T param) {
         def updated = rotateTurnBasedGame(handleActionInternal(player, game, param))
         if (transitionEngine) {
             updated = transitionEngine.evaluateGame(updated)
@@ -85,7 +85,7 @@ abstract class AbstractGameActionHandler<T> extends AbstractGameGetterHandler {
 
     //  No rotation
     @SuppressWarnings("GrMethodMayBeStatic")
-    protected Game rotateTurnBasedGame(final Game game) {
+    protected IMPL rotateTurnBasedGame(final IMPL game) {
         return game
     }
 
