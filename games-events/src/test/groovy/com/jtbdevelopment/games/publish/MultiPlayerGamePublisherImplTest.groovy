@@ -12,8 +12,8 @@ import java.util.concurrent.ThreadPoolExecutor
  * Date: 12/8/14
  * Time: 7:11 PM
  */
-class GamePublisherTest extends GameCoreTestCase {
-    GamePublisher publisher = new GamePublisher()
+class MultiPlayerGamePublisherImplTest extends GameCoreTestCase {
+    MultiPlayerGamePublisherImpl publisher = new MultiPlayerGamePublisherImpl()
 
     void testCreatesExecutorService() {
         publisher.threads = 20

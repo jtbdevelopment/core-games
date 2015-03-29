@@ -3,8 +3,8 @@ package com.jtbdevelopment.games.publish.cluster
 import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
+import com.jtbdevelopment.games.events.GamePublisher
 import com.jtbdevelopment.games.players.Player
-import com.jtbdevelopment.games.publish.GamePublisher
 import com.jtbdevelopment.games.publish.PlayerPublisher
 import com.jtbdevelopment.games.state.Game
 import com.jtbdevelopment.games.state.MultiPlayerGame

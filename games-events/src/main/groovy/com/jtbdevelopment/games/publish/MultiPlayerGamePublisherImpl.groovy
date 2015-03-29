@@ -1,7 +1,7 @@
 package com.jtbdevelopment.games.publish
 
+import com.jtbdevelopment.games.events.GamePublisher
 import com.jtbdevelopment.games.players.Player
-import com.jtbdevelopment.games.state.Game
 import com.jtbdevelopment.games.state.MultiPlayerGame
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,7 +20,7 @@ import java.util.concurrent.Executors
 @Component
 @Lazy
 @CompileStatic
-class GamePublisher {
+class MultiPlayerGamePublisherImpl implements GamePublisher<MultiPlayerGame> {
     @Autowired(required = false)
     List<GameListener> subscribers
 
@@ -29,8 +29,12 @@ class GamePublisher {
 
     ExecutorService service;
 
+    MultiPlayerGame publish(final MultiPlayerGame game, final Player initiatingPlayer) {
+        return publish(game, initiatingPlayer, true)
+    }
+
     //  Returns game primarily to allow easy chaining
-    Game publish(final MultiPlayerGame game, final Player initiatingPlayer, boolean initiatingServer = true) {
+    MultiPlayerGame publish(final MultiPlayerGame game, final Player initiatingPlayer, boolean initiatingServer) {
         service.submit(new Runnable() {
             @Override
             void run() {
