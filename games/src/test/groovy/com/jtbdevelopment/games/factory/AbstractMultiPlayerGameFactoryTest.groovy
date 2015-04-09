@@ -47,6 +47,7 @@ class AbstractMultiPlayerGameFactoryTest extends GameCoreTestCase {
         assert game.lastUpdate == game.created
         assert game.created == null
         assert game.gamePhase == GamePhase.Challenged
+        assert game.round == 1
         assertNull game.version
     }
 
@@ -74,6 +75,8 @@ class AbstractMultiPlayerGameFactoryTest extends GameCoreTestCase {
         priorGame.players = players
         priorGame.players.add(PONE)
         priorGame.initiatingPlayer = PTHREE.id
+        priorGame.round = 10
+        priorGame.id = 'fhjkfhskdfh'
         MultiPlayerGame game = gameFactory.createGame(priorGame, initiatingPlayer)
 
         assertNotNull game
@@ -85,7 +88,9 @@ class AbstractMultiPlayerGameFactoryTest extends GameCoreTestCase {
         assert game.lastUpdate == game.created
         assert game.created == null
         assert game.gamePhase == GamePhase.Challenged
+        assert game.round == (priorGame.round + 1)
         assertNull game.version
+        assert game.previousId == priorGame.id
     }
 
 

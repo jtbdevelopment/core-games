@@ -71,6 +71,7 @@ abstract class AbstractMultiPlayerGameMasker<ID extends Serializable, FEATURES, 
         playerMaskedGame.features.addAll(game.features)
         playerMaskedGame.id = game.idAsString
         playerMaskedGame.gamePhase = game.gamePhase
+        playerMaskedGame.round = game.round
     }
 
     @SuppressWarnings("GrMethodMayBeStatic")

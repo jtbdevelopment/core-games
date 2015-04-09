@@ -12,6 +12,14 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 interface MultiPlayerGame<ID extends Serializable, TIMESTAMP, FEATURES> extends Game<ID, TIMESTAMP, FEATURES> {
+    ID getPreviousId()
+
+    void setPreviousId(final ID previousID)
+
+    int getRound()
+
+    void setRound(final int round)
+
     ID getInitiatingPlayer()
 
     void setInitiatingPlayer(final ID initiatingPlayer)

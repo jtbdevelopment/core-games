@@ -22,6 +22,13 @@ abstract class AbstractMultiPlayerGameFactory<IMPL extends MultiPlayerGame, FEAT
         game
     }
 
+    @Override
+    protected void copyFromPreviousGame(final IMPL previousGame, final IMPL newGame) {
+        super.copyFromPreviousGame(previousGame, newGame)
+        newGame.round = previousGame.round + 1
+        newGame.previousId = (Serializable) previousGame.id
+    }
+
     public IMPL createGame(final IMPL previousGame, final Player initiatingPlayer) {
         List<Player> players = rotatePlayers(previousGame)
         IMPL game = createFreshGame(previousGame.features, players, initiatingPlayer)
@@ -42,6 +49,7 @@ abstract class AbstractMultiPlayerGameFactory<IMPL extends MultiPlayerGame, FEAT
                                    final List<Player> players,
                                    final Player initiatingPlayer) {
         IMPL game = newGame()
+        game.round = 1;
         game.gamePhase = GamePhase.Challenged
         game.version = null
         game.features.addAll(features)

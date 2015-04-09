@@ -139,6 +139,7 @@ class AbstractMultiPlayerGameMaskerTest extends GroovyTestCase {
         assert maskedGame.lastUpdate == (game.lastUpdate ? game.lastUpdate.toInstant().toEpochMilli() : null)
         assert maskedGame.features == game.features
         assert maskedGame.gamePhase == game.gamePhase
+        assert maskedGame.round == game.round
     }
 
 }

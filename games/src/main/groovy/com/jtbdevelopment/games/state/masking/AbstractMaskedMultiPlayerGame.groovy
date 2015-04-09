@@ -16,6 +16,8 @@ abstract class AbstractMaskedMultiPlayerGame<FEATURES> implements MaskedMultiPla
     String id
     Integer version
 
+    int round
+
     Long created
     Long lastUpdate
     Long completedTimestamp
