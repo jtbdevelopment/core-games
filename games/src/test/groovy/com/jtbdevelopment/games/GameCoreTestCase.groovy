@@ -46,7 +46,7 @@ abstract class GameCoreTestCase extends GroovyTestCase {
         }
     }
 
-    public static class StringMPGame extends AbstractMultiPlayerGame<String, Object> {
+    public static class StringMPGame extends AbstractMultiPlayerGame<String, Object> implements Cloneable {
         String id
 
         @Override
