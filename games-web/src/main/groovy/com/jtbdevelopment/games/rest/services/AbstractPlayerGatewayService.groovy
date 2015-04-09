@@ -2,6 +2,7 @@ package com.jtbdevelopment.games.rest.services
 
 import com.jtbdevelopment.games.players.PlayerRoles
 import com.jtbdevelopment.games.security.SessionUserInfo
+import com.jtbdevelopment.games.state.GamePhase
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.context.SecurityContextHolder
@@ -36,5 +37,16 @@ abstract class AbstractPlayerGatewayService<ID extends Serializable> {
     @SuppressWarnings("GrMethodMayBeStatic")
     String ping() {
         return PING_RESULT
+    }
+
+    @GET
+    @Path("phases")
+    @Produces(MediaType.APPLICATION_JSON)
+    @SuppressWarnings("GrMethodMayBeStatic")
+    public Map<GamePhase, List<String>> phasesAndDescriptions() {
+        GamePhase.values().collectEntries() {
+            GamePhase it ->
+                [(it): [it.description, it.groupLabel]]
+        }
     }
 }

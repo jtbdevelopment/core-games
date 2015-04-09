@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.state.masking
 
 import com.jtbdevelopment.games.state.Game
+import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.PlayerState
 import groovy.transform.CompileStatic
 
@@ -22,6 +23,10 @@ interface MaskedMultiPlayerGame<FEATURES> extends Game<String, Long, FEATURES> {
 
     void setDeclinedTimestamp(final Long declinedTimestamp)
 
+    Long getRematchTimestamp()
+
+    void setRematchTimestamp(final Long rematchTimestamp)
+
     String getInitiatingPlayer()
 
     void setInitiatingPlayer(final String initiatingPlayer)
@@ -41,4 +46,8 @@ interface MaskedMultiPlayerGame<FEATURES> extends Game<String, Long, FEATURES> {
     Map<String, String> getPlayerProfiles();
 
     void setPlayerProfiles(final Map<String, String> players)
+
+    GamePhase getGamePhase()
+
+    void setGamePhase(final GamePhase gamePhase)
 }

@@ -1,5 +1,6 @@
 package com.jtbdevelopment.games.state.masking
 
+import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.PlayerState
 import groovy.transform.CompileStatic
 
@@ -19,6 +20,9 @@ abstract class AbstractMaskedMultiPlayerGame<FEATURES> implements MaskedMultiPla
     Long lastUpdate
     Long completedTimestamp
     Long declinedTimestamp
+    Long rematchTimestamp
+
+    GamePhase gamePhase
 
     String initiatingPlayer
     Map<String, String> players = [:]  //  players will be hashed down to an md5 key + displayName

@@ -2,6 +2,7 @@ package com.jtbdevelopment.games.state.masking
 
 import com.jtbdevelopment.games.players.AbstractPlayer
 import com.jtbdevelopment.games.state.AbstractMultiPlayerGame
+import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.PlayerState
 
 import java.time.ZonedDateTime
@@ -73,6 +74,7 @@ class AbstractMultiPlayerGameMaskerTest extends GroovyTestCase {
 
     public void testMaskingSinglePlayerGame() {
         IntGame game = new IntGame(
+                gamePhase: GamePhase.Quit,
                 players: [PONE],
                 created: ZonedDateTime.now(),
                 completedTimestamp: ZonedDateTime.now(),
@@ -102,6 +104,7 @@ class AbstractMultiPlayerGameMaskerTest extends GroovyTestCase {
     public void testMultiplePlayersWithSomePlayerIDFeatureData() {
         IntGame game = new IntGame(
                 players: [PONE, PTWO],
+                gamePhase: GamePhase.Challenged,
                 created: ZonedDateTime.now(),
                 completedTimestamp: ZonedDateTime.now(),
                 declinedTimestamp: ZonedDateTime.now(),
@@ -132,8 +135,10 @@ class AbstractMultiPlayerGameMaskerTest extends GroovyTestCase {
         assert maskedGame.completedTimestamp == (game.completedTimestamp ? game.completedTimestamp.toInstant().toEpochMilli() : null)
         assert maskedGame.created == (game.created ? game.created.toInstant().toEpochMilli() : null)
         assert maskedGame.declinedTimestamp == (game.declinedTimestamp ? game.declinedTimestamp.toInstant().toEpochMilli() : null)
+        assert maskedGame.rematchTimestamp == (game.rematchTimestamp ? game.rematchTimestamp.toInstant().toEpochMilli() : null)
         assert maskedGame.lastUpdate == (game.lastUpdate ? game.lastUpdate.toInstant().toEpochMilli() : null)
         assert maskedGame.features == game.features
+        assert maskedGame.gamePhase == game.gamePhase
     }
 
 }

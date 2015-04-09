@@ -3,6 +3,7 @@ package com.jtbdevelopment.games.factory
 import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.exceptions.input.FailedToCreateValidGameException
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.MultiPlayerGame
 
 /**
@@ -45,6 +46,7 @@ class AbstractMultiPlayerGameFactoryTest extends GameCoreTestCase {
         assert game.initiatingPlayer == initiatingPlayer.id
         assert game.lastUpdate == game.created
         assert game.created == null
+        assert game.gamePhase == GamePhase.Challenged
         assertNull game.version
     }
 
@@ -82,6 +84,7 @@ class AbstractMultiPlayerGameFactoryTest extends GameCoreTestCase {
         assert game.initiatingPlayer == initiatingPlayer.id
         assert game.lastUpdate == game.created
         assert game.created == null
+        assert game.gamePhase == GamePhase.Challenged
         assertNull game.version
     }
 

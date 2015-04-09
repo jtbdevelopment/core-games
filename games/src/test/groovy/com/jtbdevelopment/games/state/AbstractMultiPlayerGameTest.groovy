@@ -16,9 +16,11 @@ class AbstractMultiPlayerGameTest extends GroovyTestCase {
 
     void testConstructor() {
         IntegerMultiPlayerGame game = new IntegerMultiPlayerGame()
-        assert game.initiatingPlayer == null
+        assertNull game.initiatingPlayer
         assert game.players.isEmpty()
         assert game.playerStates.isEmpty()
-        assert game.declinedTimestamp == null
+        assertNull game.declinedTimestamp
+        assertNull game.gamePhase
+        assertNull game.rematchTimestamp
     }
 }

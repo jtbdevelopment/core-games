@@ -4,6 +4,7 @@ import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.PlayerRoles
 import com.jtbdevelopment.games.security.SessionUserInfo
+import com.jtbdevelopment.games.state.GamePhase
 import groovy.transform.TypeChecked
 import org.springframework.security.authentication.TestingAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -75,6 +76,32 @@ class AbstractPlayerGatewayServiceTest extends GameCoreTestCase {
         )
         assert gameServices.isAnnotationPresent(Path.class)
         assert gameServices.getAnnotation(Path.class).value() == "player"
+        def params = gameServices.parameterAnnotations
+        assert params.length == 0
+    }
+
+    void testGetPhases() {
+        playerGatewayService.phasesAndDescriptions() == [
+                (GamePhase.Challenged)      : GamePhase.Challenged.description,
+                (GamePhase.Declined)        : GamePhase.Declined.description,
+                (GamePhase.NextRoundStarted): GamePhase.NextRoundStarted.description,
+                (GamePhase.Playing)         : GamePhase.Playing.description,
+                (GamePhase.Quit)            : GamePhase.Quit.description,
+                (GamePhase.Setup)           : GamePhase.Setup.description,
+                (GamePhase.RoundOver)       : GamePhase.RoundOver.description,
+        ]
+    }
+
+    void testGetPhasesAnnotations() {
+        def gameServices = AbstractPlayerGatewayService.getMethod("phasesAndDescriptions", [] as Class[])
+        assert (gameServices.annotations.size() == 3 ||
+                (gameServices.isAnnotationPresent(TypeChecked.TypeCheckingInfo) && gameServices.annotations.size() == 4)
+        )
+        assert gameServices.isAnnotationPresent(Path.class)
+        assert gameServices.getAnnotation(Path.class).value() == "phases"
+        assert gameServices.isAnnotationPresent(GET.class)
+        assert gameServices.isAnnotationPresent(Produces.class)
+        assert gameServices.getAnnotation(Produces.class).value() == [MediaType.APPLICATION_JSON]
         def params = gameServices.parameterAnnotations
         assert params.length == 0
     }

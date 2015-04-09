@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.factory
 
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.MultiPlayerGame
 import groovy.transform.CompileStatic
 
@@ -41,6 +42,7 @@ abstract class AbstractMultiPlayerGameFactory<IMPL extends MultiPlayerGame, FEAT
                                    final List<Player> players,
                                    final Player initiatingPlayer) {
         IMPL game = newGame()
+        game.gamePhase = GamePhase.Challenged
         game.version = null
         game.features.addAll(features)
         game.initiatingPlayer = initiatingPlayer.id

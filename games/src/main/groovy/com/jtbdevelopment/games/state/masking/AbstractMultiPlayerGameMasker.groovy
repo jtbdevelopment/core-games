@@ -66,9 +66,11 @@ abstract class AbstractMultiPlayerGameMasker<ID extends Serializable, FEATURES, 
         playerMaskedGame.completedTimestamp = convertTime(game.completedTimestamp)
         playerMaskedGame.created = convertTime(game.created)
         playerMaskedGame.declinedTimestamp = convertTime(game.declinedTimestamp)
+        playerMaskedGame.rematchTimestamp = convertTime(game.rematchTimestamp)
         playerMaskedGame.lastUpdate = convertTime(game.lastUpdate)
         playerMaskedGame.features.addAll(game.features)
         playerMaskedGame.id = game.idAsString
+        playerMaskedGame.gamePhase = game.gamePhase
     }
 
     @SuppressWarnings("GrMethodMayBeStatic")

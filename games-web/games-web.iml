@@ -12,6 +12,9 @@
           <file>file://$MODULE_DIR$/src/main/groovy/com/jtbdevelopment/games/security/spring/social/SpringSocialConfig.groovy</file>
           <file>file://$MODULE_DIR$/src/main/groovy/com/jtbdevelopment/games/rest/aop/AspectConfiguration.groovy</file>
         </fileset>
+        <fileset id="fileset3" name="Spring Application Context (3)" removed="false">
+          <file>file://$MODULE_DIR$/src/main/groovy/com/jtbdevelopment/games/security/spring/security/SecurityConfig.groovy</file>
+        </fileset>
       </configuration>
     </facet>
   </component>
