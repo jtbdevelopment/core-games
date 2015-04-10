@@ -16,6 +16,7 @@
         <module>games-web</module>
         <module>games-web-std-multiplayer</module>
         <module>games-mongo</module>
+        <module>games-std-tracker</module>
     </modules>
 
     <properties>
