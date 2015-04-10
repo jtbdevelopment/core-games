@@ -59,9 +59,11 @@ abstract class AbstractUpdatesFromClusterListener {
     protected void receivePublishGame(final String gameId, final String playerId) {
         if (gameRepository) {
             Player p = (Player) playerRepository.findOne(stringToIDConverter.convert(playerId))
-            MultiPlayerGame g = (MultiPlayerGame) gameRepository.findOne(stringToIDConverter.convert(gameId))
-            if (p != null && g != null) {
-                gamePublisher.publish(g, p, false)
+            if (!playerId || p) {
+                MultiPlayerGame g = (MultiPlayerGame) gameRepository.findOne(stringToIDConverter.convert(gameId))
+                if (g != null) {
+                    gamePublisher.publish(g, p, false)
+                }
             }
         }
     }

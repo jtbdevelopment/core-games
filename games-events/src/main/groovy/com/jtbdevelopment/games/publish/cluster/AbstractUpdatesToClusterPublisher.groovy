@@ -20,7 +20,7 @@ abstract class AbstractUpdatesToClusterPublisher implements GameListener, Player
         if (initiatingServer) {
             internalPublish(new ClusterMessage(
                     gameId: game.idAsString,
-                    playerId: initiatingPlayer.idAsString,
+                    playerId: initiatingPlayer?.idAsString,
                     clusterMessageType: ClusterMessage.ClusterMessageType.GameUpdate)
             )
         }

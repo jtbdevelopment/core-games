@@ -36,7 +36,7 @@ class AtmosphereListener implements GameListener, PlayerListener {
     void gameChanged(final MultiPlayerGame game, final Player initiatingPlayer, final boolean initiatingServer) {
         game.players.findAll {
             Player p ->
-                p != initiatingPlayer
+                initiatingPlayer == null || p != initiatingPlayer
         }.each {
             Player publish ->
                 Broadcaster broadcaster = getBroadcasterFactory().lookup(LiveFeedService.PATH_ROOT + publish.idAsString)

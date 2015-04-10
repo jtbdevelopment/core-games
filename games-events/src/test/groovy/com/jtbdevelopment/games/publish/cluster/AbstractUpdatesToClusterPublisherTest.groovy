@@ -29,6 +29,15 @@ class AbstractUpdatesToClusterPublisherTest extends GroovyTestCase {
         assert publisher.clusterMessage.clusterMessageType == ClusterMessage.ClusterMessageType.GameUpdate
     }
 
+    void testPublishGameFromThisServerWithNullPlayer() {
+        MultiPlayerGame g = [getIdAsString: { return 'G' }] as MultiPlayerGame
+
+        publisher.gameChanged(g, null, true)
+        assert publisher.clusterMessage.gameId == g.idAsString
+        assertNull publisher.clusterMessage.playerId
+        assert publisher.clusterMessage.clusterMessageType == ClusterMessage.ClusterMessageType.GameUpdate
+    }
+
     void testPublishGameNotFromThisServer() {
         MultiPlayerGame g = [getIdAsString: { return 'G' }] as MultiPlayerGame
         Player p = [getIdAsString: { return 'TTT' }] as Player
