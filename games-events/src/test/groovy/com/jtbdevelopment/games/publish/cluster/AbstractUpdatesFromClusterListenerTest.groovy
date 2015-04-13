@@ -94,7 +94,64 @@ class AbstractUpdatesFromClusterListenerTest extends GameCoreTestCase {
         assert published
     }
 
-    void testReceivePublishGameWithNoRepository() {
+    void testReceivePublishGameNullPlayer() {
+        String gameId = 'GID'
+        boolean published = false
+        MultiPlayerGame game = [] as MultiPlayerGame
+        listener.playerRepository = [
+                findOne: {
+                    String id ->
+                        assertNull id
+                        return null
+                }
+        ] as AbstractPlayerRepository
+        listener.gameRepository = [
+                findOne: {
+                    String id ->
+                        assert id == gameId.reverse()
+                        return game
+                }
+        ] as AbstractMultiPlayerGameRepository
+        listener.gamePublisher = [
+                publish: {
+                    Game g, Player p, boolean fromServer ->
+                        assertNull p
+                        assert g.is(game)
+                        assertFalse fromServer
+                        published = true
+                        return g
+                }
+        ] as GamePublisher
+        listener.receiveClusterMessage(new ClusterMessage(
+                clusterMessageType: ClusterMessage.ClusterMessageType.GameUpdate,
+                playerId: null,
+                gameId: gameId)
+        )
+        assert published
+    }
+
+    void testReceivePublishGameInvalidPlayer() {
+        String gameId = 'GID'
+        boolean published = false
+        MultiPlayerGame game = [] as MultiPlayerGame
+        listener.playerRepository = [
+                findOne: {
+                    String id ->
+                        assert id == PINACTIVE1.id
+                        return null
+                }
+        ] as AbstractPlayerRepository
+        listener.gameRepository = null
+        listener.gamePublisher = null
+        listener.receiveClusterMessage(new ClusterMessage(
+                clusterMessageType: ClusterMessage.ClusterMessageType.GameUpdate,
+                playerId: PINACTIVE1.id,
+                gameId: gameId)
+        )
+        assertFalse published
+    }
+
+    void testReceivePublishGameWithNoGameRepository() {
         String gameId = 'GID'
         boolean published = false
         MultiPlayerGame game = [] as MultiPlayerGame

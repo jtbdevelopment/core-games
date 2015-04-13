@@ -4,6 +4,8 @@ import com.jtbdevelopment.games.events.GamePublisher
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.MultiPlayerGame
 import groovy.transform.CompileStatic
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Lazy
@@ -21,6 +23,8 @@ import java.util.concurrent.Executors
 @Lazy
 @CompileStatic
 class MultiPlayerGamePublisherImpl implements GamePublisher<MultiPlayerGame> {
+    private static final Logger logger = LoggerFactory.getLogger(MultiPlayerGamePublisherImpl.class)
+
     @Autowired(required = false)
     List<GameListener> subscribers
 
@@ -41,7 +45,11 @@ class MultiPlayerGamePublisherImpl implements GamePublisher<MultiPlayerGame> {
                 if (subscribers != null) {
                     subscribers.each {
                         GameListener listener ->
-                            listener.gameChanged(game, initiatingPlayer, initiatingServer)
+                            try {
+                                listener.gameChanged(game, initiatingPlayer, initiatingServer)
+                            } catch (Throwable e) {
+                                logger.error('Error publishing!', e)
+                            }
                     }
                 }
             }

@@ -4,7 +4,9 @@ import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.players.Player
 
 import java.util.concurrent.Callable
+import java.util.concurrent.CountDownLatch
 import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
 
 /**
  * Date: 2/6/15
@@ -21,7 +23,7 @@ class PlayerPublisherTest extends GameCoreTestCase {
         assert publisher.service.submit(new Callable() {
             @Override
             Object call() throws Exception {
-                Thread.sleep(1000)
+                Thread.sleep(100)
                 return expectedResult
             }
         }).get() == expectedResult
@@ -44,19 +46,22 @@ class PlayerPublisherTest extends GameCoreTestCase {
         publisher.threads = 1
         publisher.setUp()
 
-        def players = []
+        CountDownLatch latch = new CountDownLatch(4)
+        def players1 = [] as Set, players2 = [] as Set
         def gl1 = [
                 playerChanged: {
                     Player p, boolean iS ->
                         assert iS
-                        players.add(p)
+                        players1.add(p)
+                        latch.countDown()
                 },
         ] as PlayerListener
         def gl2 = [
                 playerChanged: {
                     Player p, boolean iS ->
                         assert iS
-                        players.add(p)
+                        players2.add(p)
+                        latch.countDown()
                 },
         ] as PlayerListener
 
@@ -64,28 +69,32 @@ class PlayerPublisherTest extends GameCoreTestCase {
 
         publisher.publish(PTWO)
         publisher.publish(PONE)
-        Thread.sleep(1000);
+        latch.await(1, TimeUnit.SECONDS)
         publisher.service.shutdown()
-        assert players == [PTWO, PTWO, PONE, PONE]
+        assert players1 == [PTWO, PONE] as Set
+        assert players2 == [PTWO, PONE] as Set
     }
 
     void testPublishTrueInitiatingServer() {
         publisher.threads = 1
         publisher.setUp()
 
-        def players = []
+        CountDownLatch latch = new CountDownLatch(4)
+        def players1 = [] as Set, players2 = [] as Set
         def gl1 = [
                 playerChanged: {
                     Player p, boolean iS ->
                         assert iS
-                        players.add(p)
+                        players1.add(p)
+                        latch.countDown()
                 },
         ] as PlayerListener
         def gl2 = [
                 playerChanged: {
                     Player p, boolean iS ->
                         assert iS
-                        players.add(p)
+                        players2.add(p)
+                        latch.countDown()
                 },
         ] as PlayerListener
 
@@ -93,28 +102,32 @@ class PlayerPublisherTest extends GameCoreTestCase {
 
         publisher.publish(PTWO, true)
         publisher.publish(PONE, true)
-        Thread.sleep(1000);
+        latch.await(1, TimeUnit.SECONDS)
         publisher.service.shutdown()
-        assert players == [PTWO, PTWO, PONE, PONE]
+        assert players1 == [PTWO, PONE] as Set
+        assert players2 == [PTWO, PONE] as Set
     }
 
     void testPublishFalseInitiatingServer() {
         publisher.threads = 1
         publisher.setUp()
 
-        def players = []
+        CountDownLatch latch = new CountDownLatch(4)
+        def players1 = [] as Set, players2 = [] as Set
         def gl1 = [
                 playerChanged: {
                     Player p, boolean iS ->
                         assertFalse iS
-                        players.add(p)
+                        players1.add(p)
+                        latch.countDown()
                 },
         ] as PlayerListener
         def gl2 = [
                 playerChanged: {
                     Player p, boolean iS ->
                         assertFalse iS
-                        players.add(p)
+                        players2.add(p)
+                        latch.countDown()
                 },
         ] as PlayerListener
 
@@ -122,9 +135,10 @@ class PlayerPublisherTest extends GameCoreTestCase {
 
         publisher.publish(PTWO, false)
         publisher.publish(PONE, false)
-        Thread.sleep(1000);
+        latch.await(1, TimeUnit.SECONDS)
         publisher.service.shutdown()
-        assert players == [PTWO, PTWO, PONE, PONE]
+        assert players1 == [PTWO, PONE] as Set
+        assert players2 == [PTWO, PONE] as Set
     }
 
     void testPublishAllWithNoListeners() {
@@ -143,11 +157,13 @@ class PlayerPublisherTest extends GameCoreTestCase {
         publisher.setUp()
 
         def gl1Called = false, gl2Called = false
+        CountDownLatch latch = new CountDownLatch(2)
         def gl1 = [
                 allPlayersChanged: {
                     boolean iS ->
                         assert iS
                         gl1Called = true
+                        latch.countDown()
                 },
         ] as PlayerListener
         def gl2 = [
@@ -155,14 +171,14 @@ class PlayerPublisherTest extends GameCoreTestCase {
                     boolean iS ->
                         assert iS
                         gl2Called = true
+                        latch.countDown()
                 },
         ] as PlayerListener
 
         publisher.subscribers = [gl1, gl2]
 
         publisher.publishAll()
-        publisher.publishAll()
-        Thread.sleep(1000);
+        latch.await(1, TimeUnit.SECONDS)
         publisher.service.shutdown()
         assert gl1Called
         assert gl2Called
@@ -172,12 +188,14 @@ class PlayerPublisherTest extends GameCoreTestCase {
         publisher.threads = 1
         publisher.setUp()
 
+        CountDownLatch latch = new CountDownLatch(4)
         def gl1Called = false, gl2Called = false
         def gl1 = [
                 allPlayersChanged: {
                     boolean iS ->
                         assert iS
                         gl1Called = true
+                        latch.countDown()
                 },
         ] as PlayerListener
         def gl2 = [
@@ -185,6 +203,7 @@ class PlayerPublisherTest extends GameCoreTestCase {
                     boolean iS ->
                         assert iS
                         gl2Called = true
+                        latch.countDown()
                 },
         ] as PlayerListener
 
@@ -192,7 +211,7 @@ class PlayerPublisherTest extends GameCoreTestCase {
 
         publisher.publishAll(true)
         publisher.publishAll(true)
-        Thread.sleep(1000);
+        latch.await(1, TimeUnit.SECONDS)
         publisher.service.shutdown()
         assert gl1Called
         assert gl2Called
@@ -202,12 +221,14 @@ class PlayerPublisherTest extends GameCoreTestCase {
         publisher.threads = 1
         publisher.setUp()
 
+        CountDownLatch latch = new CountDownLatch(4)
         def gl1Called = false, gl2Called = false
         def gl1 = [
                 allPlayersChanged: {
                     boolean iS ->
                         assertFalse iS
                         gl1Called = true
+                        latch.countDown()
                 },
         ] as PlayerListener
         def gl2 = [
@@ -215,14 +236,14 @@ class PlayerPublisherTest extends GameCoreTestCase {
                     boolean iS ->
                         assertFalse iS
                         gl2Called = true
+                        latch.countDown()
                 },
         ] as PlayerListener
 
         publisher.subscribers = [gl1, gl2]
 
         publisher.publishAll(false)
-        publisher.publishAll(false)
-        Thread.sleep(1000);
+        latch.await(1, TimeUnit.SECONDS)
         publisher.service.shutdown()
         assert gl1Called
         assert gl2Called
