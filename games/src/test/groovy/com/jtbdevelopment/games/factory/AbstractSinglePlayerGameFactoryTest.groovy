@@ -31,7 +31,6 @@ class AbstractSinglePlayerGameFactoryTest extends GameCoreTestCase {
 
 
         Set<Object> expectedFeatures = ["1", 2] as Set
-        Thread.sleep(1)
         SinglePlayerGame game = gameFactory.createGame(expectedFeatures, PONE)
 
         assertNotNull game
@@ -59,7 +58,6 @@ class AbstractSinglePlayerGameFactoryTest extends GameCoreTestCase {
         gameFactory.gameInitializers = [initializer, initializer, initializer, initializer]
 
         Set<Object> expectedFeatures = [32.1, new StringBuilder()] as Set
-        Thread.sleep(1)
 
         StringSPGame priorGame = new StringSPGame();
         priorGame.features = expectedFeatures

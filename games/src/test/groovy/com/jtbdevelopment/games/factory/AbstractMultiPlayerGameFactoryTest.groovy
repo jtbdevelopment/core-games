@@ -35,7 +35,6 @@ class AbstractMultiPlayerGameFactoryTest extends GameCoreTestCase {
         Set<Object> expectedFeatures = ["1", 2] as Set
         Player initiatingPlayer = PONE
         List<Player> players = [PTWO, PTHREE, PFOUR]
-        Thread.sleep(1)
         MultiPlayerGame game = gameFactory.createGame(expectedFeatures, players, initiatingPlayer)
 
         assertNotNull game
@@ -68,7 +67,6 @@ class AbstractMultiPlayerGameFactoryTest extends GameCoreTestCase {
         Set<Object> expectedFeatures = [32.1, new StringBuilder()] as Set
         Player initiatingPlayer = PONE
         List<Player> players = [PTWO, PTHREE, PFOUR]
-        Thread.sleep(1)
 
         StringMPGame priorGame = new StringMPGame();
         priorGame.features = expectedFeatures
