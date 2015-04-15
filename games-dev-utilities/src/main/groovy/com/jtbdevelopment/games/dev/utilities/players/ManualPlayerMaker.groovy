@@ -44,6 +44,7 @@ class ManualPlayerMaker {
         }
 
         println "Complete"
+        ctx.stop()
     }
 
     static ManualPlayer makePlayer(final String displayName, final String sourceId, final String password) {
