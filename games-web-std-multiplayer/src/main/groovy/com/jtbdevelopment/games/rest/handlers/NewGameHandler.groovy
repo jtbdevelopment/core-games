@@ -43,7 +43,7 @@ class NewGameHandler extends AbstractHandler {
     public Game handleCreateNewGame(
             final Serializable initiatingPlayerID,
             final List<String> playersIDs,
-            final Set<Object> features) {
+            final Set<?> features) {
         Set<Player> players = loadPlayerMD5s(playersIDs)  //  Load as set to prevent dupes in initial setup
         Player initiatingPlayer = players.find { Player player -> player.id == initiatingPlayerID }
         if (initiatingPlayer == null) {
@@ -63,7 +63,7 @@ class NewGameHandler extends AbstractHandler {
 
     protected Game setupGameWithEligibilityWrapper(
             final Player initiatingPlayer,
-            final Set<Object> features,
+            final Set<?> features,
             Set<Player> players) {
         PlayerGameEligibilityResult eligibilityResult = gameTracker?.getGameEligibility(initiatingPlayer)
         if (eligibilityResult?.eligibility == PlayerGameEligibility.NoGamesAvailable) {
@@ -88,7 +88,7 @@ class NewGameHandler extends AbstractHandler {
     }
 
     protected Game setupGame(
-            final Set<Object> features,
+            final Set<?> features,
             final Set<Player> players,
             final Player initiatingPlayer) {
         def game = gameFactory.createGame(features, players.toList(), initiatingPlayer)
