@@ -17,8 +17,8 @@ import java.time.ZonedDateTime
  * Date: 4/8/2015
  * Time: 10:16 PM
  */
-class AbstractChallengeToRematchHandlerTest extends GameCoreTestCase {
-    AbstractChallengeToRematchHandler handler = new AbstractChallengeToRematchHandler() {}
+class ChallengeToRematchHandlerTest extends GameCoreTestCase {
+    ChallengeToRematchHandler handler = new ChallengeToRematchHandler() {}
 
     void testEligibilityCheck() {
         assert handler.requiresEligibilityCheck(null)

@@ -1,7 +1,7 @@
 package com.jtbdevelopment.games.rest
 
-import com.jtbdevelopment.games.rest.handlers.AbstractChallengeToRematchHandler
 import com.jtbdevelopment.games.rest.handlers.ChallengeResponseHandler
+import com.jtbdevelopment.games.rest.handlers.ChallengeToRematchHandler
 import com.jtbdevelopment.games.rest.handlers.QuitHandler
 import com.jtbdevelopment.games.state.PlayerState
 import com.jtbdevelopment.games.state.masking.AbstractMaskedMultiPlayerGame
@@ -71,7 +71,7 @@ class AbstractMultiPlayerGameServicesTest extends GroovyTestCase {
                         assert g == GID
                         result
                 }
-        ] as AbstractChallengeToRematchHandler
+        ] as ChallengeToRematchHandler
         assert result.is(services.createRematch())
     }
 

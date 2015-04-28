@@ -7,6 +7,7 @@ import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.MultiPlayerGame
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -15,8 +16,9 @@ import java.time.ZonedDateTime
  * Date: 11/4/2014
  * Time: 9:11 PM
  */
+@Component
 @CompileStatic
-abstract class AbstractChallengeToRematchHandler extends AbstractGameActionHandler<Object, MultiPlayerGame> {
+class ChallengeToRematchHandler extends AbstractGameActionHandler<Object, MultiPlayerGame> {
     public static final ZoneId GMT = ZoneId.of("GMT")
     @Autowired
     protected AbstractMultiPlayerGameFactory gameFactory
