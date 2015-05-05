@@ -22,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 
 import javax.ws.rs.client.Client
 import javax.ws.rs.client.ClientBuilder
+import javax.ws.rs.client.Entity
 import javax.ws.rs.client.WebTarget
 import javax.ws.rs.core.GenericType
 import javax.ws.rs.core.MediaType
@@ -33,6 +34,8 @@ import javax.ws.rs.core.UriBuilder
  */
 @CompileStatic
 abstract class AbstractGameIntegration extends AbstractMongoIntegration {
+    protected static final Entity EMPTY_PUT_POST = Entity.entity("", MediaType.TEXT_PLAIN)
+
     private static Server SERVER;
     private static final int port = 8998;
     static final URI BASE_URI = UriBuilder.fromUri("http://localhost/").port(port).build();
