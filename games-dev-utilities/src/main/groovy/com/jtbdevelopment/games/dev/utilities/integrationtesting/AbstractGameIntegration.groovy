@@ -9,6 +9,7 @@ import com.jtbdevelopment.games.mongo.players.MongoManualPlayer
 import com.jtbdevelopment.games.mongo.players.MongoPlayerFactory
 import com.jtbdevelopment.games.players.friendfinder.SourceBasedFriendFinder
 import com.jtbdevelopment.games.rest.services.AbstractPlayerGatewayService
+import com.jtbdevelopment.games.state.Game
 import com.jtbdevelopment.games.state.GamePhase
 import groovy.transform.CompileStatic
 import org.bson.types.ObjectId
@@ -33,7 +34,7 @@ import javax.ws.rs.core.UriBuilder
  * Time: 3:29 PM
  */
 @CompileStatic
-abstract class AbstractGameIntegration extends AbstractMongoIntegration {
+abstract class AbstractGameIntegration<G extends Game> extends AbstractMongoIntegration {
     protected static final Entity EMPTY_PUT_POST = Entity.entity("", MediaType.TEXT_PLAIN)
 
     private static Server SERVER;
@@ -57,6 +58,8 @@ abstract class AbstractGameIntegration extends AbstractMongoIntegration {
         player.verified = true
         return player
     }
+
+    abstract Class<G> returnedGameClass();
 
     static ApplicationContext applicationContext
     static PasswordEncoder passwordEncoder
@@ -138,6 +141,30 @@ abstract class AbstractGameIntegration extends AbstractMongoIntegration {
                 "NextRoundStarted": [GamePhase.NextRoundStarted.description, GamePhase.NextRoundStarted.groupLabel],
                 "Playing"         : [GamePhase.Playing.description, GamePhase.Playing.groupLabel],
         ]
+    }
+
+    protected G accept(WebTarget target) {
+        (G) target.path("accept").request(MediaType.APPLICATION_JSON).put(EMPTY_PUT_POST, returnedGameClass())
+    }
+
+    protected G reject(WebTarget target) {
+        (G) target.path("reject").request(MediaType.APPLICATION_JSON).put(EMPTY_PUT_POST, returnedGameClass())
+    }
+
+    protected G quit(WebTarget target) {
+        (G) target.path("quit").request(MediaType.APPLICATION_JSON).put(EMPTY_PUT_POST, returnedGameClass())
+    }
+
+    protected G rematch(WebTarget target) {
+        (G) target.path("rematch").request(MediaType.APPLICATION_JSON).put(EMPTY_PUT_POST, returnedGameClass())
+    }
+
+    protected static WebTarget createAPITarget(final MongoManualPlayer p) {
+        return createConnection(p).target(PLAYER_API)
+    }
+
+    protected static WebTarget createGameTarget(final WebTarget source, final Game g) {
+        return source.path("game").path(g.idAsString)
     }
 
     protected static Client createConnection(final MongoManualPlayer p) {
