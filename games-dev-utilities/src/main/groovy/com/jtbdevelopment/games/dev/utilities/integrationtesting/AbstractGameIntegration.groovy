@@ -143,19 +143,23 @@ abstract class AbstractGameIntegration<G extends Game> extends AbstractMongoInte
         ]
     }
 
-    protected G accept(WebTarget target) {
+    protected G getGame(WebTarget target) {
+        (G) target.request(MediaType.APPLICATION_JSON).get(returnedGameClass())
+    }
+
+    protected G acceptGame(WebTarget target) {
         (G) target.path("accept").request(MediaType.APPLICATION_JSON).put(EMPTY_PUT_POST, returnedGameClass())
     }
 
-    protected G reject(WebTarget target) {
+    protected G rejectGame(WebTarget target) {
         (G) target.path("reject").request(MediaType.APPLICATION_JSON).put(EMPTY_PUT_POST, returnedGameClass())
     }
 
-    protected G quit(WebTarget target) {
+    protected G quitGame(WebTarget target) {
         (G) target.path("quit").request(MediaType.APPLICATION_JSON).put(EMPTY_PUT_POST, returnedGameClass())
     }
 
-    protected G rematch(WebTarget target) {
+    protected G rematchGame(WebTarget target) {
         (G) target.path("rematch").request(MediaType.APPLICATION_JSON).put(EMPTY_PUT_POST, returnedGameClass())
     }
 
