@@ -164,6 +164,10 @@ abstract class AbstractGameIntegration<G extends Game> extends AbstractMongoInte
     }
 
     protected static WebTarget createAPITarget(final MongoManualPlayer p) {
+        return createConnection(p).target(API_URI)
+    }
+
+    protected static WebTarget createPlayerAPITarget(final MongoManualPlayer p) {
         return createConnection(p).target(PLAYER_API)
     }
 
