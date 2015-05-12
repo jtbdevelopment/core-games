@@ -92,7 +92,13 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
 
     @Test
     void testFindByMD5() {
-        List<Player> players = playerRepository.findByMd5In([player1.md5, player3.md5, systemPlayer.md5])//, 'JUNK'])
+        Player player = playerRepository.findByMd5(player1.md5)
+        assert player == player1
+    }
+
+    @Test
+    void testFindByMD5s() {
+        List<Player> players = playerRepository.findByMd5In([player1.md5, player3.md5, systemPlayer.md5])
         assert players.size() == 3
         assert players.contains(player1)
         assert players.contains(player3)

@@ -28,6 +28,9 @@ interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSor
     Player<ID> findOne(ID id)
 
     @Cacheable(value = PLAYER_MD5_CACHE)
+    Player<ID> findByMd5(final String md5);
+
+    @Cacheable(value = PLAYER_MD5_CACHE)
     List<Player<ID>> findByMd5In(final Collection<String> md5s);
 
     @Cacheable(value = PLAYER_S_AND_SID_CACHE, key = 'T(com.jtbdevelopment.games.players.AbstractPlayer).getSourceAndSourceId(#p0, #p1)')
