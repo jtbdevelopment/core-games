@@ -36,6 +36,8 @@ import javax.annotation.PostConstruct
 class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final static Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
+    public static final String NO_REDIRECT = 'noRedirect'
+
     @Autowired
     PlayerUserDetailsService playerUserDetailsService
 
@@ -87,7 +89,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
                 ).
                 permitAll().
                 antMatchers("/**").authenticated().
-                and().formLogin().loginPage("/signin/index.html").loginProcessingUrl("/signin/authenticate").failureUrl("/signin/index.html?error=BadCredentials").defaultSuccessUrl("/", true).
+                and().formLogin().loginPage("/signin/index.html").loginProcessingUrl("/signin/authenticate").failureUrl("/signin/index.html?error=BadCredentials").defaultSuccessUrl("/", true).successHandler(new ConfigurableSuccessfulAuthenticationHandler()).failureHandler(new ConfigurableFailureAuthenticationHandler()).
                 and().logout().logoutUrl("/signout").deleteCookies("JSESSIONID").
                 and().rememberMe().tokenRepository(persistentTokenRepository).userDetailsService(playerUserDetailsService).
                 and().portMapper().portMapper(portMapper).
