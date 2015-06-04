@@ -5,10 +5,10 @@ package com.jtbdevelopment.games.players
  */
 class PlayerRolesTest extends GroovyTestCase {
     void testPlayer() {
-        assert PlayerRoles.PLAYER == 'Player'
+        assert PlayerRoles.PLAYER == 'ROLE_Player'
     }
 
     void testAdmin() {
-        assert PlayerRoles.ADMIN == 'Admin'
+        assert PlayerRoles.ADMIN == 'ROLE_Admin'
     }
 }

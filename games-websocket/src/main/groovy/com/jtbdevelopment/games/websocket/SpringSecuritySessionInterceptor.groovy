@@ -69,4 +69,9 @@ class SpringSecuritySessionInterceptor implements AtmosphereInterceptor {
     void postInspect(final AtmosphereResource r) {
 
     }
+
+    @Override
+    void destroy() {
+
+    }
 }

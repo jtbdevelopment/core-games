@@ -10,6 +10,7 @@ import com.jtbdevelopment.games.state.masking.MultiPlayerGameMasker
 import groovy.transform.CompileStatic
 import org.atmosphere.cpr.Broadcaster
 import org.atmosphere.cpr.BroadcasterFactory
+import org.atmosphere.cpr.Universe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -29,25 +30,26 @@ class AtmosphereListener implements GameListener, PlayerListener {
     @Autowired
     StringToIDConverter<? extends Serializable> stringToIDConverter
 
-    //  TODO - injectable in theory when 2.3 comes out, currently only a RC.  Replace getBroadcasterFactory then
     BroadcasterFactory broadcasterFactory
 
     @Override
     void gameChanged(final MultiPlayerGame game, final Player initiatingPlayer, final boolean initiatingServer) {
-        game.players.findAll {
-            Player p ->
-                initiatingPlayer == null || p != initiatingPlayer
-        }.each {
-            Player publish ->
-                Broadcaster broadcaster = getBroadcasterFactory().lookup(LiveFeedService.PATH_ROOT + publish.idAsString)
-                if (broadcaster != null) {
-                    broadcaster.broadcast(
-                            new WebSocketMessage(
-                                    messageType: WebSocketMessage.MessageType.Game,
-                                    game: gameMasker.maskGameForPlayer((MultiPlayerGame) game, publish)
-                            )
-                    )
-                }
+        if (broadcasterFactory) {
+            game.players.findAll {
+                Player p ->
+                    initiatingPlayer == null || p != initiatingPlayer
+            }.each {
+                Player publish ->
+                    Broadcaster broadcaster = getBroadcasterFactory().lookup(LiveFeedService.PATH_ROOT + publish.idAsString)
+                    if (broadcaster != null) {
+                        broadcaster.broadcast(
+                                new WebSocketMessage(
+                                        messageType: WebSocketMessage.MessageType.Game,
+                                        game: gameMasker.maskGameForPlayer((MultiPlayerGame) game, publish)
+                                )
+                        )
+                    }
+            }
         }
     }
 
@@ -77,8 +79,7 @@ class AtmosphereListener implements GameListener, PlayerListener {
 
     protected BroadcasterFactory getBroadcasterFactory() {
         if (!broadcasterFactory) {
-            //  Explicitly not tested for now - see TODO above
-            broadcasterFactory = BroadcasterFactory.default
+            broadcasterFactory = Universe.broadcasterFactory()
         }
         broadcasterFactory
     }
