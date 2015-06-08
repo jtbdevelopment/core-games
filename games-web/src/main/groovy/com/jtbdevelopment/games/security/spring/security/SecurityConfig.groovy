@@ -1,5 +1,6 @@
 package com.jtbdevelopment.games.security.spring.security
 
+import com.jtbdevelopment.games.security.spring.security.cachecontrol.SmarterCacheControlHeaderWriter
 import com.jtbdevelopment.games.security.spring.security.csrf.XSRFTokenCookieFilter
 import com.jtbdevelopment.games.security.spring.security.facebook.FacebookCanvasAllowingProtectionMatcher
 import com.jtbdevelopment.games.security.spring.security.facebook.FacebookCanvasXFrameAllowFromStrategy
@@ -96,9 +97,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
                 and().headers().addHeaderWriter(new XFrameOptionsHeaderWriter(new FacebookCanvasXFrameAllowFromStrategy())).
                 and().apply(new SpringSocialConfigurer().postLoginUrl("/"))
 
-        //  TODO - review - Spring Security is sticking no cache on everything, even static
-        //  difficult to remove after - need a custom CacheControlHeadersWriter with some smarts
-        http.headers().cacheControl().disable()
+        http.headers().cacheControl().disable().addHeaderWriter(new SmarterCacheControlHeaderWriter())
 
         if (Boolean.parseBoolean(securityProperties.getAllowBasicAuth())) {
             logger.warn("-----------------------------------------------------")
