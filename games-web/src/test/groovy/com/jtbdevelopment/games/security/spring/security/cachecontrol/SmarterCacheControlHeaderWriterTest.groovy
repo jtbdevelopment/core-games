@@ -33,7 +33,7 @@ class SmarterCacheControlHeaderWriterTest extends GroovyTestCase {
     }
 
     void testWriteHeadersAllowsCachingFor() {
-        ["/images", "/scripts", "/styles", "/bower_components"].each {
+        ["/images", "/scripts", "/styles", "/bower_components", '/views'].each {
             MockHttpServletRequest request = new MockHttpServletRequest()
             MockHttpServletResponse response = new MockHttpServletResponse()
 

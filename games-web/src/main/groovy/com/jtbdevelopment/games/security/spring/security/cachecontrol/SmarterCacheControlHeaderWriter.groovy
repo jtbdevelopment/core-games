@@ -36,6 +36,7 @@ class SmarterCacheControlHeaderWriter implements HeaderWriter {
         return path.startsWith("/images") ||
                 path.startsWith("/scripts") ||
                 path.startsWith("/styles") ||
+                path.startsWith("/views") ||
                 path.startsWith("/bower_components")
     }
 }
