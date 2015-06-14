@@ -112,10 +112,9 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
                 and().logout().logoutUrl(LOGOUT_PAGE).deleteCookies("JSESSIONID").
                 and().rememberMe().tokenRepository(persistentTokenRepository).userDetailsService(playerUserDetailsService).
                 and().portMapper().portMapper(portMapper).
-                and().headers().addHeaderWriter(new XFrameOptionsHeaderWriter(new FacebookCanvasXFrameAllowFromStrategy())).
+                and().headers().frameOptions().disable().addHeaderWriter(new XFrameOptionsHeaderWriter(new FacebookCanvasXFrameAllowFromStrategy())).
+                and().headers().cacheControl().disable().addHeaderWriter(new SmarterCacheControlHeaderWriter()).
                 and().apply(new MobileAwareSocialConfigurer().successHandler(successfulAuthenticationHandler).failureHandler(new MobileAwareSocialFailureAuthenticationHandler(mobileAppChecker, mobileAppProperties)))
-
-        http.headers().cacheControl().disable().addHeaderWriter(new SmarterCacheControlHeaderWriter())
 
         if (Boolean.parseBoolean(securityProperties.getAllowBasicAuth())) {
             logger.warn("-----------------------------------------------------")
