@@ -1,9 +1,11 @@
 package com.jtbdevelopment.games.security.spring.security
 
+import com.jtbdevelopment.games.security.spring.redirects.*
 import com.jtbdevelopment.games.security.spring.security.cachecontrol.SmarterCacheControlHeaderWriter
 import com.jtbdevelopment.games.security.spring.security.csrf.XSRFTokenCookieFilter
 import com.jtbdevelopment.games.security.spring.security.facebook.FacebookCanvasAllowingProtectionMatcher
 import com.jtbdevelopment.games.security.spring.security.facebook.FacebookCanvasXFrameAllowFromStrategy
+import com.jtbdevelopment.games.security.spring.social.MobileAwareSocialConfigurer
 import com.jtbdevelopment.games.security.spring.social.security.PlayerSocialUserDetailsService
 import com.jtbdevelopment.games.security.spring.userdetails.PlayerUserDetailsService
 import org.slf4j.Logger
@@ -18,14 +20,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.PortMapperImpl
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository
 import org.springframework.security.web.csrf.CsrfFilter
 import org.springframework.security.web.csrf.CsrfTokenRepository
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter
-import org.springframework.social.security.SpringSocialConfigurer
 
 import javax.annotation.PostConstruct
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 /**
  * Date: 1/12/15
@@ -38,6 +42,10 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final static Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
     public static final String NO_REDIRECT = 'noRedirect'
+    public static final String LOGIN_PAGE = "/signin"
+    public static final String LOGOUT_PAGE = "/signout"
+    public static final String AUTHENTICATE_PAGE = "/signin/authenticate"
+    public static final String LOGGED_IN_URL = "/"
 
     @Autowired
     PlayerUserDetailsService playerUserDetailsService
@@ -56,6 +64,13 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     AuthenticationManagerBuilder authenticationManagerBuilder
+
+    @Autowired
+    MobileAppProperties mobileAppProperties
+
+    @Autowired
+    MobileAppChecker mobileAppChecker
+
 
     @PostConstruct
     public void configureAuthenticationProvider() throws Exception {
@@ -77,6 +92,9 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
         portMapper.getTranslatedPortMappings().put(8998, 8999)
         portMapper.getTranslatedPortMappings().put(8998, 8999)
         portMapper.getTranslatedPortMappings().put(8090, 8943)
+
+
+        AuthenticationSuccessHandler successfulAuthenticationHandler = new MobileAwareSuccessfulAuthenticationHandler(mobileAppChecker, mobileAppProperties, LOGGED_IN_URL, true)
         http.authorizeRequests().
                 antMatchers(
                         "/favicon.ico",
@@ -90,12 +108,12 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
                 ).
                 permitAll().
                 antMatchers("/**").authenticated().
-                and().formLogin().loginPage("/signin/index.html").loginProcessingUrl("/signin/authenticate").failureUrl("/signin/index.html?error=BadCredentials").defaultSuccessUrl("/", true).successHandler(new ConfigurableSuccessfulAuthenticationHandler()).failureHandler(new ConfigurableFailureAuthenticationHandler()).
-                and().logout().logoutUrl("/signout").deleteCookies("JSESSIONID").
+                and().formLogin().successHandler(successfulAuthenticationHandler).failureHandler(new MobileAwareFailureAuthenticationHandler(mobileAppChecker, mobileAppProperties)).loginPage(LOGIN_PAGE).loginProcessingUrl(AUTHENTICATE_PAGE).
+                and().logout().logoutUrl(LOGOUT_PAGE).deleteCookies("JSESSIONID").
                 and().rememberMe().tokenRepository(persistentTokenRepository).userDetailsService(playerUserDetailsService).
                 and().portMapper().portMapper(portMapper).
                 and().headers().addHeaderWriter(new XFrameOptionsHeaderWriter(new FacebookCanvasXFrameAllowFromStrategy())).
-                and().apply(new SpringSocialConfigurer().postLoginUrl("/"))
+                and().apply(new MobileAwareSocialConfigurer().successHandler(successfulAuthenticationHandler).failureHandler(new MobileAwareSocialFailureAuthenticationHandler(mobileAppChecker, mobileAppProperties)))
 
         http.headers().cacheControl().disable().addHeaderWriter(new SmarterCacheControlHeaderWriter())
 
@@ -115,5 +133,15 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
             http.csrf().csrfTokenRepository(csrfTokenRepository()).requireCsrfProtectionMatcher(new FacebookCanvasAllowingProtectionMatcher()).
                     and().addFilterAfter(new XSRFTokenCookieFilter(), CsrfFilter.class)
         }
+    }
+
+    static boolean shouldPreventRedirect(final HttpServletRequest request, final HttpServletResponse response) {
+        if (request.parameterMap.containsKey(SecurityConfig.NO_REDIRECT)) {
+            String[] parameterValues = request.parameterMap[SecurityConfig.NO_REDIRECT]
+            if (parameterValues != null && parameterValues.length > 0 && "true" == parameterValues[0]) {
+                return true
+            }
+        }
+        return false
     }
 }

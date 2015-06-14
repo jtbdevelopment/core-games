@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value
  * Time: 6:43 PM
  */
 class SecurityPropertiesTest extends GroovyTestCase {
-    SecurityProperties properties = new SecurityProperties()
 
     void testValueAnnotations() {
         assert SecurityProperties.class.
