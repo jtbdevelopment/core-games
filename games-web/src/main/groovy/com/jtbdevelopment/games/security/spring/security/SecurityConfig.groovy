@@ -39,7 +39,7 @@ import javax.annotation.PostConstruct
 class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final static Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
-    public static final String LOGIN_PAGE = "/signin"
+    public static final String LOGIN_PAGE = "/signin/index.html"
     public static final String LOGOUT_PAGE = "/signout"
     public static final String AUTHENTICATE_PAGE = "/signin/authenticate"
     public static final String LOGGED_IN_URL = "/"
