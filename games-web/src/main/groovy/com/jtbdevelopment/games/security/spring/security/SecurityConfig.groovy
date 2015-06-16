@@ -28,8 +28,6 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter
 
 import javax.annotation.PostConstruct
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 /**
  * Date: 1/12/15
@@ -41,7 +39,6 @@ import javax.servlet.http.HttpServletResponse
 class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final static Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
-    public static final String NO_REDIRECT = 'noRedirect'
     public static final String LOGIN_PAGE = "/signin"
     public static final String LOGOUT_PAGE = "/signout"
     public static final String AUTHENTICATE_PAGE = "/signin/authenticate"
@@ -80,7 +77,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
         authenticationManagerBuilder.authenticationProvider(daoAuthenticationProvider)
     }
 
-    protected CsrfTokenRepository csrfTokenRepository() {
+    protected static CsrfTokenRepository csrfTokenRepository() {
         HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository()
         repository.setHeaderName('X-XSRF-TOKEN')
         repository
@@ -132,15 +129,5 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
             http.csrf().csrfTokenRepository(csrfTokenRepository()).requireCsrfProtectionMatcher(new FacebookCanvasAllowingProtectionMatcher()).
                     and().addFilterAfter(new XSRFTokenCookieFilter(), CsrfFilter.class)
         }
-    }
-
-    static boolean shouldPreventRedirect(final HttpServletRequest request, final HttpServletResponse response) {
-        if (request.parameterMap.containsKey(SecurityConfig.NO_REDIRECT)) {
-            String[] parameterValues = request.parameterMap[SecurityConfig.NO_REDIRECT]
-            if (parameterValues != null && parameterValues.length > 0 && "true" == parameterValues[0]) {
-                return true
-            }
-        }
-        return false
     }
 }
