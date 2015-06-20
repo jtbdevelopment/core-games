@@ -37,9 +37,12 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoIntegration {
     MongoPlayer player1, player2, player3, player4
     CacheManager cacheManager
     Cache cache
+    ZonedDateTime start
 
     @Before
     void setup() {
+        start = ZonedDateTime.now(ZoneId.of("GMT"));
+
         assert db.collectionExists(GAMES_COLLECTION_NAME)
         collection = db.getCollection(GAMES_COLLECTION_NAME)
 
@@ -105,6 +108,8 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoIntegration {
         assert loaded.features == save.features
 
         assert gameRepository.count() == 1
+        assert gameRepository.countByCreatedGreaterThan(start) == 1
+        assert gameRepository.countByCreatedGreaterThan((ZonedDateTime) loaded.created) == 0
     }
 
     @Test
@@ -251,5 +256,10 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoIntegration {
         cache.clear()
         assert cache.get(p1g1.id) == null
         assert gameRepository.findOne(p1g1.id) == null
+    }
+
+    @Test
+    void testPlayerCount() {
+        assert 4L == playerRepository.count()
     }
 }

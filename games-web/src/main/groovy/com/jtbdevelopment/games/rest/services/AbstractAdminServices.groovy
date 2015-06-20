@@ -1,5 +1,6 @@
 package com.jtbdevelopment.games.rest.services
 
+import com.jtbdevelopment.games.dao.AbstractGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.dao.StringToIDConverter
 import com.jtbdevelopment.games.players.Player
@@ -15,6 +16,9 @@ import javax.annotation.security.RolesAllowed
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 /**
  * Date: 11/27/2014
@@ -29,9 +33,26 @@ abstract class AbstractAdminServices {
     public static final int DEFAULT_PAGE_SIZE = 500
     @Autowired
     AbstractPlayerRepository playerRepository
+    @Autowired
+    AbstractGameRepository gameRepository
+    public static final ZoneId GMT = ZoneId.of("GMT")
 
     @Autowired
     StringToIDConverter<? extends Serializable> stringToIDConverter
+
+    @GET
+    @Path("gamesSince/{since}")
+    @Produces(MediaType.TEXT_PLAIN)
+    long gamesSince(@PathParam("since") long since) {
+        return gameRepository.countByCreatedGreaterThan(ZonedDateTime.ofInstant(Instant.ofEpochSecond(since), GMT))
+    }
+
+    @GET
+    @Path("playerCount")
+    @Produces(MediaType.TEXT_PLAIN)
+    long players() {
+        return playerRepository.count()
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
