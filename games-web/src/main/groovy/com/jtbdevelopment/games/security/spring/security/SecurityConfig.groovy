@@ -2,9 +2,9 @@ package com.jtbdevelopment.games.security.spring.security
 
 import com.jtbdevelopment.games.security.spring.redirects.*
 import com.jtbdevelopment.games.security.spring.security.cachecontrol.SmarterCacheControlHeaderWriter
+import com.jtbdevelopment.games.security.spring.security.csp.ContentSecurityPolicyHeaderWriter
 import com.jtbdevelopment.games.security.spring.security.csrf.XSRFTokenCookieFilter
 import com.jtbdevelopment.games.security.spring.security.facebook.FacebookCanvasAllowingProtectionMatcher
-import com.jtbdevelopment.games.security.spring.security.facebook.FacebookCanvasXFrameAllowFromStrategy
 import com.jtbdevelopment.games.security.spring.social.MobileAwareSocialConfigurer
 import com.jtbdevelopment.games.security.spring.social.security.PlayerSocialUserDetailsService
 import com.jtbdevelopment.games.security.spring.userdetails.PlayerUserDetailsService
@@ -25,7 +25,6 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.security.web.csrf.CsrfFilter
 import org.springframework.security.web.csrf.CsrfTokenRepository
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository
-import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter
 
 import javax.annotation.PostConstruct
 
@@ -109,7 +108,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
                 and().logout().logoutUrl(LOGOUT_PAGE).deleteCookies("JSESSIONID").
                 and().rememberMe().tokenRepository(persistentTokenRepository).userDetailsService(playerUserDetailsService).
                 and().portMapper().portMapper(portMapper).
-                and().headers().frameOptions().disable().addHeaderWriter(new XFrameOptionsHeaderWriter(new FacebookCanvasXFrameAllowFromStrategy())).
+                and().headers().frameOptions().disable().addHeaderWriter(new ContentSecurityPolicyHeaderWriter()).
                 and().headers().cacheControl().disable().addHeaderWriter(new SmarterCacheControlHeaderWriter()).
                 and().apply(new MobileAwareSocialConfigurer().successHandler(successfulAuthenticationHandler).failureHandler(new MobileAwareSocialFailureAuthenticationHandler(mobileAppChecker, mobileAppProperties)))
 
