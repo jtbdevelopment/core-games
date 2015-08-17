@@ -46,6 +46,86 @@ class AbstractAdminServicesTest extends GameCoreTestCase {
         assert expectedCount == adminServices.players()
     }
 
+    void testGetPlayersAnnotations() {
+        Method m = AbstractAdminServices.class.getMethod("players", [] as Class<?>[])
+        assert (m.annotations.size() == 3 ||
+                (m.isAnnotationPresent(TypeChecked.TypeCheckingInfo) && m.annotations.size() == 4)
+        )
+        assert m.isAnnotationPresent(GET.class)
+        assert m.isAnnotationPresent(Produces.class)
+        assert m.getAnnotation(Produces.class).value() == [MediaType.TEXT_PLAIN]
+        assert m.isAnnotationPresent(Path.class)
+        assert m.getAnnotation(Path.class).value() == "playerCount"
+    }
+
+    void testPlayerCreatedSinceCount() {
+        long expectedCount = 5
+        def now = ZonedDateTime.now(ZoneId.of("GMT"))
+        ZonedDateTime since = ZonedDateTime.ofInstant(
+                Instant.ofEpochSecond(now.toEpochSecond()),
+                ZoneId.of("GMT"))
+        adminServices.playerRepository = [
+                countByCreatedGreaterThan: {
+                    z ->
+                        assert since.equals(z)
+                        return expectedCount
+                }
+        ] as AbstractPlayerRepository
+
+        assert expectedCount == adminServices.playersCreatedSince(since.toEpochSecond())
+    }
+
+    void testGetPlayersCreatedSinceAnnotations() {
+        Method m = AbstractAdminServices.class.getMethod("playersCreatedSince", [long.class] as Class<?>[])
+        assert (m.annotations.size() == 3 ||
+                (m.isAnnotationPresent(TypeChecked.TypeCheckingInfo) && m.annotations.size() == 4)
+        )
+        assert m.isAnnotationPresent(GET.class)
+        assert m.isAnnotationPresent(Produces.class)
+        assert m.getAnnotation(Produces.class).value() == [MediaType.TEXT_PLAIN]
+        def params = m.parameterAnnotations
+        assert params.length == 1
+        assert params[0].length == 1
+        assert params[0][0].annotationType() == PathParam.class
+        assert ((PathParam) params[0][0]).value() == "since"
+        assert m.isAnnotationPresent(Path.class)
+        assert m.getAnnotation(Path.class).value() == "playersCreated/{since}"
+    }
+
+    void testPlayerLastLoginSinceCount() {
+        long expectedCount = 5
+        def now = ZonedDateTime.now(ZoneId.of("GMT"))
+        ZonedDateTime since = ZonedDateTime.ofInstant(
+                Instant.ofEpochSecond(now.toEpochSecond()),
+                ZoneId.of("GMT"))
+        adminServices.playerRepository = [
+                countByLastLoginGreaterThan: {
+                    z ->
+                        assert since.equals(z)
+                        return expectedCount
+                }
+        ] as AbstractPlayerRepository
+
+        assert expectedCount == adminServices.playersLoggedInSince(since.toEpochSecond())
+    }
+
+    void testGetPlayersLastLoginSinceAnnotations() {
+        Method m = AbstractAdminServices.class.getMethod("playersLoggedInSince", [long.class] as Class<?>[])
+        assert (m.annotations.size() == 3 ||
+                (m.isAnnotationPresent(TypeChecked.TypeCheckingInfo) && m.annotations.size() == 4)
+        )
+        assert m.isAnnotationPresent(GET.class)
+        assert m.isAnnotationPresent(Produces.class)
+        assert m.getAnnotation(Produces.class).value() == [MediaType.TEXT_PLAIN]
+        def params = m.parameterAnnotations
+        assert params.length == 1
+        assert params[0].length == 1
+        assert params[0][0].annotationType() == PathParam.class
+        assert ((PathParam) params[0][0]).value() == "since"
+        assert m.isAnnotationPresent(Path.class)
+        assert m.getAnnotation(Path.class).value() == "playersLoggedIn/{since}"
+    }
+
     void testGamesSinceCount() {
         long expectedCount = 5
 
@@ -62,18 +142,6 @@ class AbstractAdminServicesTest extends GameCoreTestCase {
         ] as AbstractGameRepository
 
         assert expectedCount == adminServices.gamesSince(since.toEpochSecond())
-    }
-
-    void testGetPlayersAnnotations() {
-        Method m = AbstractAdminServices.class.getMethod("players", [] as Class<?>[])
-        assert (m.annotations.size() == 3 ||
-                (m.isAnnotationPresent(TypeChecked.TypeCheckingInfo) && m.annotations.size() == 4)
-        )
-        assert m.isAnnotationPresent(GET.class)
-        assert m.isAnnotationPresent(Produces.class)
-        assert m.getAnnotation(Produces.class).value() == [MediaType.TEXT_PLAIN]
-        assert m.isAnnotationPresent(Path.class)
-        assert m.getAnnotation(Path.class).value() == "playerCount"
     }
 
     void testGamesSinceAnnotations() {

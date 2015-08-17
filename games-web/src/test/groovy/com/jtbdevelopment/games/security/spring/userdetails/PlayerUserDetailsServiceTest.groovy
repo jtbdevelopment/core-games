@@ -3,6 +3,8 @@ package com.jtbdevelopment.games.security.spring.userdetails
 import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.ManualPlayer
+import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.security.spring.LastLoginUpdater
 import com.jtbdevelopment.games.security.spring.PlayerUserDetails
 
 /**
@@ -22,10 +24,18 @@ class PlayerUserDetailsServiceTest extends GameCoreTestCase {
                 }
         ] as AbstractPlayerRepository<String>
         userDetailsService.playerRepository = repo
+        Player updatedPlayer = [] as Player
+        userDetailsService.lastLoginUpdater = [
+                updatePlayerLastLogin: {
+                    Player p ->
+                        assert p.is(PTWO)
+                        return updatedPlayer
+                }
+        ] as LastLoginUpdater
 
         PlayerUserDetails d = userDetailsService.loadUserByUsername(PTWO.sourceId)
-        assert d.effectiveUser == PTWO
-        assert d.sessionUser == PTWO
+        assert d.effectiveUser == updatedPlayer
+        assert d.sessionUser == updatedPlayer
     }
 
     void testNoLoadUserByUsername() {

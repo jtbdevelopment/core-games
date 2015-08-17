@@ -3,6 +3,8 @@ package com.jtbdevelopment.games.players
 import groovy.transform.CompileStatic
 import org.springframework.data.annotation.Transient
 
+import java.time.ZonedDateTime
+
 /**
  * Date: 12/30/2014
  * Time: 11:08 AM
@@ -60,4 +62,14 @@ interface Player<ID extends Serializable> {
     String getMd5()
 
     String getSourceAndSourceId()
+
+    ZonedDateTime getCreated()
+
+    ZonedDateTime getLastLogin()
+
+    void setLastLogin(final ZonedDateTime lastLogin)
+
+    String getLastVersionNotes()
+
+    void setLastVersionNotes(final String lastVersionNotes)
 }

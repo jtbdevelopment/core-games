@@ -15,6 +15,8 @@ import org.springframework.data.mongodb.core.MongoOperations
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 
+import java.time.ZonedDateTime
+
 /**
  * Date: 1/11/15
  * Time: 3:09 PM
@@ -36,6 +38,10 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
                 sourceId: "MADEUP" + id,
                 displayName: id,
                 disabled: disabled,
+                lastVersionNotes: 'X.Y',
+                //  Mongo module doesn't have JSR 310 serializers registered
+                created: (ZonedDateTime) null,
+                lastLogin: (ZonedDateTime) null,
                 imageUrl: "http://somewhere.com/image/" + id,
                 profileUrl: "http://somewhere.com/profile/" + id))
     }
@@ -108,7 +114,7 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
     @Test
     void testSerialization() {
         ObjectMapper mapper = context.getBean(ObjectMapper.class)
-        assert mapper.writeValueAsString(player1) == '{"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","disabled":false,"adminUser":false,"payLevel":"PremiumPlayer","gameSpecificPlayerAttributes":null,"id":"' + player1.idAsString + '","md5":"' + player1.md5 + '"}'
+        assert mapper.writeValueAsString(player1) == '{"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","created":null,"lastLogin":null,"lastVersionNotes":"X.Y","disabled":false,"adminUser":false,"payLevel":"PremiumPlayer","gameSpecificPlayerAttributes":null,"id":"' + player1.idAsString + '","md5":"' + player1.md5 + '"}'
     }
 
     @Test

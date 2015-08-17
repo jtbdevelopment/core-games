@@ -55,6 +55,20 @@ abstract class AbstractAdminServices {
     }
 
     @GET
+    @Path("playersCreated/{since}")
+    @Produces(MediaType.TEXT_PLAIN)
+    long playersCreatedSince(@PathParam("since") long since) {
+        return playerRepository.countByCreatedGreaterThan(ZonedDateTime.ofInstant(Instant.ofEpochSecond(since), GMT))
+    }
+
+    @GET
+    @Path("playersLoggedIn/{since}")
+    @Produces(MediaType.TEXT_PLAIN)
+    long playersLoggedInSince(@PathParam("since") long since) {
+        return playerRepository.countByLastLoginGreaterThan(ZonedDateTime.ofInstant(Instant.ofEpochSecond(since), GMT))
+    }
+
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     Object playersToSimulate(
             @QueryParam("page") Integer page, @QueryParam("pageSize") Integer pageSize) {

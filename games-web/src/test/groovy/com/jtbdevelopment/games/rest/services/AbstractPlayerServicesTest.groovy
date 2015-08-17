@@ -14,10 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.context.SecurityContextImpl
 
 import javax.annotation.security.RolesAllowed
-import javax.ws.rs.GET
-import javax.ws.rs.Path
-import javax.ws.rs.PathParam
-import javax.ws.rs.Produces
+import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
@@ -103,6 +100,45 @@ class AbstractPlayerServicesTest extends GameCoreTestCase {
         assert gameServices.isAnnotationPresent(GET.class)
         def params = gameServices.parameterAnnotations
         assert params.length == 0
+    }
+
+    void testUpdateLastVersionInfo() {
+        String newNotes = "NewVersion"
+        playerServices.playerRepository = [
+                findOne: {
+                    String it ->
+                        assert it == PONE.id
+                        return PONE
+                },
+                save   : {
+                    Player p ->
+                        assert p.is(PONE)
+                        assert newNotes == p.lastVersionNotes
+                        return PONE
+                }
+        ] as AbstractPlayerRepository
+
+        playerServices.playerID.set(PONE.idAsString)
+
+        def returned = playerServices.updateLastVersionNotes(newNotes)
+        assert PONE.is(returned)
+    }
+
+    void testUpdateVersionNotesInfoAnnotations() {
+        def gameServices = AbstractPlayerServices.getMethod("updateLastVersionNotes", [String.class] as Class[])
+        assert (gameServices.annotations.size() == 3 ||
+                (gameServices.isAnnotationPresent(TypeChecked.TypeCheckingInfo) && gameServices.annotations.size() == 4)
+        )
+        assert gameServices.isAnnotationPresent(Produces.class)
+        assert gameServices.getAnnotation(Produces.class).value() == [MediaType.APPLICATION_JSON]
+        assert gameServices.isAnnotationPresent(POST.class)
+        def params = gameServices.parameterAnnotations
+        assert params.length == 1
+        assert params[0].length == 1
+        assert params[0][0].annotationType() == PathParam.class
+        assert ((PathParam) params[0][0]).value() == "versionNotes"
+        assert gameServices.isAnnotationPresent(Path.class)
+        assert gameServices.getAnnotation(Path.class).value() == "lastVersionNotes/{versionNotes}"
     }
 
     void testGetFriends() {

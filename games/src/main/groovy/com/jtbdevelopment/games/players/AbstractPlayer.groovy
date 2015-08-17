@@ -2,7 +2,11 @@ package com.jtbdevelopment.games.players
 
 import groovy.transform.CompileStatic
 import org.apache.commons.codec.digest.DigestUtils
+import org.springframework.data.annotation.CreatedDate
 import org.springframework.util.StringUtils
+
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 /**
  * Date: 11/3/14
@@ -10,12 +14,20 @@ import org.springframework.util.StringUtils
  */
 @CompileStatic
 abstract class AbstractPlayer<ID extends Serializable> implements Cloneable, Player<ID>, Serializable {
+    public static final ZoneId GMT = ZoneId.of("GMT")
 
     String source
     String sourceId
     String displayName
     String imageUrl
     String profileUrl
+
+    @CreatedDate
+    ZonedDateTime created = ZonedDateTime.now(GMT)
+    ZonedDateTime lastLogin = ZonedDateTime.now(GMT).minusYears(5)
+
+    String lastVersionNotes = ""
+
     boolean disabled = false
     boolean adminUser = false
     PlayerPayLevel payLevel = PlayerPayLevel.FreeToPlay

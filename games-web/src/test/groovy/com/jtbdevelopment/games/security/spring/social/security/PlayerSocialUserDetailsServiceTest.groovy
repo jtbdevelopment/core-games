@@ -3,6 +3,7 @@ package com.jtbdevelopment.games.security.spring.social.security
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.dao.StringToIDConverter
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.security.spring.LastLoginUpdater
 import com.jtbdevelopment.games.security.spring.PlayerUserDetails
 import org.springframework.social.security.SocialUserDetails
 
@@ -24,9 +25,10 @@ class PlayerSocialUserDetailsServiceTest extends GroovyTestCase {
         }
     }
 
-    void testReturnsWrappedPlayerIfFound() {
+    void testReturnsWrappedPlayerIfFoundAfterCallingLoginUpdated() {
         String id = 'ANID'
         Player player = [] as Player
+        Player playerCopy = [] as Player
         service.playerRepository = [
                 findOne: {
                     String it ->
@@ -34,15 +36,21 @@ class PlayerSocialUserDetailsServiceTest extends GroovyTestCase {
                         return player
                 }
         ] as AbstractPlayerRepository
+        service.lastLoginUpdater = [
+                updatePlayerLastLogin: {
+                    Player p ->
+                        assert p.is(player)
+                        playerCopy
+                }
+        ] as LastLoginUpdater
 
         SocialUserDetails userDetails = service.loadUserByUserId(id)
         assert userDetails instanceof PlayerUserDetails
-        assert userDetails.sessionUser.is(player)
+        assert userDetails.sessionUser.is(playerCopy)
     }
 
     void testReturnsNullIfNotFound() {
         String id = 'ANID'
-        Player player = [] as Player
         service.playerRepository = [
                 findOne: {
                     String it ->

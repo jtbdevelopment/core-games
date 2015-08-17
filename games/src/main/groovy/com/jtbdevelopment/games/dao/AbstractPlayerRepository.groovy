@@ -9,6 +9,8 @@ import org.springframework.cache.annotation.Caching
 import org.springframework.data.repository.NoRepositoryBean
 import org.springframework.data.repository.PagingAndSortingRepository
 
+import java.time.ZonedDateTime
+
 import static com.jtbdevelopment.games.dao.caching.CacheConstants.*
 
 /**
@@ -99,4 +101,8 @@ interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSor
             ]
     )
     void deleteAll()
+
+    long countByCreatedGreaterThan(final ZonedDateTime cutoff)
+
+    long countByLastLoginGreaterThan(final ZonedDateTime cutoff)
 }

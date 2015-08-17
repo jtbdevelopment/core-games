@@ -2,6 +2,7 @@ package com.jtbdevelopment.games.rest.services
 
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.dao.StringToIDConverter
+import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.PlayerRoles
 import com.jtbdevelopment.games.players.friendfinder.FriendFinder
 import groovy.transform.CompileStatic
@@ -14,10 +15,7 @@ import org.springframework.context.ApplicationContextAware
 import org.springframework.util.StringUtils
 
 import javax.annotation.security.RolesAllowed
-import javax.ws.rs.GET
-import javax.ws.rs.Path
-import javax.ws.rs.PathParam
-import javax.ws.rs.Produces
+import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
@@ -41,6 +39,12 @@ abstract class AbstractPlayerServices<ID extends Serializable> implements Applic
 
     private ApplicationContext applicationContext;
 
+    @Override
+    void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext
+    }
+
+
     @Path("game/{gameID}")
     Object gamePlay(@PathParam("gameID") final String gameID) {
         if (StringUtils.isEmpty(gameID) || StringUtils.isEmpty(gameID.trim())) {
@@ -49,11 +53,6 @@ abstract class AbstractPlayerServices<ID extends Serializable> implements Applic
         gamePlayServices.gameID.set(stringToIDConverter.convert(gameID))
         gamePlayServices.playerID.set(playerID.get())
         return gamePlayServices
-    }
-
-    @Override
-    void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext
     }
 
     @GET
@@ -75,6 +74,15 @@ abstract class AbstractPlayerServices<ID extends Serializable> implements Applic
             logger.warn("Unable to retrieve FriendFinder from application context");
             throw new IllegalStateException("No App Context")
         }
+    }
+
+    @Path("lastVersionNotes/{versionNotes}")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public Object updateLastVersionNotes(@PathParam("versionNotes") final String lastVersionNotes) {
+        Player player = playerRepository.findOne((playerID.get()))
+        player.lastVersionNotes = lastVersionNotes
+        return playerRepository.save(player)
     }
 
     @Path("admin")
