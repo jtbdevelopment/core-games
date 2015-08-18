@@ -69,6 +69,7 @@ class JettyServer {
         atmosphereServletHolder.setInitParameter("org.atmosphere.websocket.messageContentType", "application/json")
         atmosphereServletHolder.setInitParameter("org.atmosphere.cpr.broadcasterLifeCyclePolicy", "EMPTY_DESTROY")
         atmosphereServletHolder.setInitParameter("org.atmosphere.cpr.sessionSupport", "true")
+        atmosphereServletHolder.setInitParameter("org.atmosphere.interceptor.HeartbeatInterceptor.heartbeatFrequencyInSeconds", "20")
         atmosphereServletHolder.asyncSupported = true
     }
 

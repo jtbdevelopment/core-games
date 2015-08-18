@@ -6,6 +6,7 @@ import org.atmosphere.config.service.*
 import org.atmosphere.cpr.AtmosphereResource
 import org.atmosphere.cpr.AtmosphereResourceEvent
 import org.atmosphere.interceptor.AtmosphereResourceLifecycleInterceptor
+import org.atmosphere.interceptor.HeartbeatInterceptor
 import org.atmosphere.interceptor.SuspendTrackerInterceptor
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -16,7 +17,8 @@ import org.slf4j.LoggerFactory
                 SpringSecuritySessionInterceptor.class,
                 AtmosphereResourceLifecycleInterceptor.class,
                 TrackMessageSizeInterceptor.class,
-                SuspendTrackerInterceptor.class
+                SuspendTrackerInterceptor.class,
+                HeartbeatInterceptor.class
         ],
         atmosphereConfig = ["supportSession=true"]
 )
