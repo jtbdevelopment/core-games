@@ -1,8 +1,10 @@
 package com.jtbdevelopment.games.mongo.players
 
+import com.jtbdevelopment.games.players.GameSpecificPlayerAttributes
 import com.jtbdevelopment.games.players.ManualPlayer
 import groovy.transform.CompileStatic
 import org.bson.types.ObjectId
+import org.springframework.data.annotation.PersistenceConstructor
 import org.springframework.data.mongodb.core.mapping.Document
 
 /**
@@ -25,6 +27,12 @@ class MongoManualPlayer extends MongoPlayer implements ManualPlayer<ObjectId> {
     String verificationToken = ""
 
     public MongoManualPlayer() {
+        super.source = MANUAL_SOURCE
+    }
+
+    @PersistenceConstructor
+    public MongoManualPlayer(final GameSpecificPlayerAttributes gameSpecificPlayerAttributes) {
+        super(gameSpecificPlayerAttributes)
         super.source = MANUAL_SOURCE
     }
 }

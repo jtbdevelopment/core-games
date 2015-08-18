@@ -1,7 +1,10 @@
 package com.jtbdevelopment.games.player.tracking
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.jtbdevelopment.games.players.GameSpecificPlayerAttributes
+import com.jtbdevelopment.games.players.Player
 import groovy.transform.CompileStatic
+import org.springframework.data.annotation.Transient
 
 /**
  * Date: 1/30/15
@@ -14,4 +17,13 @@ abstract class AbstractPlayerGameTrackingAttributes implements GameSpecificPlaye
 
     int freeGamesUsedToday = 0
     int availablePurchasedGames = 0
+
+    @Transient
+    @JsonIgnore
+    Player player
+
+    abstract int getMaxDailyFreeGames()
+
+    @SuppressWarnings("GroovyUnusedDeclaration")
+    abstract void setMaxDailyFreeGames(int maxDailyFreeGames)
 }

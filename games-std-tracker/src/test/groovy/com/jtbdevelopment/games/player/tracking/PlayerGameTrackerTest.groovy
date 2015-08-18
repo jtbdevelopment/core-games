@@ -25,21 +25,15 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
     final String UPDATEFREEPLAYED = "{ \"\$inc\" : { \"gameSpecificPlayerAttributes.freeGamesUsedToday\" : 1}}"
     public static
     final String FRRETOPLAYPREMIUMFIND = "Query: { \"_id\" : { \"\$oid\" : \"100000000000000000000000\"} , \"gameSpecificPlayerAttributes.freeGamesUsedToday\" : { \"\$lt\" : " + DEFAULT_PREMIUM + "}}, Fields: null, Sort: null"
-    PlayerGameTracker tracker = new PlayerGameTracker(playerGameLimits: new PlayerLimitsImpl())
+    PlayerGameTracker tracker = new PlayerGameTracker()
 
     private static class PlayerAttributes extends AbstractPlayerGameTrackingAttributes {
-
-    }
-
-    private static class PlayerLimitsImpl implements PlayerGameLimits {
-        @Override
-        int getDefaultDailyFreeGames() {
-            return DEFAULT_FREE
-        }
+        int maxDailyFreeGames
 
         @Override
-        int getDefaultDailyPremiumFreeGames() {
-            return DEFAULT_PREMIUM
+        void setPlayer(final Player player) {
+            super.setPlayer(player)
+            maxDailyFreeGames = (player.payLevel == PlayerPayLevel.FreeToPlay ? DEFAULT_FREE : DEFAULT_PREMIUM)
         }
     }
 
@@ -48,7 +42,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
         boolean published = false
         MongoPlayer input = (MongoPlayer) PONE.clone();
         input.payLevel = PlayerPayLevel.FreeToPlay
-        input.gameSpecificPlayerAttributes = new PlayerAttributes(freeGamesUsedToday: 0, availablePurchasedGames: 5)
+        input.gameSpecificPlayerAttributes = new PlayerAttributes(freeGamesUsedToday: 0, availablePurchasedGames: 5, player: input)
         MongoPlayer output = (MongoPlayer) input.clone()
         output.gameSpecificPlayerAttributes = new PlayerAttributes(freeGamesUsedToday: 1, availablePurchasedGames: 5)
         tracker.mongoOperations = [

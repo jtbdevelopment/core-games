@@ -2,6 +2,8 @@ package com.jtbdevelopment.games.mongo.players
 
 import com.jtbdevelopment.games.players.GameSpecificPlayerAttributes
 import com.jtbdevelopment.games.players.GameSpecificPlayerAttributesFactory
+import com.jtbdevelopment.games.players.Player
+import org.springframework.data.annotation.Transient
 
 /**
  * Date: 1/8/15
@@ -12,6 +14,8 @@ class MongoPlayerFactoryTest extends GroovyTestCase {
 
     private static class GameAttributes implements GameSpecificPlayerAttributes {
         int magicValue
+        @Transient
+        Player player
     }
 
     private static class GameAttributesFactory implements GameSpecificPlayerAttributesFactory {
@@ -55,6 +59,7 @@ class MongoPlayerFactoryTest extends GroovyTestCase {
         def player = factory.newPlayer()
         assert player instanceof MongoPlayer
         assertNotNull player.gameSpecificPlayerAttributes
+        assert player.is(player.gameSpecificPlayerAttributes.player)
         assert ((GameAttributes) player.gameSpecificPlayerAttributes).magicValue == 1
     }
 
@@ -63,6 +68,7 @@ class MongoPlayerFactoryTest extends GroovyTestCase {
         def player = factory.newManualPlayer()
         assert player instanceof MongoManualPlayer
         assertNotNull player.gameSpecificPlayerAttributes
+        assert player.is(player.gameSpecificPlayerAttributes.player)
         assert ((GameAttributes) player.gameSpecificPlayerAttributes).magicValue == 2
     }
 
@@ -71,6 +77,7 @@ class MongoPlayerFactoryTest extends GroovyTestCase {
         def player = factory.newSystemPlayer()
         assert player instanceof MongoSystemPlayer
         assertNotNull player.gameSpecificPlayerAttributes
+        assert player.is(player.gameSpecificPlayerAttributes.player)
         assert ((GameAttributes) player.gameSpecificPlayerAttributes).magicValue == 3
     }
 }

@@ -106,4 +106,11 @@ abstract class AbstractPlayer<ID extends Serializable> implements Cloneable, Pla
     static String getSourceAndSourceId(final String source, final String sourceId) {
         return (source && sourceId) ? (source + "/" + sourceId) : null
     }
+
+    void setGameSpecificPlayerAttributes(final GameSpecificPlayerAttributes gameSpecificPlayerAttributes) {
+        this.gameSpecificPlayerAttributes = gameSpecificPlayerAttributes
+        if (gameSpecificPlayerAttributes) {
+            gameSpecificPlayerAttributes.setPlayer(this)
+        }
+    }
 }

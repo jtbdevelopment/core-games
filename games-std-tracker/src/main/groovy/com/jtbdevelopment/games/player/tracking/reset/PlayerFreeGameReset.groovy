@@ -3,7 +3,6 @@ package com.jtbdevelopment.games.player.tracking.reset
 import com.jtbdevelopment.games.dao.caching.CacheConstants
 import com.jtbdevelopment.games.mongo.players.MongoPlayer
 import com.jtbdevelopment.games.player.tracking.AbstractPlayerGameTrackingAttributes
-import com.jtbdevelopment.games.player.tracking.PlayerGameLimits
 import com.jtbdevelopment.games.publish.PlayerPublisher
 import groovy.transform.CompileStatic
 import org.slf4j.Logger
@@ -30,9 +29,6 @@ class PlayerFreeGameReset {
 
     @Autowired
     PlayerPublisher playerPublisher
-
-    @Autowired
-    PlayerGameLimits playerGameLimits
 
     @Caching(
             evict = [

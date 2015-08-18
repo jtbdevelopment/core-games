@@ -2,9 +2,11 @@ package com.jtbdevelopment.games.mongo.players
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.jtbdevelopment.games.players.AbstractPlayer
+import com.jtbdevelopment.games.players.GameSpecificPlayerAttributes
 import groovy.transform.CompileStatic
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
+import org.springframework.data.annotation.PersistenceConstructor
 import org.springframework.data.mongodb.core.index.CompoundIndex
 import org.springframework.data.mongodb.core.index.CompoundIndexes
 import org.springframework.data.mongodb.core.index.Indexed
@@ -30,6 +32,13 @@ class MongoPlayer extends AbstractPlayer<ObjectId> implements Cloneable {
 
     @Indexed
     private String md5
+
+    MongoPlayer() {}
+
+    @PersistenceConstructor
+    MongoPlayer(final GameSpecificPlayerAttributes gameSpecificPlayerAttributes) {
+        setGameSpecificPlayerAttributes(gameSpecificPlayerAttributes)
+    }
 
     String getIdAsString() {
         return id?.toHexString()

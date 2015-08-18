@@ -5,7 +5,9 @@ package com.jtbdevelopment.games.player.tracking
  * Time: 9:26 AM
  */
 class AbstractPlayerGameTrackingAttributesTest extends GroovyTestCase {
-    AbstractPlayerGameTrackingAttributes attributes = new AbstractPlayerGameTrackingAttributes() {}
+    AbstractPlayerGameTrackingAttributes attributes = new AbstractPlayerGameTrackingAttributes() {
+        int maxDailyFreeGames
+    }
 
     void testInitializesToZero() {
         assert attributes.availablePurchasedGames == 0

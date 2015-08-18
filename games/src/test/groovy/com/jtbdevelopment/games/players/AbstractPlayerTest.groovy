@@ -2,6 +2,7 @@ package com.jtbdevelopment.games.players
 
 import com.jtbdevelopment.games.GameCoreTestCase
 import org.apache.commons.codec.digest.DigestUtils
+import org.springframework.data.annotation.Transient
 
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -103,5 +104,27 @@ class AbstractPlayerTest extends GameCoreTestCase {
                 sourceId: "BAYMAX",
                 source: null).getSourceAndSourceId() == null
 
+    }
+
+    private class TestPlayerAttributes implements GameSpecificPlayerAttributes {
+        @Transient
+        Player player
+
+        int someAttribute
+    }
+
+    void testSettingGameSpecificAttributeAlsoLinksAttributeBackToPlayer() {
+        TestPlayerAttributes attributes = new TestPlayerAttributes(someAttribute: 5)
+
+        assertNull attributes.player
+
+        Player p = new StringPlayer(gameSpecificPlayerAttributes: attributes)
+        assert p.is(attributes.player)
+    }
+
+    void testSettingGameSpecificAttributeToNullDoesNotException() {
+        Player p = new StringPlayer()
+        p.gameSpecificPlayerAttributes = null
+        assertNull p.gameSpecificPlayerAttributes
     }
 }

@@ -3,7 +3,6 @@ package com.jtbdevelopment.games.player.tracking
 import com.jtbdevelopment.games.dao.caching.CacheConstants
 import com.jtbdevelopment.games.mongo.players.MongoPlayer
 import com.jtbdevelopment.games.players.Player
-import com.jtbdevelopment.games.players.PlayerPayLevel
 import com.jtbdevelopment.games.publish.PlayerPublisher
 import com.jtbdevelopment.games.tracking.GameEligibilityTracker
 import com.jtbdevelopment.games.tracking.PlayerGameEligibility
@@ -42,9 +41,6 @@ class PlayerGameTracker implements GameEligibilityTracker<PlayerGameEligibilityR
     @Autowired
     PlayerPublisher playerPublisher
 
-    @Autowired
-    PlayerGameLimits playerGameLimits
-
     /**
      * Checks eligibility for player and decrements appropriate value
      * Caller should retain value until all actions completed in case rollback is needed
@@ -61,7 +57,7 @@ class PlayerGameTracker implements GameEligibilityTracker<PlayerGameEligibilityR
     )
     @Override
     PlayerGameEligibilityResult getGameEligibility(final Player player) {
-        int freeGames = (player.payLevel == PlayerPayLevel.FreeToPlay ? playerGameLimits.defaultDailyFreeGames : playerGameLimits.defaultDailyPremiumFreeGames)
+        int freeGames = ((AbstractPlayerGameTrackingAttributes) player.gameSpecificPlayerAttributes).maxDailyFreeGames
 
         //  Try free game first
         MongoPlayer updated = (MongoPlayer) mongoOperations.findAndModify(
