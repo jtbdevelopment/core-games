@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.MongoOperations
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 
+import java.time.ZoneId
 import java.time.ZonedDateTime
 
 /**
@@ -39,9 +40,7 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
                 displayName: id,
                 disabled: disabled,
                 lastVersionNotes: 'X.Y',
-                //  Mongo module doesn't have JSR 310 serializers registered
-                created: (ZonedDateTime) null,
-                lastLogin: (ZonedDateTime) null,
+                lastLogin: ZonedDateTime.now(ZoneId.of("GMT")),
                 imageUrl: "http://somewhere.com/image/" + id,
                 profileUrl: "http://somewhere.com/profile/" + id))
     }
@@ -114,7 +113,19 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
     @Test
     void testSerialization() {
         ObjectMapper mapper = context.getBean(ObjectMapper.class)
-        assert mapper.writeValueAsString(player1) == '{"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","created":null,"lastLogin":null,"lastVersionNotes":"X.Y","disabled":false,"adminUser":false,"payLevel":"PremiumPlayer","gameSpecificPlayerAttributes":null,"id":"' + player1.idAsString + '","md5":"' + player1.md5 + '"}'
+
+        //  Mongo module doesn't have JSR 310 serializers registered
+        ZonedDateTime ll = player1.lastLogin
+        ZonedDateTime c = player1.created
+        try {
+            player1.lastLogin = null
+            player1.created = null
+
+            assert mapper.writeValueAsString(player1) == '{"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","created":null,"lastLogin":null,"lastVersionNotes":"X.Y","disabled":false,"adminUser":false,"payLevel":"PremiumPlayer","gameSpecificPlayerAttributes":null,"id":"' + player1.idAsString + '","md5":"' + player1.md5 + '"}'
+        } finally {
+            player1.lastLogin = ll
+            player1.created = c
+        }
     }
 
     @Test
@@ -265,6 +276,14 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
         cache = cacheManager.getCache(CacheConstants.PLAYER_MD5_CACHE)
         cache.clear()
         assert playerRepository.findByMd5In([player3.md5, player4.md5]).isEmpty()
+    }
+
+    @Test
+    void testFindByLastLogin() {
+        List<Player> playerList = playerRepository.findByLastLoginLessThan(player1.created.minusMinutes(1))
+        assert 2 == playerList.size()
+        playerList = playerRepository.findByLastLoginLessThan(systemPlayer.created.plusHours(1))
+        assert 6 == playerList.size()
     }
 }
 

@@ -44,6 +44,9 @@ interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSor
     //  Not caching - currently only used by manual players for testing
     List<Player<ID>> findBySourceAndDisabled(final String source, final boolean disabled);
 
+    //  Not caching - loading in order to delete
+    List<Player<ID>> findByLastLoginLessThan(final ZonedDateTime cutoff)
+
     @Caching(
             put = [
                     @CachePut(value = PLAYER_ID_CACHE, key = '#result.id'),
