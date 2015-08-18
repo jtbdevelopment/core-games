@@ -8,9 +8,8 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.repository.NoRepositoryBean
 import org.springframework.data.repository.PagingAndSortingRepository
 
-import java.time.ZonedDateTime
-
 import static com.jtbdevelopment.games.dao.caching.CacheConstants.GAME_ID_CACHE
+
 /**
  * Date: 12/31/2014
  * Time: 5:32 PM
@@ -45,5 +44,8 @@ interface AbstractGameRepository<ID extends Serializable, TIMESTAMP, FEATURES, I
     @CacheEvict(value = GAME_ID_CACHE, allEntries = true)
     void deleteAll()
 
-    long countByCreatedGreaterThan(final ZonedDateTime cutoff)
+    long countByCreatedGreaterThan(final TIMESTAMP cutoff)
+
+    //  Not caching - likely for maintenance
+    List<IMPL> findByCreatedLessThan(final TIMESTAMP cutoff)
 }

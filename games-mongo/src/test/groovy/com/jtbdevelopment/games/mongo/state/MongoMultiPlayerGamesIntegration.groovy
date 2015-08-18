@@ -200,6 +200,23 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoIntegration {
     }
 
     @Test
+    void testFindsCreatedBefore() {
+        SimpleMultiPlayerGame p1g1 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 15, stringValue: '2', players: [player1, player4, player2] as List<Player>))
+        gameRepository.save(p1g1)
+        SimpleMultiPlayerGame p2g1 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 20, stringValue: '2', players: [player2, player4] as List<Player>))
+        gameRepository.save(p2g1)
+
+        List<SimpleMultiPlayerGame> games
+        games = (List<SimpleMultiPlayerGame>) gameRepository.findByCreatedLessThan(p1g1.created)
+        assert !games.contains(p1g1)
+        assert !games.contains(p2g1)
+
+        games = (List<SimpleMultiPlayerGame>) gameRepository.findByCreatedLessThan(ZonedDateTime.now(GMT))
+        assert games.contains(p1g1)
+        assert games.contains(p2g1)
+    }
+
+    @Test
     void testDeleteAllCache() {
         SimpleMultiPlayerGame p1g1 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 15, stringValue: '2', players: [player1, player4, player2] as List<Player>))
         SimpleMultiPlayerGame p2g1 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 20, stringValue: '2', players: [player2, player4] as List<Player>))

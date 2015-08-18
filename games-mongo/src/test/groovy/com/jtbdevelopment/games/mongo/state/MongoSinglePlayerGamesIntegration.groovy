@@ -194,6 +194,23 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoIntegration {
     }
 
     @Test
+    void testFindsCreatedBefore() {
+        SimpleSinglePlayerGame p1g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 5, stringValue: 'X', player: player1))
+        gameRepository.save(p1g1)
+        SimpleSinglePlayerGame p2g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 20, stringValue: '2', player: player2))
+        gameRepository.save(p2g1)
+
+        List<SimpleSinglePlayerGame> games
+        games = (List<SimpleSinglePlayerGame>) gameRepository.findByCreatedLessThan(p1g1.created)
+        assert !games.contains(p1g1)
+        assert !games.contains(p2g1)
+
+        games = (List<SimpleSinglePlayerGame>) gameRepository.findByCreatedLessThan(ZonedDateTime.now(GMT))
+        assert games.contains(p1g1)
+        assert games.contains(p2g1)
+    }
+
+    @Test
     void testIterableDeletesForCache() {
         SimpleSinglePlayerGame p1g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 5, stringValue: 'X', player: player1))
         SimpleSinglePlayerGame p2g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 20, stringValue: '2', player: player2))

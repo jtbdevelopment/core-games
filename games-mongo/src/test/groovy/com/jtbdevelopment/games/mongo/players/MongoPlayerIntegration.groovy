@@ -114,14 +114,13 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
     void testSerialization() {
         ObjectMapper mapper = context.getBean(ObjectMapper.class)
 
-        //  Mongo module doesn't have JSR 310 serializers registered
         ZonedDateTime ll = player1.lastLogin
         ZonedDateTime c = player1.created
         try {
-            player1.lastLogin = null
-            player1.created = null
+            player1.lastLogin = ZonedDateTime.of(2015, 11, 10, 1, 2, 3, 100, ZoneId.of("GMT"))
+            player1.created = ZonedDateTime.of(200, 1, 30, 4, 5, 6, 100, ZoneId.of("GMT"))
 
-            assert mapper.writeValueAsString(player1) == '{"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","created":null,"lastLogin":null,"lastVersionNotes":"X.Y","disabled":false,"adminUser":false,"payLevel":"PremiumPlayer","gameSpecificPlayerAttributes":null,"id":"' + player1.idAsString + '","md5":"' + player1.md5 + '"}'
+            assert mapper.writeValueAsString(player1) == '{"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","created":-55853265294.000000100,"lastLogin":1447117323.000000100,"lastVersionNotes":"X.Y","disabled":false,"adminUser":false,"payLevel":"PremiumPlayer","gameSpecificPlayerAttributes":null,"id":"' + player1.idAsString + '","md5":"' + player1.md5 + '"}'
         } finally {
             player1.lastLogin = ll
             player1.created = c

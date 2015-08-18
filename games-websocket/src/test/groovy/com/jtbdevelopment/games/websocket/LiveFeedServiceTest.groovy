@@ -8,6 +8,7 @@ import org.atmosphere.cpr.AtmosphereResource
 import org.atmosphere.cpr.AtmosphereResourceEventImpl
 import org.atmosphere.cpr.AtmosphereResourceImpl
 import org.atmosphere.interceptor.AtmosphereResourceLifecycleInterceptor
+import org.atmosphere.interceptor.HeartbeatInterceptor
 import org.atmosphere.interceptor.SuspendTrackerInterceptor
 
 import java.lang.reflect.Method
@@ -45,7 +46,8 @@ class LiveFeedServiceTest extends GroovyTestCase {
         assert a.interceptors() == [SpringSecuritySessionInterceptor.class,
                                     AtmosphereResourceLifecycleInterceptor.class,
                                     TrackMessageSizeInterceptor.class,
-                                    SuspendTrackerInterceptor.class]
+                                    SuspendTrackerInterceptor.class,
+                                    HeartbeatInterceptor.class]
         assert a.atmosphereConfig() == ["supportSession=true"]
     }
 
