@@ -48,6 +48,15 @@ interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSor
     List<Player<ID>> findByLastLoginLessThan(final ZonedDateTime cutoff)
 
     @Caching(
+            evict = [
+                    @CacheEvict(value = PLAYER_ID_CACHE, allEntries = true),
+                    @CacheEvict(value = PLAYER_MD5_CACHE, allEntries = true),
+                    @CacheEvict(value = PLAYER_S_AND_SID_CACHE, allEntries = true),
+            ]
+    )
+    long deleteByLastLoginLessThan(final ZonedDateTime cutoff)
+
+    @Caching(
             put = [
                     @CachePut(value = PLAYER_ID_CACHE, key = '#result.id'),
                     @CachePut(value = PLAYER_MD5_CACHE, key = '#result.md5'),

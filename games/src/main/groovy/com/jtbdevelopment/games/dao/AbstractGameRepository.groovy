@@ -48,4 +48,7 @@ interface AbstractGameRepository<ID extends Serializable, TIMESTAMP, FEATURES, I
 
     //  Not caching - likely for maintenance
     List<IMPL> findByCreatedLessThan(final TIMESTAMP cutoff)
+
+    @CacheEvict(value = GAME_ID_CACHE, allEntries = true)
+    long deleteByCreatedLessThan(final TIMESTAMP cutoff)
 }

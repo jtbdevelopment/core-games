@@ -8,7 +8,6 @@ import com.jtbdevelopment.games.mongo.players.MongoPlayer
 import com.jtbdevelopment.games.mongo.state.utility.SimpleSinglePlayerGame
 import com.jtbdevelopment.games.state.Game
 import com.mongodb.DBCollection
-import groovy.transform.CompileStatic
 import org.junit.Before
 import org.junit.Test
 import org.springframework.cache.Cache
@@ -24,7 +23,6 @@ import java.time.ZonedDateTime
  * Date: 1/10/15
  * Time: 2:35 PM
  */
-@CompileStatic
 class MongoSinglePlayerGamesIntegration extends AbstractMongoIntegration {
     private static final String GAMES_COLLECTION_NAME = 'single'
     private DBCollection collection
@@ -196,9 +194,7 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoIntegration {
     @Test
     void testFindsCreatedBefore() {
         SimpleSinglePlayerGame p1g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 5, stringValue: 'X', player: player1))
-        gameRepository.save(p1g1)
         SimpleSinglePlayerGame p2g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 20, stringValue: '2', player: player2))
-        gameRepository.save(p2g1)
 
         List<SimpleSinglePlayerGame> games
         games = (List<SimpleSinglePlayerGame>) gameRepository.findByCreatedLessThan(p1g1.created)
@@ -208,6 +204,21 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoIntegration {
         games = (List<SimpleSinglePlayerGame>) gameRepository.findByCreatedLessThan(ZonedDateTime.now(GMT))
         assert games.contains(p1g1)
         assert games.contains(p2g1)
+    }
+
+    @Test
+    void testDeleteCreatedBefore() {
+        SimpleSinglePlayerGame p1g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 5, stringValue: 'X', player: player1, created: ZonedDateTime.now(GMT)))
+        Thread.sleep(100)
+        SimpleSinglePlayerGame p2g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 20, stringValue: '2', player: player2, created: ZonedDateTime.now(GMT)))
+
+        assert gameRepository.findOne(p1g1.id)
+        assert gameRepository.findOne(p2g1.id)
+
+        assert 1 <= gameRepository.deleteByCreatedLessThan((ZonedDateTime) p2g1.created.withZoneSameInstant(GMT))
+
+        assert gameRepository.findOne(p2g1.id)
+        assert null == gameRepository.findOne(p1g1.id)
     }
 
     @Test

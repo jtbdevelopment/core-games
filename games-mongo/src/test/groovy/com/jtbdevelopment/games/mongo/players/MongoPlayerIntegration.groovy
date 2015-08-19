@@ -284,6 +284,18 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
         playerList = playerRepository.findByLastLoginLessThan(systemPlayer.created.plusHours(1))
         assert 6 == playerList.size()
     }
+
+    @Test
+    void testDeleteByLastLogin() {
+        Player p = makeSimplePlayer('DELETEME');
+        ZonedDateTime oldDate = ZonedDateTime.of(2000, 1, 1, 0, 0, 0, 0, ZoneId.of("GMT"))
+        assert ((long) 0) == playerRepository.deleteByLastLoginLessThan(oldDate)
+        p.lastLogin = oldDate.minusMinutes(1)
+        playerRepository.save(p)
+
+        assert ((long) 1) == playerRepository.deleteByLastLoginLessThan(oldDate)
+        assert null == playerRepository.findOne(p.id)
+    }
 }
 
 

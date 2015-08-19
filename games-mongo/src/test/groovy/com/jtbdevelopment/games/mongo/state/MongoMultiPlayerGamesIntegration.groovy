@@ -10,7 +10,6 @@ import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.Game
 import com.jtbdevelopment.games.state.PlayerState
 import com.mongodb.DBCollection
-import groovy.transform.CompileStatic
 import org.junit.Before
 import org.junit.Test
 import org.springframework.cache.Cache
@@ -26,7 +25,6 @@ import java.time.ZonedDateTime
  * Date: 1/10/15
  * Time: 2:35 PM
  */
-@CompileStatic
 class MongoMultiPlayerGamesIntegration extends AbstractMongoIntegration {
     private static final String GAMES_COLLECTION_NAME = 'multi'
     private DBCollection collection
@@ -202,9 +200,7 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoIntegration {
     @Test
     void testFindsCreatedBefore() {
         SimpleMultiPlayerGame p1g1 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 15, stringValue: '2', players: [player1, player4, player2] as List<Player>))
-        gameRepository.save(p1g1)
         SimpleMultiPlayerGame p2g1 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 20, stringValue: '2', players: [player2, player4] as List<Player>))
-        gameRepository.save(p2g1)
 
         List<SimpleMultiPlayerGame> games
         games = (List<SimpleMultiPlayerGame>) gameRepository.findByCreatedLessThan(p1g1.created)
@@ -214,6 +210,21 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoIntegration {
         games = (List<SimpleMultiPlayerGame>) gameRepository.findByCreatedLessThan(ZonedDateTime.now(GMT))
         assert games.contains(p1g1)
         assert games.contains(p2g1)
+    }
+
+    @Test
+    void testDeleteCreatedBefore() {
+        SimpleMultiPlayerGame p1g1 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 15, stringValue: '2', players: [player1, player4, player2] as List<Player>))
+        Thread.sleep(100)
+        SimpleMultiPlayerGame p2g1 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 20, stringValue: '2', players: [player2, player4] as List<Player>))
+
+        assert gameRepository.findOne(p1g1.id)
+        assert gameRepository.findOne(p2g1.id)
+
+        assert 1 <= gameRepository.deleteByCreatedLessThan(p2g1.created)
+
+        assert null == gameRepository.findOne(p1g1.id)
+        assert gameRepository.findOne(p2g1.id)
     }
 
     @Test
