@@ -2,6 +2,7 @@ package com.jtbdevelopment.games.rest
 
 import com.jtbdevelopment.games.rest.handlers.ChallengeResponseHandler
 import com.jtbdevelopment.games.rest.handlers.ChallengeToRematchHandler
+import com.jtbdevelopment.games.rest.handlers.DeclineRematchOptionHandler
 import com.jtbdevelopment.games.rest.handlers.QuitHandler
 import com.jtbdevelopment.games.rest.services.AbstractGameServices
 import com.jtbdevelopment.games.state.PlayerState
@@ -25,6 +26,16 @@ abstract class AbstractMultiPlayerGameServices<ID extends Serializable> extends 
     ChallengeResponseHandler responseHandler
     @Autowired
     ChallengeToRematchHandler rematchHandler
+    @Autowired
+    DeclineRematchOptionHandler declineRematchOptionHandler
+
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("endRematch")
+    Object endRematch() {
+        declineRematchOptionHandler.handleAction(playerID.get(), gameID.get())
+    }
+
 
     @PUT
     @Produces(MediaType.APPLICATION_JSON)

@@ -2,6 +2,7 @@ package com.jtbdevelopment.games.rest
 
 import com.jtbdevelopment.games.rest.handlers.ChallengeResponseHandler
 import com.jtbdevelopment.games.rest.handlers.ChallengeToRematchHandler
+import com.jtbdevelopment.games.rest.handlers.DeclineRematchOptionHandler
 import com.jtbdevelopment.games.rest.handlers.QuitHandler
 import com.jtbdevelopment.games.state.PlayerState
 import com.jtbdevelopment.games.state.masking.AbstractMaskedMultiPlayerGame
@@ -31,6 +32,7 @@ class AbstractMultiPlayerGameServicesTest extends GroovyTestCase {
 
         Map<String, List<Object>> stuff = [
                 //  method: [name, params, path, path param values, consumes
+                "endRematch": ["endRematch", [], [], []],
                 "createRematch": ["rematch", [], [], []],
                 "rejectGame"   : ["reject", [], [], []],
                 "quitGame"     : ["quit", [], [], []],
@@ -113,4 +115,15 @@ class AbstractMultiPlayerGameServicesTest extends GroovyTestCase {
         assert result.is(services.quitGame())
     }
 
+    void testEndRematches() {
+        services.declineRematchOptionHandler = [
+                handleAction: {
+                    String p, String g ->
+                        assert p == PID
+                        assert g == GID
+                        result
+                }
+        ] as DeclineRematchOptionHandler
+        assert result.is(services.endRematch())
+    }
 }
