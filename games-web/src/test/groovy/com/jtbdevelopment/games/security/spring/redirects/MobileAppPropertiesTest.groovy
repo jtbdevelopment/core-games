@@ -11,7 +11,7 @@ class MobileAppPropertiesTest extends GroovyTestCase {
         assert MobileAppProperties.class.
                 getDeclaredField('mobileSuccessUrl')?.
                 getAnnotation(Value.class)?.
-                value() == '${mobile.success.url:#/app/games}'
+                value() == '${mobile.success.url:/api/security}'
         assert MobileAppProperties.class.
                 getDeclaredField('mobileFailureUrl')?.
                 getAnnotation(Value.class)?.

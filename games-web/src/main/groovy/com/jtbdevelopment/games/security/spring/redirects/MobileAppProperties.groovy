@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 @CompileStatic
 @Component
 class MobileAppProperties {
-    @Value('${mobile.success.url:#/app/games}')
+    @Value('${mobile.success.url:/api/security}')
     String mobileSuccessUrl
 
     @Value('${mobile.failure.url:#/app/signin}')

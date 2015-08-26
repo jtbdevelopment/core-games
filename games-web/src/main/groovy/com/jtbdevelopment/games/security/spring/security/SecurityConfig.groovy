@@ -2,6 +2,7 @@ package com.jtbdevelopment.games.security.spring.security
 
 import com.jtbdevelopment.games.security.spring.redirects.*
 import com.jtbdevelopment.games.security.spring.security.cachecontrol.SmarterCacheControlHeaderWriter
+import com.jtbdevelopment.games.security.spring.security.cors.CorsFilter
 import com.jtbdevelopment.games.security.spring.security.csp.ContentSecurityPolicyHeaderWriter
 import com.jtbdevelopment.games.security.spring.security.csrf.XSRFTokenCookieFilter
 import com.jtbdevelopment.games.security.spring.security.facebook.FacebookCanvasAllowingProtectionMatcher
@@ -12,6 +13,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
@@ -101,8 +103,8 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/auth/**",
                         "/signin/**",
                         "/api/social/apis"
-                ).
-                permitAll().
+                ).permitAll().
+                antMatchers(HttpMethod.OPTIONS, "/livefeed/*").permitAll().
                 antMatchers("/**").authenticated().
                 and().formLogin().successHandler(successfulAuthenticationHandler).failureHandler(new MobileAwareFailureAuthenticationHandler(mobileAppChecker, mobileAppProperties)).loginPage(LOGIN_PAGE).loginProcessingUrl(AUTHENTICATE_PAGE).
                 and().logout().logoutUrl(LOGOUT_PAGE).deleteCookies("JSESSIONID").
@@ -121,7 +123,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
             logger.warn("-----------------------------------------------------")
             logger.warn("-----------------------------------------------------")
             logger.warn("-----------------------------------------------------")
-            http.httpBasic().and().csrf().disable()
+            http.httpBasic().and().csrf().disable().headers().addHeaderWriter(new CorsFilter())
         } else {
             http.requiresChannel().antMatchers("/**").requiresSecure()
             http.rememberMe().useSecureCookie(true)

@@ -37,12 +37,8 @@ class MobileAwareSuccessfulAuthenticationHandler extends SavedRequestAwareAuthen
             final HttpServletRequest request,
             final HttpServletResponse response,
             final Authentication authentication) throws ServletException, IOException {
-        if (checker.isMobileRequest(request) && request.getHeader(REFERER) != null) {
-            logger.info("Mobile successful login - calculating default mobile app url")
-            String url = request.getHeader(REFERER) + mobileAppProperties.mobileSuccessUrl
-            logger.debug(url)
-
-            response.sendRedirect(url);
+        if (checker.isMobileRequest(request)) {
+            response.sendRedirect(mobileAppProperties.mobileSuccessUrl);
         } else {
             super.onAuthenticationSuccess(request, response, authentication)
         }
