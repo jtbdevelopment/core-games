@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse
 @CompileStatic
 class MobileAwareSuccessfulAuthenticationHandler extends SavedRequestAwareAuthenticationSuccessHandler {
     protected final static Logger logger = LoggerFactory.getLogger(MobileAwareSuccessfulAuthenticationHandler.class)
-    public static final String REFERER = "Referer"
 
     private final MobileAppChecker checker
     private final MobileAppProperties mobileAppProperties
