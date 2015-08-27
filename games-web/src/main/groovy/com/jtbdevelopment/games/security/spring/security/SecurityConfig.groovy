@@ -3,6 +3,7 @@ package com.jtbdevelopment.games.security.spring.security
 import com.jtbdevelopment.games.security.spring.redirects.*
 import com.jtbdevelopment.games.security.spring.security.cachecontrol.SmarterCacheControlHeaderWriter
 import com.jtbdevelopment.games.security.spring.security.cors.CorsFilter
+import com.jtbdevelopment.games.security.spring.security.cors.CorsHeaderWriter
 import com.jtbdevelopment.games.security.spring.security.csp.ContentSecurityPolicyHeaderWriter
 import com.jtbdevelopment.games.security.spring.security.csrf.XSRFTokenCookieFilter
 import com.jtbdevelopment.games.security.spring.security.facebook.FacebookCanvasAllowingProtectionMatcher
@@ -22,6 +23,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.PortMapperImpl
+import org.springframework.security.web.access.channel.ChannelProcessingFilter
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository
 import org.springframework.security.web.csrf.CsrfFilter
@@ -124,7 +126,8 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
             logger.warn("-----------------------------------------------------")
             logger.warn("-----------------------------------------------------")
             logger.warn("-----------------------------------------------------")
-            http.httpBasic().and().csrf().disable().headers().addHeaderWriter(new CorsFilter())
+            http.httpBasic().and().csrf().disable().headers() addHeaderWriter(new CorsHeaderWriter())
+            http.addFilterBefore(new CorsFilter(), ChannelProcessingFilter.class)
         } else {
             http.requiresChannel().antMatchers("/**").requiresSecure()
             http.rememberMe().useSecureCookie(true)

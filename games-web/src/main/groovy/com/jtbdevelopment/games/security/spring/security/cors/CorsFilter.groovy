@@ -1,35 +1,43 @@
 package com.jtbdevelopment.games.security.spring.security.cors
 
-import org.springframework.security.web.header.HeaderWriter
-import org.springframework.util.StringUtils
+import groovy.transform.CompileStatic
 
+import javax.servlet.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 /**
- * Date: 8/26/15
- * Time: 6:39 PM
- *
- * Primarily for testing locally and should not normally be used
- *
- * No tests for same reason
+ * Date: 8/27/15
+ * Time: 4:50 PM
  */
-class CorsFilter implements HeaderWriter {
+@CompileStatic
+class CorsFilter implements Filter {
+    private CorsHeaderWriter headerWriter = new CorsHeaderWriter()
 
     @Override
-    void writeHeaders(final HttpServletRequest request, final HttpServletResponse response) {
-        String origin = request.getHeader('Origin')
-        if (origin && !origin.startsWith('file:')) {
-            response.addHeader('Access-Control-Allow-Origin', origin)
-            response.addHeader('Access-Control-Allow-Credentials', 'true')
-            response.addHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-            response.addHeader('Access-Control-Max-Age', '3600')
+    void init(final FilterConfig filterConfig) throws ServletException {
 
-            def allowedHeaders = request.getHeader('Access-Control-Request-Headers')
-            if (!StringUtils.isEmpty(allowedHeaders)) {
-                response.addHeader('Access-Control-Allow-Headers', allowedHeaders)
+    }
+
+    @Override
+    void doFilter(
+            final ServletRequest request,
+            final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
+        if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
+            HttpServletRequest httpServletRequest = (HttpServletRequest) request
+            HttpServletResponse httpServletResponse = (HttpServletResponse) response
+
+            if (httpServletRequest.getMethod() == "OPTIONS") {
+                headerWriter.writeHeaders(httpServletRequest, httpServletResponse)
+                httpServletResponse.setStatus(HttpServletResponse.SC_OK)
+            } else {
+                chain.doFilter(request, response)
             }
         }
     }
-}
 
+    @Override
+    void destroy() {
+
+    }
+}
