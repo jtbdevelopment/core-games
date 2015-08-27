@@ -25,7 +25,6 @@ class AbstractPlayerGatewayServiceTest extends GameCoreTestCase {
 
     void testClassAnnotations() {
         assert AbstractPlayerGatewayService.class.getAnnotation(RolesAllowed.class).value() == [PlayerRoles.PLAYER]
-        //assert AbstractPlayerGatewayService.class.getAnnotation(Path.class).value() == "/"
     }
 
     void testPing() {
