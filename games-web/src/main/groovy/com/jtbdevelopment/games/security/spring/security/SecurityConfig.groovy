@@ -94,6 +94,8 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         AuthenticationSuccessHandler successfulAuthenticationHandler = new MobileAwareSuccessfulAuthenticationHandler(mobileAppChecker, mobileAppProperties, LOGGED_IN_URL, true)
         http.authorizeRequests().
+                antMatchers(HttpMethod.OPTIONS, "/api/**", '/livefeed/**').permitAll().
+                antMatchers(HttpMethod.OPTIONS, "/api/*", '/livefeed/*').permitAll().
                 antMatchers(
                         "/favicon.ico",
                         "/images/**",
@@ -104,7 +106,6 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/signin/**",
                         "/api/social/apis"
                 ).permitAll().
-                antMatchers(HttpMethod.OPTIONS, "/livefeed/*").permitAll().
                 antMatchers("/**").authenticated().
                 and().formLogin().successHandler(successfulAuthenticationHandler).failureHandler(new MobileAwareFailureAuthenticationHandler(mobileAppChecker, mobileAppProperties)).loginPage(LOGIN_PAGE).loginProcessingUrl(AUTHENTICATE_PAGE).
                 and().logout().logoutUrl(LOGOUT_PAGE).deleteCookies("JSESSIONID").
