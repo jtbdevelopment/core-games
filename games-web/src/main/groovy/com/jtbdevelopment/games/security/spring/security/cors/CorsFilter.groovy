@@ -9,6 +9,10 @@ import javax.servlet.http.HttpServletResponse
 /**
  * Date: 8/27/15
  * Time: 4:50 PM
+ *
+ * Primarily for testing locally and should not normally be used
+ *
+ * No tests for same reason
  */
 @CompileStatic
 class CorsFilter implements Filter {
