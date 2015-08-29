@@ -7,6 +7,7 @@ import com.jtbdevelopment.games.security.spring.security.cors.CorsHeaderWriter
 import com.jtbdevelopment.games.security.spring.security.csp.ContentSecurityPolicyHeaderWriter
 import com.jtbdevelopment.games.security.spring.security.csrf.XSRFTokenCookieFilter
 import com.jtbdevelopment.games.security.spring.security.facebook.FacebookCanvasAllowingProtectionMatcher
+import com.jtbdevelopment.games.security.spring.security.loginConfigurer.MobileAwareFormLoginConfigurer
 import com.jtbdevelopment.games.security.spring.social.MobileAwareSocialConfigurer
 import com.jtbdevelopment.games.security.spring.social.security.PlayerSocialUserDetailsService
 import com.jtbdevelopment.games.security.spring.userdetails.PlayerUserDetailsService
@@ -95,9 +96,12 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
         AuthenticationSuccessHandler successfulAuthenticationHandler = new MobileAwareSuccessfulAuthenticationHandler(mobileAppChecker, mobileAppProperties, LOGGED_IN_URL, true)
+
+        def mobileAwareFormLoginConfigurer = new MobileAwareFormLoginConfigurer(mobileAppChecker)
+        mobileAwareFormLoginConfigurer.setBuilder(http)
+
         http.authorizeRequests().
                 antMatchers(HttpMethod.OPTIONS, "/api/**", '/livefeed/**').permitAll().
-                antMatchers(HttpMethod.OPTIONS, "/api/*", '/livefeed/*').permitAll().
                 antMatchers(
                         "/favicon.ico",
                         "/images/**",
@@ -109,7 +113,8 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/social/apis"
                 ).permitAll().
                 antMatchers("/**").authenticated().
-                and().formLogin().successHandler(successfulAuthenticationHandler).failureHandler(new MobileAwareFailureAuthenticationHandler(mobileAppChecker, mobileAppProperties)).loginPage(LOGIN_PAGE).loginProcessingUrl(AUTHENTICATE_PAGE).
+                and().apply(mobileAwareFormLoginConfigurer.successHandler(successfulAuthenticationHandler).failureHandler(new MobileAwareFailureAuthenticationHandler(mobileAppChecker, mobileAppProperties)).loginPage(LOGIN_PAGE).loginProcessingUrl(AUTHENTICATE_PAGE)).
+//                and().formLogin().successHandler(successfulAuthenticationHandler).failureHandler(new MobileAwareFailureAuthenticationHandler(mobileAppChecker, mobileAppProperties)).loginPage(LOGIN_PAGE).loginProcessingUrl(AUTHENTICATE_PAGE).
                 and().logout().logoutUrl(LOGOUT_PAGE).deleteCookies("JSESSIONID").
                 and().rememberMe().tokenRepository(persistentTokenRepository).userDetailsService(playerUserDetailsService).
                 and().portMapper().portMapper(portMapper).
