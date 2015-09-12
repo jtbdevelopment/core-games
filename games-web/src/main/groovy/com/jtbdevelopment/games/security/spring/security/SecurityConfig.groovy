@@ -43,10 +43,13 @@ import javax.annotation.PostConstruct
 class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final static Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
-    public static final String LOGIN_PAGE = "/signin/"
+    //  To be implemented on UI
+    public static final String LOGIN_PAGE = "/#/signin"
+    public static final String LOGGED_IN_URL = "/#/signedin"
+
+    //  Provided by server
     public static final String LOGOUT_PAGE = "/signout"
     public static final String AUTHENTICATE_PAGE = "/signin/authenticate"
-    public static final String LOGGED_IN_URL = "/"
 
     @Autowired
     PlayerUserDetailsService playerUserDetailsService
@@ -91,7 +94,6 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         PortMapperImpl portMapper = new PortMapperImpl()
         portMapper.getTranslatedPortMappings().put(8998, 8999)
-        portMapper.getTranslatedPortMappings().put(8998, 8999)
         portMapper.getTranslatedPortMappings().put(8090, 8943)
 
 
@@ -104,17 +106,26 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
                 antMatchers(HttpMethod.OPTIONS, "/api/**", '/livefeed/**').permitAll().
                 antMatchers(
                         "/favicon.ico",
+                        "/index.html",
                         "/images/**",
+
+                        "/views/**",
+                        "/templates/**",
+
                         "/styles/**",
+
                         "/scripts/**",
-                        "/facebook/**",
+                        "/bower_components/**",  //  dev sometimes
+
+                        "/facebook/**",  // ??
+
                         "/auth/**",
                         "/signin/**",
+
                         "/api/social/apis"
                 ).permitAll().
                 antMatchers("/**").authenticated().
                 and().apply(mobileAwareFormLoginConfigurer.successHandler(successfulAuthenticationHandler).failureHandler(new MobileAwareFailureAuthenticationHandler(mobileAppChecker, mobileAppProperties)).loginPage(LOGIN_PAGE).loginProcessingUrl(AUTHENTICATE_PAGE)).
-//                and().formLogin().successHandler(successfulAuthenticationHandler).failureHandler(new MobileAwareFailureAuthenticationHandler(mobileAppChecker, mobileAppProperties)).loginPage(LOGIN_PAGE).loginProcessingUrl(AUTHENTICATE_PAGE).
                 and().logout().logoutUrl(LOGOUT_PAGE).deleteCookies("JSESSIONID").
                 and().rememberMe().tokenRepository(persistentTokenRepository).userDetailsService(playerUserDetailsService).
                 and().portMapper().portMapper(portMapper).
