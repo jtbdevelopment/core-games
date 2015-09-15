@@ -11,6 +11,8 @@ import groovy.transform.CompileStatic
 import org.atmosphere.cpr.Broadcaster
 import org.atmosphere.cpr.BroadcasterFactory
 import org.atmosphere.cpr.Universe
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -21,6 +23,8 @@ import org.springframework.stereotype.Component
 @Component
 @CompileStatic
 class AtmosphereListener implements GameListener, PlayerListener {
+    private static final Logger logger = LoggerFactory.getLogger(AtmosphereListener.class)
+
     @Autowired
     MultiPlayerGameMasker gameMasker
 
@@ -34,21 +38,20 @@ class AtmosphereListener implements GameListener, PlayerListener {
 
     @Override
     void gameChanged(final MultiPlayerGame game, final Player initiatingPlayer, final boolean initiatingServer) {
-        if (broadcasterFactory) {
-            game.players.findAll {
-                Player p ->
-                    initiatingPlayer == null || p != initiatingPlayer
-            }.each {
-                Player publish ->
-                    Broadcaster broadcaster = getBroadcasterFactory().lookup(LiveFeedService.PATH_ROOT + publish.idAsString)
-                    if (broadcaster != null) {
-                        broadcaster.broadcast(
-                                new WebSocketMessage(
-                                        messageType: WebSocketMessage.MessageType.Game,
-                                        game: gameMasker.maskGameForPlayer((MultiPlayerGame) game, publish)
-                                )
-                        )
-                    }
+        if (getBroadcasterFactory()) {
+            try {
+                Collection<Player> players = game.players.findAll {
+                    Player p ->
+                        initiatingPlayer == null || p != initiatingPlayer
+                }
+
+                logger.info("Publishing to " + players.size() + " players.")
+                players.each {
+                    Player publish ->
+                        publishToPlayer(publish, game);
+                }
+            } catch (Exception e) {
+                logger.error("Error publishing", e);
             }
         }
     }
@@ -82,5 +85,21 @@ class AtmosphereListener implements GameListener, PlayerListener {
             broadcasterFactory = Universe.broadcasterFactory()
         }
         broadcasterFactory
+    }
+
+    private void publishToPlayer(final Player publish, final MultiPlayerGame game) {
+        try {
+            Broadcaster broadcaster = getBroadcasterFactory().lookup(LiveFeedService.PATH_ROOT + publish.idAsString)
+            if (broadcaster != null) {
+                broadcaster.broadcast(
+                        new WebSocketMessage(
+                                messageType: WebSocketMessage.MessageType.Game,
+                                game: gameMasker.maskGameForPlayer((MultiPlayerGame) game, publish)
+                        )
+                )
+            }
+        } catch (Exception e) {
+            logger.error("Error publishing", e);
+        }
     }
 }
