@@ -1,5 +1,6 @@
 package com.jtbdevelopment.games.security.spring.social.facebook
 
+import com.jtbdevelopment.games.security.spring.social.facebook.provider.CustomFacebookAuthenticationService
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
@@ -10,7 +11,6 @@ import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.social.connect.Connection
 import org.springframework.social.connect.ConnectionRepository
 import org.springframework.social.facebook.api.Facebook
-import org.springframework.social.facebook.security.FacebookAuthenticationService
 
 /**
  * Date: 12/16/14
@@ -21,8 +21,8 @@ import org.springframework.social.facebook.security.FacebookAuthenticationServic
 class FacebookConfig {
     @Bean
     @Autowired
-    FacebookAuthenticationService facebookAuthenticationService(final FacebookProperties facebookProperties) {
-        def service = new FacebookAuthenticationService(facebookProperties.getClientID(), facebookProperties.getClientSecret())
+    CustomFacebookAuthenticationService facebookAuthenticationService(final FacebookProperties facebookProperties) {
+        def service = new CustomFacebookAuthenticationService(facebookProperties.getClientID(), facebookProperties.getClientSecret())
         service.setDefaultScope(facebookProperties.permissions)
         return service;
     }

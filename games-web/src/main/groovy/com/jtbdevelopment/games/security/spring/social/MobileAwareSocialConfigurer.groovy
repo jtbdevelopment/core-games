@@ -1,5 +1,6 @@
 package com.jtbdevelopment.games.security.spring.social
 
+import com.jtbdevelopment.games.security.social.filter.CustomSocialAuthenticationFilter
 import org.springframework.beans.factory.NoSuchBeanDefinitionException
 import org.springframework.context.ApplicationContext
 import org.springframework.security.authentication.AuthenticationManager
@@ -12,7 +13,10 @@ import org.springframework.security.web.authentication.RememberMeServices
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter
 import org.springframework.social.UserIdSource
 import org.springframework.social.connect.UsersConnectionRepository
-import org.springframework.social.security.*
+import org.springframework.social.security.AuthenticationNameUserIdSource
+import org.springframework.social.security.SocialAuthenticationProvider
+import org.springframework.social.security.SocialAuthenticationServiceLocator
+import org.springframework.social.security.SocialUserDetailsService
 
 /**
  * Date: 6/12/15
@@ -61,7 +65,7 @@ class MobileAwareSocialConfigurer extends SecurityConfigurerAdapter<DefaultSecur
         SocialAuthenticationServiceLocator authServiceLocator = getDependency(applicationContext, SocialAuthenticationServiceLocator.class);
         SocialUserDetailsService socialUsersDetailsService = getDependency(applicationContext, SocialUserDetailsService.class);
 
-        SocialAuthenticationFilter filter = new SocialAuthenticationFilter(
+        CustomSocialAuthenticationFilter filter = new CustomSocialAuthenticationFilter(
                 http.getSharedObject(AuthenticationManager.class),
                 userIdSource != null ? userIdSource : new AuthenticationNameUserIdSource(),
                 usersConnectionRepository,

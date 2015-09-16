@@ -1,5 +1,9 @@
 package com.jtbdevelopment.games.security.spring.social.facebook
 
+import com.jtbdevelopment.games.security.spring.social.facebook.provider.CustomFacebookAuthenticationService
+import com.jtbdevelopment.games.security.spring.social.facebook.provider.CustomFacebookConnectionFactory
+import com.jtbdevelopment.games.security.spring.social.facebook.provider.CustomFacebookServiceProvider
+import com.jtbdevelopment.games.security.spring.social.facebook.provider.FacebookTokenExchangingOAuth2Template
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Bean
@@ -10,9 +14,6 @@ import org.springframework.social.connect.Connection
 import org.springframework.social.connect.ConnectionFactory
 import org.springframework.social.connect.ConnectionRepository
 import org.springframework.social.facebook.api.Facebook
-import org.springframework.social.facebook.connect.FacebookConnectionFactory
-import org.springframework.social.facebook.connect.FacebookServiceProvider
-import org.springframework.social.facebook.security.FacebookAuthenticationService
 import org.springframework.social.oauth2.OAuth2Template
 import org.springframework.social.security.provider.OAuth2AuthenticationService
 
@@ -35,13 +36,13 @@ class FacebookConfigTest extends GroovyTestCase {
         properties.clientID = 'APRODUCT'
         properties.clientSecret = 'ASECRET'
         properties.permissions = 'PERMS'
-        FacebookAuthenticationService service = config.facebookAuthenticationService(properties)
+        CustomFacebookAuthenticationService service = config.facebookAuthenticationService(properties)
         assert service
-        FacebookConnectionFactory factory = service.getConnectionFactory()
+        CustomFacebookConnectionFactory factory = service.getConnectionFactory()
         Method m = ConnectionFactory.class.getDeclaredMethod('getServiceProvider', [] as Class[])
         m.accessible = true
-        FacebookServiceProvider provider = m.invoke(factory)
-        OAuth2Template template = provider.getOAuthOperations()
+        CustomFacebookServiceProvider provider = m.invoke(factory)
+        FacebookTokenExchangingOAuth2Template template = provider.getOAuthOperations()
         Field f = OAuth2Template.class.getDeclaredField('clientId')
         f.accessible = true
         assert properties.clientID == f.get(template)
