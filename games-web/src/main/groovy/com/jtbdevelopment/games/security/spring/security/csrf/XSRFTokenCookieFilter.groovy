@@ -17,6 +17,9 @@ import javax.servlet.http.HttpServletResponse
  * Based on https://spring.io/blog/2015/01/12/the-login-page-angular-js-and-spring-security-part-ii
  */
 class XSRFTokenCookieFilter extends OncePerRequestFilter {
+
+    public static final String XSRF_TOKEN = "XSRF-TOKEN"
+
     @Override
     protected void doFilterInternal(
             final HttpServletRequest request,
@@ -24,13 +27,15 @@ class XSRFTokenCookieFilter extends OncePerRequestFilter {
             final FilterChain filterChain) throws ServletException {
         CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
         if (csrf != null) {
-            Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");
+            Cookie cookie = WebUtils.getCookie(request, XSRF_TOKEN);
             String token = csrf.getToken();
             if (cookie == null || token != null && !token.equals(cookie.getValue())) {
-                cookie = new Cookie("XSRF-TOKEN", token);
+                cookie = new Cookie(XSRF_TOKEN, token);
                 cookie.setPath("/");
                 response.addCookie(cookie);
             }
+            //  Useful for mobile
+            response.addHeader(XSRF_TOKEN, cookie.value);
         }
         filterChain.doFilter(request, response);
     }
