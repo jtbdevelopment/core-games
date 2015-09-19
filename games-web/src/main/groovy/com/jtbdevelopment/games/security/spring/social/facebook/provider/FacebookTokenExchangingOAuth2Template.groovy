@@ -36,7 +36,6 @@ class FacebookTokenExchangingOAuth2Template extends OAuth2Template {
             return super.exchangeForAccess(authorizationCode, redirectUri, additionalParameters)
         } catch (Exception ex) {
             MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
-//            if (useParametersForClientAuthentication) {
             params.set("client_id", clientId)
             params.set("client_secret", clientSecret);
             //}
