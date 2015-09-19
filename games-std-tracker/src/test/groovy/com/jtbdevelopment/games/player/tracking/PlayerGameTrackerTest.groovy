@@ -2,6 +2,7 @@ package com.jtbdevelopment.games.player.tracking
 
 import com.jtbdevelopment.games.mongo.MongoGameCoreTestCase
 import com.jtbdevelopment.games.mongo.players.MongoPlayer
+import com.jtbdevelopment.games.mongo.players.MongoSystemPlayer
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.PlayerPayLevel
 import com.jtbdevelopment.games.publish.PlayerPublisher
@@ -35,6 +36,17 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
             super.setPlayer(player)
             maxDailyFreeGames = (player.payLevel == PlayerPayLevel.FreeToPlay ? DEFAULT_FREE : DEFAULT_PREMIUM)
         }
+    }
+
+    void testSystemPlayer() {
+        int callNumber = 0
+        boolean published = false
+        MongoSystemPlayer input = new MongoSystemPlayer()
+        PlayerGameEligibilityResult result = tracker.getGameEligibility(input)
+        assertNotNull result
+        assert result.eligibility == PlayerGameEligibility.SystemPlayer
+        assert result.player.is(input)
+        assertFalse published
     }
 
     void testRegularEligibilityWithPlayerHavingFreeGames() {

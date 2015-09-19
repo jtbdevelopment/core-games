@@ -41,6 +41,9 @@ interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSor
     @Cacheable(value = PLAYER_S_AND_SID_CACHE, key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectSourceAndSourceIDs(#p0, #p1)')
     List<Player<ID>> findBySourceAndSourceIdIn(final String source, final Collection<String> sourceId);
 
+    //  Not caching - should mostly be used on startup to create system players
+    Player<ID> findByDisplayName(final String displayName)
+
     //  Not caching - currently only used by manual players for testing
     List<Player<ID>> findBySourceAndDisabled(final String source, final boolean disabled);
 

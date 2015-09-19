@@ -70,6 +70,12 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
     }
 
     @Test
+    void testFindByDisplayName() {
+        assert null == playerRepository.findByDisplayName('Humpty Dumpty')
+        assert player1 == playerRepository.findByDisplayName(player1.displayName)
+    }
+
+    @Test
     void testFindBySourceAndDisabled() {
         assert playerRepository.findBySourceAndDisabled(systemPlayer.source, true).isEmpty()
         assert playerRepository.findBySourceAndDisabled(systemPlayer.source, false) == [systemPlayer] as List<Player>

@@ -77,6 +77,33 @@ class FriendFinderTest extends GameCoreTestCase {
         ]
     }
 
+    void testEmptyMaskedFriendsIfNoFriends() {
+        def f1 = [
+                handlesSource: {
+                    String it ->
+                        true;
+                },
+                findFriends  : {
+                    StringPlayer p ->
+                        assert p.is(PFOUR)
+                        return [:]
+                }
+        ] as SourceBasedFriendFinder
+
+        finder.friendFinders = [f1]
+        finder.playerRepository = [
+                findOne: {
+                    String it ->
+                        assert it == PFOUR.id
+                        return PFOUR
+                }
+        ] as AbstractPlayerRepository<String>
+
+        assert finder.findFriends(PFOUR.id) == [
+                (SourceBasedFriendFinder.MASKED_FRIENDS_KEY): [:]
+        ]
+    }
+
     void testNoPlayerInRepository() {
         finder.playerRepository = [
                 findOne: {

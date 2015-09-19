@@ -16,15 +16,14 @@ import org.springframework.data.mongodb.core.mapping.Document
  * Date: 11/3/14
  * Time: 6:53 AM
  */
-//  TODO
-//  This propagating to game table...
-//@CompoundIndex(unique = true, name = "id_source", def = "{'sourceId':1, 'source':1}")
 @Document(collection = "player")
 @CompileStatic
 @JsonIgnoreProperties(['idAsString', 'sourceAndSourceId'])
 @CompoundIndexes([
         @CompoundIndex(name = "created", def = "{'created': 1}"),
         @CompoundIndex(name = "lastLogin", def = "{'lastLogin': 1}"),
+        @CompoundIndex(name = "displayName", def = "{'displayName': 1}"),
+        @CompoundIndex(unique = true, name = "id_source", def = "{'sourceId':1, 'source':1}")
 ])
 class MongoPlayer extends AbstractPlayer<ObjectId> implements Cloneable {
     @Id

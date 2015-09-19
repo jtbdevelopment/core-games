@@ -3,6 +3,7 @@ package com.jtbdevelopment.games.player.tracking
 import com.jtbdevelopment.games.dao.caching.CacheConstants
 import com.jtbdevelopment.games.mongo.players.MongoPlayer
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.players.SystemPlayer
 import com.jtbdevelopment.games.publish.PlayerPublisher
 import com.jtbdevelopment.games.tracking.GameEligibilityTracker
 import com.jtbdevelopment.games.tracking.PlayerGameEligibility
@@ -57,6 +58,10 @@ class PlayerGameTracker implements GameEligibilityTracker<PlayerGameEligibilityR
     )
     @Override
     PlayerGameEligibilityResult getGameEligibility(final Player player) {
+        if (player instanceof SystemPlayer) {
+            return new PlayerGameEligibilityResult(eligibility: PlayerGameEligibility.SystemPlayer, player: player)
+        }
+
         int freeGames = ((AbstractPlayerGameTrackingAttributes) player.gameSpecificPlayerAttributes).maxDailyFreeGames
 
         //  Try free game first

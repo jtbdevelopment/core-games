@@ -7,5 +7,6 @@ package com.jtbdevelopment.games.tracking
 enum PlayerGameEligibility {
     FreeGameUsed,
     PaidGameUsed,
-    NoGamesAvailable
+    NoGamesAvailable,
+    SystemPlayer
 }

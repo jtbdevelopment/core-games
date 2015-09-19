@@ -49,6 +49,8 @@ class FriendFinder<ID extends Serializable> {
         Set<Player> playerFriends = (Set<Player>) friends.remove(SourceBasedFriendFinder.FRIENDS_KEY)
         if (playerFriends) {
             friends[SourceBasedFriendFinder.MASKED_FRIENDS_KEY] = friendMasker.maskFriends(playerFriends)
+        } else {
+            friends[SourceBasedFriendFinder.MASKED_FRIENDS_KEY] = [:]
         }
         return friends
     }
