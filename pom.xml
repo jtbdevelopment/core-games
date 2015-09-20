@@ -41,7 +41,7 @@
         <junit.version>4.12</junit.version>
         <groovy.version>2.4.4</groovy.version>
         <gpars.version>1.2.1</gpars.version>
-        <flapdoodle.mongo.version>1.46.4</flapdoodle.mongo.version>
+        <flapdoodle.mongo.version>1.50.0</flapdoodle.mongo.version>
     </properties>
 
     <dependencyManagement>
