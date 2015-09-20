@@ -39,7 +39,7 @@ class MultiPlayerGamePublisherImpl implements GamePublisher<MultiPlayerGame> {
 
     //  Returns game primarily to allow easy chaining
     MultiPlayerGame publish(final MultiPlayerGame game, final Player initiatingPlayer, boolean initiatingServer) {
-        service.submit(new Runnable() {
+        service.execute(new Runnable() {
             @Override
             void run() {
                 if (subscribers != null) {
