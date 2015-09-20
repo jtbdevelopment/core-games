@@ -11,6 +11,10 @@
 
     <artifactId>games-dev-utilities</artifactId>
 
+    <properties>
+        <jetty.version>9.3.3.v20150827</jetty.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.jtbdevelopment.core-games</groupId>
@@ -37,17 +41,17 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
-            <version>9.2.6.v20141205</version>
+            <version>${jetty.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
-            <version>9.2.6.v20141205</version>
+            <version>${jetty.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
             <artifactId>javax-websocket-server-impl</artifactId>
-            <version>9.2.6.v20141205</version>
+            <version>${jetty.version}</version>
         </dependency>
 
         <dependency>
