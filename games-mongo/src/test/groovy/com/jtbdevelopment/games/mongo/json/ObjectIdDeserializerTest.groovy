@@ -78,6 +78,11 @@ class ObjectIdDeserializerTest extends GroovyTestCase {
         }
 
         @Override
+        boolean hasToken(final JsonToken t) {
+            return false
+        }
+
+        @Override
         String getCurrentName() throws IOException, JsonParseException {
             return null
         }
