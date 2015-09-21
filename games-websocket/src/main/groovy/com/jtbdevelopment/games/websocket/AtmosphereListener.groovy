@@ -9,8 +9,6 @@ import com.jtbdevelopment.games.state.MultiPlayerGame
 import com.jtbdevelopment.games.state.masking.MultiPlayerGameMasker
 import groovy.transform.CompileStatic
 import org.atmosphere.cpr.Broadcaster
-import org.atmosphere.cpr.BroadcasterFactory
-import org.atmosphere.cpr.Universe
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -34,72 +32,99 @@ class AtmosphereListener implements GameListener, PlayerListener {
     @Autowired
     StringToIDConverter<? extends Serializable> stringToIDConverter
 
-    BroadcasterFactory broadcasterFactory
+    @Autowired
+    AtmosphereBroadcasterFactory broadcasterFactory
 
     @Override
     void gameChanged(final MultiPlayerGame game, final Player initiatingPlayer, final boolean initiatingServer) {
-        if (getBroadcasterFactory()) {
+        if (broadcasterFactory.broadcasterFactory) {
             try {
                 Collection<Player> players = game.players.findAll {
                     Player p ->
                         initiatingPlayer == null || p != initiatingPlayer
                 }
 
-                logger.info("Publishing to " + players.size() + " players.")
+                logger.trace("Publishing " + game.id + " to " + players.size() + " players.")
                 players.each {
                     Player publish ->
                         publishToPlayer(publish, game);
                 }
             } catch (Exception e) {
-                logger.error("Error publishing", e);
+                logger.error("Error publishing game " + game.id, e);
             }
+        } else {
+            logger.warn("No broadcaster in game changed")
         }
     }
 
     @Override
     void playerChanged(final Player player, final boolean initiatingServer) {
-        Broadcaster broadcaster = getBroadcasterFactory().lookup(LiveFeedService.PATH_ROOT + player.idAsString)
-        if (broadcaster != null) {
-            broadcaster.broadcast(
-                    new WebSocketMessage(
-                            messageType: WebSocketMessage.MessageType.Player,
-                            player: player
+        if (getBroadcasterFactory()) {
+            try {
+                logger.trace("Publishing player changed to " + player.id)
+                Broadcaster broadcaster = broadcasterFactory.broadcasterFactory.lookup(LiveFeedService.PATH_ROOT + player.idAsString)
+                if (broadcaster != null) {
+                    broadcaster.broadcast(
+                            new WebSocketMessage(
+                                    messageType: WebSocketMessage.MessageType.Player,
+                                    player: player
+                            )
                     )
-            )
+                } else {
+                    logger.trace("Player is not connected to this server for player changed " + player.id)
+                }
+            } catch (Exception e) {
+                logger.error("Error publishing player update " + player.id, e);
+            }
+        } else {
+            logger.warn("No broadcaster in player changed")
         }
     }
 
     @Override
     void allPlayersChanged(final boolean initiatingServer) {
-        getBroadcasterFactory().lookupAll().each {
-            Broadcaster broadcaster ->
-                Player p = (Player) playerRepository.findOne(stringToIDConverter.convert(broadcaster.ID.replace('/livefeed/', '')))
-                if (p) {
-                    broadcaster.broadcast(new WebSocketMessage(messageType: WebSocketMessage.MessageType.Player, player: p))
+        if (broadcasterFactory.getBroadcasterFactory()) {
+            logger.trace("Publishing all players changed.")
+            try {
+                Collection<Broadcaster> broadcasters = broadcasterFactory.broadcasterFactory.lookupAll()
+                logger.trace("Publishing all players changed to " + broadcasters.size() + " players.")
+                broadcasters.each {
+                    Broadcaster broadcaster ->
+                        try {
+                            logger.trace("Looking up player for feed " + broadcaster.ID)
+                            Player p = (Player) playerRepository.findOne(stringToIDConverter.convert(broadcaster.ID.replace('/livefeed/', '')))
+                            if (p) {
+                                logger.trace("Publishing all player changed to " + p.id)
+                                broadcaster.broadcast(new WebSocketMessage(messageType: WebSocketMessage.MessageType.Player, player: p))
+                            }
+                        } catch (Exception e) {
+                            logger.error("Failed to notify broadcaster for all player changed " + broadcaster.ID, e)
+                        }
                 }
+            } catch (Exception e) {
+                logger.error("Failed to lookup broadcasters.", e)
+            }
+        } else {
+            logger.warn("No broadcaster in all players changed")
         }
-    }
-
-    protected BroadcasterFactory getBroadcasterFactory() {
-        if (!broadcasterFactory) {
-            broadcasterFactory = Universe.broadcasterFactory()
-        }
-        broadcasterFactory
     }
 
     private void publishToPlayer(final Player publish, final MultiPlayerGame game) {
+        logger.trace("Publishing game update on game " + game.id + " to player " + publish.id)
         try {
-            Broadcaster broadcaster = getBroadcasterFactory().lookup(LiveFeedService.PATH_ROOT + publish.idAsString)
-            if (broadcaster != null) {
+            Broadcaster broadcaster = broadcasterFactory.broadcasterFactory.lookup(LiveFeedService.PATH_ROOT + publish.idAsString)
+            if (broadcaster) {
                 broadcaster.broadcast(
                         new WebSocketMessage(
                                 messageType: WebSocketMessage.MessageType.Game,
                                 game: gameMasker.maskGameForPlayer((MultiPlayerGame) game, publish)
                         )
                 )
+            } else {
+                logger.trace("Player is not connected to this server.")
             }
         } catch (Exception e) {
-            logger.error("Error publishing", e);
+            logger.error("Error publishing game " + game.id + " to player " + publish.id, e);
         }
     }
 }

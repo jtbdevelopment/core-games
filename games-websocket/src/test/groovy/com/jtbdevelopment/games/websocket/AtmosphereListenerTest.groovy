@@ -16,7 +16,6 @@ import org.atmosphere.cpr.BroadcasterFactory
  * Time: 7:18 PM
  */
 class AtmosphereListenerTest extends GameCoreTestCase {
-
     AtmosphereListener listener = new AtmosphereListener()
 
     //  Initiating Server Flag irrelevant here
@@ -78,7 +77,12 @@ class AtmosphereListenerTest extends GameCoreTestCase {
                         fail("Not sure how we got here")
                 }
         ] as BroadcasterFactory
-        listener.broadcasterFactory = factory
+        AtmosphereBroadcasterFactory factoryFactory = [
+                getBroadcasterFactory: {
+                    return factory
+                }
+        ] as AtmosphereBroadcasterFactory
+        listener.broadcasterFactory = factoryFactory
         [PONE, PTWO, PTHREE, PFOUR].each {
             listener.playerChanged(it, initiatingServer)
         }
@@ -127,11 +131,17 @@ class AtmosphereListenerTest extends GameCoreTestCase {
                     return '/livefeed/' + PFOUR.idAsString
                 }
         ] as Broadcaster
-        listener.broadcasterFactory = [
+        BroadcasterFactory factory = [
                 lookupAll: {
                     return [b2, b4, bJunk]
                 }
         ] as BroadcasterFactory
+        AtmosphereBroadcasterFactory factoryFactory = [
+                getBroadcasterFactory: {
+                    return factory
+                }
+        ] as AtmosphereBroadcasterFactory
+        listener.broadcasterFactory = factoryFactory
         listener.playerRepository = [
                 findOne: {
                     String id ->
@@ -153,6 +163,9 @@ class AtmosphereListenerTest extends GameCoreTestCase {
 
     void testPublishGameToConnectedNonInitiatingPlayers() {
         MultiPlayerGame game = [
+                getId: {
+                    return 'An ID!'
+                },
                 getPlayers: {
                     [PONE, PTWO, PTHREE, PFOUR]
                 }
@@ -214,7 +227,12 @@ class AtmosphereListenerTest extends GameCoreTestCase {
                         fail("Not sure how we got here")
                 }
         ] as BroadcasterFactory
-        listener.broadcasterFactory = factory
+        AtmosphereBroadcasterFactory factoryFactory = [
+                getBroadcasterFactory: {
+                    return factory
+                }
+        ] as AtmosphereBroadcasterFactory
+        listener.broadcasterFactory = factoryFactory
         listener.gameMasker = masker
 
         listener.gameChanged(game, PONE, initiatingServer)
