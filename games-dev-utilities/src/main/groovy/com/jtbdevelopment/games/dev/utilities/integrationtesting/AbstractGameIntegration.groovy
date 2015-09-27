@@ -78,6 +78,10 @@ abstract class AbstractGameIntegration<G extends Game> extends AbstractMongoInte
         TEST_PLAYER2 = createPlayer("f2345", "ITP2", "TEST PLAYER2")
         TEST_PLAYER3 = createPlayer("f3456", "ITP3", "TEST PLAYER3")
 
+        playerRepository.delete(TEST_PLAYER1)
+        playerRepository.delete(TEST_PLAYER2)
+        playerRepository.delete(TEST_PLAYER3)
+
         TEST_PLAYER1 = (MongoManualPlayer) playerRepository.save(TEST_PLAYER1)
         TEST_PLAYER2 = (MongoManualPlayer) playerRepository.save(TEST_PLAYER2)
         TEST_PLAYER3 = (MongoManualPlayer) playerRepository.save(TEST_PLAYER3)
