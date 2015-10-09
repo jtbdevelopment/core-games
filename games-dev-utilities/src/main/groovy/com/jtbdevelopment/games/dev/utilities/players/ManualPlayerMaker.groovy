@@ -24,12 +24,12 @@ class ManualPlayerMaker {
         passwordEncoder = ctx.getBean(PasswordEncoder.class)
 
         ManualPlayer[] players = [
-                makePlayer("Manual Player1", 'M1@MANUAL.COM', "M1"),
-                makePlayer("Manual Player2", 'M2@MANUAL.COM', "M2"),
-                makePlayer("Manual Player3", 'M3@MANUAL.COM', "M3"),
-                makePlayer("Manual Player4", 'M4@MANUAL.COM', "M4"),
-                makePlayer("Manual Player5", 'M5@MANUAL.COM', "M5"),
-                makePlayer("Manual Player6", 'M6@MANUAL.COM', "M6"),
+                makePlayer("Manual Player1", 'M1@MANUAL.COM', "M1", "images/avatars/maleprofile.png"),
+                makePlayer("Manual Player2", 'M2@MANUAL.COM', "M2", "images/avatars/femaleprofile.png"),
+                makePlayer("Manual Player3", 'M3@MANUAL.COM', "M3", "images/avatars/maleprofile.png"),
+                makePlayer("Manual Player4", 'M4@MANUAL.COM', "M4", "images/avatars/femaleprofile.png"),
+                makePlayer("Manual Player5", 'M5@MANUAL.COM', "M5", "images/avatars/maleprofile.png"),
+                makePlayer("Manual Player6", 'M6@MANUAL.COM', "M6", "images/avatars/femaleprofile.png"),
         ]
 
         players.each {
@@ -47,7 +47,8 @@ class ManualPlayerMaker {
         ctx.stop()
     }
 
-    static ManualPlayer makePlayer(final String displayName, final String sourceId, final String password) {
+    static ManualPlayer makePlayer(
+            final String displayName, final String sourceId, final String password, final String imageUrl) {
         ManualPlayer manualPlayer = (ManualPlayer) playerFactory.newManualPlayer()
         manualPlayer.disabled = false
         manualPlayer.adminUser = true
@@ -55,6 +56,7 @@ class ManualPlayerMaker {
         manualPlayer.displayName = displayName
         manualPlayer.sourceId = sourceId
         manualPlayer.password = passwordEncoder.encode(password)
+        manualPlayer.imageUrl = imageUrl
         return manualPlayer
     }
 }
