@@ -33,6 +33,12 @@ class MultiPlayerGamePublisherImpl implements GamePublisher<MultiPlayerGame> {
 
     ExecutorService service;
 
+
+    @PostConstruct
+    public void setUp() {
+        service = Executors.newFixedThreadPool(threads)
+    }
+
     MultiPlayerGame publish(final MultiPlayerGame game, final Player initiatingPlayer) {
         return publish(game, initiatingPlayer, true)
     }
@@ -57,9 +63,4 @@ class MultiPlayerGamePublisherImpl implements GamePublisher<MultiPlayerGame> {
         game
     }
 
-
-    @PostConstruct
-    public void setUp() {
-        service = Executors.newFixedThreadPool(threads)
-    }
 }

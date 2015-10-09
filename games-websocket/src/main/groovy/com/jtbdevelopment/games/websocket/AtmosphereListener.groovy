@@ -12,7 +12,14 @@ import org.atmosphere.cpr.Broadcaster
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+
+import javax.annotation.PostConstruct
+import java.time.Instant
+import java.util.concurrent.Callable
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 /**
  * Date: 12/8/14
@@ -23,7 +30,32 @@ import org.springframework.stereotype.Component
 class AtmosphereListener implements GameListener, PlayerListener {
     private static final Logger logger = LoggerFactory.getLogger(AtmosphereListener.class)
 
-    private static PublishItem
+    @Value('${atmosphere.LRU.seconds:300}')
+    int retryRetentionPeriod = 300
+
+    @Value('${atmosphere.threads:10}')
+    int threads = 10
+
+    @Value('${atmosphere.retries:5}')
+    int retries = 5
+
+    @Value('${atmosphere.retryPause:100}')
+    int retryPause = 100
+
+    protected ExecutorService service;
+
+    private Map<Player, Instant> recentPublishes = new LinkedHashMap<Player, Instant>() {
+        @Override
+        protected boolean removeEldestEntry(final Map.Entry<Player, Instant> eldest) {
+            return Instant.now().compareTo(eldest.value.plusSeconds(retryRetentionPeriod)) > 0
+        }
+    }
+
+    private static abstract class PlayerCallable implements Callable<Boolean> {
+        int attempts
+        Player player
+    }
+
     @Autowired
     MultiPlayerGameMasker gameMasker
 
@@ -35,6 +67,11 @@ class AtmosphereListener implements GameListener, PlayerListener {
 
     @Autowired
     AtmosphereBroadcasterFactory broadcasterFactory
+
+    @PostConstruct
+    public void setUp() {
+        service = Executors.newFixedThreadPool(threads)
+    }
 
     @Override
     void allPlayersChanged(final boolean initiatingServer) {
@@ -67,7 +104,17 @@ class AtmosphereListener implements GameListener, PlayerListener {
     @Override
     void playerChanged(final Player player, final boolean initiatingServer) {
         if (broadcasterFactory.broadcasterFactory) {
-            publishPlayerUpdate(player)
+            publishWithRetry(new PlayerCallable() {
+                {
+                    this.player = player
+                }
+
+                @Override
+                Boolean call() throws Exception {
+                    return publishPlayerUpdate(player)
+                }
+            })
+
         } else {
             logger.warn("No broadcaster in player changed")
         }
@@ -105,8 +152,17 @@ class AtmosphereListener implements GameListener, PlayerListener {
 
                 logger.trace("Publishing " + game.id + " to " + players.size() + " players.")
                 players.each {
-                    Player publish ->
-                        publishGameToPlayer(publish, game);
+                    Player player ->
+                        publishWithRetry(new PlayerCallable() {
+                            {
+                                this.player = player
+                            }
+
+                            @Override
+                            Boolean call() throws Exception {
+                                return publishGameToPlayer(player, game)
+                            }
+                        })
                 }
             } catch (Exception e) {
                 logger.error("Error publishing game " + game.id, e);
@@ -135,5 +191,32 @@ class AtmosphereListener implements GameListener, PlayerListener {
             logger.error("Error publishing game " + game.id + " to player " + player.id, e);
         }
         return false
+    }
+
+    private void publishWithRetry(final PlayerCallable playerCallable) {
+        service.submit(new Runnable() {
+            @Override
+            void run() {
+                if (playerCallable.attempts > 0) {
+                    Thread.sleep(retryPause)
+                }
+
+                playerCallable.attempts++
+                if (playerCallable.call()) {
+                    recentPublishes[playerCallable.player] = Instant.now()
+                    if (playerCallable.attempts > 1) {
+                        logger.trace("Published to " + playerCallable.player.id + " in " + playerCallable.attempts + " attempts.")
+                    }
+                } else {
+                    if (recentPublishes.containsKey(playerCallable.player)) {
+                        if (playerCallable.attempts < retries) {
+                            service.submit(this)
+                        } else {
+                            logger.trace("Failed to publish to " + playerCallable.player.id + " in " + playerCallable.attempts + " attempts.")
+                        }
+                    }
+                }
+            }
+        })
     }
 }

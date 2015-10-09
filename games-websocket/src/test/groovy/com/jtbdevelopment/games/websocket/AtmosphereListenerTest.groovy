@@ -11,6 +11,8 @@ import com.jtbdevelopment.games.state.masking.MultiPlayerGameMasker
 import org.atmosphere.cpr.Broadcaster
 import org.atmosphere.cpr.BroadcasterFactory
 
+import java.util.concurrent.TimeUnit
+
 /**
  * Date: 12/22/14
  * Time: 7:18 PM
@@ -30,6 +32,10 @@ class AtmosphereListenerTest extends GameCoreTestCase {
                 return source?.reverse()
             }
         }
+        listener.threads = 5
+        listener.retries = 3
+        listener.retryPause = 100
+        listener.setUp()
     }
 
     void testPublishPlayerToConnectedPlayer() {
@@ -86,6 +92,8 @@ class AtmosphereListenerTest extends GameCoreTestCase {
         [PONE, PTWO, PTHREE, PFOUR].each {
             listener.playerChanged(it, initiatingServer)
         }
+        listener.service.shutdown()
+        listener.service.awaitTermination(10, TimeUnit.SECONDS)
         assert p2pub && p4pub
     }
 
@@ -158,6 +166,8 @@ class AtmosphereListenerTest extends GameCoreTestCase {
                 }
         ] as AbstractPlayerRepository
         listener.allPlayersChanged(initiatingServer)
+        listener.service.shutdown()
+        listener.service.awaitTermination(10, TimeUnit.SECONDS)
         assert p2pub && p4pub
     }
 
@@ -236,6 +246,8 @@ class AtmosphereListenerTest extends GameCoreTestCase {
         listener.gameMasker = masker
 
         listener.gameChanged(game, PONE, initiatingServer)
+        listener.service.shutdown()
+        listener.service.awaitTermination(10, TimeUnit.SECONDS)
         assert p2pub && p4pub
     }
 }
