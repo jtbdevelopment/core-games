@@ -123,7 +123,7 @@ class AtmosphereListener implements GameListener, PlayerListener {
     private boolean publishPlayerUpdate(final Player player) {
         try {
             logger.trace("Publishing player changed to " + player.id)
-            Broadcaster broadcaster = broadcasterFactory.broadcasterFactory.lookup(LiveFeedService.PATH_ROOT + player.idAsString)
+            Broadcaster broadcaster = broadcasterFactory.broadcasterFactory.lookup(LiveFeedService.PATH_ROOT + player.idAsString, true)
             if (broadcaster != null) {
                 broadcaster.broadcast(
                         new WebSocketMessage(
@@ -175,7 +175,7 @@ class AtmosphereListener implements GameListener, PlayerListener {
     private boolean publishGameToPlayer(final Player player, final MultiPlayerGame game) {
         logger.trace("Publishing game update on game " + game.id + " to player " + player.id)
         try {
-            Broadcaster broadcaster = broadcasterFactory.broadcasterFactory.lookup(LiveFeedService.PATH_ROOT + player.idAsString)
+            Broadcaster broadcaster = broadcasterFactory.broadcasterFactory.lookup(LiveFeedService.PATH_ROOT + player.idAsString, true)
             if (broadcaster) {
                 broadcaster.broadcast(
                         new WebSocketMessage(
@@ -215,6 +215,7 @@ class AtmosphereListener implements GameListener, PlayerListener {
                             logger.trace("Failed to publish to " + playerCallable.player.id + " in " + playerCallable.attempts + " attempts.")
                         }
                     }
+                    logger.trace("Not publishing to " + playerCallable.player.id + ", not in recent publishes");
                 }
             }
         })
