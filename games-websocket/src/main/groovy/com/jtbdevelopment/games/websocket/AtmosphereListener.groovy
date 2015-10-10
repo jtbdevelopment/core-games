@@ -58,6 +58,9 @@ class AtmosphereListener implements GameListener, PlayerListener {
         Player player
     }
 
+    @Autowired(required = false)
+    List<WebSocketPublicationListener> publicationListeners
+
     @Autowired
     MultiPlayerGameMasker gameMasker
 
@@ -123,6 +126,7 @@ class AtmosphereListener implements GameListener, PlayerListener {
     }
 
     private boolean publishPlayerUpdate(final Player player) {
+        boolean status = false
         try {
             logger.trace("Publishing player changed to " + player.id)
             Broadcaster broadcaster = broadcasterFactory.broadcasterFactory.lookup(LiveFeedService.PATH_ROOT + player.idAsString)
@@ -133,14 +137,21 @@ class AtmosphereListener implements GameListener, PlayerListener {
                                 player: player
                         )
                 )
-                return true
+                status = true
             } else {
                 logger.trace("Player is not connected to this server for player changed " + player.id)
             }
         } catch (Exception e) {
             logger.error("Error publishing player update " + player.id, e);
         }
-        return false
+        publicationListeners?.each {
+            try {
+                it.publishedPlayerUpdate(player, status)
+            } catch (Exception e) {
+                logger.error("Error publishing to publication listener", e)
+            }
+        }
+        return status
     }
 
     @Override
@@ -176,6 +187,7 @@ class AtmosphereListener implements GameListener, PlayerListener {
 
     private boolean publishGameToPlayer(final Player player, final MultiPlayerGame game) {
         logger.trace("Publishing game update on game " + game.id + " to player " + player.id)
+        boolean status = false
         try {
             Broadcaster broadcaster = broadcasterFactory.broadcasterFactory.lookup(LiveFeedService.PATH_ROOT + player.idAsString)
             if (broadcaster) {
@@ -185,14 +197,22 @@ class AtmosphereListener implements GameListener, PlayerListener {
                                 game: gameMasker.maskGameForPlayer((MultiPlayerGame) game, player)
                         )
                 )
-                return true
+
+                status = true
             } else {
                 logger.trace("Player " + player.id + " is not connected to this server for " + game.id + ".")
             }
         } catch (Exception e) {
             logger.error("Error publishing game " + game.id + " to player " + player.id, e);
         }
-        return false
+        publicationListeners?.each {
+            try {
+                it.publishedGameUpdateToPlayer(player, game, status)
+            } catch (Exception e) {
+                logger.error("Error publishing to publication listener", e)
+            }
+        }
+        return status
     }
 
     private void publishWithRetry(final PlayerCallable playerCallable) {

@@ -25,7 +25,6 @@ class AtmosphereListenerTest extends GameCoreTestCase {
 
     @Override
     protected void setUp() throws Exception {
-        super.setUp()
         listener.stringToIDConverter = new StringToIDConverter<String>() {
             @Override
             String convert(final String source) {
@@ -36,6 +35,7 @@ class AtmosphereListenerTest extends GameCoreTestCase {
         listener.retries = 3
         listener.retryPause = 100
         listener.setUp()
+        listener.publicationListeners = [];
     }
 
     void testPublishPlayerToConnectedPlayer() {
@@ -88,6 +88,15 @@ class AtmosphereListenerTest extends GameCoreTestCase {
                     return factory
                 }
         ] as AtmosphereBroadcasterFactory
+
+        Set<Player> successes = [] as Set
+        Set<Player> failures = [] as Set
+        listener.publicationListeners.add([
+                publishedPlayerUpdate: {
+                    Player p, boolean status ->
+                        if (status) successes.add(p) else failures.add(p)
+                }
+        ] as WebSocketPublicationListener)
         listener.broadcasterFactory = factoryFactory
         [PONE, PTWO, PTHREE, PFOUR].each {
             listener.playerChanged(it, initiatingServer)
@@ -95,6 +104,8 @@ class AtmosphereListenerTest extends GameCoreTestCase {
         listener.service.shutdown()
         listener.service.awaitTermination(10, TimeUnit.SECONDS)
         assert p2pub && p4pub
+        assert [PTWO, PFOUR] as Set == successes
+        assert [PONE, PTHREE] as Set == failures
     }
 
     void testPublishRefreshPlayerToAllValidConnectedPlayers() {
@@ -237,6 +248,17 @@ class AtmosphereListenerTest extends GameCoreTestCase {
                         fail("Not sure how we got here")
                 }
         ] as BroadcasterFactory
+
+        Set<Player> successes = [] as Set
+        Set<Player> failures = [] as Set
+        listener.publicationListeners.add([
+                publishedGameUpdateToPlayer: {
+                    Player p, MultiPlayerGame g, boolean status ->
+                        assert g.is(game)
+                        if (status) successes.add(p) else failures.add(p)
+                }
+        ] as WebSocketPublicationListener)
+
         AtmosphereBroadcasterFactory factoryFactory = [
                 getBroadcasterFactory: {
                     return factory
@@ -249,5 +271,7 @@ class AtmosphereListenerTest extends GameCoreTestCase {
         listener.service.shutdown()
         listener.service.awaitTermination(10, TimeUnit.SECONDS)
         assert p2pub && p4pub
+        assert [PTWO, PFOUR] as Set == successes
+        assert [PTHREE] as Set == failures
     }
 }
