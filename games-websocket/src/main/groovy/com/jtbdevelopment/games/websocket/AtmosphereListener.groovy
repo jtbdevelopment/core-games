@@ -24,6 +24,8 @@ import java.util.concurrent.Executors
 /**
  * Date: 12/8/14
  * Time: 7:56 PM
+ *
+ * TODO - some tests for retry logic
  */
 @Component
 @CompileStatic
