@@ -18,6 +18,7 @@
         <module>games-mongo</module>
         <module>games-std-tracker</module>
         <module>games-dev-utilities</module>
+        <module>games-push-notifications</module>
     </modules>
 
     <properties>

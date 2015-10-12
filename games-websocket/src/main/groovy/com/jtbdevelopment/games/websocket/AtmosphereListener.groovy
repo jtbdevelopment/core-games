@@ -41,8 +41,8 @@ class AtmosphereListener implements GameListener, PlayerListener {
     @Value('${atmosphere.retries:5}')
     int retries = 5
 
-    @Value('${atmosphere.retryPause:100}')
-    int retryPause = 100
+    @Value('${atmosphere.retryPause:500}')
+    int retryPause = 500
 
     protected ExecutorService service;
 
