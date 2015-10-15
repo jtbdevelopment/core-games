@@ -8,7 +8,7 @@ import com.jtbdevelopment.games.dao.caching.CacheConstants
  * Date: 3/7/15
  * Time: 4:17 PM
  */
-class CachingConfigurerTest extends GroovyTestCase {
+class CoreGameCachingConfigurerTest extends GroovyTestCase {
     void testModifyConfiguration() {
         def configs = [CacheConstants.PLAYER_S_AND_SID_CACHE,
                        CacheConstants.PLAYER_ID_CACHE,
@@ -22,7 +22,7 @@ class CachingConfigurerTest extends GroovyTestCase {
                         assert mc.maxIdleSeconds == 300
                 }
         ] as Config
-        new CachingConfigurer().modifyConfiguration(config)
+        new CoreGameCachingConfigurer().modifyConfiguration(config)
         assert configs.empty
     }
 }

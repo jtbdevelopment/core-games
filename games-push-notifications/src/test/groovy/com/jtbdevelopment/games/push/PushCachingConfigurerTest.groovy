@@ -7,7 +7,7 @@ import com.hazelcast.config.MapConfig
  * Date: 10/11/2015
  * Time: 8:32 PM
  */
-class CachingConfigurerTest extends GroovyTestCase {
+class PushCachingConfigurerTest extends GroovyTestCase {
     void testModifyConfiguration() {
         def configs = [PushWebSocketPublicationListener.WEBSOCKET_TRACKING_MAP,
                        PushNotifierFilter.PLAYER_PUSH_TRACKING_MAP] as Set
@@ -19,7 +19,7 @@ class CachingConfigurerTest extends GroovyTestCase {
                         assert mc.maxIdleSeconds == 60
                 }
         ] as Config
-        new CachingConfigurer().modifyConfiguration(config)
+        new PushCachingConfigurer().modifyConfiguration(config)
         assert configs.empty
     }
 }
