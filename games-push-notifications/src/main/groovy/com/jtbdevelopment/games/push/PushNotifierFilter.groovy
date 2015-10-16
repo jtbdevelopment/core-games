@@ -8,6 +8,8 @@ import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.MultiPlayerGame
 import groovy.transform.CompileStatic
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -21,6 +23,8 @@ import java.util.concurrent.ConcurrentMap
 @Component
 @CompileStatic
 class PushNotifierFilter implements EntryEvictedListener<GamePublicationTracker, Boolean> {
+    private static final Logger logger = LoggerFactory.getLogger(PushNotifierFilter.class)
+
     static final String PLAYER_PUSH_TRACKING_MAP = "PUSH_PLAYER_TRACKING_SET"
     protected ConcurrentMap<Serializable, Serializable> recentlyPushedPlayers
 
@@ -49,13 +53,16 @@ class PushNotifierFilter implements EntryEvictedListener<GamePublicationTracker,
             return
         }
 
+        logger.trace('Checking push for ' + event.key.gid + '/' + event.key.pid)
         if (recentlyPushedPlayers.putIfAbsent(event.key.pid, event.key.pid) == null) {
+            logger.trace('Not pushed recently ' + event.key.gid + '/' + event.key.pid)
             Player player = playerRepository.findOne(event.key.pid)
             MultiPlayerGame game = (MultiPlayerGame) gameRepository.findOne((event.key.gid))
             if (player && game && filter.shouldPush(player, game)) {
-
+                logger.trace('Deemed push worthy ' + event.key.gid + '/' + event.key.pid)
                 pushNotifier.notifyPlayer(player, game)
             }
         }
+        logger.trace('Completed push check for ' + event.key.gid + '/' + event.key.pid)
     }
 }
