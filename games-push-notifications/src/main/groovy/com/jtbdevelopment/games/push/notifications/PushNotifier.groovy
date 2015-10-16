@@ -1,4 +1,4 @@
-package com.jtbdevelopment.games.push
+package com.jtbdevelopment.games.push.notifications
 
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.MultiPlayerGame

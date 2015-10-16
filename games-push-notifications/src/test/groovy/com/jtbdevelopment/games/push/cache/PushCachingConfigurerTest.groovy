@@ -1,7 +1,9 @@
-package com.jtbdevelopment.games.push
+package com.jtbdevelopment.games.push.cache
 
 import com.hazelcast.config.Config
 import com.hazelcast.config.MapConfig
+import com.jtbdevelopment.games.push.notifications.PushNotifierFilter
+import com.jtbdevelopment.games.push.websocket.PushWebSocketPublicationListener
 
 /**
  * Date: 10/11/2015

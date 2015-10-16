@@ -1,4 +1,4 @@
-package com.jtbdevelopment.games.push
+package com.jtbdevelopment.games.push.notifications
 
 import com.hazelcast.core.EntryEvent
 import com.hazelcast.core.HazelcastInstance
@@ -6,6 +6,7 @@ import com.hazelcast.map.listener.EntryEvictedListener
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.push.PushWorthyFilter
 import com.jtbdevelopment.games.state.MultiPlayerGame
 import groovy.transform.CompileStatic
 import org.slf4j.Logger

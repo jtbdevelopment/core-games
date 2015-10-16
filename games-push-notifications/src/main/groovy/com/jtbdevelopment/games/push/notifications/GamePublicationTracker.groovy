@@ -1,4 +1,4 @@
-package com.jtbdevelopment.games.push
+package com.jtbdevelopment.games.push.notifications
 
 import groovy.transform.CompileStatic
 

@@ -1,4 +1,4 @@
-package com.jtbdevelopment.games.push
+package com.jtbdevelopment.games.push.notifications
 
 import com.hazelcast.core.EntryEvent
 import com.hazelcast.core.HazelcastInstance
@@ -7,6 +7,7 @@ import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.push.PushWorthyFilter
 import com.jtbdevelopment.games.state.MultiPlayerGame
 
 import java.util.concurrent.ConcurrentHashMap

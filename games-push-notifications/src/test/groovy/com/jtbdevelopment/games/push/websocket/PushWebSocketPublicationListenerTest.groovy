@@ -1,7 +1,8 @@
-package com.jtbdevelopment.games.push
+package com.jtbdevelopment.games.push.websocket
 
 import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.push.notifications.GamePublicationTracker
 import com.jtbdevelopment.games.state.MultiPlayerGame
 
 import java.util.concurrent.ConcurrentHashMap
