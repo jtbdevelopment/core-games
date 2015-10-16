@@ -1,5 +1,6 @@
 package com.jtbdevelopment.games.players
 
+import com.jtbdevelopment.games.players.notifications.RegisteredDevice
 import groovy.transform.CompileStatic
 import org.apache.commons.codec.digest.DigestUtils
 import org.springframework.data.annotation.CreatedDate
@@ -21,6 +22,8 @@ abstract class AbstractPlayer<ID extends Serializable> implements Cloneable, Pla
     String displayName
     String imageUrl
     String profileUrl
+
+    Set<RegisteredDevice> registeredDevices = [] as Set
 
     @CreatedDate
     ZonedDateTime created = ZonedDateTime.now(GMT)
@@ -112,5 +115,18 @@ abstract class AbstractPlayer<ID extends Serializable> implements Cloneable, Pla
         if (gameSpecificPlayerAttributes) {
             gameSpecificPlayerAttributes.setPlayer(this)
         }
+    }
+
+    @Override
+    void updateRegisteredDevice(final RegisteredDevice device) {
+        if (registeredDevices.contains(device)) {
+            registeredDevices.remove(device)
+        }
+        registeredDevices.add(device)
+    }
+
+    @Override
+    void removeRegisteredDevice(final RegisteredDevice device) {
+        registeredDevices.remove(device)
     }
 }

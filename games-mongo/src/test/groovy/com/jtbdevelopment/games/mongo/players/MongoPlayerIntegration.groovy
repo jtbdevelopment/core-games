@@ -6,6 +6,7 @@ import com.jtbdevelopment.games.dao.caching.CacheConstants
 import com.jtbdevelopment.games.mongo.dao.MongoPlayerRepository
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.PlayerPayLevel
+import com.jtbdevelopment.games.players.notifications.RegisteredDevice
 import com.mongodb.DBCollection
 import groovy.transform.CompileStatic
 import org.junit.Before
@@ -125,8 +126,9 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
         try {
             player1.lastLogin = ZonedDateTime.of(2015, 11, 10, 1, 2, 3, 100, ZoneId.of("GMT"))
             player1.created = ZonedDateTime.of(200, 1, 30, 4, 5, 6, 100, ZoneId.of("GMT"))
+            player1.updateRegisteredDevice(new RegisteredDevice(deviceID: "ADevice", lastRegistered: player1.lastLogin))
 
-            assert mapper.writeValueAsString(player1) == '{"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","created":-55853265294.000000100,"lastLogin":1447117323.000000100,"lastVersionNotes":"X.Y","disabled":false,"adminUser":false,"payLevel":"PremiumPlayer","gameSpecificPlayerAttributes":null,"id":"' + player1.idAsString + '","md5":"' + player1.md5 + '"}'
+            assert mapper.writeValueAsString(player1) == '{"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","registeredDevices":[{"deviceID":"ADevice","lastRegistered":1447117323.000000100}],"created":-55853265294.000000100,"lastLogin":1447117323.000000100,"lastVersionNotes":"X.Y","disabled":false,"adminUser":false,"payLevel":"PremiumPlayer","gameSpecificPlayerAttributes":null,"id":"' + player1.idAsString + '","md5":"' + player1.md5 + '"}'
         } finally {
             player1.lastLogin = ll
             player1.created = c
@@ -137,7 +139,7 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
     void testDeserialization() {
         ObjectMapper mapper = context.getBean(ObjectMapper.class)
         MongoPlayer player = mapper.readValue(
-                '{"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","disabled":false,"adminUser":true,"id":"54b656dba826d455d3eaa8a4","md5":"94026ad238c04d23e4fd1fe7efeebabf", "payLevel": "PremiumPlayer"}',
+                '{"registeredDevices":[{"deviceID":"ADevice","lastRegistered":1447117323.000000100}],"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","disabled":false,"adminUser":true,"id":"54b656dba826d455d3eaa8a4","md5":"94026ad238c04d23e4fd1fe7efeebabf", "payLevel": "PremiumPlayer"}',
                 MongoPlayer.class
         )
         assert player
@@ -147,6 +149,10 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
         assert player.adminUser
         assert player.profileUrl == "http://somewhere.com/profile/1"
         assert player.imageUrl == "http://somewhere.com/image/1"
+        assert !player.registeredDevices.empty
+        RegisteredDevice device = player.registeredDevices.iterator().next()
+        assert "ADevice" == device.deviceID
+        assert ZonedDateTime.of(2015, 11, 10, 1, 2, 3, 100, ZoneId.of("GMT")) == device.lastRegistered
     }
 
     @Test

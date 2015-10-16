@@ -1,5 +1,6 @@
 package com.jtbdevelopment.games.players
 
+import com.jtbdevelopment.games.players.notifications.RegisteredDevice
 import groovy.transform.CompileStatic
 import org.springframework.data.annotation.Transient
 
@@ -72,4 +73,12 @@ interface Player<ID extends Serializable> {
     String getLastVersionNotes()
 
     void setLastVersionNotes(final String lastVersionNotes)
+
+    Set<RegisteredDevice> getRegisteredDevices()
+
+    void setRegisteredDevices(final Set<RegisteredDevice> devices)
+
+    void updateRegisteredDevice(final RegisteredDevice device)
+
+    void removeRegisteredDevice(final RegisteredDevice device)
 }

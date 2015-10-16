@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.players
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.players.notifications.RegisteredDevice
 import org.apache.commons.codec.digest.DigestUtils
 import org.springframework.data.annotation.Transient
 
@@ -21,6 +22,7 @@ class AbstractPlayerTest extends GameCoreTestCase {
         assertFalse p.adminUser
         assert start.compareTo(p.created) < 0
         assert start.minusYears(5).compareTo(p.lastLogin) < 0
+        assert p.registeredDevices.empty
     }
 
     void testHashCodeWithNoId() {
@@ -126,5 +128,40 @@ class AbstractPlayerTest extends GameCoreTestCase {
         Player p = new StringPlayer()
         p.gameSpecificPlayerAttributes = null
         assertNull p.gameSpecificPlayerAttributes
+    }
+
+    void testUpdatingDeviceNotInSetAlready() {
+        Player p = new StringPlayer()
+        RegisteredDevice device = new RegisteredDevice(deviceID: "X")
+        p.updateRegisteredDevice(device)
+        assert [device] as Set == p.registeredDevices
+    }
+
+    void testUpdatingExistingDevice() {
+        Player p = new StringPlayer()
+        RegisteredDevice device = new RegisteredDevice(deviceID: "X")
+        p.updateRegisteredDevice(device)
+
+        RegisteredDevice updatedDevice = new RegisteredDevice(
+                deviceID: device.deviceID,
+                lastRegistered: device.lastRegistered.plusSeconds(1)
+        )
+
+        p.updateRegisteredDevice(updatedDevice)
+
+        assert [updatedDevice] as Set == p.registeredDevices
+        assert updatedDevice.lastRegistered == p.registeredDevices.iterator().next().lastRegistered
+    }
+
+    void testRemovingAnExistingDevice() {
+        Player p = new StringPlayer()
+        RegisteredDevice device = new RegisteredDevice(deviceID: "X", lastRegistered: ZonedDateTime.now())
+        p.updateRegisteredDevice(device)
+
+        assertTrue p.registeredDevices.contains(device)
+
+        RegisteredDevice remove = new RegisteredDevice(deviceID: "X", lastRegistered: ZonedDateTime.now())
+        p.removeRegisteredDevice(remove)
+        assertFalse p.registeredDevices.contains(device)
     }
 }
