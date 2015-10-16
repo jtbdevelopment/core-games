@@ -101,6 +101,7 @@ class AtmosphereListenerTest extends GameCoreTestCase {
         [PONE, PTWO, PTHREE, PFOUR].each {
             listener.playerChanged(it, initiatingServer)
         }
+        Thread.sleep(200)
         listener.service.shutdown()
         listener.service.awaitTermination(10, TimeUnit.SECONDS)
         assert p2pub && p4pub
@@ -177,6 +178,7 @@ class AtmosphereListenerTest extends GameCoreTestCase {
                 }
         ] as AbstractPlayerRepository
         listener.allPlayersChanged(initiatingServer)
+        Thread.sleep(200)
         listener.service.shutdown()
         listener.service.awaitTermination(10, TimeUnit.SECONDS)
         assert p2pub && p4pub
@@ -191,8 +193,8 @@ class AtmosphereListenerTest extends GameCoreTestCase {
                     [PONE, PTWO, PTHREE, PFOUR]
                 }
         ] as MultiPlayerGame
-        boolean p2pub = false;
-        boolean p4pub = false;
+        boolean p2pub = false
+        boolean p4pub = false
         MaskedMultiPlayerGame mg2 = [] as MaskedMultiPlayerGame
         MaskedMultiPlayerGame mg4 = [] as MaskedMultiPlayerGame
         Broadcaster b2 = [
@@ -268,6 +270,7 @@ class AtmosphereListenerTest extends GameCoreTestCase {
         listener.gameMasker = masker
 
         listener.gameChanged(game, PONE, initiatingServer)
+        Thread.sleep(200)
         listener.service.shutdown()
         listener.service.awaitTermination(10, TimeUnit.SECONDS)
         assert p2pub && p4pub
