@@ -44,6 +44,8 @@ class PushServices {
 
         //  TODO - remove old devices here?
 
+        //  TODO - register client /update client in GCM
+
         Player player = playerRepository.findOne(
                 ((SessionUserInfo<Serializable>) SecurityContextHolder.context.authentication.principal).
                         effectiveUser.id)
@@ -60,6 +62,8 @@ class PushServices {
         Player player = playerRepository.findOne(
                 ((SessionUserInfo<Serializable>) SecurityContextHolder.context.authentication.principal).
                         effectiveUser.id)
+
+        //  TODO - register client /update client in GCM
 
         RegisteredDevice device = new RegisteredDevice(deviceID: deviceID)
         player.removeRegisteredDevice(device)
