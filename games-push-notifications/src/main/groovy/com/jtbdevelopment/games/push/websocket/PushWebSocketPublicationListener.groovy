@@ -3,6 +3,7 @@ package com.jtbdevelopment.games.push.websocket
 import com.hazelcast.core.HazelcastInstance
 import com.hazelcast.core.IMap
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.push.PushProperties
 import com.jtbdevelopment.games.push.notifications.GamePublicationTracker
 import com.jtbdevelopment.games.push.notifications.PushNotifierFilter
 import com.jtbdevelopment.games.state.MultiPlayerGame
@@ -35,17 +36,22 @@ class PushWebSocketPublicationListener implements WebSocketPublicationListener {
     @Autowired
     PushNotifierFilter pushNotifierFilter
 
+    @Autowired
+    PushProperties pushProperties
+
     protected ConcurrentMap<GamePublicationTracker, Boolean> trackingMap
 
     @PostConstruct
     void setup() {
-        trackingMap = hazelcastInstance.getMap(WEBSOCKET_TRACKING_MAP)
-        ((IMap) trackingMap).addEntryListener(pushNotifierFilter, true)
+        if (pushProperties.enabled) {
+            trackingMap = hazelcastInstance.getMap(WEBSOCKET_TRACKING_MAP)
+            ((IMap) trackingMap).addEntryListener(pushNotifierFilter, true)
 
-        computeRegistrationCutoff()
-        Thread.start {
-            Thread.sleep(60 * 60 * 1000)  // hourly
             computeRegistrationCutoff()
+            Thread.start {
+                Thread.sleep(60 * 60 * 1000)  // hourly
+                computeRegistrationCutoff()
+            }
         }
     }
 
@@ -60,7 +66,9 @@ class PushWebSocketPublicationListener implements WebSocketPublicationListener {
 
     @Override
     void publishedGameUpdateToPlayer(final Player player, final MultiPlayerGame game, final boolean status) {
-        if (player.registeredDevices.find { it.lastRegistered.compareTo(registeredCutoff) > 0 }) {
+        if (pushProperties.enabled && player.registeredDevices.find {
+            it.lastRegistered.compareTo(registeredCutoff) > 0
+        }) {
             GamePublicationTracker tracker = new GamePublicationTracker(
                     pid: (Serializable) player.id,
                     gid: (Serializable) game.id)
