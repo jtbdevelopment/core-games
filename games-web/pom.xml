@@ -11,7 +11,8 @@
     <artifactId>games-web</artifactId>
 
     <dependencies>
-        <dependency>
+
+    <dependency>
             <groupId>com.jtbdevelopment.core-common</groupId>
             <artifactId>core-spring-web</artifactId>
             <version>${core.common.version}</version>
