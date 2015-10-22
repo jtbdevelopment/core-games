@@ -10,7 +10,7 @@ import java.time.ZonedDateTime
  * Time: 6:52 AM
  */
 @Component
-class RegisteredDevice {
+class RegisteredDevice implements Serializable {
     private final static ZoneId GMT = ZoneId.of("GMT")
 
     String deviceID = ""
