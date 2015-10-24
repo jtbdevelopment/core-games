@@ -24,7 +24,7 @@ class PushNotifierTest extends GameCoreTestCase {
                 post: {
                     Entity e, GenericType t ->
                         assert ((Map<String, Object>) e.entity) == [
-                                test: "value", registration_ids: "dev1,dev2"
+                                test: "value", registration_ids: ["dev1", "dev2"]
                         ]
                         return result
                 }

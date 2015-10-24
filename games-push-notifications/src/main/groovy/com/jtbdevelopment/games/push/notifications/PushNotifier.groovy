@@ -70,9 +70,9 @@ class PushNotifier {
             Map<String, Object> message = new HashMap<>(baseMessage)
             //  TODO - create user device groups
             List<String> deviceIDs = player.registeredDevices.collect { it.deviceID }
-            message["registration_ids"] = deviceIDs.join(",")
+            message["registration_ids"] = deviceIDs
             Entity entity = Entity.entity(message, MediaType.APPLICATION_JSON)
-            logger.trace("Posting to GCM message " + message)
+            logger.trace("Posting to GCM message " + objectMapper?.writeValueAsString(message));
             Map<String, Object> result = builder.post(entity, new GenericType<Map<String, Object>>() {})
             logger.trace("GCM posted with result " + result)
             if (result["failure"] != 0 && result["canonical_ids"] != 0) {
