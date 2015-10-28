@@ -2,7 +2,9 @@ package com.jtbdevelopment.games.push.notifications
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider
+import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.players.notifications.RegisteredDevice
 import com.jtbdevelopment.games.push.PushProperties
 import com.jtbdevelopment.games.state.MultiPlayerGame
 import groovy.transform.CompileStatic
@@ -22,6 +24,12 @@ import javax.ws.rs.core.UriBuilder
 /**
  * Date: 10/11/2015
  * Time: 8:34 PM
+ *
+ * From Google API Docs - the type of response you will receive{"multicast_id": 216,
+ "success": 3,
+ "failure": 3,
+ "canonical_ids": 1,
+ "results": [{ "message_id": "1:0408" },{ "error": "Unavailable" },{ "error": "InvalidRegistration" },{ "message_id": "1:1516" },{ "message_id": "1:2342", "registration_id": "32" },{ "error": "NotRegistered"}]}*
  */
 @Component
 @CompileStatic
@@ -45,6 +53,9 @@ class PushNotifier {
     PushProperties pushProperties
 
     @Autowired
+    AbstractPlayerRepository playerRepository
+
+    @Autowired
     public void setup() {
         client.register(
                 new JacksonJaxbJsonProvider(
@@ -58,10 +69,10 @@ class PushNotifier {
         baseMessage["collapse_key"] = "YourTurn"
         baseMessage["time_to_live"] = DEFAULT_TTL
         baseMessage["notification"] = new HashMap<String, Object>([
-                title: "Your turn.",
-                body : "Your turn to play.",
-                icon : "icon",
-                tag  : "YourTurn",
+                title  : "Your turn.",
+                body   : "Your turn to play.",
+                message: "Your turn to play.",
+                tag    : "YourTurn",
         ])
     }
 
@@ -76,22 +87,25 @@ class PushNotifier {
             Map<String, Object> result = builder.post(entity, new GenericType<Map<String, Object>>() {})
             logger.trace("GCM posted with result " + result)
             if (result["failure"] != 0 && result["canonical_ids"] != 0) {
-                //  TODO
-                /*
-                { "multicast_id": 216,
-  "success": 3,
-  "failure": 3,
-  "canonical_ids": 1,
-  "results": [
-    { "message_id": "1:0408" },
-    { "error": "Unavailable" },
-    { "error": "InvalidRegistration" },
-    { "message_id": "1:1516" },
-    { "message_id": "1:2342", "registration_id": "32" },
-    { "error": "NotRegistered"}
-  ]
-}
-                 */
+                boolean playerUpdated = false
+                List<Map<String, String>> results = (List<Map<String, String>>) result["results"]
+                for (int i = 0; i < results.size(); ++i) {
+                    def subResult = results[i]
+                    String error = subResult["error"]
+                    if ("InvalidRegistration" == error || "NotRegistered" == error) {
+                        player.removeRegisteredDevice(player.registeredDevices.find { it.deviceID == deviceIDs[i] })
+                        playerUpdated = true
+                    }
+                    String newRegId = subResult["registration_id"]
+                    if (newRegId) {
+                        player.removeRegisteredDevice(player.registeredDevices.find { it.deviceID == deviceIDs[i] })
+                        player.updateRegisteredDevice(new RegisteredDevice(deviceID: newRegId))
+                        playerUpdated = true
+                    }
+                }
+                if (playerUpdated) {
+                    playerRepository.save(player)
+                }
             }
             return true
         } catch (Exception ex) {
