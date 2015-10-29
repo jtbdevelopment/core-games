@@ -40,11 +40,9 @@ class PushNotifier {
     private static final URI GCM_URI = UriBuilder.fromUri(GCM_URL).build()
     private static int DEFAULT_TTL = 60 * 60 * 4 // 4 hours in seconds
 
-    //  TODO - allow app greater control of message sent
-
     protected Client client = ClientBuilder.newClient()
     protected Builder builder
-    protected Map<String, Object> baseMessage = [:]
+    protected Map<String, Object> baseMessage
 
     @Autowired
     ObjectMapper objectMapper
@@ -66,19 +64,36 @@ class PushNotifier {
                 request(MediaType.APPLICATION_JSON_TYPE).
                 header("Content-Type", MediaType.APPLICATION_JSON).
                 header("Authorization", "key=" + pushProperties.apiKey)
-        baseMessage["collapse_key"] = "YourTurn"
-        baseMessage["time_to_live"] = DEFAULT_TTL
-        baseMessage["notification"] = new HashMap<String, Object>([
-                title  : "Your turn.",
-                body   : "Your turn to play.",
-                message: "Your turn to play.",
-                tag    : "YourTurn",
+
+        baseMessage = new HashMap<String, Object>([
+                //  common
+                collapse_key     : "YourTurn",
+                time_to_live     : DEFAULT_TTL,
+
+                //  ios
+                content_available: true,
+                notification     : [
+                        //  common
+                        title  : "Your turn.",
+                        body   : "Your turn to play.",
+
+                        //  Android
+                        icon   : "icon",
+                        tag    : "YourTurn",
+                        message: "Your turn to play.",
+
+                        // ios
+                        badge  : "1",
+
+                ]
         ])
     }
 
     boolean notifyPlayer(final Player player, final MultiPlayerGame game) {
         try {
             Map<String, Object> message = new HashMap<>(baseMessage)
+            //  TODO - allow app greater control of message sent
+
             //  TODO - create user device groups
             List<String> deviceIDs = player.registeredDevices.collect { it.deviceID }
             message["registration_ids"] = deviceIDs
