@@ -29,4 +29,12 @@ class GamePublicationTracker implements Serializable {
         result = 31 * result + gid.hashCode()
         return result
     }
+
+    @Override
+    public String toString() {
+        return "GamePublicationTracker{" +
+                "pid=" + pid +
+                ", gid=" + gid +
+                '}';
+    }
 }

@@ -9,6 +9,8 @@ import com.jtbdevelopment.games.push.notifications.PushNotifierFilter
 import com.jtbdevelopment.games.state.MultiPlayerGame
 import com.jtbdevelopment.games.websocket.WebSocketPublicationListener
 import groovy.transform.CompileStatic
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -24,6 +26,7 @@ import java.util.concurrent.ConcurrentMap
 @CompileStatic
 @Component
 class PushWebSocketPublicationListener implements WebSocketPublicationListener {
+    private static final Logger logger = LoggerFactory.getLogger(PushWebSocketPublicationListener.class)
     static final String WEBSOCKET_TRACKING_MAP = "PUSH_TRACKING_MAP"
 
     protected static final ZoneId GMT = ZoneId.of("GMT")
@@ -70,12 +73,19 @@ class PushWebSocketPublicationListener implements WebSocketPublicationListener {
             it.lastRegistered.compareTo(registeredCutoff) > 0
         }) {
             GamePublicationTracker tracker = new GamePublicationTracker(
-                    pid: (Serializable) player.id,
+                    pid: player.id,
                     gid: (Serializable) game.id)
+            boolean was, is
             if (status) {
-                trackingMap.put(tracker, status)
+                logger.trace("Forcing publish on " + tracker)
+                was = trackingMap.put(tracker, status)
             } else {
-                trackingMap.putIfAbsent(tracker, status)
+                logger.trace("putIfAbsent publish on " + tracker)
+                was = trackingMap.putIfAbsent(tracker, status)
+            }
+            if (logger.isTraceEnabled()) {
+                is = trackingMap.get(tracker)
+                logger.trace("Was " + was + ", is " + is)
             }
         }
     }

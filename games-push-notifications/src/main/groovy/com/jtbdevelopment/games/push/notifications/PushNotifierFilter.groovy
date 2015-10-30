@@ -54,16 +54,16 @@ class PushNotifierFilter implements EntryEvictedListener<GamePublicationTracker,
             return
         }
 
-        logger.trace('Checking push for ' + event.key.gid + '/' + event.key.pid)
+        logger.trace('Checking push for ' + event.key)
         if (recentlyPushedPlayers.putIfAbsent(event.key.pid, event.key.pid) == null) {
-            logger.trace('Not pushed recently ' + event.key.gid + '/' + event.key.pid)
+            logger.trace('Not pushed recently ' + event.key)
             Player player = playerRepository.findOne(event.key.pid)
             MultiPlayerGame game = (MultiPlayerGame) gameRepository.findOne((event.key.gid))
             if (player && game && filter.shouldPush(player, game)) {
-                logger.trace('Deemed push worthy ' + event.key.gid + '/' + event.key.pid)
+                logger.trace('Deemed push worthy ' + event.key)
                 pushNotifier.notifyPlayer(player, game)
             }
         }
-        logger.trace('Completed push check for ' + event.key.gid + '/' + event.key.pid)
+        logger.trace('Completed push check for ' + event.key)
     }
 }
