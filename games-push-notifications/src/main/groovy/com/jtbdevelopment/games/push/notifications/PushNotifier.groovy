@@ -101,7 +101,7 @@ class PushNotifier {
             logger.trace("Posting to GCM message " + objectMapper?.writeValueAsString(message));
             Map<String, Object> result = builder.post(entity, new GenericType<Map<String, Object>>() {})
             logger.trace("GCM posted with result " + result)
-            if (result["failure"] != 0 && result["canonical_ids"] != 0) {
+            if (result["failure"] != 0 || result["canonical_ids"] != 0) {
                 boolean playerUpdated = false
                 List<Map<String, String>> results = (List<Map<String, String>>) result["results"]
                 for (int i = 0; i < results.size(); ++i) {
