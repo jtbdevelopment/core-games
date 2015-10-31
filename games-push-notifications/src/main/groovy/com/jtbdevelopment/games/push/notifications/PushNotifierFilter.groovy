@@ -50,11 +50,12 @@ class PushNotifierFilter implements EntryEvictedListener<GamePublicationTracker,
 
     @Override
     void entryEvicted(final EntryEvent<GamePublicationTracker, Boolean> event) {
-        if (event.value) {
+        logger.trace('Evicting push check ' + event)
+        if (event.oldValue?.booleanValue()) {
             return
         }
 
-        logger.trace('Checking push for ' + event.key)
+        logger.trace('Checking push for ' + event.key + ', value ' + event.value)
         if (recentlyPushedPlayers.putIfAbsent(event.key.pid, event.key.pid) == null) {
             logger.trace('Not pushed recently ' + event.key)
             Player player = playerRepository.findOne(event.key.pid)

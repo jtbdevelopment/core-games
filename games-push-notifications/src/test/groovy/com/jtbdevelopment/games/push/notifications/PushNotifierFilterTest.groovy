@@ -34,14 +34,14 @@ class PushNotifierFilterTest extends GameCoreTestCase {
     }
 
     void testDoesNothingIfValueOnEvictionIsTrue() {
-        filter.entryEvicted(new EntryEvent<GamePublicationTracker, Boolean>("TEST", null, 0, null, true))
+        filter.entryEvicted(new EntryEvent<GamePublicationTracker, Boolean>("TEST", null, 0, null, true, null))
     }
 
     void testDoesNothingIfRecentlyPushedToPlayer() {
         filter.recentlyPushedPlayers = new ConcurrentHashMap<>()
         Serializable pid = "XY12"
         filter.recentlyPushedPlayers.put(pid, pid)
-        filter.entryEvicted(new EntryEvent<GamePublicationTracker, Boolean>("TEST", null, 0, new GamePublicationTracker(pid: pid), false))
+        filter.entryEvicted(new EntryEvent<GamePublicationTracker, Boolean>("TEST", null, 0, new GamePublicationTracker(pid: pid), false, null))
     }
 
     void testDoesNothingIfUnableToLoadPlayer() {
@@ -62,7 +62,7 @@ class PushNotifierFilterTest extends GameCoreTestCase {
                         return new GameCoreTestCase.StringMPGame()
                 }
         ] as AbstractMultiPlayerGameRepository
-        filter.entryEvicted(new EntryEvent<GamePublicationTracker, Boolean>("TEST", null, 0, new GamePublicationTracker(pid: pid, gid: gid), false))
+        filter.entryEvicted(new EntryEvent<GamePublicationTracker, Boolean>("TEST", null, 0, new GamePublicationTracker(pid: pid, gid: gid), false, null))
     }
 
     void testDoesNothingIfUnableToLoadGame() {
@@ -83,7 +83,7 @@ class PushNotifierFilterTest extends GameCoreTestCase {
                         return null
                 }
         ] as AbstractMultiPlayerGameRepository
-        filter.entryEvicted(new EntryEvent<GamePublicationTracker, Boolean>("TEST", null, 0, new GamePublicationTracker(pid: pid, gid: gid), false))
+        filter.entryEvicted(new EntryEvent<GamePublicationTracker, Boolean>("TEST", null, 0, new GamePublicationTracker(pid: pid, gid: gid), false, null))
     }
 
     void testDoesNothingIfNotPushWorthy() {
@@ -115,7 +115,7 @@ class PushNotifierFilterTest extends GameCoreTestCase {
                         return false
                 }
         ] as PushWorthyFilter
-        filter.entryEvicted(new EntryEvent<GamePublicationTracker, Boolean>("TEST", null, 0, new GamePublicationTracker(pid: pid, gid: gid), false))
+        filter.entryEvicted(new EntryEvent<GamePublicationTracker, Boolean>("TEST", null, 0, new GamePublicationTracker(pid: pid, gid: gid), false, null))
     }
 
     void testDoesPushIfPushWorthy() {
@@ -156,7 +156,7 @@ class PushNotifierFilterTest extends GameCoreTestCase {
                         pushed = true
                 }
         ] as PushNotifier
-        filter.entryEvicted(new EntryEvent<GamePublicationTracker, Boolean>("TEST", null, 0, new GamePublicationTracker(pid: pid, gid: gid), false))
+        filter.entryEvicted(new EntryEvent<GamePublicationTracker, Boolean>("TEST", null, 0, new GamePublicationTracker(pid: pid, gid: gid), false, null))
         assert pushed
     }
 }
