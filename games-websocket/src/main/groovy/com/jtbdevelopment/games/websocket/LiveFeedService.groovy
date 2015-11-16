@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory
 public class LiveFeedService {
 
     static final Logger logger = LoggerFactory.getLogger(LiveFeedService.class)
+    static final String PATH_ROOT = "/livefeed/"
 
     @PathParam("id")
     String id
