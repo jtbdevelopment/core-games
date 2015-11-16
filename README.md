@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jtbdevelopment/core-games.svg?branch=master)](https://travis-ci.org/jtbdevelopment/core-games)
+
 core-games
 ==========
 
