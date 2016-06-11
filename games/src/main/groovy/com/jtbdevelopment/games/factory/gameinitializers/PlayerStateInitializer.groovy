@@ -26,4 +26,6 @@ class PlayerStateInitializer implements GameInitializer<Game> {
             }
         }
     }
+
+    final int order = DEFAULT_ORDER
 }
