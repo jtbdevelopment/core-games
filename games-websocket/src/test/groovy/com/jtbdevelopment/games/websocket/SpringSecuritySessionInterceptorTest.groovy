@@ -4,6 +4,7 @@ import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.security.SessionUserInfo
 import org.atmosphere.cpr.Action
 import org.atmosphere.cpr.AtmosphereRequest
+import org.atmosphere.cpr.AtmosphereRequestImpl
 import org.atmosphere.cpr.AtmosphereResource
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContext
@@ -19,7 +20,7 @@ class SpringSecuritySessionInterceptorTest extends GroovyTestCase {
 
     void testInspectWithCorrectDetails() {
         String id = '43rn'
-        AtmosphereRequest request = new AtmosphereRequest.Builder().pathInfo("/" + id).build()
+        AtmosphereRequest request = new AtmosphereRequestImpl.Builder().pathInfo("/" + id).build()
         SecurityContext sc = [
                 getAuthentication: {
                     return [
@@ -59,7 +60,7 @@ class SpringSecuritySessionInterceptorTest extends GroovyTestCase {
 
     void testInspectWithIncorrectDetails() {
         String id = '43rn'
-        AtmosphereRequest request = new AtmosphereRequest.Builder().pathInfo("/X" + id).build()
+        AtmosphereRequest request = new AtmosphereRequestImpl.Builder().pathInfo("/X" + id).build()
         SecurityContext sc = [
                 getAuthentication: {
                     return [
@@ -99,7 +100,7 @@ class SpringSecuritySessionInterceptorTest extends GroovyTestCase {
 
     void testInspectWithNullContext() {
         String id = '43rn'
-        AtmosphereRequest request = new AtmosphereRequest.Builder().pathInfo("/" + id).build()
+        AtmosphereRequest request = new AtmosphereRequestImpl.Builder().pathInfo("/" + id).build()
         HttpSession s = [
                 getAttribute: {
                     String name ->
@@ -120,7 +121,7 @@ class SpringSecuritySessionInterceptorTest extends GroovyTestCase {
 
     void testInspectWithNullSession() {
         String id = '43rn'
-        AtmosphereRequest request = new AtmosphereRequest.Builder().pathInfo("/" + id).build()
+        AtmosphereRequest request = new AtmosphereRequestImpl.Builder().pathInfo("/" + id).build()
         SecurityContext sc = [
                 getAuthentication: {
                     return null

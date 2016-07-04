@@ -152,7 +152,7 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
         assert !player.registeredDevices.empty
         RegisteredDevice device = player.registeredDevices.iterator().next()
         assert "ADevice" == device.deviceID
-        assert ZonedDateTime.of(2015, 11, 10, 1, 2, 3, 100, ZoneId.of("GMT")) == device.lastRegistered
+        assert ZonedDateTime.of(2015, 11, 10, 1, 2, 3, 100, ZoneId.of("UTC")) == device.lastRegistered
     }
 
     @Test
