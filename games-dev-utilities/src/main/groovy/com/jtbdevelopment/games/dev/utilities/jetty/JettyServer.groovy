@@ -71,6 +71,7 @@ class JettyServer {
         atmosphereServletHolder.setInitParameter("org.atmosphere.cpr.sessionSupport", "true")
         atmosphereServletHolder.setInitParameter("org.atmosphere.websocket.suppressJSR356", "true")
         atmosphereServletHolder.setInitParameter("org.atmosphere.interceptor.HeartbeatInterceptor.heartbeatFrequencyInSeconds", "20")
+        atmosphereServletHolder.setInitParameter("org.atmosphere.cpr.dropAccessControlAllowOriginHeader", "true")
         atmosphereServletHolder.asyncSupported = true
     }
 
