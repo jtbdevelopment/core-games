@@ -3,15 +3,18 @@ package com.jtbdevelopment.games.dev.utilities.integrationtesting
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider
 import com.jtbdevelopment.core.mongo.spring.AbstractMongoIntegration
+import com.jtbdevelopment.games.dao.AbstractGameRepository
+import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dev.utilities.jetty.JettyServer
 import com.jtbdevelopment.games.mongo.dao.MongoPlayerRepository
 import com.jtbdevelopment.games.mongo.players.MongoManualPlayer
 import com.jtbdevelopment.games.mongo.players.MongoPlayerFactory
+import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.friendfinder.SourceBasedFriendFinder
 import com.jtbdevelopment.games.rest.services.AbstractPlayerGatewayService
 import com.jtbdevelopment.games.state.Game
 import com.jtbdevelopment.games.state.GamePhase
-import groovy.transform.CompileStatic
+import com.jtbdevelopment.games.state.MultiPlayerGame
 import org.bson.types.ObjectId
 import org.eclipse.jetty.server.Server
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature
@@ -28,13 +31,17 @@ import javax.ws.rs.client.WebTarget
 import javax.ws.rs.core.GenericType
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.UriBuilder
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 /**
  * Date: 11/15/2014
  * Time: 3:29 PM
+ *
+ * G - internal Game
+ * R - returned Game via web calls
  */
-@CompileStatic
-abstract class AbstractGameIntegration<G extends Game> extends AbstractMongoIntegration {
+abstract class AbstractGameIntegration<G extends Game, R extends Game> extends AbstractMongoIntegration {
     protected static final Entity EMPTY_PUT_POST = Entity.entity("", MediaType.TEXT_PLAIN)
 
     private static Server SERVER;
@@ -42,6 +49,7 @@ abstract class AbstractGameIntegration<G extends Game> extends AbstractMongoInte
     static final URI BASE_URI = UriBuilder.fromUri("http://localhost/").port(port).build();
     static final URI API_URI = BASE_URI.resolve("/api")
     static final URI PLAYER_API = BASE_URI.resolve("api/player")
+    static final ZoneId GMT = ZoneId.of("UTC")
 
     static MongoManualPlayer TEST_PLAYER1
     static MongoManualPlayer TEST_PLAYER2
@@ -59,11 +67,18 @@ abstract class AbstractGameIntegration<G extends Game> extends AbstractMongoInte
         return player
     }
 
-    abstract Class<G> returnedGameClass();
+    abstract Class<R> returnedGameClass()
+
+    abstract Class<G> internalGameClass()
+
+    abstract G newGame()
+
+    abstract AbstractGameRepository gameRepository()
 
     static ApplicationContext applicationContext
     static PasswordEncoder passwordEncoder
     static MongoPlayerRepository playerRepository
+
 
     @BeforeClass
     public static void initialize() {
@@ -78,9 +93,9 @@ abstract class AbstractGameIntegration<G extends Game> extends AbstractMongoInte
         TEST_PLAYER2 = createPlayer("f2345", "ITP2", "TEST PLAYER2")
         TEST_PLAYER3 = createPlayer("f3456", "ITP3", "TEST PLAYER3")
 
-        playerRepository.delete(TEST_PLAYER1)
-        playerRepository.delete(TEST_PLAYER2)
-        playerRepository.delete(TEST_PLAYER3)
+        playerRepository.delete(TEST_PLAYER1.id)
+        playerRepository.delete(TEST_PLAYER2.id)
+        playerRepository.delete(TEST_PLAYER3.id)
 
         TEST_PLAYER1 = (MongoManualPlayer) playerRepository.save(TEST_PLAYER1)
         TEST_PLAYER2 = (MongoManualPlayer) playerRepository.save(TEST_PLAYER2)
@@ -145,6 +160,42 @@ abstract class AbstractGameIntegration<G extends Game> extends AbstractMongoInte
                 "NextRoundStarted": [GamePhase.NextRoundStarted.description, GamePhase.NextRoundStarted.groupLabel],
                 "Playing"         : [GamePhase.Playing.description, GamePhase.Playing.groupLabel],
         ]
+    }
+
+    @Test
+    void testGetMultiplayerGames() {
+        if (MultiPlayerGame.class.isAssignableFrom(internalGameClass())) {
+            ZonedDateTime now = ZonedDateTime.now(GMT)
+            MultiPlayerGame g1 = (MultiPlayerGame) newGame()
+            MultiPlayerGame g2 = (MultiPlayerGame) newGame()
+            MultiPlayerGame g3 = (MultiPlayerGame) newGame()
+            MultiPlayerGame g4 = (MultiPlayerGame) newGame()
+
+            g1.lastUpdate = now.plusSeconds(1)
+            g2.lastUpdate = now.minusDays(1)
+            g3.lastUpdate = now.minusDays(-30)
+            g4.lastUpdate = now.plusSeconds(1)
+            g1.players = [(Player) TEST_PLAYER1, (Player) TEST_PLAYER2]
+            g2.players.addAll([TEST_PLAYER1])
+            g3.players.addAll([TEST_PLAYER1, TEST_PLAYER3])
+            g4.players.addAll([TEST_PLAYER3, TEST_PLAYER2])
+            g1.gamePhase = GamePhase.Challenged
+            g2.gamePhase = GamePhase.Declined
+            g3.gamePhase = GamePhase.NextRoundStarted
+            g4.gamePhase = GamePhase.Challenged
+
+            ((AbstractMultiPlayerGameRepository) gameRepository()).save([g1, g2, g3, g4])
+
+            GenericType<List<R>> type = new GenericType<List<R>>() {}
+            def client = createPlayerAPITarget(TEST_PLAYER1).path("games")
+            List<R> foundGames = client.request(MediaType.APPLICATION_JSON).get(type)
+
+            //  Other tests can make this result set ambiguous
+            assert 2 <= foundGames.size()
+            assert foundGames.find { R it -> it.id == g1.idAsString }
+            assert foundGames.find { R it -> it.id == g2.idAsString }
+            assert false
+        }
     }
 
     protected G getGame(WebTarget target) {
