@@ -8,12 +8,15 @@ import com.jtbdevelopment.games.mongo.players.MongoPlayer
 import com.jtbdevelopment.games.mongo.state.utility.SimpleMultiPlayerGame
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.Game
+import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.PlayerState
 import com.mongodb.DBCollection
 import org.junit.Before
 import org.junit.Test
 import org.springframework.cache.Cache
 import org.springframework.cache.CacheManager
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoOperations
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
@@ -166,10 +169,10 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoIntegration {
 
     @Test
     void testFindGamesByPlayer() {
-        SimpleMultiPlayerGame p1g1 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 5, stringValue: 'X', players: [player1, player2] as List<Player>))
-        SimpleMultiPlayerGame p1g2 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 10, stringValue: 'X', players: [player1, player3] as List<Player>))
-        SimpleMultiPlayerGame p1g3 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 15, stringValue: '2', players: [player1, player4, player2] as List<Player>))
-        SimpleMultiPlayerGame p2g1 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 20, stringValue: '2', players: [player2, player4] as List<Player>))
+        SimpleMultiPlayerGame p1g1 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 5, stringValue: 'X', players: [player1, player2] as List<Player>, gamePhase: GamePhase.Playing))
+        SimpleMultiPlayerGame p1g2 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 10, stringValue: 'X', players: [player1, player3] as List<Player>, gamePhase: GamePhase.Playing))
+        SimpleMultiPlayerGame p1g3 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 15, stringValue: '2', players: [player1, player4, player2] as List<Player>, gamePhase: GamePhase.Challenged))
+        SimpleMultiPlayerGame p2g1 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 20, stringValue: '2', players: [player2, player4] as List<Player>, gamePhase: GamePhase.Challenged))
 
         List<SimpleMultiPlayerGame> p1g = (List<SimpleMultiPlayerGame>) gameRepository.findByPlayersId(player1.id)
         assert p1g.size() == 3
@@ -183,6 +186,13 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoIntegration {
         assert p2g.contains(p1g3)
 
         assert gameRepository.findAll().collect { it }.size() == 4
+
+        Sort sort = new Sort(Sort.Direction.DESC, ["lastUpdate", "created"])
+        PageRequest page = new PageRequest(0, 20, sort)
+        List<SimpleMultiPlayerGame> by = (List<SimpleMultiPlayerGame>) gameRepository.findByPlayersIdAndGamePhaseAndLastUpdateGreaterThan(player1.id, GamePhase.Playing, p1g1.created.minusDays(1), page)
+        assert 2 == by.size()
+        assert by.contains(p1g1)
+        assert by.contains(p1g2)
     }
 
     @Test

@@ -7,6 +7,7 @@ import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.AbstractGame
 import com.jtbdevelopment.games.state.AbstractMultiPlayerGame
 import com.jtbdevelopment.games.state.AbstractSinglePlayerGame
+import com.jtbdevelopment.games.state.masking.AbstractMaskedMultiPlayerGame
 
 /**
  * Date: 11/8/14
@@ -53,6 +54,10 @@ abstract class GameCoreTestCase extends GroovyTestCase {
         String getIdAsString() {
             return id
         }
+    }
+
+    public static class StringMaskedMPGame extends AbstractMaskedMultiPlayerGame<Object> implements Cloneable {
+
     }
 
     public static class StringPlayer extends AbstractPlayer<String> {
