@@ -15,6 +15,7 @@ import com.jtbdevelopment.games.rest.services.AbstractPlayerGatewayService
 import com.jtbdevelopment.games.state.Game
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.MultiPlayerGame
+import com.jtbdevelopment.games.state.masking.MaskedMultiPlayerGame
 import org.bson.types.ObjectId
 import org.eclipse.jetty.server.Server
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature
@@ -171,10 +172,6 @@ abstract class AbstractGameIntegration<G extends Game, R extends Game> extends A
             MultiPlayerGame g3 = (MultiPlayerGame) newGame()
             MultiPlayerGame g4 = (MultiPlayerGame) newGame()
 
-            g1.lastUpdate = now.plusSeconds(1)
-            g2.lastUpdate = now.minusDays(1)
-            g3.lastUpdate = now.minusDays(-30)
-            g4.lastUpdate = now.plusSeconds(1)
             g1.players = [(Player) TEST_PLAYER1, (Player) TEST_PLAYER2]
             g2.players.addAll([TEST_PLAYER1])
             g3.players.addAll([TEST_PLAYER1, TEST_PLAYER3])
@@ -183,18 +180,23 @@ abstract class AbstractGameIntegration<G extends Game, R extends Game> extends A
             g2.gamePhase = GamePhase.Declined
             g3.gamePhase = GamePhase.NextRoundStarted
             g4.gamePhase = GamePhase.Challenged
+            g1.initiatingPlayer = TEST_PLAYER1.id
+            g2.initiatingPlayer = TEST_PLAYER1.id
+            g3.initiatingPlayer = TEST_PLAYER1.id
+            g4.initiatingPlayer = TEST_PLAYER1.id
 
             ((AbstractMultiPlayerGameRepository) gameRepository()).save([g1, g2, g3, g4])
 
-            GenericType<List<R>> type = new GenericType<List<R>>() {}
+            GenericType<List<MaskedMultiPlayerGame>> type = new GenericType<List<MaskedMultiPlayerGame>>() {}
             def client = createPlayerAPITarget(TEST_PLAYER1).path("games")
             List<R> foundGames = client.request(MediaType.APPLICATION_JSON).get(type)
 
             //  Other tests can make this result set ambiguous
             assert 2 <= foundGames.size()
-            assert foundGames.find { R it -> it.id == g1.idAsString }
-            assert foundGames.find { R it -> it.id == g2.idAsString }
-            assert false
+            assert foundGames.find { it -> it.id == g1.idAsString }
+            assert foundGames.find { it -> it.id == g2.idAsString }
+            assert foundGames.find { it -> it.id == g3.idAsString }
+            assert null == foundGames.find { it -> it.id == g4.idAsString }
         }
     }
 
