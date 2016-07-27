@@ -33,7 +33,6 @@ import javax.ws.rs.core.GenericType
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.UriBuilder
 import java.time.ZoneId
-import java.time.ZonedDateTime
 
 /**
  * Date: 11/15/2014
@@ -166,7 +165,6 @@ abstract class AbstractGameIntegration<G extends Game, R extends Game> extends A
     @Test
     void testGetMultiplayerGames() {
         if (MultiPlayerGame.class.isAssignableFrom(internalGameClass())) {
-            ZonedDateTime now = ZonedDateTime.now(GMT)
             MultiPlayerGame g1 = (MultiPlayerGame) newGame()
             MultiPlayerGame g2 = (MultiPlayerGame) newGame()
             MultiPlayerGame g3 = (MultiPlayerGame) newGame()
