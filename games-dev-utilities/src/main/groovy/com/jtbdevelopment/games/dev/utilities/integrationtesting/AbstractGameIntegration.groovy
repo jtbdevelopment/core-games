@@ -190,7 +190,7 @@ abstract class AbstractGameIntegration<G extends Game, R extends Game> extends A
             List<R> foundGames = client.request(MediaType.APPLICATION_JSON).get(type)
 
             //  Other tests can make this result set ambiguous
-            assert 2 <= foundGames.size()
+            assert 3 <= foundGames.size()
             assert foundGames.find { it -> it.id == g1.idAsString }
             assert foundGames.find { it -> it.id == g2.idAsString }
             assert foundGames.find { it -> it.id == g3.idAsString }
