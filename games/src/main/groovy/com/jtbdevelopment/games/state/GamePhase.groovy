@@ -6,7 +6,7 @@ package com.jtbdevelopment.games.state
  */
 enum GamePhase {
     Challenged('Challenge delivered.', 'Challenged'),  /*  Agreement from initial players  */
-    Declined('Challenge declinedTimestamp.', 'Declined', 7),  /*  Challenged was rejected by a player */
+    Declined('Challenge declined.', 'Declined', 7),  /*  Challenged was rejected by a player */
     Quit('Game quit.', 'Quit', 7),  /*  Player Quit, similar to Declined but after game started  */
     Setup('Game setup in progress.', 'Setup'), /*  Setting word phrases  */
     Playing('Game in play!', 'Play'),
