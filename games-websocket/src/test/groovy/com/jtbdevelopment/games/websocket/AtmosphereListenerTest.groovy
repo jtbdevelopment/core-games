@@ -272,7 +272,7 @@ class AtmosphereListenerTest extends GameCoreTestCase {
         listener.gameChanged(game, PONE, initiatingServer)
         Thread.sleep(1000)
         listener.service.shutdown()
-        listener.service.awaitTermination(10, TimeUnit.SECONDS)
+        listener.service.awaitTermination(100, TimeUnit.SECONDS)
         assert p2pub && p4pub
         assert [PTWO, PFOUR] as Set == successes
         assert [PTHREE] as Set == failures
