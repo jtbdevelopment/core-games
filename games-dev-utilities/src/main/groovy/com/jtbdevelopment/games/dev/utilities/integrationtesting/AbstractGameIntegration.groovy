@@ -187,7 +187,7 @@ abstract class AbstractGameIntegration<G extends Game, R extends Game> extends A
 
             GenericType<List<MaskedMultiPlayerGame>> type = new GenericType<List<MaskedMultiPlayerGame>>() {}
             def client = createPlayerAPITarget(TEST_PLAYER1).path("games")
-            List<R> foundGames = client.request(MediaType.APPLICATION_JSON).get(type)
+            List<MaskedMultiPlayerGame> foundGames = client.request(MediaType.APPLICATION_JSON).get(type)
 
             //  Other tests can make this result set ambiguous
             assert 3 <= foundGames.size()
