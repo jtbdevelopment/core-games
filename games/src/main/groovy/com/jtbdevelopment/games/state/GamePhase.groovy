@@ -5,13 +5,13 @@ package com.jtbdevelopment.games.state
  * Time: 12:34 PM
  */
 enum GamePhase {
-    Challenged('Challenge delivered.', 'Challenged'),  /*  Agreement from initial players  */
-    Declined('Challenge declined.', 'Declined', 7),  /*  Challenged was rejected by a player */
-    Quit('Game quit.', 'Quit', 7),  /*  Player Quit, similar to Declined but after game started  */
-    Setup('Game setup in progress.', 'Setup'), /*  Setting word phrases  */
     Playing('Game in play!', 'Play'),
+    Challenged('Challenge delivered.', 'Challenged'),  /*  Agreement from initial players  */
+    Setup('Game setup in progress.', 'Setup'), /*  Setting word phrases  */
     RoundOver('Round finished.', 'Played', 7),  /*  Option to continue to a new game  */
-    NextRoundStarted('Next round begun.', 'Finished', 7)
+    NextRoundStarted('Next round begun.', 'Finished', 7),
+    Declined('Challenge declined.', 'Declined', 7),  /*  Challenged was rejected by a player */
+    Quit('Game quit.', 'Quit', 7)  /*  Player Quit, similar to Declined but after game started  */
 
     String description
     String groupLabel
