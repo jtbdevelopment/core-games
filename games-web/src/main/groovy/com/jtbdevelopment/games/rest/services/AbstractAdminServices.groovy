@@ -55,6 +55,13 @@ abstract class AbstractAdminServices {
     }
 
     @GET
+    @Path("gameCount")
+    @Produces(MediaType.TEXT_PLAIN)
+    long games() {
+        return gameRepository.count()
+    }
+
+    @GET
     @Path("playersCreated/{since}")
     @Produces(MediaType.TEXT_PLAIN)
     long playersCreatedSince(@PathParam("since") long since) {

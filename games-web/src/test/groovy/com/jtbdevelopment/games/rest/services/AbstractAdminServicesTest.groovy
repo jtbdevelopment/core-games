@@ -58,6 +58,29 @@ class AbstractAdminServicesTest extends GameCoreTestCase {
         assert m.getAnnotation(Path.class).value() == "playerCount"
     }
 
+    void testGameCount() {
+        long expectedCount = 15
+        adminServices.gameRepository = [
+                count: {
+                    return expectedCount
+                }
+        ] as AbstractGameRepository
+
+        assert expectedCount == adminServices.games()
+    }
+
+    void testGetGamesAnnotations() {
+        Method m = AbstractAdminServices.class.getMethod("games", [] as Class<?>[])
+        assert (m.annotations.size() == 3 ||
+                (m.isAnnotationPresent(TypeChecked.TypeCheckingInfo) && m.annotations.size() == 4)
+        )
+        assert m.isAnnotationPresent(GET.class)
+        assert m.isAnnotationPresent(Produces.class)
+        assert m.getAnnotation(Produces.class).value() == [MediaType.TEXT_PLAIN]
+        assert m.isAnnotationPresent(Path.class)
+        assert m.getAnnotation(Path.class).value() == "gameCount"
+    }
+
     void testPlayerCreatedSinceCount() {
         long expectedCount = 5
         def now = ZonedDateTime.now(ZoneId.of("GMT"))
