@@ -217,6 +217,47 @@ class AbstractAdminServicesTest extends GameCoreTestCase {
         assert ((QueryParam) params[1][0]).value() == "pageSize"
     }
 
+    void testPlayersToSimulateNoPageParams() {
+        def likeString = 'Hey Joe'
+        def repo = [
+                findByDisplayNameContains: {
+                    String like, PageRequest pageRequest ->
+                        assert likeString == like
+                        assert pageRequest.pageNumber == AbstractAdminServices.DEFAULT_PAGE
+                        assert pageRequest.pageSize == AbstractAdminServices.DEFAULT_PAGE_SIZE
+                        assert pageRequest.sort.properties.size() == 1
+                        assert pageRequest.sort.getOrderFor("displayName").direction == Sort.Direction.ASC
+                        new PageImpl<Player>([PTWO, PTHREE])
+                }
+        ] as AbstractPlayerRepository
+        adminServices.playerRepository = repo;
+
+        assert adminServices.playersToSimulateLike(likeString, null, null) == [PTWO, PTHREE] as Set
+    }
+
+    void testPlayersToSimulateLikeAnnotations() {
+        Method m = AbstractAdminServices.class.getMethod("playersToSimulateLike", [String.class, Integer.class, Integer.class] as Class<?>[])
+        assert (m.annotations.size() == 3 ||
+                (m.isAnnotationPresent(TypeChecked.TypeCheckingInfo) && m.annotations.size() == 4)
+        )
+        assert m.isAnnotationPresent(GET.class)
+        assert m.isAnnotationPresent(Produces.class)
+        assert m.getAnnotation(Produces.class).value() == [MediaType.APPLICATION_JSON]
+        assert m.isAnnotationPresent(Path.class)
+        assert "playersLike/{like}" == m.getAnnotation(Path.class).value()
+        def params = m.parameterAnnotations
+        assert params.length == 3
+        assert params[0].length == 1
+        assert params[0][0].annotationType() == PathParam.class
+        assert ((PathParam) params[0][0]).value() == "like"
+        assert params[1].length == 1
+        assert params[1][0].annotationType() == QueryParam.class
+        assert ((QueryParam) params[1][0]).value() == "page"
+        assert params[2].length == 1
+        assert params[2][0].annotationType() == QueryParam.class
+        assert ((QueryParam) params[2][0]).value() == "pageSize"
+    }
+
     void testSwitchEffectiveUser() {
         adminServices.stringToIDConverter = new GameCoreTestCase.StringToStringConverter()
         SecurityContextHolder.context = new SecurityContextImpl()

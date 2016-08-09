@@ -6,6 +6,8 @@ import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.CachePut
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.cache.annotation.Caching
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.NoRepositoryBean
 import org.springframework.data.repository.PagingAndSortingRepository
 
@@ -43,6 +45,9 @@ interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSor
 
     //  Not caching - should mostly be used on startup to create system players
     Player<ID> findByDisplayName(final String displayName)
+
+    //  Not caching - should mostly be used by admin player search
+    Page<Player<ID>> findByDisplayNameContains(final String displayName, Pageable pageable)
 
     //  Not caching - currently only used by manual players for testing
     List<Player<ID>> findBySourceAndDisabled(final String source, final boolean disabled);

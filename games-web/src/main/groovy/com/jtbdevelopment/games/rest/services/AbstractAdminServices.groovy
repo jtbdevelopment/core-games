@@ -80,10 +80,26 @@ abstract class AbstractAdminServices {
     Object playersToSimulate(
             @QueryParam("page") Integer page, @QueryParam("pageSize") Integer pageSize) {
         return playerRepository.findAll(new PageRequest(
-                page ?: DEFAULT_PAGE,
-                pageSize ?: DEFAULT_PAGE_SIZE,
+                (int) (page ?: DEFAULT_PAGE),
+                (int) (pageSize ?: DEFAULT_PAGE_SIZE),
                 Sort.Direction.ASC,
                 'displayName')).toList() as Set
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("playersLike/{like}")
+    Object playersToSimulateLike(
+            @PathParam("like") String like,
+            @QueryParam("page") Integer page,
+            @QueryParam("pageSize") Integer pageSize) {
+        return playerRepository.findByDisplayNameContains(
+                like,
+                new PageRequest(
+                        (int) (page ?: DEFAULT_PAGE),
+                        (int) (pageSize ?: DEFAULT_PAGE_SIZE),
+                        Sort.Direction.ASC,
+                        'displayName')).toList() as Set
     }
 
     @PUT

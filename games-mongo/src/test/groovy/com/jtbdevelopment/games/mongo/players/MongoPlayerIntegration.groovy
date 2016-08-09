@@ -9,9 +9,13 @@ import com.jtbdevelopment.games.players.PlayerPayLevel
 import com.jtbdevelopment.games.players.notifications.RegisteredDevice
 import com.mongodb.DBCollection
 import groovy.transform.CompileStatic
+import org.bson.types.ObjectId
 import org.junit.Before
 import org.junit.Test
 import org.springframework.cache.CacheManager
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoOperations
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
@@ -29,7 +33,7 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
     private DBCollection collection
 
     MongoPlayerRepository playerRepository
-    MongoPlayer player1, player2, player3, player4
+    MongoPlayer player1, player2, player3, player4, number4
     MongoManualPlayer manualPlayer
     MongoSystemPlayer systemPlayer
     CacheManager cacheManager
@@ -59,6 +63,7 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
         player2 = makeSimplePlayer('2')
         player3 = makeSimplePlayer('3', true)
         player4 = makeSimplePlayer('4')
+        number4 = makeSimplePlayer('4IAmNumber')
         manualPlayer = (MongoManualPlayer) playerRepository.save(new MongoManualPlayer(
                 sourceId: "MADEUP" + "M",
                 displayName: "M",
@@ -77,12 +82,26 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
     }
 
     @Test
+    void testFindByDisplayNameContainsPageable() {
+        def page = new PageRequest(
+                1,
+                1,
+                Sort.Direction.ASC,
+                'displayName')
+        assert 0L == playerRepository.findByDisplayNameContains('Humpty Dumpty', page).getTotalElements()
+        Page<Player<ObjectId>> contains = playerRepository.findByDisplayNameContains('4', page)
+        assert 2L == contains.getTotalElements()
+        assert 1 == contains.getNumberOfElements()
+        assert number4 == ++contains.iterator()
+    }
+
+    @Test
     void testFindBySourceAndDisabled() {
         assert playerRepository.findBySourceAndDisabled(systemPlayer.source, true).isEmpty()
         assert playerRepository.findBySourceAndDisabled(systemPlayer.source, false) == [systemPlayer] as List<Player>
         assert playerRepository.findBySourceAndDisabled(manualPlayer.source, true).isEmpty()
         assert playerRepository.findBySourceAndDisabled(manualPlayer.source, false) == [manualPlayer] as List<Player>
-        assert playerRepository.findBySourceAndDisabled(player1.source, false) as Set == [player1, player2, player4] as Set
+        assert playerRepository.findBySourceAndDisabled(player1.source, false) as Set == [player1, player2, player4, number4] as Set
         assert playerRepository.findBySourceAndDisabled(player1.source, true) == [player3] as List<Player>
     }
 
@@ -294,7 +313,7 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
         List<Player> playerList = playerRepository.findByLastLoginLessThan(player1.created.minusMinutes(1))
         assert 2 == playerList.size()
         playerList = playerRepository.findByLastLoginLessThan(systemPlayer.created.plusHours(1))
-        assert 6 == playerList.size()
+        assert 7 == playerList.size()
     }
 
     @Test
