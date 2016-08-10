@@ -77,6 +77,8 @@ abstract class AbstractAdminServices {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Deprecated()
+    // use playersToSimulateV2 or /players
     Object playersToSimulate(
             @QueryParam("page") Integer page, @QueryParam("pageSize") Integer pageSize) {
         return playerRepository.findAll(new PageRequest(
@@ -84,6 +86,20 @@ abstract class AbstractAdminServices {
                 (int) (pageSize ?: DEFAULT_PAGE_SIZE),
                 Sort.Direction.ASC,
                 'displayName')).toList() as Set
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("players")
+    Object playersToSimulateV2(
+            @QueryParam("page") Integer page,
+            @QueryParam("pageSize") Integer pageSize) {
+        return playerRepository.findAll(
+                new PageRequest(
+                        (int) (page ?: DEFAULT_PAGE),
+                        (int) (pageSize ?: DEFAULT_PAGE_SIZE),
+                        Sort.Direction.ASC,
+                        'displayName'))
     }
 
     @GET
@@ -99,7 +115,7 @@ abstract class AbstractAdminServices {
                         (int) (page ?: DEFAULT_PAGE),
                         (int) (pageSize ?: DEFAULT_PAGE_SIZE),
                         Sort.Direction.ASC,
-                        'displayName')).toList() as Set
+                        'displayName'))
     }
 
     @PUT

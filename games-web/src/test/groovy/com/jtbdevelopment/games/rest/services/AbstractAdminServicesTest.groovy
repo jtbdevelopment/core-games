@@ -201,12 +201,13 @@ class AbstractAdminServicesTest extends GameCoreTestCase {
 
     void testPlayersToSimulateAnnotations() {
         Method m = AbstractAdminServices.class.getMethod("playersToSimulate", [Integer.class, Integer.class] as Class<?>[])
-        assert (m.annotations.size() == 2 ||
-                (m.isAnnotationPresent(TypeChecked.TypeCheckingInfo) && m.annotations.size() == 3)
+        assert (m.annotations.size() == 3 ||
+                (m.isAnnotationPresent(TypeChecked.TypeCheckingInfo) && m.annotations.size() == 4)
         )
         assert m.isAnnotationPresent(GET.class)
         assert m.isAnnotationPresent(Produces.class)
         assert m.getAnnotation(Produces.class).value() == [MediaType.APPLICATION_JSON]
+        assert m.isAnnotationPresent(Deprecated.class)
         def params = m.parameterAnnotations
         assert params.length == 2
         assert params[0].length == 1
@@ -217,7 +218,45 @@ class AbstractAdminServicesTest extends GameCoreTestCase {
         assert ((QueryParam) params[1][0]).value() == "pageSize"
     }
 
-    void testPlayersToSimulateNoPageParams() {
+    void testPlayersToSimulateV2NoParams() {
+        def repoResult = new PageImpl<Player>([PTWO, PTHREE])
+        def repo = [
+                findAll: {
+                    PageRequest pageRequest ->
+                        assert pageRequest.pageNumber == AbstractAdminServices.DEFAULT_PAGE
+                        assert pageRequest.pageSize == AbstractAdminServices.DEFAULT_PAGE_SIZE
+                        assert pageRequest.sort.properties.size() == 1
+                        assert pageRequest.sort.getOrderFor("displayName").direction == Sort.Direction.ASC
+                        repoResult
+                }
+        ] as AbstractPlayerRepository
+        adminServices.playerRepository = repo;
+
+        assert adminServices.playersToSimulateV2(null, null).is(repoResult)
+    }
+
+    void testPlayersToSimulateV2Annotations() {
+        Method m = AbstractAdminServices.class.getMethod("playersToSimulateV2", [Integer.class, Integer.class] as Class<?>[])
+        assert (m.annotations.size() == 3 ||
+                (m.isAnnotationPresent(TypeChecked.TypeCheckingInfo) && m.annotations.size() == 4)
+        )
+        assert m.isAnnotationPresent(GET.class)
+        assert m.isAnnotationPresent(Produces.class)
+        assert m.getAnnotation(Produces.class).value() == [MediaType.APPLICATION_JSON]
+        assert m.isAnnotationPresent(Path.class)
+        assert "players" == m.getAnnotation(Path.class).value()
+        def params = m.parameterAnnotations
+        assert params.length == 2
+        assert params[0].length == 1
+        assert params[0][0].annotationType() == QueryParam.class
+        assert ((QueryParam) params[0][0]).value() == "page"
+        assert params[1].length == 1
+        assert params[1][0].annotationType() == QueryParam.class
+        assert ((QueryParam) params[1][0]).value() == "pageSize"
+    }
+
+    void testPlayersToSimulateLikeNoPageParams() {
+        def repoResult = new PageImpl<Player>([PTWO, PTHREE])
         def likeString = 'Hey Joe'
         def repo = [
                 findByDisplayNameContains: {
@@ -227,12 +266,12 @@ class AbstractAdminServicesTest extends GameCoreTestCase {
                         assert pageRequest.pageSize == AbstractAdminServices.DEFAULT_PAGE_SIZE
                         assert pageRequest.sort.properties.size() == 1
                         assert pageRequest.sort.getOrderFor("displayName").direction == Sort.Direction.ASC
-                        new PageImpl<Player>([PTWO, PTHREE])
+                        repoResult
                 }
         ] as AbstractPlayerRepository
         adminServices.playerRepository = repo;
 
-        assert adminServices.playersToSimulateLike(likeString, null, null) == [PTWO, PTHREE] as Set
+        assert adminServices.playersToSimulateLike(likeString, null, null).is(repoResult)
     }
 
     void testPlayersToSimulateLikeAnnotations() {
