@@ -93,6 +93,16 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
         assert 2L == contains.getTotalElements()
         assert 1 == contains.getNumberOfElements()
         assert number4 == ++contains.iterator()
+
+        page = new PageRequest(
+                0,
+                3,
+                Sort.Direction.ASC,
+                'displayName')
+        contains = playerRepository.findByDisplayNameContains('', page)
+        assert 7 == contains.getTotalElements()
+        assert 3 == contains.getNumberOfElements()
+        assert player1 == ++contains.iterator()
     }
 
     @Test

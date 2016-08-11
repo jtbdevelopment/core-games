@@ -78,7 +78,7 @@ abstract class AbstractAdminServices {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Deprecated()
-    // use playersToSimulateV2 or /players
+    // use playersToSimulateLike
     Object playersToSimulate(
             @QueryParam("page") Integer page, @QueryParam("pageSize") Integer pageSize) {
         return playerRepository.findAll(new PageRequest(
@@ -90,23 +90,9 @@ abstract class AbstractAdminServices {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("players")
-    Object playersToSimulateV2(
-            @QueryParam("page") Integer page,
-            @QueryParam("pageSize") Integer pageSize) {
-        return playerRepository.findAll(
-                new PageRequest(
-                        (int) (page ?: DEFAULT_PAGE),
-                        (int) (pageSize ?: DEFAULT_PAGE_SIZE),
-                        Sort.Direction.ASC,
-                        'displayName'))
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("playersLike/{like}")
+    @Path("playersLike")
     Object playersToSimulateLike(
-            @PathParam("like") String like,
+            @QueryParam("like") String like,
             @QueryParam("page") Integer page,
             @QueryParam("pageSize") Integer pageSize) {
         return playerRepository.findByDisplayNameContains(
