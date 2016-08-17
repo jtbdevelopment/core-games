@@ -8,5 +8,6 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 interface Dictionary {
+    Set<String> words()
     boolean isValidWord(final String input);
 }

@@ -82,6 +82,10 @@ class AspellUSEnglishCaseInsensitiveDictionary implements Dictionary {
         log.info("Dictionaries loaded.")
     }
 
+    Set<String> words() {
+        return this.words
+    }
+
     @Override
     boolean isValidWord(final String input) {
         return words.contains(input.toUpperCase())

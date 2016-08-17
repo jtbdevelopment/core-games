@@ -18,6 +18,10 @@ class AspellUSEnglishCaseInsensitiveDictionaryTest extends GroovyTestCase {
         }
     }
 
+    public void testWordsAreAvailable() {
+        assertNotNull dictionary.words()
+        assert 632299 == dictionary.words().size()
+    }
 
     public void testLowercaseWord() {
         assert dictionary.isValidWord("apple")
