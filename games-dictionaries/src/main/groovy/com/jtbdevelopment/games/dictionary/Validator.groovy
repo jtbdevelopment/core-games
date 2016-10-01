@@ -8,5 +8,5 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 interface Validator {
-    public List<String> validateWordPhrase(final String wordPhrase);
+    public List<String> validateWordPhrase(final String wordPhrase, final DictionaryType dictionary);
 }

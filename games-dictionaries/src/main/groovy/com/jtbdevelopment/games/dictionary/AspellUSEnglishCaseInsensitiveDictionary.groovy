@@ -3,7 +3,6 @@ package com.jtbdevelopment.games.dictionary
 import groovy.transform.CompileStatic
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Component
 
 /**
  * Date: 10/27/14
@@ -40,17 +39,16 @@ import org.springframework.stereotype.Component
  */
 
 @CompileStatic
-@Component
 class AspellUSEnglishCaseInsensitiveDictionary implements Dictionary {
     private static final Logger log = LoggerFactory.getLogger(AspellUSEnglishCaseInsensitiveDictionary.class)
 
     private final Set<String> words = new HashSet<>(700000);
 
-    public AspellUSEnglishCaseInsensitiveDictionary() {
+    public AspellUSEnglishCaseInsensitiveDictionary(final String dictionaryFile) {
         boolean hitWords = false
         int counter = 0
         log.info("Loading dictionary..")
-        InputStream stream = new BufferedInputStream(AspellUSEnglishCaseInsensitiveDictionary.class.getResourceAsStream("/aspell/dictionary.txt"))
+        InputStream stream = new BufferedInputStream(AspellUSEnglishCaseInsensitiveDictionary.class.getResourceAsStream(dictionaryFile))
         stream.eachLine {
             String line ->
                 if (hitWords) {

@@ -12,9 +12,8 @@ class AspellUSEnglishCaseInsensitiveDictionaryTest extends GroovyTestCase {
 
     @BeforeClass
     public synchronized void setUp() {
-
         if (!dictionary) {
-            dictionary = new AspellUSEnglishCaseInsensitiveDictionary();
+            dictionary = new AspellUSEnglishCaseInsensitiveDictionary("/aspell/maximum-en-us-dictionary.txt");
         }
     }
 

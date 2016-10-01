@@ -15,10 +15,11 @@ import org.springframework.stereotype.Component
 class SimplePunctuationStrippingValidator implements Validator {
     private static Logger log = LoggerFactory.getLogger(SimplePunctuationStrippingValidator.class)
     @Autowired
-    Dictionary dictionary
+    DictionaryManager dictionaryManager
 
     @Override
-    List<String> validateWordPhrase(final String wordPhrase) {
+    List<String> validateWordPhrase(final String wordPhrase, DictionaryType dictionaryType) {
+        Dictionary dictionary = dictionaryManager.getDictionary(dictionaryType)
         if (wordPhrase == null) {
             log.info("Invalidating null word phrase " + wordPhrase);
             return [""];
