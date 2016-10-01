@@ -47,14 +47,18 @@ class SimplePunctuationStrippingValidator implements Validator {
     }
 
     private static String fixUpInputString(final String wordPhrase) {
-        String working = new String((char[]) wordPhrase.toCharArray().collect({
+        StringBuilder builder = new StringBuilder()
+        wordPhrase.toCharArray().each {
             char c ->
-                if (c.isLetter() || c == '\'' || c == ' ')
-                    return c
-                return ' '
-        }).toArray()).trim()
+                if (c.isLetter() || c == '\'' as char) {
+                    builder.append(c)
+                } else {
+                    builder.append(' ')
+                }
+        }
+        String working = builder.toString().trim();
 
-        while (working.length() > 0 && working.charAt(working.length() - 1) == '\'') {
+        while (working.length() > 0 && working.charAt(working.length() - 1) == '\'' as char) {
             working = working.substring(0, working.length() - 1)
         }
 
