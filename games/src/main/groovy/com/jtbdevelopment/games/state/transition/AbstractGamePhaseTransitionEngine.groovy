@@ -52,7 +52,7 @@ abstract class AbstractGamePhaseTransitionEngine<IMPL extends MultiPlayerGame> i
         if (game.rematchTimestamp != null) {
             return changeStateAndReevaluate(GamePhase.NextRoundStarted, game)
         }
-        return game
+        return (IMPL) gameScorer.scoreGame(game)
     }
 
     protected IMPL evaluateChallengedPhase(final IMPL game) {

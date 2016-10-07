@@ -2,7 +2,9 @@ package com.jtbdevelopment.games.state.transition
 
 import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.state.GamePhase
+import com.jtbdevelopment.games.state.MultiPlayerGame
 import com.jtbdevelopment.games.state.PlayerState
+import com.jtbdevelopment.games.state.scoring.GameScorer
 
 import java.time.ZonedDateTime
 
@@ -81,9 +83,16 @@ class AbstractGamePhaseTransitionEngineTest extends GameCoreTestCase {
     }
 
     public void testRematchToRematch() {
-        assert transitionEngine.gameScorer == null
         GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(gamePhase: GamePhase.RoundOver, rematchTimestamp: null)
-        assert game.is(transitionEngine.evaluateGame(game))
+        GameCoreTestCase.StringMPGame scoredGame = new GameCoreTestCase.StringMPGame(gamePhase: GamePhase.RoundOver, rematchTimestamp: null)
+        transitionEngine.gameScorer = [
+                scoreGame: {
+                    MultiPlayerGame g ->
+                        assert game.is(g)
+                        return scoredGame
+                }
+        ] as GameScorer
+        assert scoredGame.is(transitionEngine.evaluateGame(game))
     }
 
 
