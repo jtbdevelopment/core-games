@@ -29,7 +29,7 @@ import java.util.concurrent.Executors
  */
 @Component
 @CompileStatic
-class AtmosphereListener implements GameListener, PlayerListener {
+class AtmosphereListener implements GameListener<MultiPlayerGame>, PlayerListener {
     private static final Logger logger = LoggerFactory.getLogger(AtmosphereListener.class)
 
     @Value('${atmosphere.LRU.seconds:300}')

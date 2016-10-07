@@ -11,7 +11,7 @@ import groovy.transform.CompileStatic
  * Time: 7:10 AM
  */
 @CompileStatic
-abstract class AbstractUpdatesToClusterPublisher implements GameListener, PlayerListener {
+abstract class AbstractUpdatesToClusterPublisher implements GameListener<MultiPlayerGame>, PlayerListener {
 
     abstract protected void internalPublish(final ClusterMessage clusterMessage)
 

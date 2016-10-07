@@ -9,6 +9,6 @@ import groovy.transform.CompileStatic
  * Time: 7:56 AM
  */
 @CompileStatic
-interface GameListener {
-    void gameChanged(final MultiPlayerGame game, final Player initiatingPlayer, final boolean initiatingServer)
+interface GameListener<T extends MultiPlayerGame> {
+    void gameChanged(final T game, final Player initiatingPlayer, final boolean initiatingServer)
 }
