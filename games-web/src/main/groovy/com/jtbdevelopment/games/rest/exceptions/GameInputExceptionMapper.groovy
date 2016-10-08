@@ -22,7 +22,7 @@ class GameInputExceptionMapper implements ExceptionMapper<GameInputException> {
     @Override
     Response toResponse(final GameInputException e) {
         logger.info("Mapping error " + e.message)
-        return Response.status(Response.Status.BAD_REQUEST)
+        return Response.status(Response.Status.CONFLICT)
                 .entity(e.message)
                 .type(MediaType.TEXT_PLAIN_TYPE)
                 .build()

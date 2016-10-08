@@ -16,7 +16,7 @@ class GameInputExceptionMapperTest extends GroovyTestCase {
         String s = "A MESSAGE"
         Response response = mapper.toResponse(new GameInputException(s) {})
         assert response.entity == s
-        assert response.status == Response.Status.BAD_REQUEST.statusCode
+        assert response.status == Response.Status.CONFLICT.statusCode
         assert response.mediaType == MediaType.TEXT_PLAIN_TYPE
     }
 }
