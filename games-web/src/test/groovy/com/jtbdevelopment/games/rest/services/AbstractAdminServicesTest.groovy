@@ -183,41 +183,6 @@ class AbstractAdminServicesTest extends GameCoreTestCase {
         assert m.getAnnotation(Path.class).value() == "gamesSince/{since}"
     }
 
-    void testPlayersToSimulateNoParams() {
-        def repo = [
-                findAll: {
-                    PageRequest pageRequest ->
-                        assert pageRequest.pageNumber == AbstractAdminServices.DEFAULT_PAGE
-                        assert pageRequest.pageSize == AbstractAdminServices.DEFAULT_PAGE_SIZE
-                        assert pageRequest.sort.properties.size() == 1
-                        assert pageRequest.sort.getOrderFor("displayName").direction == Sort.Direction.ASC
-                        new PageImpl<Player>([PTWO, PTHREE])
-                }
-        ] as AbstractPlayerRepository
-        adminServices.playerRepository = repo;
-
-        assert adminServices.playersToSimulate(null, null) == [PTWO, PTHREE] as Set
-    }
-
-    void testPlayersToSimulateAnnotations() {
-        Method m = AbstractAdminServices.class.getMethod("playersToSimulate", [Integer.class, Integer.class] as Class<?>[])
-        assert (m.annotations.size() == 3 ||
-                (m.isAnnotationPresent(TypeChecked.TypeCheckingInfo) && m.annotations.size() == 4)
-        )
-        assert m.isAnnotationPresent(GET.class)
-        assert m.isAnnotationPresent(Produces.class)
-        assert m.getAnnotation(Produces.class).value() == [MediaType.APPLICATION_JSON]
-        assert m.isAnnotationPresent(Deprecated.class)
-        def params = m.parameterAnnotations
-        assert params.length == 2
-        assert params[0].length == 1
-        assert params[0][0].annotationType() == QueryParam.class
-        assert ((QueryParam) params[0][0]).value() == "page"
-        assert params[1].length == 1
-        assert params[1][0].annotationType() == QueryParam.class
-        assert ((QueryParam) params[1][0]).value() == "pageSize"
-    }
-
     void testPlayersToSimulateLikeNoPageParams() {
         def repoResult = new PageImpl<Player>([PTWO, PTHREE])
         def likeString = 'Hey Joe'
