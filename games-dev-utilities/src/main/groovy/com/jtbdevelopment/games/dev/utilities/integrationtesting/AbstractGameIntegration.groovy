@@ -82,7 +82,7 @@ abstract class AbstractGameIntegration<G extends Game, R extends Game> extends A
 
     @BeforeClass
     public static void initialize() {
-        SERVER = JettyServer.makeServer(port, "spring-context-integration.xml")
+        SERVER = JettyServer.makeServer(port)
         SERVER.start()
 
         assert applicationContext != null
