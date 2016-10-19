@@ -12,6 +12,7 @@ import org.eclipse.jetty.webapp.WebAppContext
 import org.glassfish.jersey.servlet.ServletContainer
 import org.springframework.web.context.ContextLoaderListener
 import org.springframework.web.context.request.RequestContextListener
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext
 import org.springframework.web.filter.DelegatingFilterProxy
 
 import javax.servlet.DispatcherType
@@ -28,17 +29,20 @@ import java.nio.file.StandardCopyOption
  */
 @CompileStatic
 class JettyServer {
-    static Server makeServer(int port, final String springContext) {
+    static Server makeServer(int port) {
         Server server = new Server(port)
 
         configureHttps(port, server)
 
         WebAppContext webAppContext = new WebAppContext()
-        webAppContext.setInitParameter("contextConfigLocation", "classpath:" + springContext);
+        webAppContext.setInitParameter("contextConfigLocation", "<NONE>");
         webAppContext.setResourceBase(".")
         webAppContext.setContextPath("/")
         webAppContext.setParentLoaderPriority(false)
-        webAppContext.addEventListener(new ContextLoaderListener())
+        AnnotationConfigWebApplicationContext root = new AnnotationConfigWebApplicationContext()
+        root.configLocation = "com.jtbdevelopment"
+        root.register(AppConfig.class)
+        webAppContext.addEventListener(new ContextLoaderListener(root))
         webAppContext.addEventListener(new RequestContextListener())
         webAppContext.logger = new Slf4jLog()
 
@@ -117,7 +121,7 @@ class JettyServer {
     }
 
     static void main(final String[] args) throws Exception {
-        Server server = makeServer(9998, "spring-context-integration.xml");
+        Server server = makeServer(9998);
         server.start()
         Thread.sleep(Long.MAX_VALUE);
         server.stop()
