@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest
 @Component
 @CompileStatic
 class MobileAppChecker {
+    @SuppressWarnings("GrMethodMayBeStatic")
     boolean isMobileRequest(final HttpServletRequest request) {
         String origin = request?.getHeader('Origin');
         return origin != null && origin.startsWith('file:')

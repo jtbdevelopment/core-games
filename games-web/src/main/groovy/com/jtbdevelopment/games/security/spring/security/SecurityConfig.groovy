@@ -125,7 +125,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/social/apis"
                 ).permitAll().
                 antMatchers("/**").authenticated().
-                and().apply(mobileAwareFormLoginConfigurer.successHandler(successfulAuthenticationHandler).failureHandler(new MobileAwareFailureAuthenticationHandler(mobileAppChecker, mobileAppProperties)).loginPage(LOGIN_PAGE).loginProcessingUrl(AUTHENTICATE_PAGE)).
+                and().apply(mobileAwareFormLoginConfigurer.successHandler(successfulAuthenticationHandler).failureHandler(new MobileAwareFailureAuthenticationHandler(mobileAppChecker)).loginPage(LOGIN_PAGE).loginProcessingUrl(AUTHENTICATE_PAGE)).
                 and().logout().logoutUrl(LOGOUT_PAGE).deleteCookies("JSESSIONID").
                 and().rememberMe().tokenRepository(persistentTokenRepository).userDetailsService(playerUserDetailsService).
                 and().portMapper().portMapper(portMapper).

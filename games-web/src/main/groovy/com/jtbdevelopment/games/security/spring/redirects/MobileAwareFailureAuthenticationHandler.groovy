@@ -21,7 +21,7 @@ class MobileAwareFailureAuthenticationHandler extends SimpleUrlAuthenticationFai
     private final MobileAppChecker checker
 
     MobileAwareFailureAuthenticationHandler(
-            final MobileAppChecker checker, final MobileAppProperties mobileAppProperties) {
+            final MobileAppChecker checker) {
         this.checker = checker
     }
 
