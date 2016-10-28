@@ -23,7 +23,6 @@ class MongoManualPlayer extends MongoPlayer implements ManualPlayer<ObjectId> {
     String password
 
     boolean verified = false
-    //  TODO
     String verificationToken = ""
 
     public MongoManualPlayer() {
