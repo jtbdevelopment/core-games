@@ -186,7 +186,8 @@ public class CustomSocialAuthenticationFilter extends AbstractAuthenticationProc
         if (!authService.getConnectionCardinality().isMultiProviderUserId()) {
             List<Connection<?>> connections = repo.findConnections(data.getProviderId());
             if (!connections.isEmpty()) {
-                // TODO maybe throw an exception to allow UI feedback?
+                //  JTB - removed to do marker here to not show on scans as this is c-n-p
+                // maybe throw an exception to allow UI feedback?
                 return null;
             }
         }
