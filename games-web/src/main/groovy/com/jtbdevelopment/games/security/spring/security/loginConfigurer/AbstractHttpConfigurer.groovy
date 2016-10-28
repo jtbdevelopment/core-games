@@ -29,7 +29,7 @@ abstract class AbstractHttpConfigurer
         return getBuilder();
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(["unchecked", "GroovyUnusedDeclaration"])
     public MobileAwareFormLoginConfigurer withObjectPostProcessor(ObjectPostProcessor<?> objectPostProcessor) {
         addObjectPostProcessor(objectPostProcessor);
         return (MobileAwareFormLoginConfigurer) this;
