@@ -58,6 +58,7 @@ abstract class AbstractAuthenticationFilterConfigurer
     }
 
     //  JTB - groovy collapsing of overload
+    @SuppressWarnings("GroovyUnusedDeclaration")
     public final MobileAwareFormLoginConfigurer defaultSuccessUrl(String defaultSuccessUrl, boolean alwaysUse = false) {
         SavedRequestAwareAuthenticationSuccessHandler handler = new SavedRequestAwareAuthenticationSuccessHandler();
         handler.setDefaultTargetUrl(defaultSuccessUrl);
@@ -75,6 +76,7 @@ abstract class AbstractAuthenticationFilterConfigurer
     protected abstract RequestMatcher createLoginProcessingUrlMatcher(
             String loginProcessingUrl);
 
+    @SuppressWarnings("GroovyUnusedDeclaration")
     public final MobileAwareFormLoginConfigurer authenticationDetailsSource(
             AuthenticationDetailsSource<HttpServletRequest, ?> authenticationDetailsSource) {
         this.authenticationDetailsSource = authenticationDetailsSource;

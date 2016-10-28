@@ -22,7 +22,7 @@ abstract class AbstractHttpConfigurer
      *
      * @return the {@link HttpSecurityBuilder} for additional customizations
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(["unchecked", "GroovyUnusedDeclaration"])
     public HttpSecurity disable() {
         //  JTB - minor groovy change here
         getBuilder().removeConfigurer(this.class);
