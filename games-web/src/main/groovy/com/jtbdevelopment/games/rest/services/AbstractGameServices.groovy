@@ -17,7 +17,6 @@ abstract class AbstractGameServices<ID extends Serializable> {
     ThreadLocal<ID> playerID = new ThreadLocal<>()
     ThreadLocal<ID> gameID = new ThreadLocal<>()
 
-    //  TODO - would like this moved as well
     @Autowired
     GameGetterHandler gameGetterHandler
 
