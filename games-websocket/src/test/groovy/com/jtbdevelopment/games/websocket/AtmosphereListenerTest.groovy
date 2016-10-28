@@ -11,6 +11,7 @@ import com.jtbdevelopment.games.state.masking.MultiPlayerGameMasker
 import org.atmosphere.cpr.Broadcaster
 import org.atmosphere.cpr.BroadcasterFactory
 
+import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.TimeUnit
 
 /**
@@ -18,22 +19,24 @@ import java.util.concurrent.TimeUnit
  * Time: 7:18 PM
  */
 class AtmosphereListenerTest extends GameCoreTestCase {
-    AtmosphereListener listener = new AtmosphereListener()
+    AtmosphereListener listener
 
     //  Initiating Server Flag irrelevant here
+    //  randomly choose on each - should not affect results
     boolean initiatingServer = new Random().nextBoolean()
 
     @Override
     protected void setUp() throws Exception {
+        listener = new AtmosphereListener()
         listener.stringToIDConverter = new StringToIDConverter<String>() {
             @Override
             String convert(final String source) {
                 return source?.reverse()
             }
         }
-        listener.threads = 5
+        listener.threads = 10
         listener.retries = 3
-        listener.retryPause = 100
+        listener.retryPause = 1
         listener.setUp()
         listener.publicationListeners = [];
     }
@@ -67,14 +70,12 @@ class AtmosphereListenerTest extends GameCoreTestCase {
                 lookup: {
                     String id ->
                         switch (id) {
+                            case LiveFeedService.PATH_ROOT + PTHREE.idAsString:
                             case LiveFeedService.PATH_ROOT + PONE.idAsString:
                                 return null
                                 break;
                             case LiveFeedService.PATH_ROOT + PTWO.idAsString:
                                 return b2
-                                break;
-                            case LiveFeedService.PATH_ROOT + PTHREE.idAsString:
-                                return null
                                 break;
                             case LiveFeedService.PATH_ROOT + PFOUR.idAsString:
                                 return b4
@@ -89,24 +90,28 @@ class AtmosphereListenerTest extends GameCoreTestCase {
                 }
         ] as AtmosphereBroadcasterFactory
 
-        Set<Player> successes = [] as Set
-        Set<Player> failures = [] as Set
+        def successes = new ConcurrentSkipListSet<String>()
+        def failures = new ConcurrentSkipListSet<String>()
         listener.publicationListeners.add([
                 publishedPlayerUpdate: {
                     Player p, boolean status ->
-                        if (status) successes.add(p) else failures.add(p)
+
+                        if (status) successes.add(p.idAsString)
+                        else failures.add(p.idAsString)
+                        log.info(failures.toString())
+                        log.info(successes.toString())
                 }
         ] as WebSocketPublicationListener)
         listener.broadcasterFactory = factoryFactory
         [PONE, PTWO, PTHREE, PFOUR].each {
             listener.playerChanged(it, initiatingServer)
         }
-        Thread.sleep(1000)
+        Thread.sleep(1)
         listener.service.shutdown()
-        listener.service.awaitTermination(10, TimeUnit.SECONDS)
+        listener.service.awaitTermination(100, TimeUnit.SECONDS)
         assert p2pub && p4pub
-        assert [PTWO, PFOUR] as Set == successes
-        assert [PONE, PTHREE] as Set == failures
+        assert [PTWO.idAsString, PFOUR.idAsString] as Set == successes
+        assert [PONE.idAsString, PTHREE.idAsString] as Set == failures
     }
 
     void testPublishRefreshPlayerToAllValidConnectedPlayers() {
@@ -178,15 +183,15 @@ class AtmosphereListenerTest extends GameCoreTestCase {
                 }
         ] as AbstractPlayerRepository
         listener.allPlayersChanged(initiatingServer)
-        Thread.sleep(200)
+        Thread.sleep(1)
         listener.service.shutdown()
-        listener.service.awaitTermination(10, TimeUnit.SECONDS)
+        listener.service.awaitTermination(100, TimeUnit.SECONDS)
         assert p2pub && p4pub
     }
 
     void testPublishGameToConnectedNonInitiatingPlayers() {
         MultiPlayerGame game = [
-                getId: {
+                getId     : {
                     return 'An ID!'
                 },
                 getPlayers: {
@@ -251,13 +256,16 @@ class AtmosphereListenerTest extends GameCoreTestCase {
                 }
         ] as BroadcasterFactory
 
-        Set<Player> successes = [] as Set
-        Set<Player> failures = [] as Set
+        def successes = new ConcurrentSkipListSet<String>()
+        def failures = new ConcurrentSkipListSet<String>()
         listener.publicationListeners.add([
                 publishedGameUpdateToPlayer: {
                     Player p, MultiPlayerGame g, boolean status ->
                         assert g.is(game)
-                        if (status) successes.add(p) else failures.add(p)
+                        if (status) successes.add(p.idAsString)
+                        else failures.add(p.idAsString)
+                        log.info(failures.toString())
+                        log.info(successes.toString())
                 }
         ] as WebSocketPublicationListener)
 
@@ -270,11 +278,10 @@ class AtmosphereListenerTest extends GameCoreTestCase {
         listener.gameMasker = masker
 
         listener.gameChanged(game, PONE, initiatingServer)
-        Thread.sleep(1000)
         listener.service.shutdown()
         listener.service.awaitTermination(100, TimeUnit.SECONDS)
         assert p2pub && p4pub
-        assert [PTWO, PFOUR] as Set == successes
-        assert [PTHREE] as Set == failures
+        assert [PTWO.idAsString, PFOUR.idAsString] as Set == successes
+        assert [PTHREE.idAsString] as Set == failures
     }
 }

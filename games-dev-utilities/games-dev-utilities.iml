@@ -26,8 +26,8 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.slf4j:jcl-over-slf4j:1.7.21" level="project" />
     <orderEntry type="module" module-name="games-websocket" />
     <orderEntry type="module" module-name="games-web" />
-    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-web:1.6" level="project" />
-    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring:1.6" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-web:1.7-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring:1.7-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-web:4.1.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.social:spring-social-core:1.1.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aspects:4.3.1.RELEASE" level="project" />
@@ -80,16 +80,16 @@
     <orderEntry type="module" module-name="games-events" />
     <orderEntry type="library" name="Maven: org.atmosphere:atmosphere-runtime:2.4.5" level="project" />
     <orderEntry type="module" module-name="games-mongo" />
-    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-web-mongo:1.6" level="project" />
-    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-mongo:1.6" level="project" />
-    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-jackson:1.6" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-web-mongo:1.7-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-mongo:1.7-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-jackson:1.7-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.7.5" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-mongodb:1.9.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-tx:4.3.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:mongo-java-driver:2.14.0" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.7.5" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.7.5" level="project" />
-    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-mongo:test-jar:tests:1.6" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-mongo:test-jar:tests:1.7-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-servlet:9.3.10.v20160621" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-security:9.3.10.v20160621" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-server:9.3.10.v20160621" level="project" />

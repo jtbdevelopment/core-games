@@ -13,7 +13,7 @@ import javax.ws.rs.ext.Provider
  * Date: 10/2/16
  * Time: 8:22 AM
  *
- * TODO - should this be in core common
+ * TODO - should this be in core common?  There is no jersey core for now, so no
  */
 @Provider
 class ExceptionListenerLogger implements ApplicationEventListener, RequestEventListener {

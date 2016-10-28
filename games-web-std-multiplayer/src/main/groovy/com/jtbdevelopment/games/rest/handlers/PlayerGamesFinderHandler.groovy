@@ -6,6 +6,7 @@ import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.masking.MaskedMultiPlayerGame
 import com.jtbdevelopment.games.state.masking.MultiPlayerGameMasker
 import groovy.transform.CompileStatic
+import groovyx.gpars.GParsPool
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -35,22 +36,20 @@ class PlayerGamesFinderHandler extends AbstractGameGetterHandler {
         ZonedDateTime now = ZonedDateTime.now(GMT)
 
         List<MaskedMultiPlayerGame> result = [];
-        //  TODO - Would be nice to be parallel
-        //  GPars and compile static not nice
-        //  JDK1.8 streams and this build seemed to have issues
-        //  shelving for now
-        GamePhase.values().each {
-            GamePhase phase ->
-                def days = now.minusDays(phase.historyCutoffDays)
-                result.addAll(((AbstractMultiPlayerGameRepository) gameRepository).findByPlayersIdAndGamePhaseAndLastUpdateGreaterThan(
-                        player.id,
-                        phase,
-                        days,
-                        PAGE
-                ).collect {
-                    game ->
-                        gameMasker.maskGameForPlayer(game, player)
-                })
+        GParsPool.withPool {
+            GamePhase.values().each {
+                GamePhase phase ->
+                    def days = now.minusDays(phase.historyCutoffDays)
+                    result.addAll(((AbstractMultiPlayerGameRepository) gameRepository).findByPlayersIdAndGamePhaseAndLastUpdateGreaterThan(
+                            player.id,
+                            phase,
+                            days,
+                            PAGE
+                    ).collect {
+                        game ->
+                            gameMasker.maskGameForPlayer(game, player)
+                    })
+            }
         }
         result
     }

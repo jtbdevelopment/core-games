@@ -26,6 +26,7 @@ import java.util.concurrent.Executors
  * Time: 7:56 PM
  *
  * TODO - some tests for retry logic
+ * TODO - split into game and player?, smells a bit
  */
 @Component
 @CompileStatic
