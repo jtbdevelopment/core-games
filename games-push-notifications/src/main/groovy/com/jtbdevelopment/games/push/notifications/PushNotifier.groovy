@@ -89,6 +89,7 @@ class PushNotifier {
         ])
     }
 
+    //  TODO - incorporate link to game
     boolean notifyPlayer(final Player player, final MultiPlayerGame game) {
         try {
             Map<String, Object> message = new HashMap<>(baseMessage)
