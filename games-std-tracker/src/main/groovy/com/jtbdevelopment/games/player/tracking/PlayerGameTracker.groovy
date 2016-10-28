@@ -71,9 +71,7 @@ class PlayerGameTracker implements GameEligibilityTracker<PlayerGameEligibilityR
                 RETURN_NEW_OPTION,
                 player.class
         )
-        //  TODO - verify if quantity compare necessary and test if so
-        if (updated != null &&
-                ((AbstractPlayerGameTrackingAttributes) updated.gameSpecificPlayerAttributes).freeGamesUsedToday != ((AbstractPlayerGameTrackingAttributes) player.gameSpecificPlayerAttributes).freeGamesUsedToday) {
+        if (updated != null) {
             playerPublisher.publish(updated)
             return new PlayerGameEligibilityResult(eligibility: PlayerGameEligibility.FreeGameUsed, player: updated)
         }
@@ -84,9 +82,8 @@ class PlayerGameTracker implements GameEligibilityTracker<PlayerGameEligibilityR
                 RETURN_NEW_OPTION,
                 player.class
         )
-        //  TODO - verify if quantity compare necessary and test if so
-        if (updated != null &&
-                ((AbstractPlayerGameTrackingAttributes) updated.gameSpecificPlayerAttributes).availablePurchasedGames != ((AbstractPlayerGameTrackingAttributes) player.gameSpecificPlayerAttributes).availablePurchasedGames) {
+
+        if (updated != null) {
             playerPublisher.publish(updated)
             return new PlayerGameEligibilityResult(eligibility: PlayerGameEligibility.PaidGameUsed, player: updated)
         }
