@@ -11,7 +11,7 @@ import com.jtbdevelopment.games.push.websocket.PushWebSocketPublicationListener
  */
 class PushCachingConfigurerTest extends GroovyTestCase {
     void testModifyConfiguration() {
-        def configs = [PushWebSocketPublicationListener.WEBSOCKET_TRACKING_MAP,
+        def configs = [PushWebSocketPublicationListener.WEB_SOCKET_TRACKING_MAP,
                        PushNotifierFilter.PLAYER_PUSH_TRACKING_MAP] as Set
         def config = [
                 addMapConfig: {

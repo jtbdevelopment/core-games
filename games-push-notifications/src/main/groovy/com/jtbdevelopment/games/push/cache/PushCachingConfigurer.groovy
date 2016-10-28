@@ -21,7 +21,7 @@ class PushCachingConfigurer implements HazelcastConfigurer {
     @Override
     void modifyConfiguration(final Config config) {
         [PushNotifierFilter.PLAYER_PUSH_TRACKING_MAP,
-         PushWebSocketPublicationListener.WEBSOCKET_TRACKING_MAP].each {
+         PushWebSocketPublicationListener.WEB_SOCKET_TRACKING_MAP].each {
             String it ->
                 MapConfig mc = new MapConfig(it)
                 mc.maxIdleSeconds = ONE_MINUTE

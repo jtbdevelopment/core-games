@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentMap
 @Component
 class PushWebSocketPublicationListener implements WebSocketPublicationListener {
     private static final Logger logger = LoggerFactory.getLogger(PushWebSocketPublicationListener.class)
-    static final String WEBSOCKET_TRACKING_MAP = "PUSH_TRACKING_MAP"
+    static final String WEB_SOCKET_TRACKING_MAP = "PUSH_TRACKING_MAP"
 
     protected static final ZoneId GMT = ZoneId.of("GMT")
     protected static final int CUTOFF_DAYS = 30
@@ -47,7 +47,7 @@ class PushWebSocketPublicationListener implements WebSocketPublicationListener {
     @PostConstruct
     void setup() {
         if (pushProperties.enabled) {
-            trackingMap = hazelcastInstance.getMap(WEBSOCKET_TRACKING_MAP)
+            trackingMap = hazelcastInstance.getMap(WEB_SOCKET_TRACKING_MAP)
             ((IMap) trackingMap).addEntryListener(pushNotifierFilter, true)
 
             computeRegistrationCutoff()
@@ -68,20 +68,20 @@ class PushWebSocketPublicationListener implements WebSocketPublicationListener {
     }
 
     @Override
-    void publishedGameUpdateToPlayer(final Player player, final MultiPlayerGame game, final boolean status) {
+    void publishedGameUpdateToPlayer(final Player player, final MultiPlayerGame game, final boolean published) {
         if (pushProperties.enabled && player.registeredDevices.find {
-            it.lastRegistered.compareTo(registeredCutoff) > 0
+            it.lastRegistered > registeredCutoff
         }) {
             GamePublicationTracker tracker = new GamePublicationTracker(
                     pid: player.id,
                     gid: (Serializable) game.id)
             boolean was, is
-            if (status) {
-                logger.trace("Forcing publish on " + tracker)
-                was = trackingMap.put(tracker, status)
+            if (published) {
+                logger.trace("Forcing published status on " + tracker)
+                was = trackingMap.put(tracker, published)
             } else {
-                logger.trace("putIfAbsent publish on " + tracker)
-                was = trackingMap.putIfAbsent(tracker, status)
+                logger.trace("putIfAbsent publish status on " + tracker)
+                was = trackingMap.putIfAbsent(tracker, published)
             }
             if (logger.isTraceEnabled()) {
                 is = trackingMap.get(tracker)
