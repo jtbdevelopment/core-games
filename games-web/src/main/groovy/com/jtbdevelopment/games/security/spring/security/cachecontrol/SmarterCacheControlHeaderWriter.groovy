@@ -21,8 +21,6 @@ class SmarterCacheControlHeaderWriter implements HeaderWriter {
     @Override
     void writeHeaders(final HttpServletRequest request, final HttpServletResponse response) {
         if (allowCaching(request)) {
-            //  TODO - review
-            //response.addHeader("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate")
             response.addHeader(EXPIRES, "" + ZonedDateTime.now().plusHours(1).toInstant().epochSecond)
         } else {
             response.addHeader(CACHE_CONTROL, "no-cache, no-store, max-age=0, must-revalidate")
@@ -31,7 +29,7 @@ class SmarterCacheControlHeaderWriter implements HeaderWriter {
         }
     }
 
-    private boolean allowCaching(final HttpServletRequest request) {
+    private static boolean allowCaching(final HttpServletRequest request) {
         String path = request.servletPath
         return path.startsWith("/images") ||
                 path.startsWith("/scripts") ||
