@@ -30,14 +30,14 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-web:1.7-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring:1.7-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-web:1.7" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring:1.7" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-tx:4.3.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:1.12.2.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.slf4j:jcl-over-slf4j:1.7.21" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-web:4.1.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.social:spring-social-core:1.1.4.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-jackson:1.7-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-jackson:1.7" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.7.5" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.7.5" level="project" />
     <orderEntry type="module" module-name="games" />
@@ -93,7 +93,7 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.5.4" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.7.5" level="project" />
     <orderEntry type="library" name="Maven: javax.servlet:javax.servlet-api:3.1.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.jtbdevelopment.core-common:core-spring-web:test-jar:tests:1.7-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.jtbdevelopment.core-common:core-spring-web:test-jar:tests:1.7" level="project" />
     <orderEntry type="module" module-name="games" scope="TEST" production-on-test="" />
     <orderEntry type="library" name="Maven: org.codehaus.groovy:groovy-all:2.4.7" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.gpars:gpars:1.2.1" level="project" />
