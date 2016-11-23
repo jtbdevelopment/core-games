@@ -4,7 +4,7 @@
     <facet type="Spring" name="Spring">
       <configuration>
         <fileset id="fileset" name="Spring Application Context" removed="false">
-          <file>file://$MODULE_DIR$/src/main/resources/spring-context-integration.xml</file>
+          <file>file://$MODULE_DIR$/src/main/groovy/com/jtbdevelopment/games/dev/utilities/jetty/AppConfig.groovy</file>
         </fileset>
       </configuration>
     </facet>

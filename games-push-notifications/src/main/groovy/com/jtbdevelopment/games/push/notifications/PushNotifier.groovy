@@ -95,7 +95,7 @@ class PushNotifier {
             Map<String, Object> message = new HashMap<>(baseMessage)
             //  TODO - allow app greater control of message sent
 
-            //  TODO - create user device groups
+            //  TODO - create user device groups?
             List<String> deviceIDs = player.registeredDevices.collect { it.deviceID }
             message["registration_ids"] = deviceIDs
             Entity entity = Entity.entity(message, MediaType.APPLICATION_JSON)
