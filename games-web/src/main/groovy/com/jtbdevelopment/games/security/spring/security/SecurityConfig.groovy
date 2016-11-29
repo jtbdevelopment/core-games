@@ -41,7 +41,7 @@ import javax.annotation.PostConstruct
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
 class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final static Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
+    private final static Logger logger = LoggerFactory.getLogger(SecurityConfig.class)
 
     //  To be implemented on UI
     public static final String LOGIN_PAGE = "/#/signin"
@@ -77,7 +77,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @PostConstruct
-    public void configureAuthenticationProvider() throws Exception {
+    void configureAuthenticationProvider() throws Exception {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider()
         daoAuthenticationProvider.setPasswordEncoder(injectedPasswordEncoder)
         daoAuthenticationProvider.setUserDetailsService(playerUserDetailsService)
@@ -145,7 +145,6 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
             http.httpBasic().and().csrf().disable().headers() addHeaderWriter(new CorsHeaderWriter())
             http.addFilterBefore(new CorsFilter(), ChannelProcessingFilter.class)
         } else {
-            http.requiresChannel().antMatchers("/**").requiresSecure()
             http.rememberMe().useSecureCookie(true)
             http.csrf().csrfTokenRepository(csrfTokenRepository()).requireCsrfProtectionMatcher(new FacebookCanvasAllowingProtectionMatcher()).
                     and().addFilterAfter(new XSRFTokenCookieFilter(), CsrfFilter.class)
