@@ -20,7 +20,7 @@ import javax.servlet.ServletRegistration
 class CoreWebConfig implements WebApplicationInitializer {
 
     void onStartup(final ServletContext servletContext) throws ServletException {
-        servletContext.setInitParameter("contextConfigLocation", "<NONE>");
+        servletContext.setInitParameter("contextConfigLocation", "<NONE>")
         AnnotationConfigWebApplicationContext root = new AnnotationConfigWebApplicationContext()
         root.register(SpringWebConfig.class)
         root.configLocation = "com.jtbdevelopment"
@@ -32,7 +32,7 @@ class CoreWebConfig implements WebApplicationInitializer {
                 "jersey.config.server.provider.packages"  : "com.jtbdevelopment",
                 "jersey.config.server.provider.classnames": "org.glassfish.jersey.filter.LoggingFilter;org.glassfish.jersey.message.DeflateEncoder;org.glassfish.jersey.message.GZipEncoder;org.glassfish.jersey.server.filter.EncodingFilter",
                 "jersey.config.server.tracing"            : "ALL"
-        ]);
+        ])
         jersey.addMapping("/api/*")
     }
 }
