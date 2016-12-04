@@ -34,13 +34,13 @@ class AutoConnectionSignUp implements ConnectionSignUp {
                 return player.id
             } else {
                 Player p = playerFactory.newPlayer()
-                p.disabled = false;
+                p.disabled = false
                 p.displayName = connection.fetchUserProfile().name
                 p.source = connection.key.providerId
                 p.sourceId = connection.key.providerUserId
                 p.profileUrl = connection.profileUrl
                 p.imageUrl = connection.imageUrl
-                p = playerRepository.save(p);
+                p = playerRepository.save(p)
                 return p?.idAsString
             }
         } catch (Exception e) {
