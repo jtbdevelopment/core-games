@@ -23,7 +23,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.web.PortMapperImpl
 import org.springframework.security.web.access.channel.ChannelProcessingFilter
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository
@@ -92,11 +91,6 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
-        PortMapperImpl portMapper = new PortMapperImpl()
-        portMapper.getTranslatedPortMappings().put(8998, 8999)
-        portMapper.getTranslatedPortMappings().put(8090, 8943)
-
-
         AuthenticationSuccessHandler successfulAuthenticationHandler = new MobileAwareSuccessfulAuthenticationHandler(mobileAppChecker, mobileAppProperties, LOGGED_IN_URL, true)
 
         def mobileAwareFormLoginConfigurer = new MobileAwareFormLoginConfigurer(mobileAppChecker)
@@ -128,7 +122,6 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
                 and().apply(mobileAwareFormLoginConfigurer.successHandler(successfulAuthenticationHandler).failureHandler(new MobileAwareFailureAuthenticationHandler(mobileAppChecker)).loginPage(LOGIN_PAGE).loginProcessingUrl(AUTHENTICATE_PAGE)).
                 and().logout().logoutUrl(LOGOUT_PAGE).deleteCookies("JSESSIONID").
                 and().rememberMe().tokenRepository(persistentTokenRepository).userDetailsService(playerUserDetailsService).
-                and().portMapper().portMapper(portMapper).
                 and().headers().frameOptions().disable().addHeaderWriter(new ContentSecurityPolicyHeaderWriter()).
                 and().headers().cacheControl().disable().addHeaderWriter(new SmarterCacheControlHeaderWriter()).
                 and().apply(new MobileAwareSocialConfigurer().successHandler(successfulAuthenticationHandler).failureHandler(new MobileAwareSocialFailureAuthenticationHandler(mobileAppChecker, mobileAppProperties)))

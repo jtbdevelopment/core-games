@@ -33,7 +33,7 @@ class PlayerUserDetailsService implements UserDetailsService {
         if (player) {
             return new PlayerUserDetails(lastLoginUpdater.updatePlayerLastLogin(player))
         } else {
-            return null;
+            return null
         }
     }
 }
