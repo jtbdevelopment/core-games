@@ -31,11 +31,11 @@ class MultiPlayerGamePublisherImpl implements GamePublisher<MultiPlayerGame> {
     @Value('${publishing.threads:10}')
     int threads
 
-    ExecutorService service;
+    ExecutorService service
 
 
     @PostConstruct
-    public void setUp() {
+    void setUp() {
         service = Executors.newFixedThreadPool(threads)
     }
 

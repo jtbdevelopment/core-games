@@ -8,7 +8,7 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 class ClusterMessage implements Serializable {
-    public enum ClusterMessageType {
+    enum ClusterMessageType {
         GameUpdate,         //  gameId and playerId
         PlayerUpdate,       //  playerId only
         AllPlayersUpdate    //  no content
