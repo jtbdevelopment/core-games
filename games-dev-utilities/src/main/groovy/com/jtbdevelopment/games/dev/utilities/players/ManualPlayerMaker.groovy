@@ -12,12 +12,12 @@ import org.springframework.security.crypto.password.PasswordEncoder
  * Time: 1:48 PM
  */
 class ManualPlayerMaker {
-    static PasswordEncoder passwordEncoder;
+    static PasswordEncoder passwordEncoder
 
     static PlayerFactory playerFactory
 
-    public static void main(final String[] args) {
-        ApplicationContext ctx = new AnnotationConfigApplicationContext("com.jtbdevelopment");
+    static void main(final String[] args) {
+        ApplicationContext ctx = new AnnotationConfigApplicationContext("com.jtbdevelopment")
 
         AbstractPlayerRepository repository = ctx.getBean(AbstractPlayerRepository.class)
         playerFactory = ctx.getBean(PlayerFactory.class)
@@ -34,7 +34,7 @@ class ManualPlayerMaker {
 
         players.each {
             ManualPlayer it ->
-                ManualPlayer loaded = (ManualPlayer) repository.findBySourceAndSourceId(it.source, it.sourceId);
+                ManualPlayer loaded = (ManualPlayer) repository.findBySourceAndSourceId(it.source, it.sourceId)
                 if (!loaded) {
                     println "Creating player " + it
                     repository.save(it)
