@@ -54,7 +54,7 @@ class FacebookFriendFinder implements SourceBasedFriendFinder {
                     results[NOT_FOUND_KEY].add(it)
                 }
         }
-        PagedList<Reference> canInvite = facebook.fetchConnections("me", "invitable_friends", Reference.class);
+        PagedList<Reference> canInvite = facebook.fetchConnections("me", "invitable_friends", Reference.class)
         results[INVITABLE_FRIENDS_KEY].addAll(canInvite)
         return results
     }

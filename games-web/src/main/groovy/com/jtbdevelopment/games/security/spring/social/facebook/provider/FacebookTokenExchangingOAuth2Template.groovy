@@ -34,18 +34,17 @@ class FacebookTokenExchangingOAuth2Template extends OAuth2Template {
             final String redirectUri, final MultiValueMap<String, String> additionalParameters) {
         try {
             return super.exchangeForAccess(authorizationCode, redirectUri, additionalParameters)
-        } catch (Exception ex) {
-            MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+        } catch (Exception ignored) {
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>()
             params.set("client_id", clientId)
-            params.set("client_secret", clientSecret);
-            //}
-            params.set("fb_exchange_token", authorizationCode);
-            params.set("redirect_uri", redirectUri);
-            params.set("grant_type", "fb_exchange_token");
+            params.set("client_secret", clientSecret)
+            params.set("fb_exchange_token", authorizationCode)
+            params.set("redirect_uri", redirectUri)
+            params.set("grant_type", "fb_exchange_token")
             if (additionalParameters != null) {
-                params.putAll(additionalParameters);
+                params.putAll(additionalParameters)
             }
-            return postForAccessGrant(accessTokenUrl, params);
+            return postForAccessGrant(accessTokenUrl, params)
         }
     }
 }

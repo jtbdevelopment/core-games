@@ -29,7 +29,7 @@ class FacebookProperties {
     boolean warnings = true
 
     @PostConstruct
-    public void testDefaults() {
+    void testDefaults() {
         if (StringUtils.isEmpty(clientID) || clientID == 'NOTSET' || StringUtils.isEmpty(clientSecret) || clientSecret == 'NOTSET') {
             warnings = true
             logger.warn('----------------------------------------------------------------------------------------------')
@@ -40,7 +40,7 @@ class FacebookProperties {
             logger.warn('----------------------------------------------------------------------------------------------')
             logger.warn('----------------------------------------------------------------------------------------------')
         } else {
-            warnings = false;
+            warnings = false
         }
     }
 }

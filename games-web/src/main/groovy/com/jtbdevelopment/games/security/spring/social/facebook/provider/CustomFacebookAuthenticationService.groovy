@@ -13,12 +13,12 @@ import org.springframework.social.security.provider.OAuth2AuthenticationService
 @CompileStatic
 class CustomFacebookAuthenticationService extends OAuth2AuthenticationService<Facebook> {
 
-    public CustomFacebookAuthenticationService(String apiKey, String appSecret) {
-        super(new CustomFacebookConnectionFactory(apiKey, appSecret));
+    CustomFacebookAuthenticationService(String apiKey, String appSecret) {
+        super(new CustomFacebookConnectionFactory(apiKey, appSecret))
     }
 
-    public CustomFacebookAuthenticationService(String apiKey, String appSecret, String appNamespace) {
-        super(new CustomFacebookConnectionFactory(apiKey, appSecret, appNamespace));
+    CustomFacebookAuthenticationService(String apiKey, String appSecret, String appNamespace) {
+        super(new CustomFacebookConnectionFactory(apiKey, appSecret, appNamespace))
     }
 
 }

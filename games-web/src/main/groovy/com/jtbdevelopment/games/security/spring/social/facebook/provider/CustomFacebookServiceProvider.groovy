@@ -15,21 +15,21 @@ class CustomFacebookServiceProvider extends AbstractOAuth2ServiceProvider<Facebo
 
     private String appNamespace
 
-    public CustomFacebookServiceProvider(String appId, String appSecret, String appNamespace) {
-        super(getOAuth2Template(appId, appSecret));
-        this.appNamespace = appNamespace;
+    CustomFacebookServiceProvider(String appId, String appSecret, String appNamespace) {
+        super(getOAuth2Template(appId, appSecret))
+        this.appNamespace = appNamespace
     }
 
     private static OAuth2Template getOAuth2Template(String appId, String appSecret) {
         FacebookTokenExchangingOAuth2Template oAuth2Template = new FacebookTokenExchangingOAuth2Template(appId, appSecret,
                 "https://www.facebook.com/v2.3/dialog/oauth",
-                GraphApi.GRAPH_API_URL + "oauth/access_token");
-        oAuth2Template.setUseParametersForClientAuthentication(true);
-        return oAuth2Template;
+                GraphApi.GRAPH_API_URL + "oauth/access_token")
+        oAuth2Template.setUseParametersForClientAuthentication(true)
+        return oAuth2Template
     }
 
-    public Facebook getApi(String accessToken) {
-        return new FacebookTemplate(accessToken, appNamespace);
+    Facebook getApi(String accessToken) {
+        return new FacebookTemplate(accessToken, appNamespace)
     }
 
 }
