@@ -17,40 +17,40 @@ import java.time.ZonedDateTime
 class PlayerCleanupTest extends GameCoreTestCase {
     PlayerCleanup playerCleanup = new PlayerCleanup()
 
+    GameCoreTestCase.StringSystemPlayer system = makeSimpleSystemPlayer("system 1")
+    GameCoreTestCase.StringManualPlayer manual = makeSimpleManualPlayer("manual 1")
 
     void testDeleteOlderPlayersWithoutSocialConnection() {
         ZonedDateTime start = ZonedDateTime.now(ZoneId.of('GMT')).minusDays(90)
-        boolean deleted = false
+        def deleted = [] as Set
         playerCleanup.playerRepository = [
-                deleteByLastLoginLessThan: {
+                findByLastLoginLessThan: {
                     ZonedDateTime cutoff ->
                         assert start <= cutoff
                         assert start.plusMinutes(1) > cutoff
-                        deleted = true
-                        return 1L
+                        return [PONE, system, manual]
+                },
+                delete                 : {
+                    deleted.add(it)
                 }
         ] as AbstractPlayerRepository
 
         playerCleanup.deleteInactivePlayers()
-        assert deleted
+        assert [PONE] as Set == deleted
     }
 
     void testDeleteOlderPLayersWithSomeSocialConnections() {
         ZonedDateTime start = ZonedDateTime.now(ZoneId.of('GMT')).minusDays(90)
-        boolean deleted = false
+        def deleted = [] as Set
         playerCleanup.playerRepository = [
-                findByLastLoginLessThan  : {
+                findByLastLoginLessThan: {
                     ZonedDateTime cutoff ->
                         assert start <= cutoff
                         assert start.plusMinutes(1) > cutoff
-                        return [PONE, PTWO, PTHREE]
+                        return [PONE, PTWO, manual, system, PTHREE]
                 },
-                deleteByLastLoginLessThan: {
-                    ZonedDateTime cutoff ->
-                        assert start <= cutoff
-                        assert start.plusMinutes(1) > cutoff
-                        deleted = true
-                        return 1L
+                delete                 : {
+                    deleted.add(it)
                 }
         ] as AbstractPlayerRepository
 
@@ -108,7 +108,7 @@ class PlayerCleanupTest extends GameCoreTestCase {
         ] as AbstractUsersConnectionRepository
 
         playerCleanup.deleteInactivePlayers()
-        assert deleted
+        assert [PONE, PTWO, PTHREE] as Set == deleted
         assert removedConnections == [poneKey1, poneKey2, poneKey3, ptwoKey1] as Set
     }
 

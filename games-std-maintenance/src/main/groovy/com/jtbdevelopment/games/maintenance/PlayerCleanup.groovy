@@ -2,6 +2,9 @@ package com.jtbdevelopment.games.maintenance
 
 import com.jtbdevelopment.core.spring.social.dao.AbstractUsersConnectionRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
+import com.jtbdevelopment.games.players.ManualPlayer
+import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.players.SystemPlayer
 import groovy.transform.CompileStatic
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -38,22 +41,29 @@ class PlayerCleanup {
         def cutoff = ZonedDateTime.now(GMT).minusDays(DAYS_BACK)
         logger.info('Deleting players not logged in since ' + cutoff)
 
-        if (usersConnectionRepository != null) {
-            playerRepository.findByLastLoginLessThan(cutoff).each {
-                def userSpecificRepository = usersConnectionRepository.createConnectionRepository(it.idAsString)
-                if (userSpecificRepository != null) {
-                    MultiValueMap<String, Connection<?>> connections = userSpecificRepository.findAllConnections()
-                    connections.keySet().each {
-                        String provider ->
-                            List<Connection<?>> listOfConnections = connections.get(provider)
-                            listOfConnections.each {
-                                Connection connection ->
-                                    userSpecificRepository.removeConnection(connection.key)
-                            }
+        def actualPlayers = playerRepository.findByLastLoginLessThan(cutoff).findAll {
+            Player p ->
+                !(p in ManualPlayer || p in SystemPlayer)
+        }
+        logger.info('Found ' + actualPlayers.size() + ' to cleanup.')
+        actualPlayers.each {
+            Player p ->
+                if (usersConnectionRepository != null) {
+                    def userSpecificRepository = usersConnectionRepository.createConnectionRepository(p.idAsString)
+                    if (userSpecificRepository != null) {
+                        MultiValueMap<String, Connection<?>> connections = userSpecificRepository.findAllConnections()
+                        connections.keySet().each {
+                            String provider ->
+                                List<Connection<?>> listOfConnections = connections.get(provider)
+                                listOfConnections.each {
+                                    Connection connection ->
+                                        userSpecificRepository.removeConnection(connection.key)
+                                }
+                        }
                     }
                 }
-            }
+                playerRepository.delete(p)
         }
-        logger.info('Deleted player count = ' + playerRepository.deleteByLastLoginLessThan(cutoff))
+        logger.info('Cleanup completed')
     }
 }
