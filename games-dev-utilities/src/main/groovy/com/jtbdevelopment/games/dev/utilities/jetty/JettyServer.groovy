@@ -72,7 +72,7 @@ class JettyServer {
     }
 
     static void main(final String[] args) throws Exception {
-        Server server = makeServer(9998)
+        Server server = makeServer(8080)
         server.start()
         Thread.sleep(Long.MAX_VALUE)
         server.stop()
