@@ -1,6 +1,6 @@
 package com.jtbdevelopment.games.maintenance
 
-import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
+import com.jtbdevelopment.games.dao.AbstractGameRepository
 import groovy.transform.CompileStatic
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -25,7 +25,7 @@ class GameCleanup {
     private static final int DAYS_BACK = 60
 
     @Autowired
-    AbstractMultiPlayerGameRepository gameRepository
+    AbstractGameRepository gameRepository
 
     void deleteOlderGames() {
         def cutoff = ZonedDateTime.now(GMT).minusDays(DAYS_BACK)
