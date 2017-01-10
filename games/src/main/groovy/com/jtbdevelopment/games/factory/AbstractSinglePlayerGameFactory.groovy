@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.factory
 
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.SinglePlayerGame
 import groovy.transform.CompileStatic
 
@@ -32,6 +33,7 @@ abstract class AbstractSinglePlayerGameFactory<IMPL extends SinglePlayerGame, FE
         game.player = player
         game.version = null
         game.features.addAll(features)
+        game.gamePhase = GamePhase.Setup
         game
     }
 }

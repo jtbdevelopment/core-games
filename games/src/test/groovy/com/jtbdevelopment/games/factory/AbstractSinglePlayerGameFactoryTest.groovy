@@ -2,6 +2,7 @@ package com.jtbdevelopment.games.factory
 
 import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.exceptions.input.FailedToCreateValidGameException
+import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.SinglePlayerGame
 
 /**
@@ -40,6 +41,7 @@ class AbstractSinglePlayerGameFactoryTest extends GameCoreTestCase {
         assert game.player == PONE
         assert game.lastUpdate == game.created
         assert game.created == null
+        assert GamePhase.Setup == game.gamePhase
         assertNull game.version
     }
 
@@ -71,6 +73,7 @@ class AbstractSinglePlayerGameFactoryTest extends GameCoreTestCase {
         assert game.player == PTWO
         assert game.lastUpdate == game.created
         assert game.created == null
+        assert GamePhase.Setup == game.gamePhase
         assertNull game.version
     }
 

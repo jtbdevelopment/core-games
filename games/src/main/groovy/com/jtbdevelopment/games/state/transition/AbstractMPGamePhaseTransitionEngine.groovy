@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired
  * You will most likely need to override the evaluate setup and playing functions
  */
 @CompileStatic
-abstract class AbstractGamePhaseTransitionEngine<IMPL extends MultiPlayerGame> implements GameTransitionEngine<IMPL> {
+abstract class AbstractMPGamePhaseTransitionEngine<IMPL extends MultiPlayerGame> implements GameTransitionEngine<IMPL> {
     @Autowired
     GameScorer<IMPL> gameScorer
 

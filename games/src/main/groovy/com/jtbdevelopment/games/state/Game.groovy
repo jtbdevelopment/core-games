@@ -37,4 +37,8 @@ interface Game<ID extends Serializable, TIMESTAMP, FEATURES> {
     Map<FEATURES, Object> getFeatureData()
 
     void setFeatureData(final Map<FEATURES, Object> featureData)
+
+    GamePhase getGamePhase()
+
+    void setGamePhase(final GamePhase gamePhase)
 }

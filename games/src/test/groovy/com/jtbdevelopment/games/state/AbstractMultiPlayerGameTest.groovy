@@ -20,7 +20,6 @@ class AbstractMultiPlayerGameTest extends GroovyTestCase {
         assert game.players.isEmpty()
         assert game.playerStates.isEmpty()
         assertNull game.declinedTimestamp
-        assertNull game.gamePhase
         assertNull game.rematchTimestamp
     }
 }

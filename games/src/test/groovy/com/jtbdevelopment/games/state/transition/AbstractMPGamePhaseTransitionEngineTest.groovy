@@ -12,8 +12,8 @@ import java.time.ZonedDateTime
  * Date: 4/8/2015
  * Time: 8:30 PM
  */
-class AbstractGamePhaseTransitionEngineTest extends GameCoreTestCase {
-    AbstractGamePhaseTransitionEngine transitionEngine = new AbstractGamePhaseTransitionEngine() {}
+class AbstractMPGamePhaseTransitionEngineTest extends GameCoreTestCase {
+    AbstractMPGamePhaseTransitionEngine transitionEngine = new AbstractMPGamePhaseTransitionEngine() {}
 
 
     public void testSinglePlayerChallengeTransitionsToSetup() {
@@ -36,6 +36,7 @@ class AbstractGamePhaseTransitionEngineTest extends GameCoreTestCase {
         )
 
         assert game.is(transitionEngine.evaluateGame(game))
+        assert game.gamePhase == GamePhase.Challenged
     }
 
     public void testChallengeToDeclined() {

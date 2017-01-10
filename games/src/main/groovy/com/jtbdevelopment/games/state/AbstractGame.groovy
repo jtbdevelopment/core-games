@@ -24,6 +24,8 @@ abstract class AbstractGame<ID extends Serializable, FEATURES> implements Game<I
 
     ZonedDateTime completedTimestamp
 
+    GamePhase gamePhase
+
     Set<FEATURES> features = [] as Set
     Map<FEATURES, Object> featureData = [:]
 

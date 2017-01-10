@@ -8,7 +8,7 @@ import com.jtbdevelopment.games.factory.AbstractMultiPlayerGameFactory
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.MultiPlayerGame
-import com.jtbdevelopment.games.state.transition.AbstractGamePhaseTransitionEngine
+import com.jtbdevelopment.games.state.transition.AbstractMPGamePhaseTransitionEngine
 
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -50,7 +50,7 @@ class ChallengeToRematchHandlerTest extends GameCoreTestCase {
                         assert now < g.rematchTimestamp
                         return previousT
                 }
-        ] as AbstractGamePhaseTransitionEngine
+        ] as AbstractMPGamePhaseTransitionEngine
         handler.gameRepository = [
                 save: {
                     MultiPlayerGame g ->

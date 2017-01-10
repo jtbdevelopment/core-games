@@ -76,5 +76,6 @@ class AbstractGameTest extends GroovyTestCase {
         assert game.completedTimestamp == null
         assert game.featureData.isEmpty()
         assert game.features.isEmpty()
+        assertNull game.gamePhase
     }
 }

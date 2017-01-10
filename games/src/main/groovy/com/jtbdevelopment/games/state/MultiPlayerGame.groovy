@@ -40,8 +40,4 @@ interface MultiPlayerGame<ID extends Serializable, TIMESTAMP, FEATURES> extends 
     TIMESTAMP getRematchTimestamp()
 
     void setRematchTimestamp(final TIMESTAMP rematchTimestamp)
-
-    GamePhase getGamePhase()
-
-    void setGamePhase(final GamePhase gamePhase)
 }

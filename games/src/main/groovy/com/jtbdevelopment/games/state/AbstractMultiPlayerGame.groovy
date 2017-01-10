@@ -17,8 +17,6 @@ abstract class AbstractMultiPlayerGame<ID extends Serializable, FEATURES> extend
     List<Player<ID>> players = []
     Map<ID, PlayerState> playerStates = [:]
 
-    GamePhase gamePhase
-
     ZonedDateTime declinedTimestamp
     ZonedDateTime rematchTimestamp
 }
