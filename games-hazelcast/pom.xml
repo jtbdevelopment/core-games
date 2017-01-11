@@ -3,7 +3,7 @@
     <parent>
         <artifactId>core-games</artifactId>
         <groupId>com.jtbdevelopment.core-games</groupId>
-        <version>1.6-SNAPSHOT</version>
+        <version>1.7-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -24,18 +24,18 @@
         <dependency>
             <groupId>com.jtbdevelopment.core-games</groupId>
             <artifactId>games</artifactId>
-            <version>1.6-SNAPSHOT</version>
+            <version>1.7-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.jtbdevelopment.core-games</groupId>
             <artifactId>games-events</artifactId>
-            <version>1.6-SNAPSHOT</version>
+            <version>1.7-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>com.jtbdevelopment.core-games</groupId>
             <artifactId>games</artifactId>
-            <version>1.6-SNAPSHOT</version>
+            <version>1.7-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>

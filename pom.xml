@@ -5,7 +5,7 @@
     <groupId>com.jtbdevelopment.core-games</groupId>
     <artifactId>core-games</artifactId>
     <packaging>pom</packaging>
-    <version>1.6-SNAPSHOT</version>
+    <version>1.7-SNAPSHOT</version>
     <modules>
         <module>games</module>
         <module>games-dictionaries</module>
