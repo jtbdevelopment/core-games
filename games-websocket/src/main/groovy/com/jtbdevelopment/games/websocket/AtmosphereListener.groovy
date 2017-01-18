@@ -45,12 +45,12 @@ class AtmosphereListener implements GameListener<MultiPlayerGame>, PlayerListene
     @Value('${atmosphere.retryPause:500}')
     int retryPause = 500
 
-    protected ExecutorService service;
+    protected ExecutorService service
 
     private Map<Player, Instant> recentPublishes = new LinkedHashMap<Player, Instant>() {
         @Override
         protected boolean removeEldestEntry(final Map.Entry<Player, Instant> eldest) {
-            return Instant.now().compareTo(eldest.value.plusSeconds(retryRetentionPeriod)) > 0
+            return Instant.now() > eldest.value.plusSeconds(retryRetentionPeriod)
         }
     }
 
@@ -75,7 +75,7 @@ class AtmosphereListener implements GameListener<MultiPlayerGame>, PlayerListene
     AtmosphereBroadcasterFactory broadcasterFactory
 
     @PostConstruct
-    public void setUp() {
+    void setUp() {
         service = Executors.newFixedThreadPool(threads)
     }
 
@@ -143,7 +143,7 @@ class AtmosphereListener implements GameListener<MultiPlayerGame>, PlayerListene
                 logger.trace("Player is not connected to this server for player changed " + player.id)
             }
         } catch (Exception e) {
-            logger.error("Error publishing player update " + player.id, e);
+            logger.error("Error publishing player update " + player.id, e)
         }
         publicationListeners?.each {
             try {
@@ -179,7 +179,7 @@ class AtmosphereListener implements GameListener<MultiPlayerGame>, PlayerListene
                         })
                 }
             } catch (Exception e) {
-                logger.error("Error publishing game " + game.id, e);
+                logger.error("Error publishing game " + game.id, e)
             }
         } else {
             logger.warn("No broadcaster in game changed")
@@ -204,7 +204,7 @@ class AtmosphereListener implements GameListener<MultiPlayerGame>, PlayerListene
                 logger.trace("Player " + player.id + " is not connected to this server for " + game.id + ".")
             }
         } catch (Exception e) {
-            logger.error("Error publishing game " + game.id + " to player " + player.id, e);
+            logger.error("Error publishing game " + game.id + " to player " + player.id, e)
         }
         publicationListeners?.each {
             try {
@@ -238,7 +238,7 @@ class AtmosphereListener implements GameListener<MultiPlayerGame>, PlayerListene
                             logger.trace("Failed to publish to " + playerCallable.player.id + " in " + playerCallable.attempts + " attempts.")
                         }
                     }
-                    logger.trace("Not publishing to " + playerCallable.player.id + ", not in recent publishes");
+                    logger.trace("Not publishing to " + playerCallable.player.id + ", not in recent publishes")
                 }
             }
         })
