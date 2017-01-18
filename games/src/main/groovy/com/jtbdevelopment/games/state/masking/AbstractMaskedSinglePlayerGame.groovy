@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.state.masking
 
-import com.jtbdevelopment.games.state.PlayerState
 import groovy.transform.CompileStatic
 
 /**
@@ -8,15 +7,17 @@ import groovy.transform.CompileStatic
  * Time: 6:55 PM
  */
 @CompileStatic
-abstract class AbstractMaskedMultiPlayerGame<FEATURES> extends AbstractMaskedGame<FEATURES> implements MaskedMultiPlayerGame<FEATURES> {
-    String maskedForPlayerID
-    String maskedForPlayerMD5
+abstract class AbstractMaskedSinglePlayerGame<FEATURES> extends AbstractMaskedGame<FEATURES> implements MaskedSinglePlayerGame<FEATURES> {
+    /*
 
     int round
 
     Long declinedTimestamp
     Long rematchTimestamp
 
+
     String initiatingPlayer
     Map<String, PlayerState> playerStates = [:]  // key will be md5 key
+
+*/
 }
