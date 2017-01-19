@@ -10,7 +10,7 @@ import com.jtbdevelopment.games.exceptions.system.FailedToFindGameException
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.Game
 import com.jtbdevelopment.games.state.masking.AbstractMaskedMultiPlayerGame
-import com.jtbdevelopment.games.state.masking.MultiPlayerGameMasker
+import com.jtbdevelopment.games.state.masking.GameMasker
 import com.jtbdevelopment.games.state.transition.GameTransitionEngine
 import com.jtbdevelopment.games.tracking.GameEligibilityTracker
 import com.jtbdevelopment.games.tracking.PlayerGameEligibility
@@ -171,7 +171,7 @@ class AbstractGameActionHandlerTest extends GameCoreTestCase {
                         assert p.is(PONE)
                         return maskedMultiPlayerGame
                 }
-        ] as MultiPlayerGameMasker
+        ] as GameMasker
 
         assert maskedMultiPlayerGame.is(handler.handleAction(PONE.id, gameId, testParam))
     }
@@ -231,7 +231,7 @@ class AbstractGameActionHandlerTest extends GameCoreTestCase {
                         assert p.is(PONE)
                         return maskedMultiPlayerGame
                 }
-        ] as MultiPlayerGameMasker
+        ] as GameMasker
 
         assert maskedMultiPlayerGame.is(handler.handleAction(PONE.id, gameId, testParam))
     }

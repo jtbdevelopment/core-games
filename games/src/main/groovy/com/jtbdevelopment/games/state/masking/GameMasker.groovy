@@ -1,7 +1,7 @@
 package com.jtbdevelopment.games.state.masking
 
 import com.jtbdevelopment.games.players.Player
-import com.jtbdevelopment.games.state.MultiPlayerGame
+import com.jtbdevelopment.games.state.Game
 import groovy.transform.CompileStatic
 
 /**
@@ -9,6 +9,6 @@ import groovy.transform.CompileStatic
  * Time: 7:14 AM
  */
 @CompileStatic
-interface MultiPlayerGameMasker<ID extends Serializable, U extends MultiPlayerGame, M extends MaskedMultiPlayerGame> {
+interface GameMasker<ID extends Serializable, U extends Game, M extends MaskedGame> {
     M maskGameForPlayer(final U game, final Player<ID> player)
 }

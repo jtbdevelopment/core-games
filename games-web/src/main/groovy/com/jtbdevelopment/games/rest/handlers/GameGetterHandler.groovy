@@ -2,8 +2,7 @@ package com.jtbdevelopment.games.rest.handlers
 
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.Game
-import com.jtbdevelopment.games.state.MultiPlayerGame
-import com.jtbdevelopment.games.state.masking.MultiPlayerGameMasker
+import com.jtbdevelopment.games.state.masking.GameMasker
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -16,13 +15,13 @@ import org.springframework.stereotype.Component
 @CompileStatic
 class GameGetterHandler extends AbstractGameGetterHandler {
     @Autowired(required = false)
-    MultiPlayerGameMasker gameMasker
+    GameMasker gameMasker
 
     Game getGame(final Serializable playerID, final Serializable gameID) {
         Player player = loadPlayer(playerID)
         Game game = loadGame(gameID)
         validatePlayerForGame(game, player)
-        if (game instanceof MultiPlayerGame && gameMasker) {
+        if (gameMasker) {
             return gameMasker.maskGameForPlayer(game, player)
         } else {
             return game

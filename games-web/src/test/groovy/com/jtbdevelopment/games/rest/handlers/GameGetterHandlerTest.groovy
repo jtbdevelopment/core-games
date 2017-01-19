@@ -5,7 +5,8 @@ import com.jtbdevelopment.games.dao.AbstractGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.state.Game
 import com.jtbdevelopment.games.state.masking.AbstractMaskedMultiPlayerGame
-import com.jtbdevelopment.games.state.masking.MultiPlayerGameMasker
+import com.jtbdevelopment.games.state.masking.AbstractMaskedSinglePlayerGame
+import com.jtbdevelopment.games.state.masking.GameMasker
 
 /**
  * Date: 11/17/14
@@ -17,7 +18,7 @@ class GameGetterHandlerTest extends GameCoreTestCase {
     private final GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame()
     private final String gameId = "G-id"
 
-    public void testHandlerBasicMultiPlayerWithMasking() {
+    void testHandlerBasicMultiPlayerWithMasking() {
         game.players = [PTWO, PONE]
 
         handler.gameRepository = [
@@ -42,12 +43,12 @@ class GameGetterHandlerTest extends GameCoreTestCase {
                         assert p.is(PONE)
                         return maskedGame
                 }
-        ] as MultiPlayerGameMasker
+        ] as GameMasker
 
         assert maskedGame.is(handler.getGame(PONE.id, gameId))
     }
 
-    public void testHandlerBasicMultiPlayerWithoutMasking() {
+    void testHandlerBasicMultiPlayerWithoutMasking() {
         game.players = [PTWO, PONE]
 
         handler.gameRepository = [
@@ -68,8 +69,9 @@ class GameGetterHandlerTest extends GameCoreTestCase {
         assert game.is(handler.getGame(PONE.id, gameId))
     }
 
-    public void testHandlerBasicSinglePlayer() {
+    void testHandlerBasicSinglePlayer() {
         GameCoreTestCase.StringGame game = new GameCoreTestCase.StringGame()
+        AbstractMaskedSinglePlayerGame maskedGame = new AbstractMaskedSinglePlayerGame() {}
 
         handler.gameRepository = [
                 findOne: {
@@ -88,9 +90,32 @@ class GameGetterHandlerTest extends GameCoreTestCase {
         handler.gameMasker = [
                 maskGameForPlayer: {
                     Game g, GameCoreTestCase.StringPlayer p ->
-                        fail('Should not be called!')
+                        assert g.is(game)
+                        assert p.is(PONE)
+                        return maskedGame
                 }
-        ] as MultiPlayerGameMasker
+        ] as GameMasker
+
+        assert maskedGame.is(handler.getGame(PONE.id, gameId))
+    }
+
+    void testHandlerBasicSinglePlayerWithoutMasking() {
+        GameCoreTestCase.StringGame game = new GameCoreTestCase.StringGame()
+
+        handler.gameRepository = [
+                findOne: {
+                    String it ->
+                        assert it == gameId
+                        return game
+                },
+        ] as AbstractGameRepository
+        handler.playerRepository = [
+                findOne: {
+                    String it ->
+                        assert it == PONE.id
+                        return PONE
+                }
+        ] as AbstractPlayerRepository
 
         assert game.is(handler.getGame(PONE.id, gameId))
     }

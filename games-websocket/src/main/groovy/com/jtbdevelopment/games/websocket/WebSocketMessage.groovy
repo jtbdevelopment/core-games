@@ -1,7 +1,7 @@
 package com.jtbdevelopment.games.websocket
 
 import com.jtbdevelopment.games.players.Player
-import com.jtbdevelopment.games.state.masking.MaskedMultiPlayerGame
+import com.jtbdevelopment.games.state.masking.MaskedGame
 import groovy.transform.CompileStatic
 
 /**
@@ -10,7 +10,7 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 class WebSocketMessage {
-    public enum MessageType {
+    enum MessageType {
         Heartbeat,      //  Check message
         Game,           //  Check game
         Player,         //  Check player
@@ -18,7 +18,7 @@ class WebSocketMessage {
     }
 
     MessageType messageType
-    MaskedMultiPlayerGame game
+    MaskedGame game
     Player player
     String message
 }

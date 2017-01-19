@@ -6,8 +6,7 @@ import com.jtbdevelopment.games.exceptions.input.OutOfGamesForTodayException
 import com.jtbdevelopment.games.factory.AbstractMultiPlayerGameFactory
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.Game
-import com.jtbdevelopment.games.state.MultiPlayerGame
-import com.jtbdevelopment.games.state.masking.MultiPlayerGameMasker
+import com.jtbdevelopment.games.state.masking.GameMasker
 import com.jtbdevelopment.games.state.transition.GameTransitionEngine
 import com.jtbdevelopment.games.tracking.GameEligibilityTracker
 import com.jtbdevelopment.games.tracking.PlayerGameEligibility
@@ -34,7 +33,7 @@ class NewGameHandler extends AbstractHandler {
     @Autowired(required = false)
     protected GameTransitionEngine transitionEngine
     @Autowired(required = false)
-    protected MultiPlayerGameMasker gameMasker
+    protected GameMasker gameMasker
     @Autowired(required = false)
     protected GamePublisher gamePublisher
     @Autowired(required = false)
@@ -54,7 +53,7 @@ class NewGameHandler extends AbstractHandler {
         if (gamePublisher) {
             gamePublisher.publish(game, initiatingPlayer)
         }
-        if (gameMasker && game instanceof MultiPlayerGame) {
+        if (gameMasker) {
             return gameMasker.maskGameForPlayer(game, initiatingPlayer)
         } else {
             return game

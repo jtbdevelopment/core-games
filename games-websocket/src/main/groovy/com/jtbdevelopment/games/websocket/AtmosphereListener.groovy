@@ -6,7 +6,7 @@ import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.publish.GameListener
 import com.jtbdevelopment.games.publish.PlayerListener
 import com.jtbdevelopment.games.state.MultiPlayerGame
-import com.jtbdevelopment.games.state.masking.MultiPlayerGameMasker
+import com.jtbdevelopment.games.state.masking.GameMasker
 import groovy.transform.CompileStatic
 import org.atmosphere.cpr.Broadcaster
 import org.slf4j.Logger
@@ -63,7 +63,7 @@ class AtmosphereListener implements GameListener<MultiPlayerGame>, PlayerListene
     List<WebSocketPublicationListener> publicationListeners
 
     @Autowired
-    MultiPlayerGameMasker gameMasker
+    GameMasker gameMasker
 
     @Autowired
     AbstractPlayerRepository playerRepository
@@ -195,7 +195,7 @@ class AtmosphereListener implements GameListener<MultiPlayerGame>, PlayerListene
                 broadcaster.broadcast(
                         new WebSocketMessage(
                                 messageType: WebSocketMessage.MessageType.Game,
-                                game: gameMasker.maskGameForPlayer((MultiPlayerGame) game, player)
+                                game: gameMasker.maskGameForPlayer(game, player)
                         )
                 )
 

@@ -4,8 +4,7 @@ import com.jtbdevelopment.games.events.GamePublisher
 import com.jtbdevelopment.games.exceptions.input.OutOfGamesForTodayException
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.Game
-import com.jtbdevelopment.games.state.MultiPlayerGame
-import com.jtbdevelopment.games.state.masking.MultiPlayerGameMasker
+import com.jtbdevelopment.games.state.masking.GameMasker
 import com.jtbdevelopment.games.state.transition.GameTransitionEngine
 import com.jtbdevelopment.games.tracking.GameEligibilityTracker
 import com.jtbdevelopment.games.tracking.PlayerGameEligibility
@@ -30,11 +29,11 @@ abstract class AbstractGameActionHandler<T, IMPL extends Game> extends AbstractG
     @Autowired(required = false)
     protected GameEligibilityTracker gameTracker
     @Autowired(required = false)
-    protected MultiPlayerGameMasker gameMasker
+    protected GameMasker gameMasker
 
     abstract protected IMPL handleActionInternal(final Player player, final IMPL game, final T param)
 
-    public Game handleAction(final Serializable playerID, final Serializable gameID, final T param = null) {
+    Game handleAction(final Serializable playerID, final Serializable gameID, final T param = null) {
         Player player = loadPlayer(playerID)
         IMPL game = (IMPL) loadGame(gameID)
         validatePlayerForGame(game, player)
@@ -43,7 +42,7 @@ abstract class AbstractGameActionHandler<T, IMPL extends Game> extends AbstractG
         if (gamePublisher) {
             updatedGame = gamePublisher.publish(updatedGame, player)
         }
-        if (gameMasker && updatedGame instanceof MultiPlayerGame) {
+        if (gameMasker) {
             return gameMasker.maskGameForPlayer(updatedGame, player)
         } else {
             return updatedGame
@@ -80,7 +79,7 @@ abstract class AbstractGameActionHandler<T, IMPL extends Game> extends AbstractG
         if (transitionEngine) {
             updated = transitionEngine.evaluateGame(updated)
         }
-        return gameRepository.save(updated);
+        return gameRepository.save(updated)
     }
 
     //  No rotation

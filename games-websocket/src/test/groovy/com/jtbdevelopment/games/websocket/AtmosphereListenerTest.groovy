@@ -6,8 +6,8 @@ import com.jtbdevelopment.games.dao.StringToIDConverter
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.Game
 import com.jtbdevelopment.games.state.MultiPlayerGame
+import com.jtbdevelopment.games.state.masking.GameMasker
 import com.jtbdevelopment.games.state.masking.MaskedMultiPlayerGame
-import com.jtbdevelopment.games.state.masking.MultiPlayerGameMasker
 import org.atmosphere.cpr.Broadcaster
 import org.atmosphere.cpr.BroadcasterFactory
 
@@ -226,7 +226,7 @@ class AtmosphereListenerTest extends GameCoreTestCase {
                         null
                 }
         ] as Broadcaster
-        MultiPlayerGameMasker masker = [
+        GameMasker masker = [
                 maskGameForPlayer: {
                     Game g, Player p ->
                         assert game.is(g)
@@ -234,7 +234,7 @@ class AtmosphereListenerTest extends GameCoreTestCase {
                         if (p == PFOUR) return mg4
                         fail("Masking for unexpected player")
                 }
-        ] as MultiPlayerGameMasker
+        ] as GameMasker
         BroadcasterFactory factory = [
                 lookup: {
                     String id ->

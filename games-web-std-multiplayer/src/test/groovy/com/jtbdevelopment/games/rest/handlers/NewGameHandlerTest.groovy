@@ -10,7 +10,7 @@ import com.jtbdevelopment.games.factory.AbstractMultiPlayerGameFactory
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.Game
 import com.jtbdevelopment.games.state.masking.AbstractMaskedMultiPlayerGame
-import com.jtbdevelopment.games.state.masking.MultiPlayerGameMasker
+import com.jtbdevelopment.games.state.masking.GameMasker
 import com.jtbdevelopment.games.state.transition.GameTransitionEngine
 import com.jtbdevelopment.games.tracking.GameEligibilityTracker
 import com.jtbdevelopment.games.tracking.PlayerGameEligibility
@@ -85,7 +85,7 @@ class NewGameHandlerTest extends GameCoreTestCase {
                         assert p.is(initiatingPlayer)
                         return maskedGame
                 }
-        ] as MultiPlayerGameMasker
+        ] as GameMasker
 
         assert maskedGame.is(handler.handleCreateNewGame(initiatingPlayer.id, players.collect { it.md5 }, features))
     }

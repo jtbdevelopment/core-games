@@ -12,7 +12,7 @@ import java.time.ZonedDateTime
  * Time: 7:20 AM
  */
 @CompileStatic
-abstract class AbstractMultiPlayerGameMasker<ID extends Serializable, FEATURES, U extends MultiPlayerGame<ID, ZonedDateTime, FEATURES>, M extends MaskedMultiPlayerGame<FEATURES>> implements MultiPlayerGameMasker<ID, U, M> {
+abstract class AbstractMultiPlayerGameMasker<ID extends Serializable, FEATURES, U extends MultiPlayerGame<ID, ZonedDateTime, FEATURES>, M extends MaskedMultiPlayerGame<FEATURES>> implements GameMasker<ID, U, M> {
     abstract protected M newMaskedGame()
 
     abstract Class<ID> getIDClass()

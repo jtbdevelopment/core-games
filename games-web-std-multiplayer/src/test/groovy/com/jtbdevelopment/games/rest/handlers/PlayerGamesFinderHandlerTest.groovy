@@ -5,7 +5,7 @@ import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.MultiPlayerGame
-import com.jtbdevelopment.games.state.masking.MultiPlayerGameMasker
+import com.jtbdevelopment.games.state.masking.GameMasker
 import org.springframework.data.domain.PageRequest
 
 import java.time.ZonedDateTime
@@ -58,7 +58,7 @@ class PlayerGamesFinderHandlerTest extends GameCoreTestCase {
                         assert player.is(PONE)
                         return maskResults[game]
                 }
-        ] as MultiPlayerGameMasker
+        ] as GameMasker
 
         assert handler.findGames(PONE.id) as Set == [masked3, masked2, masked1] as Set
     }
