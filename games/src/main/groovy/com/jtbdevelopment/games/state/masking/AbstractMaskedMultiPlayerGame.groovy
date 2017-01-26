@@ -12,8 +12,6 @@ abstract class AbstractMaskedMultiPlayerGame<FEATURES> extends AbstractMaskedGam
     String maskedForPlayerID
     String maskedForPlayerMD5
 
-    int round
-
     Long declinedTimestamp
     Long rematchTimestamp
 

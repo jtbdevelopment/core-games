@@ -22,6 +22,8 @@ abstract class AbstractGame<ID extends Serializable, FEATURES> implements Game<I
     @LastModifiedDate
     ZonedDateTime lastUpdate
 
+    int round
+
     ZonedDateTime completedTimestamp
 
     GamePhase gamePhase

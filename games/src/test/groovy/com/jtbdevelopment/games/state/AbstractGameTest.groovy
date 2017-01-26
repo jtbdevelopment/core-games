@@ -13,9 +13,15 @@ import java.lang.reflect.Field
 class AbstractGameTest extends GroovyTestCase {
     private static class StringGame extends AbstractGame<String, Object> {
         String id
+        String previousId
 
         @Override
         String getIdAsString() {
+            return id
+        }
+
+        @Override
+        String getPreviousIdAsString() {
             return id
         }
     }
@@ -76,6 +82,8 @@ class AbstractGameTest extends GroovyTestCase {
         assert game.completedTimestamp == null
         assert game.featureData.isEmpty()
         assert game.features.isEmpty()
+        assert 0 == game.round
+        assertNull game.previousId
         assertNull game.gamePhase
     }
 }

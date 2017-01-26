@@ -16,7 +16,17 @@ interface Game<ID extends Serializable, TIMESTAMP, FEATURES> {
 
     Integer getVersion()
 
-    void setVersion(final Integer version);
+    void setVersion(final Integer version)
+
+    ID getPreviousId()
+
+    String getPreviousIdAsString()
+
+    void setPreviousId(final ID previousID)
+
+    int getRound()
+
+    void setRound(final int round)
 
     TIMESTAMP getCreated()
 

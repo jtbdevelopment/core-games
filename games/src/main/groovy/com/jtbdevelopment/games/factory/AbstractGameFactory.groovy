@@ -19,6 +19,8 @@ abstract class AbstractGameFactory<IMPL extends Game> {
     protected abstract IMPL newGame()
 
     protected void copyFromPreviousGame(final IMPL previousGame, final IMPL newGame) {
+        newGame.round = previousGame.round + 1
+        newGame.previousId = (Serializable) previousGame.id
     }
 
     protected IMPL prepareGame(final IMPL game) {

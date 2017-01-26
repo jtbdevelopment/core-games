@@ -1,8 +1,7 @@
 package com.jtbdevelopment.games.state.masking
 
 import com.jtbdevelopment.games.players.Player
-import com.jtbdevelopment.games.state.MultiPlayerGame
-import com.jtbdevelopment.games.state.PlayerState
+import com.jtbdevelopment.games.state.SinglePlayerGame
 import groovy.transform.CompileStatic
 
 import java.time.ZonedDateTime
@@ -12,7 +11,7 @@ import java.time.ZonedDateTime
  * Time: 7:20 AM
  */
 @CompileStatic
-abstract class AbstractMultiPlayerGameMasker<ID extends Serializable, FEATURES, U extends MultiPlayerGame<ID, ZonedDateTime, FEATURES>, M extends MaskedMultiPlayerGame<FEATURES>> extends AbstractGameMasker<ID, FEATURES, U, M> implements GameMasker<ID, U, M> {
+abstract class AbstractSinglePlayerGameMasker<ID extends Serializable, FEATURES, U extends SinglePlayerGame<ID, ZonedDateTime, FEATURES>, M extends MaskedSinglePlayerGame<FEATURES>> extends AbstractGameMasker<ID, FEATURES, U, M> implements GameMasker<ID, U, M> {
     @Override
     M maskGameForPlayer(final U game, final Player<ID> player) {
         M playerMaskedGame = (M) super.maskGameForPlayer(game, player)
@@ -33,19 +32,9 @@ abstract class AbstractMultiPlayerGameMasker<ID extends Serializable, FEATURES, 
             final M playerMaskedGame,
             final Map<ID, Player<ID>> idMap) {
         super.copyMaskedData(game, player, playerMaskedGame, idMap)
-        playerMaskedGame.maskedForPlayerMD5 = player.md5
-        playerMaskedGame.maskedForPlayerID = player.idAsString
-        game.players.each {
-            Player<ID> p ->
-                playerMaskedGame.players[p.md5] = p.displayName
-                playerMaskedGame.playerImages[p.md5] = p.imageUrl
-                playerMaskedGame.playerProfiles[p.md5] = p.profileUrl
-        }
-        playerMaskedGame.initiatingPlayer = idMap[game.initiatingPlayer].md5
-        game.playerStates.each {
-            p, PlayerState state ->
-                playerMaskedGame.playerStates[idMap[(ID) p].md5] = state
-        }
+        playerMaskedGame.players[player.md5] = player.displayName
+        playerMaskedGame.playerImages[player.md5] = player.imageUrl
+        playerMaskedGame.playerProfiles[player.md5] = player.profileUrl
     }
 
     @SuppressWarnings("GrMethodMayBeStatic")
@@ -54,14 +43,12 @@ abstract class AbstractMultiPlayerGameMasker<ID extends Serializable, FEATURES, 
             final U game,
             final M playerMaskedGame) {
         super.copyUnmaskedData(game, playerMaskedGame)
-        playerMaskedGame.declinedTimestamp = convertTime((ZonedDateTime) game.declinedTimestamp)
-        playerMaskedGame.rematchTimestamp = convertTime((ZonedDateTime) game.rematchTimestamp)
     }
 
     @SuppressWarnings("GrMethodMayBeStatic")
     protected Map<ID, Player<ID>> createIDMap(final U game) {
         Map<ID, Player<ID>> idmap = [:]
-        game.players.each {
+        game.player.each {
             Player<ID> p ->
                 idmap[p.id] = p
         }

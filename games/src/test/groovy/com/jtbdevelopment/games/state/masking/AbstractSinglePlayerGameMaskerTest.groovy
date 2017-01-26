@@ -1,9 +1,8 @@
 package com.jtbdevelopment.games.state.masking
 
 import com.jtbdevelopment.games.players.AbstractPlayer
-import com.jtbdevelopment.games.state.AbstractMultiPlayerGame
+import com.jtbdevelopment.games.state.AbstractSinglePlayerGame
 import com.jtbdevelopment.games.state.GamePhase
-import com.jtbdevelopment.games.state.PlayerState
 
 import java.time.ZonedDateTime
 
@@ -12,7 +11,7 @@ import java.time.ZonedDateTime
  * Time: 6:30 PM
  */
 //  Not using GameCoreTestCase in order to use Integer keys as part of testing
-class AbstractMultiPlayerGameMaskerTest extends GroovyTestCase {
+class AbstractSinglePlayerGameMaskerTest extends GroovyTestCase {
     private static enum Features {
         FeatureA,
         FeatureB
@@ -33,7 +32,7 @@ class AbstractMultiPlayerGameMaskerTest extends GroovyTestCase {
         }
     }
 
-    private static class IntGame extends AbstractMultiPlayerGame<Integer, Features> {
+    private static class IntGame extends AbstractSinglePlayerGame<Integer, Features> {
         Integer id
         Integer previousId
 
@@ -48,10 +47,10 @@ class AbstractMultiPlayerGameMaskerTest extends GroovyTestCase {
         }
     }
 
-    private static class MaskedIntGame extends AbstractMaskedMultiPlayerGame<Features> {
+    private static class MaskedIntGame extends AbstractMaskedSinglePlayerGame<Features> {
     }
 
-    static class MaskedIntGameMasker extends AbstractMultiPlayerGameMasker<Integer, Features, IntGame, MaskedIntGame> {
+    static class MaskedIntGameMasker extends AbstractSinglePlayerGameMasker<Integer, Features, IntGame, MaskedIntGame> {
         @Override
         protected MaskedIntGame newMaskedGame() {
             return new MaskedIntGame()
@@ -76,21 +75,18 @@ class AbstractMultiPlayerGameMaskerTest extends GroovyTestCase {
 
     MaskedIntGameMasker masker = new MaskedIntGameMasker()
     private static IntPlayer PONE = makeSimplePlayer(1)
-    private static IntPlayer PTWO = makeSimplePlayer(1)
 
     void testMaskingSinglePlayerGame() {
         IntGame game = new IntGame(
                 gamePhase: GamePhase.Quit,
-                players: [PONE],
+                player: PONE,
                 created: ZonedDateTime.now(),
                 completedTimestamp: ZonedDateTime.now(),
-                declinedTimestamp: ZonedDateTime.now(),
                 featureData: [(Features.FeatureA): ""],
                 features: [Features.FeatureA, Features.FeatureB] as Set,
+                previousId: 100,
                 id: 101,
-                initiatingPlayer: PONE.id,
                 lastUpdate: ZonedDateTime.now(),
-                playerStates: [(PONE.id): PlayerState.Accepted],
                 version: 10,
         )
 
@@ -100,48 +96,15 @@ class AbstractMultiPlayerGameMaskerTest extends GroovyTestCase {
         assert maskedGame.players == [(PONE.md5): PONE.displayName]
         assert maskedGame.playerImages == [(PONE.md5): PONE.imageUrl]
         assert maskedGame.playerProfiles == [(PONE.md5): PONE.profileUrl]
-        assert maskedGame.initiatingPlayer == PONE.md5
-        assert maskedGame.playerStates == [(PONE.md5): PlayerState.Accepted]
-        assert maskedGame.maskedForPlayerID == PONE.idAsString
-        assert maskedGame.maskedForPlayerMD5 == PONE.md5
         assert maskedGame.featureData == game.featureData
-    }
-
-    void testMultiplePlayersWithSomePlayerIDFeatureData() {
-        IntGame game = new IntGame(
-                players: [PONE, PTWO],
-                gamePhase: GamePhase.Challenged,
-                created: ZonedDateTime.now(),
-                completedTimestamp: ZonedDateTime.now(),
-                declinedTimestamp: ZonedDateTime.now(),
-                featureData: [(Features.FeatureA): "", (Features.FeatureB): PTWO.id],
-                features: [Features.FeatureA, Features.FeatureB] as Set,
-                id: 105,
-                initiatingPlayer: PTWO.id,
-                lastUpdate: ZonedDateTime.now(),
-                playerStates: [(PONE.id): PlayerState.Accepted, (PTWO.id): PlayerState.Rejected],
-                version: 10,
-        )
-
-        MaskedIntGame maskedGame = masker.maskGameForPlayer(game, PONE)
-        checkUnmaskedGameFields(maskedGame, game)
-
-        assert maskedGame.players == [(PONE.md5): PONE.displayName, (PTWO.md5): PTWO.displayName]
-        assert maskedGame.playerImages == [(PONE.md5): PONE.imageUrl, (PTWO.md5): PTWO.imageUrl]
-        assert maskedGame.playerProfiles == [(PONE.md5): PONE.profileUrl, (PTWO.md5): PTWO.profileUrl]
-        assert maskedGame.initiatingPlayer == PTWO.md5
-        assert maskedGame.playerStates == [(PONE.md5): PlayerState.Accepted, (PTWO.md5): PlayerState.Rejected]
-        assert maskedGame.maskedForPlayerID == PONE.idAsString
-        assert maskedGame.maskedForPlayerMD5 == PONE.md5
     }
 
 
     protected static void checkUnmaskedGameFields(MaskedIntGame maskedGame, IntGame game) {
         assert maskedGame.id == game.idAsString
+        assert game.previousIdAsString == maskedGame.previousId
         assert maskedGame.completedTimestamp == (game.completedTimestamp ? game.completedTimestamp.toInstant().toEpochMilli() : null)
         assert maskedGame.created == (game.created ? game.created.toInstant().toEpochMilli() : null)
-        assert maskedGame.declinedTimestamp == (game.declinedTimestamp ? game.declinedTimestamp.toInstant().toEpochMilli() : null)
-        assert maskedGame.rematchTimestamp == (game.rematchTimestamp ? game.rematchTimestamp.toInstant().toEpochMilli() : null)
         assert maskedGame.lastUpdate == (game.lastUpdate ? game.lastUpdate.toInstant().toEpochMilli() : null)
         assert maskedGame.features == game.features
         assert maskedGame.gamePhase == game.gamePhase

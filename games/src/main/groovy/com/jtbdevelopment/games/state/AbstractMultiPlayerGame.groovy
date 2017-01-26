@@ -11,8 +11,6 @@ import java.time.ZonedDateTime
  */
 @CompileStatic
 abstract class AbstractMultiPlayerGame<ID extends Serializable, FEATURES> extends AbstractGame<ID, FEATURES> implements MultiPlayerGame<ID, ZonedDateTime, FEATURES> {
-    int round;
-    ID previousId
     ID initiatingPlayer
     List<Player<ID>> players = []
     Map<ID, PlayerState> playerStates = [:]

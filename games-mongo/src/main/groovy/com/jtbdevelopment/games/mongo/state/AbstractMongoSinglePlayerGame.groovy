@@ -21,7 +21,13 @@ abstract class AbstractMongoSinglePlayerGame<FEATURES> extends AbstractSinglePla
     @Id
     ObjectId id
 
+    ObjectId previousId
+
     String getIdAsString() {
         return id?.toHexString()
+    }
+
+    String getPreviousIdAsString() {
+        return previousId?.toHexString()
     }
 }

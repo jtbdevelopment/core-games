@@ -10,7 +10,10 @@ import groovy.transform.CompileStatic
 @CompileStatic
 abstract class AbstractMaskedGame<FEATURES> implements MaskedGame<FEATURES> {
     String id
+    String previousId
     Integer version
+
+    int round
 
     Long created
     Long lastUpdate
@@ -30,6 +33,12 @@ abstract class AbstractMaskedGame<FEATURES> implements MaskedGame<FEATURES> {
         return id
     }
 
+    @Override
+    String getPreviousIdAsString() {
+        return previousId
+    }
+
+    @SuppressWarnings("GroovyUnusedDeclaration")
     void setIdAsString(final String id) {
 
     }

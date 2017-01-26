@@ -9,6 +9,10 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 interface MaskedGame<FEATURES> extends Game<String, Long, FEATURES> {
+    int getRound()
+
+    void setRound(final int round)
+
     Map<String, String> getPlayers()
 
     void setPlayers(final Map<String, String> players)

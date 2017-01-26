@@ -37,6 +37,13 @@ abstract class GameCoreTestCase extends GroovyTestCase {
         String getIdAsString() {
             return id
         }
+
+        String previousId
+
+        @Override
+        String getPreviousIdAsString() {
+            return previousId
+        }
     }
 
     static class StringSPGame extends AbstractSinglePlayerGame<String, Object> {
@@ -46,6 +53,13 @@ abstract class GameCoreTestCase extends GroovyTestCase {
         String getIdAsString() {
             return id
         }
+
+        String previousId
+
+        @Override
+        String getPreviousIdAsString() {
+            return previousId
+        }
     }
 
     static class StringMPGame extends AbstractMultiPlayerGame<String, Object> implements Cloneable {
@@ -54,6 +68,13 @@ abstract class GameCoreTestCase extends GroovyTestCase {
         @Override
         String getIdAsString() {
             return id
+        }
+
+        String previousId
+
+        @Override
+        String getPreviousIdAsString() {
+            return previousId
         }
     }
 

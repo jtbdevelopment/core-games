@@ -9,9 +9,6 @@ import groovy.transform.CompileStatic
 @CompileStatic
 interface MaskedSinglePlayerGame<FEATURES> extends MaskedGame<FEATURES> {
     /*  TODO - review if any of these should move to common
-    int getRound()
-
-    void setRound(final int round)
 
     String getMaskedForPlayerID()
 

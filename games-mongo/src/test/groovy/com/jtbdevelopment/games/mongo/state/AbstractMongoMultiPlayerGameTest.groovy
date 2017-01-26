@@ -18,14 +18,19 @@ class AbstractMongoMultiPlayerGameTest extends GroovyTestCase {
 
     void testIdAsString() {
         ObjectId id = new ObjectId()
-        AGame game = new AGame(id: id)
+        ObjectId previous = new ObjectId()
+        AGame game = new AGame(id: id, previousId: previous)
         assert id.is(game.id)
         assert id.toHexString() == game.idAsString
+        assert previous.is(game.previousId)
+        assert previous.toHexString() == game.previousIdAsString
     }
 
     void testIdAsStringNullId() {
         AGame game = new AGame()
         assertNull game.id
         assertNull game.idAsString
+        assertNull game.previousId
+        assertNull game.previousIdAsString
     }
 }

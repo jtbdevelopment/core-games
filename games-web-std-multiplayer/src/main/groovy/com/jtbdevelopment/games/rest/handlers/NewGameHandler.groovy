@@ -39,7 +39,7 @@ class NewGameHandler extends AbstractHandler {
     @Autowired(required = false)
     protected GameEligibilityTracker gameTracker
 
-    public Game handleCreateNewGame(
+    Game handleCreateNewGame(
             final Serializable initiatingPlayerID,
             final List<String> playersIDs,
             final Set<?> features) {

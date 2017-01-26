@@ -11,7 +11,7 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 abstract class AbstractSinglePlayerGameFactory<IMPL extends SinglePlayerGame, FEATURES> extends AbstractGameFactory<IMPL> implements SinglePlayerGameFactory<IMPL, FEATURES> {
-    public IMPL createGame(
+    IMPL createGame(
             final Set<FEATURES> features,
             final Player player) {
         IMPL game = createFreshGame(features, player)
@@ -20,7 +20,7 @@ abstract class AbstractSinglePlayerGameFactory<IMPL extends SinglePlayerGame, FE
         game
     }
 
-    public IMPL createGame(final IMPL previousGame) {
+    IMPL createGame(final IMPL previousGame) {
         IMPL game = createFreshGame(previousGame.features, previousGame.player)
         copyFromPreviousGame(previousGame, game)
         prepareGame(game)

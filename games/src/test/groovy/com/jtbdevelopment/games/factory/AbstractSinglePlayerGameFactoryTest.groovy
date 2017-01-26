@@ -17,7 +17,7 @@ class AbstractSinglePlayerGameFactoryTest extends GameCoreTestCase {
         }
     }
 
-    public void testCreatingNewGame() {
+    void testCreatingNewGame() {
         int validatorsCalled = 0
         int initializersCalled = 0
         def initializer = [initializeGame: { initializersCalled++ }] as GameInitializer
@@ -46,7 +46,7 @@ class AbstractSinglePlayerGameFactoryTest extends GameCoreTestCase {
     }
 
 
-    public void testCreatingRematchGame() {
+    void testCreatingRematchGame() {
         int validatorsCalled = 0
         int initializersCalled = 0
         def initializer = [initializeGame: { initializersCalled++ }] as GameInitializer
@@ -75,10 +75,12 @@ class AbstractSinglePlayerGameFactoryTest extends GameCoreTestCase {
         assert game.created == null
         assert GamePhase.Setup == game.gamePhase
         assertNull game.version
+        assert game.round == (priorGame.round + 1)
+        assert game.previousId == priorGame.id
     }
 
 
-    public void testErrorOnValidationFail() {
+    void testErrorOnValidationFail() {
         int validatorsCalled = 0
         def validator = [
                 validateGame: { validatorsCalled++; false },

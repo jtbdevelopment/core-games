@@ -12,7 +12,7 @@ import groovy.transform.CompileStatic
 @CompileStatic
 abstract class AbstractMultiPlayerGameFactory<IMPL extends MultiPlayerGame, FEATURES> extends AbstractGameFactory<IMPL> implements MultiPlayerGameFactory<IMPL, FEATURES> {
 
-    public IMPL createGame(
+    IMPL createGame(
             final Set<FEATURES> features,
             final List<Player> players,
             final Player initiatingPlayer) {
@@ -25,11 +25,9 @@ abstract class AbstractMultiPlayerGameFactory<IMPL extends MultiPlayerGame, FEAT
     @Override
     protected void copyFromPreviousGame(final IMPL previousGame, final IMPL newGame) {
         super.copyFromPreviousGame(previousGame, newGame)
-        newGame.round = previousGame.round + 1
-        newGame.previousId = (Serializable) previousGame.id
     }
 
-    public IMPL createGame(final IMPL previousGame, final Player initiatingPlayer) {
+    IMPL createGame(final IMPL previousGame, final Player initiatingPlayer) {
         List<Player> players = rotatePlayers(previousGame)
         IMPL game = createFreshGame(previousGame.features, players, initiatingPlayer)
         copyFromPreviousGame(previousGame, game)

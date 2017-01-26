@@ -7,10 +7,16 @@ package com.jtbdevelopment.games.state
 class AbstractMultiPlayerGameTest extends GroovyTestCase {
     private static class IntegerMultiPlayerGame extends AbstractMultiPlayerGame<Integer, Object> {
         Integer id
+        Integer previousId
 
         @Override
         String getIdAsString() {
             return id?.toString()
+        }
+
+        @Override
+        String getPreviousIdAsString() {
+            return previousId?.toString()
         }
     }
 

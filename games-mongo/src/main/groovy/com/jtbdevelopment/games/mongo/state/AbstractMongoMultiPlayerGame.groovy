@@ -21,7 +21,15 @@ abstract class AbstractMongoMultiPlayerGame<FEATURES> extends AbstractMultiPlaye
     @Id
     ObjectId id
 
+    ObjectId previousId
+
+    @Override
     String getIdAsString() {
         return id?.toHexString()
+    }
+
+    @Override
+    String getPreviousIdAsString() {
+        return previousId?.toHexString()
     }
 }

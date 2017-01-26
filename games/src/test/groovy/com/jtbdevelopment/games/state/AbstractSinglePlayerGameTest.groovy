@@ -7,10 +7,16 @@ package com.jtbdevelopment.games.state
 class AbstractSinglePlayerGameTest extends GroovyTestCase {
     private static class FloatSinglePlayerGame extends AbstractSinglePlayerGame<Float, Object> {
         Float id
+        Float previousId
 
         @Override
         String getIdAsString() {
             return id?.toString()
+        }
+
+        @Override
+        String getPreviousIdAsString() {
+            return previousId?.toString()
         }
     }
 
