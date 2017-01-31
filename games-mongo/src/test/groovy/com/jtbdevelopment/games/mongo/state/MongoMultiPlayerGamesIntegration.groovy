@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.mongo.state
 
-import com.jtbdevelopment.core.mongo.spring.AbstractMongoIntegration
+import com.jtbdevelopment.core.mongo.spring.AbstractCoreMongoConfiguration
+import com.jtbdevelopment.core.mongo.spring.AbstractMongoNoSpringContextIntegration
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.caching.CacheConstants
 import com.jtbdevelopment.games.mongo.dao.MongoPlayerRepository
@@ -11,15 +12,23 @@ import com.jtbdevelopment.games.state.Game
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.PlayerState
 import com.mongodb.DBCollection
+import org.junit.AfterClass
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.Cache
 import org.springframework.cache.CacheManager
+import org.springframework.context.ApplicationContext
+import org.springframework.context.annotation.*
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.data.mongodb.config.EnableMongoAuditing
 import org.springframework.data.mongodb.core.MongoOperations
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
+import org.springframework.social.connect.support.ConnectionFactoryRegistry
 
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -28,7 +37,46 @@ import java.time.ZonedDateTime
  * Date: 1/10/15
  * Time: 2:35 PM
  */
-class MongoMultiPlayerGamesIntegration extends AbstractMongoIntegration {
+class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringContextIntegration {
+    @Configuration
+    @EnableMongoRepositories(
+            basePackages = ["com.jtbdevelopment"],
+            excludeFilters = [
+                    @ComponentScan.Filter(
+                            type = FilterType.REGEX,
+                            pattern = ["com.jtbdevelopment.games.mongo.state.utility.SimpleSinglePlayerGameRepository"]
+                    ),
+            ]
+    )
+
+    @EnableMongoAuditing
+    @ComponentScan(
+            basePackages = ['com.jtbdevelopment'],
+            excludeFilters = [
+                    @ComponentScan.Filter(type = FilterType.REGEX, pattern = [
+                            "com.jtbdevelopment.core.mongo.spring.social.dao.*IntegrationSocialConfiguration",
+                            "com.jtbdevelopment.*.*MongoSinglePlayerGameIntegrationConfiguration",
+                            "com.jtbdevelopment.*.*MongoPlayerIntegrationConfiguration",
+                            "com.jtbdevelopment.*.*CoreSpringConfiguration",
+                            "com.jtbdevelopment.*.*MongoConfiguration"
+                    ])
+            ]
+    )
+    static class MongoMultiPlayerGameIntegrationConfiguration extends AbstractCoreMongoConfiguration {
+        @Bean
+        @Autowired
+        ConnectionFactoryRegistry connectionFactoryLocator() {
+            ConnectionFactoryRegistry registry = new ConnectionFactoryRegistry()
+            return registry
+        }
+
+        @Override
+        protected String getMappingBasePackage() {
+            Package mappingBasePackage = getClass().getPackage();
+            return mappingBasePackage == null ? null : mappingBasePackage.getName();
+        }
+    }
+
     private static final String GAMES_COLLECTION_NAME = 'multi'
     private DBCollection collection
     private ZoneId GMT = ZoneId.of("GMT")
@@ -39,6 +87,20 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoIntegration {
     CacheManager cacheManager
     Cache cache
     ZonedDateTime start
+    static ApplicationContext context
+
+    @SuppressWarnings("GroovyUnusedDeclaration")
+    @BeforeClass
+    static void setupAll() {
+        setupMongo()
+        context = new AnnotationConfigApplicationContext(MongoMultiPlayerGameIntegrationConfiguration.class)
+    }
+
+    @SuppressWarnings("GroovyUnusedDeclaration")
+    @AfterClass
+    static void tearDownAll() {
+        tearDownMongo()
+    }
 
     @Before
     void setup() {
@@ -189,7 +251,7 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoIntegration {
 
         Sort sort = new Sort(Sort.Direction.DESC, ["lastUpdate", "created"])
         PageRequest page = new PageRequest(0, 20, sort)
-        List<SimpleMultiPlayerGame> by = (List<SimpleMultiPlayerGame>) gameRepository.findByPlayersIdAndGamePhaseAndLastUpdateGreaterThan(player1.id, GamePhase.Playing, p1g1.created.minusDays(1), page)
+        List<SimpleMultiPlayerGame> by = (List<SimpleMultiPlayerGame>) gameRepository.findByPlayersIdAndGamePhaseAndLastUpdateGreaterThan(player1.id, GamePhase.Playing, ((ZonedDateTime) p1g1.created).minusDays(1), page)
         assert 2 == by.size()
         assert by.contains(p1g1)
         assert by.contains(p1g2)

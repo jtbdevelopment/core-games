@@ -31,10 +31,10 @@ class GamePublicationTracker implements Serializable {
     }
 
     @Override
-    public String toString() {
+    String toString() {
         return "GamePublicationTracker{" +
                 "pid=" + pid +
                 ", gid=" + gid +
-                '}';
+                '}'
     }
 }

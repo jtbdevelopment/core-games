@@ -6,7 +6,7 @@ import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.push.PushProperties
 import com.jtbdevelopment.games.push.notifications.GamePublicationTracker
 import com.jtbdevelopment.games.push.notifications.PushNotifierFilter
-import com.jtbdevelopment.games.state.MultiPlayerGame
+import com.jtbdevelopment.games.state.Game
 import com.jtbdevelopment.games.websocket.WebSocketPublicationListener
 import groovy.transform.CompileStatic
 import org.slf4j.Logger
@@ -68,7 +68,7 @@ class PushWebSocketPublicationListener implements WebSocketPublicationListener {
     }
 
     @Override
-    void publishedGameUpdateToPlayer(final Player player, final MultiPlayerGame game, final boolean published) {
+    void publishedGameUpdateToPlayer(final Player player, final Game game, final boolean published) {
         if (pushProperties.enabled && player.registeredDevices.find {
             it.lastRegistered > registeredCutoff
         }) {

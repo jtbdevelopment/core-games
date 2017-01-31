@@ -23,5 +23,6 @@ class AbstractMaskedGameTest extends GroovyTestCase {
         assertNull game.lastUpdate
         assertNull game.version
         assert game.id == ID
+        assertNull game.allPlayers
     }
 }

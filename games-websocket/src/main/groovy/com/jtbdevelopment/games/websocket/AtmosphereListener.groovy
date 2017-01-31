@@ -5,7 +5,7 @@ import com.jtbdevelopment.games.dao.StringToIDConverter
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.publish.GameListener
 import com.jtbdevelopment.games.publish.PlayerListener
-import com.jtbdevelopment.games.state.MultiPlayerGame
+import com.jtbdevelopment.games.state.Game
 import com.jtbdevelopment.games.state.masking.GameMasker
 import groovy.transform.CompileStatic
 import org.atmosphere.cpr.Broadcaster
@@ -30,7 +30,7 @@ import java.util.concurrent.Executors
  */
 @Component
 @CompileStatic
-class AtmosphereListener implements GameListener<MultiPlayerGame>, PlayerListener {
+class AtmosphereListener implements GameListener<Game>, PlayerListener {
     private static final Logger logger = LoggerFactory.getLogger(AtmosphereListener.class)
 
     @Value('${atmosphere.LRU.seconds:300}')
@@ -156,10 +156,10 @@ class AtmosphereListener implements GameListener<MultiPlayerGame>, PlayerListene
     }
 
     @Override
-    void gameChanged(final MultiPlayerGame game, final Player initiatingPlayer, final boolean initiatingServer) {
+    void gameChanged(final Game game, final Player initiatingPlayer, final boolean initiatingServer) {
         if (broadcasterFactory.broadcasterFactory) {
             try {
-                Collection<Player> players = game.players.findAll {
+                Collection<Player> players = game.allPlayers.findAll {
                     Player p ->
                         initiatingPlayer == null || p != initiatingPlayer
                 }
@@ -186,7 +186,7 @@ class AtmosphereListener implements GameListener<MultiPlayerGame>, PlayerListene
         }
     }
 
-    private boolean publishGameToPlayer(final Player player, final MultiPlayerGame game) {
+    private boolean publishGameToPlayer(final Player player, final Game game) {
         logger.trace("Publishing game update on game " + game.id + " to player " + player.id)
         boolean status = false
         try {

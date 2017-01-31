@@ -14,8 +14,8 @@ import java.util.concurrent.TimeUnit
  * Date: 12/8/14
  * Time: 7:11 PM
  */
-class MultiPlayerGamePublisherImplTest extends GameCoreTestCase {
-    MultiPlayerGamePublisherImpl publisher = new MultiPlayerGamePublisherImpl()
+class GamePublisherImplTest extends GameCoreTestCase {
+    GamePublisherImpl publisher = new GamePublisherImpl()
 
     void testCreatesExecutorService() {
         publisher.threads = 20

@@ -1,7 +1,7 @@
 package com.jtbdevelopment.games.websocket
 
 import com.jtbdevelopment.games.players.Player
-import com.jtbdevelopment.games.state.MultiPlayerGame
+import com.jtbdevelopment.games.state.Game
 import groovy.transform.CompileStatic
 
 /**
@@ -12,5 +12,5 @@ import groovy.transform.CompileStatic
 interface WebSocketPublicationListener {
     void publishedPlayerUpdate(final Player player, boolean status)
 
-    void publishedGameUpdateToPlayer(final Player player, final MultiPlayerGame game, boolean status)
+    void publishedGameUpdateToPlayer(final Player player, final Game game, boolean status)
 }

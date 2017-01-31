@@ -17,4 +17,9 @@ abstract class AbstractMultiPlayerGame<ID extends Serializable, FEATURES> extend
 
     ZonedDateTime declinedTimestamp
     ZonedDateTime rematchTimestamp
+
+    @Override
+    List<Player<ID>> getAllPlayers() {
+        return players
+    }
 }

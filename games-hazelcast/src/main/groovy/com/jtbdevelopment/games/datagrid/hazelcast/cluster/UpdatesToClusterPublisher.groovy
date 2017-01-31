@@ -25,7 +25,7 @@ class UpdatesToClusterPublisher extends AbstractUpdatesToClusterPublisher {
     ITopic topic
 
     @PostConstruct
-    public void setup() {
+    void setup() {
         topic = hazelcastInstance.getTopic(PUB_SUB_TOPIC)
     }
 

@@ -1,5 +1,6 @@
 package com.jtbdevelopment.games.state.masking
 
+import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.GamePhase
 import groovy.transform.CompileStatic
 
@@ -41,5 +42,10 @@ abstract class AbstractMaskedGame<FEATURES> implements MaskedGame<FEATURES> {
     @SuppressWarnings("GroovyUnusedDeclaration")
     void setIdAsString(final String id) {
 
+    }
+
+    @Override
+    List<Player<String>> getAllPlayers() {
+        null
     }
 }

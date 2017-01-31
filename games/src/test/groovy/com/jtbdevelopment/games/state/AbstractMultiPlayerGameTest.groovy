@@ -1,5 +1,7 @@
 package com.jtbdevelopment.games.state
 
+import com.jtbdevelopment.games.players.Player
+
 /**
  * Date: 1/7/15
  * Time: 6:54 AM
@@ -27,5 +29,13 @@ class AbstractMultiPlayerGameTest extends GroovyTestCase {
         assert game.playerStates.isEmpty()
         assertNull game.declinedTimestamp
         assertNull game.rematchTimestamp
+    }
+
+    void testAllPlayers() {
+        def p1 = [] as Player
+        def p2 = [] as Player
+        IntegerMultiPlayerGame game = new IntegerMultiPlayerGame(players: [p1, p2])
+        assert [p1, p2] == game.players
+        assert [p1, p2] == game.allPlayers
     }
 }

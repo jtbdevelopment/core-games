@@ -3,7 +3,7 @@ package com.jtbdevelopment.games.publish.cluster
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.publish.GameListener
 import com.jtbdevelopment.games.publish.PlayerListener
-import com.jtbdevelopment.games.state.MultiPlayerGame
+import com.jtbdevelopment.games.state.Game
 import groovy.transform.CompileStatic
 
 /**
@@ -11,12 +11,12 @@ import groovy.transform.CompileStatic
  * Time: 7:10 AM
  */
 @CompileStatic
-abstract class AbstractUpdatesToClusterPublisher implements GameListener<MultiPlayerGame>, PlayerListener {
+abstract class AbstractUpdatesToClusterPublisher implements GameListener<Game>, PlayerListener {
 
     abstract protected void internalPublish(final ClusterMessage clusterMessage)
 
     @Override
-    void gameChanged(final MultiPlayerGame game, final Player initiatingPlayer, final boolean initiatingServer) {
+    void gameChanged(final Game game, final Player initiatingPlayer, final boolean initiatingServer) {
         if (initiatingServer) {
             internalPublish(new ClusterMessage(
                     gameId: game.idAsString,

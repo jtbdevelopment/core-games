@@ -54,7 +54,7 @@ class PushNotifier {
     AbstractPlayerRepository playerRepository
 
     @Autowired
-    public void setup() {
+    void setup() {
         client.register(
                 new JacksonJaxbJsonProvider(
                         objectMapper,

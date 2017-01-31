@@ -26,7 +26,7 @@ class UpdatesFromClusterListener extends AbstractUpdatesFromClusterListener impl
     ITopic topic
 
     @PostConstruct
-    public void setup() {
+    void setup() {
         topic = hazelcastInstance.getTopic(UpdatesToClusterPublisher.PUB_SUB_TOPIC)
         topic.addMessageListener(this)
     }

@@ -196,6 +196,9 @@ class AtmosphereListenerTest extends GameCoreTestCase {
                 },
                 getPlayers: {
                     [PONE, PTWO, PTHREE, PFOUR]
+                },
+                getAllPlayers: {
+                    [PONE, PTWO, PTHREE, PFOUR]
                 }
         ] as MultiPlayerGame
         boolean p2pub = false

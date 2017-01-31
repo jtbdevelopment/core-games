@@ -1,5 +1,7 @@
 package com.jtbdevelopment.games.state
 
+import com.jtbdevelopment.games.players.Player
+
 /**
  * Date: 1/7/15
  * Time: 6:57 AM
@@ -24,5 +26,14 @@ class AbstractSinglePlayerGameTest extends GroovyTestCase {
         FloatSinglePlayerGame game = new FloatSinglePlayerGame()
 
         assert game.player == null
+    }
+
+    void testGetPlayers() {
+        def player = [
+
+        ] as Player
+        FloatSinglePlayerGame game = new FloatSinglePlayerGame(player: player)
+
+        assert [player] == game.allPlayers
     }
 }

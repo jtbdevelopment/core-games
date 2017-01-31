@@ -13,23 +13,18 @@ import groovy.transform.CompileStatic
 @CompileStatic
 interface MultiPlayerGame<ID extends Serializable, TIMESTAMP, FEATURES> extends Game<ID, TIMESTAMP, FEATURES> {
     ID getInitiatingPlayer()
-
     void setInitiatingPlayer(final ID initiatingPlayer)
 
     //  Order list potentially
     List<Player<ID>> getPlayers()
-
     void setPlayers(final List<Player<ID>> players)
 
     Map<ID, PlayerState> getPlayerStates()
-
     void setPlayerStates(final Map<ID, PlayerState> playerState)
 
     TIMESTAMP getDeclinedTimestamp()
-
     void setDeclinedTimestamp(final TIMESTAMP declinedTimestamp)
 
     TIMESTAMP getRematchTimestamp()
-
     void setRematchTimestamp(final TIMESTAMP rematchTimestamp)
 }

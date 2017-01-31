@@ -1,12 +1,12 @@
 package com.jtbdevelopment.games.publish.cluster
 
-import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
+import com.jtbdevelopment.games.dao.AbstractGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.dao.StringToIDConverter
 import com.jtbdevelopment.games.events.GamePublisher
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.publish.PlayerPublisher
-import com.jtbdevelopment.games.state.MultiPlayerGame
+import com.jtbdevelopment.games.state.Game
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 
@@ -29,19 +29,19 @@ abstract class AbstractUpdatesFromClusterListener {
     StringToIDConverter<? extends Serializable> stringToIDConverter
 
     @Autowired(required = false)
-    AbstractMultiPlayerGameRepository gameRepository
+    AbstractGameRepository gameRepository
 
     protected void receiveClusterMessage(final ClusterMessage clusterMessage) {
         switch (clusterMessage.clusterMessageType) {
             case ClusterMessage.ClusterMessageType.GameUpdate:
                 receivePublishGame(clusterMessage.gameId, clusterMessage.playerId)
-                break;
+                break
             case ClusterMessage.ClusterMessageType.PlayerUpdate:
                 receivePublishPlayer(clusterMessage.playerId)
-                break;
+                break
             case ClusterMessage.ClusterMessageType.AllPlayersUpdate:
                 receivePublishAllPlayers()
-                break;
+                break
         }
     }
 
@@ -60,7 +60,7 @@ abstract class AbstractUpdatesFromClusterListener {
         if (gameRepository) {
             Player p = (Player) playerRepository.findOne(stringToIDConverter.convert(playerId))
             if (!playerId || p) {
-                MultiPlayerGame g = (MultiPlayerGame) gameRepository.findOne(stringToIDConverter.convert(gameId))
+                Game g = gameRepository.findOne(stringToIDConverter.convert(gameId))
                 if (g != null) {
                     gamePublisher.publish(g, p, false)
                 }

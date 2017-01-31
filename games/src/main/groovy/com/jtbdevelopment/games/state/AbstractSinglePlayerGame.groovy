@@ -12,4 +12,8 @@ import java.time.ZonedDateTime
 @CompileStatic
 abstract class AbstractSinglePlayerGame<ID extends Serializable, FEATURES> extends AbstractGame<ID, FEATURES> implements SinglePlayerGame<ID, ZonedDateTime, FEATURES> {
     Player<ID> player
+
+    List<Player<ID>> getAllPlayers() {
+        return [player]
+    }
 }

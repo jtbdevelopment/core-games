@@ -10,7 +10,7 @@ import org.bson.types.ObjectId
 class ObjectIdSerializerTest extends GroovyTestCase {
     private ObjectIdSerializer serializer = new ObjectIdSerializer()
 
-    public void testSerializesHexString() {
+    void testSerializesHexString() {
         ObjectId id = new ObjectId()
         def jgen = [
                 writeString: {

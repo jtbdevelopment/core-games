@@ -44,6 +44,11 @@ abstract class GameCoreTestCase extends GroovyTestCase {
         String getPreviousIdAsString() {
             return previousId
         }
+
+        @Override
+        List<Player<String>> getAllPlayers() {
+            null
+        }
     }
 
     static class StringSPGame extends AbstractSinglePlayerGame<String, Object> {

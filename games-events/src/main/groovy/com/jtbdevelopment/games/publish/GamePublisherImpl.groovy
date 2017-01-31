@@ -2,7 +2,7 @@ package com.jtbdevelopment.games.publish
 
 import com.jtbdevelopment.games.events.GamePublisher
 import com.jtbdevelopment.games.players.Player
-import com.jtbdevelopment.games.state.MultiPlayerGame
+import com.jtbdevelopment.games.state.Game
 import groovy.transform.CompileStatic
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -22,8 +22,8 @@ import java.util.concurrent.Executors
 @Component
 @Lazy
 @CompileStatic
-class MultiPlayerGamePublisherImpl implements GamePublisher<MultiPlayerGame> {
-    private static final Logger logger = LoggerFactory.getLogger(MultiPlayerGamePublisherImpl.class)
+class GamePublisherImpl implements GamePublisher<Game> {
+    private static final Logger logger = LoggerFactory.getLogger(GamePublisherImpl.class)
 
     @Autowired(required = false)
     List<GameListener> subscribers
@@ -39,12 +39,12 @@ class MultiPlayerGamePublisherImpl implements GamePublisher<MultiPlayerGame> {
         service = Executors.newFixedThreadPool(threads)
     }
 
-    MultiPlayerGame publish(final MultiPlayerGame game, final Player initiatingPlayer) {
+    Game publish(final Game game, final Player initiatingPlayer) {
         return publish(game, initiatingPlayer, true)
     }
 
     //  Returns game primarily to allow easy chaining
-    MultiPlayerGame publish(final MultiPlayerGame game, final Player initiatingPlayer, boolean initiatingServer) {
+    Game publish(final Game game, final Player initiatingPlayer, boolean initiatingServer) {
         service.execute(new Runnable() {
             @Override
             void run() {

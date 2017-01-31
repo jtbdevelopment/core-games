@@ -1,7 +1,8 @@
 package com.jtbdevelopment.games.mongo.players
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.jtbdevelopment.core.mongo.spring.AbstractMongoIntegration
+import com.jtbdevelopment.core.mongo.spring.AbstractCoreMongoConfiguration
+import com.jtbdevelopment.core.mongo.spring.AbstractMongoNoSpringContextIntegration
 import com.jtbdevelopment.games.dao.caching.CacheConstants
 import com.jtbdevelopment.games.mongo.dao.MongoPlayerRepository
 import com.jtbdevelopment.games.players.Player
@@ -10,15 +11,23 @@ import com.jtbdevelopment.games.players.notifications.RegisteredDevice
 import com.mongodb.DBCollection
 import groovy.transform.CompileStatic
 import org.bson.types.ObjectId
+import org.junit.AfterClass
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.CacheManager
+import org.springframework.context.ApplicationContext
+import org.springframework.context.annotation.*
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.data.mongodb.config.EnableMongoAuditing
 import org.springframework.data.mongodb.core.MongoOperations
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
+import org.springframework.social.connect.support.ConnectionFactoryRegistry
 
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -28,7 +37,46 @@ import java.time.ZonedDateTime
  * Time: 3:09 PM
  */
 @CompileStatic
-class MongoPlayerIntegration extends AbstractMongoIntegration {
+class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
+    @Configuration
+    @EnableMongoRepositories(
+            basePackages = ["com.jtbdevelopment"],
+            excludeFilters = [
+                    @ComponentScan.Filter(
+                            type = FilterType.REGEX,
+                            pattern = ["com.jtbdevelopment.games.mongo.state.utility.SimpleMultiPlayerGameRepository"]
+                    ),
+            ]
+    )
+
+    @EnableMongoAuditing
+    @ComponentScan(
+            basePackages = ['com.jtbdevelopment'],
+            excludeFilters = [
+                    @ComponentScan.Filter(type = FilterType.REGEX, pattern = [
+                            "com.jtbdevelopment.core.mongo.spring.social.dao.*IntegrationSocialConfiguration",
+                            "com.jtbdevelopment.*.*MongoMultiPlayerGameIntegrationConfiguration",
+                            "com.jtbdevelopment.*.*MongoSinglePlayerGameIntegrationConfiguration",
+                            "com.jtbdevelopment.*.*CoreSpringConfiguration",
+                            "com.jtbdevelopment.*.*MongoConfiguration"
+                    ])
+            ]
+    )
+    static class MongoPlayerIntegrationConfiguration extends AbstractCoreMongoConfiguration {
+        @Bean
+        @Autowired
+        ConnectionFactoryRegistry connectionFactoryLocator() {
+            ConnectionFactoryRegistry registry = new ConnectionFactoryRegistry()
+            return registry
+        }
+
+        @Override
+        protected String getMappingBasePackage() {
+            Package mappingBasePackage = getClass().getPackage();
+            return mappingBasePackage == null ? null : mappingBasePackage.getName();
+        }
+    }
+
     private static final String PLAYER_COLLECTION_NAME = 'player'
     private DBCollection collection
 
@@ -37,6 +85,7 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
     MongoManualPlayer manualPlayer
     MongoSystemPlayer systemPlayer
     CacheManager cacheManager
+    static ApplicationContext context
 
     protected MongoPlayer makeSimplePlayer(final String id, final boolean disabled = false) {
         return (MongoPlayer) playerRepository.save(new MongoPlayer(
@@ -48,6 +97,19 @@ class MongoPlayerIntegration extends AbstractMongoIntegration {
                 lastLogin: ZonedDateTime.now(ZoneId.of("GMT")),
                 imageUrl: "http://somewhere.com/image/" + id,
                 profileUrl: "http://somewhere.com/profile/" + id))
+    }
+
+    @SuppressWarnings("GroovyUnusedDeclaration")
+    @BeforeClass
+    static void setupAll() {
+        setupMongo()
+        context = new AnnotationConfigApplicationContext(MongoPlayerIntegrationConfiguration.class)
+    }
+
+    @SuppressWarnings("GroovyUnusedDeclaration")
+    @AfterClass
+    static void tearDownAll() {
+        tearDownMongo()
     }
 
     @Before

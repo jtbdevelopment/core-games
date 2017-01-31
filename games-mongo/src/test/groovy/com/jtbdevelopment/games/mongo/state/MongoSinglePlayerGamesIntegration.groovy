@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.mongo.state
 
-import com.jtbdevelopment.core.mongo.spring.AbstractMongoIntegration
+import com.jtbdevelopment.core.mongo.spring.AbstractCoreMongoConfiguration
+import com.jtbdevelopment.core.mongo.spring.AbstractMongoNoSpringContextIntegration
 import com.jtbdevelopment.games.dao.AbstractSinglePlayerGameRepository
 import com.jtbdevelopment.games.dao.caching.CacheConstants
 import com.jtbdevelopment.games.mongo.dao.MongoPlayerRepository
@@ -8,13 +9,21 @@ import com.jtbdevelopment.games.mongo.players.MongoPlayer
 import com.jtbdevelopment.games.mongo.state.utility.SimpleSinglePlayerGame
 import com.jtbdevelopment.games.state.Game
 import com.mongodb.DBCollection
+import org.junit.AfterClass
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.Cache
 import org.springframework.cache.CacheManager
+import org.springframework.context.ApplicationContext
+import org.springframework.context.annotation.*
+import org.springframework.data.mongodb.config.EnableMongoAuditing
 import org.springframework.data.mongodb.core.MongoOperations
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
+import org.springframework.social.connect.support.ConnectionFactoryRegistry
 
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -23,7 +32,46 @@ import java.time.ZonedDateTime
  * Date: 1/10/15
  * Time: 2:35 PM
  */
-class MongoSinglePlayerGamesIntegration extends AbstractMongoIntegration {
+class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringContextIntegration {
+    @Configuration
+    @EnableMongoRepositories(
+            basePackages = ["com.jtbdevelopment"],
+            excludeFilters = [
+                    @ComponentScan.Filter(
+                            type = FilterType.REGEX,
+                            pattern = ["com.jtbdevelopment.games.mongo.state.utility.SimpleMultiPlayerGameRepository"]
+                    ),
+            ]
+    )
+
+    @EnableMongoAuditing
+    @ComponentScan(
+            basePackages = ['com.jtbdevelopment'],
+            excludeFilters = [
+                    @ComponentScan.Filter(type = FilterType.REGEX, pattern = [
+                            "com.jtbdevelopment.core.mongo.spring.social.dao.*IntegrationSocialConfiguration",
+                            "com.jtbdevelopment.*.*MongoMultiPlayerGameIntegrationConfiguration",
+                            "com.jtbdevelopment.*.*MongoPlayerIntegrationConfiguration",
+                            "com.jtbdevelopment.*.*CoreSpringConfiguration",
+                            "com.jtbdevelopment.*.*MongoConfiguration"
+                    ])
+            ]
+    )
+    static class MongoSinglePlayerGameIntegrationConfiguration extends AbstractCoreMongoConfiguration {
+        @Bean
+        @Autowired
+        ConnectionFactoryRegistry connectionFactoryLocator() {
+            ConnectionFactoryRegistry registry = new ConnectionFactoryRegistry()
+            return registry
+        }
+
+        @Override
+        protected String getMappingBasePackage() {
+            Package mappingBasePackage = getClass().getPackage();
+            return mappingBasePackage == null ? null : mappingBasePackage.getName();
+        }
+    }
+
     private static final String GAMES_COLLECTION_NAME = 'single'
     private DBCollection collection
     private ZoneId GMT = ZoneId.of("GMT")
@@ -34,6 +82,20 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoIntegration {
     CacheManager cacheManager
     Cache cache
     ZonedDateTime start
+    static ApplicationContext context
+
+    @SuppressWarnings("GroovyUnusedDeclaration")
+    @BeforeClass
+    static void setupAll() {
+        setupMongo()
+        context = new AnnotationConfigApplicationContext(MongoSinglePlayerGameIntegrationConfiguration.class)
+    }
+
+    @SuppressWarnings("GroovyUnusedDeclaration")
+    @AfterClass
+    static void tearDownAll() {
+        tearDownMongo()
+    }
 
     @Before
     void setup() {

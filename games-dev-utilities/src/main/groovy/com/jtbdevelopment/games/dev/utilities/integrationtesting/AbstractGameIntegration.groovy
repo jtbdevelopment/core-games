@@ -2,7 +2,7 @@ package com.jtbdevelopment.games.dev.utilities.integrationtesting
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider
-import com.jtbdevelopment.core.mongo.spring.AbstractMongoIntegration
+import com.jtbdevelopment.core.mongo.spring.AbstractMongoDefaultSpringContextIntegration
 import com.jtbdevelopment.games.dao.AbstractGameRepository
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dev.utilities.jetty.JettyServer
@@ -41,7 +41,7 @@ import java.time.ZoneId
  * G - internal Game
  * R - returned Game via web calls
  */
-abstract class AbstractGameIntegration<G extends Game, R extends Game> extends AbstractMongoIntegration {
+abstract class AbstractGameIntegration<G extends Game, R extends Game> extends AbstractMongoDefaultSpringContextIntegration {
     protected static final Entity EMPTY_PUT_POST = Entity.entity("", MediaType.TEXT_PLAIN)
 
     private static Server SERVER;

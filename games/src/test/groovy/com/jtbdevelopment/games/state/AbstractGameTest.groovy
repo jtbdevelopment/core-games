@@ -1,5 +1,6 @@
 package com.jtbdevelopment.games.state
 
+import com.jtbdevelopment.games.players.Player
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.annotation.Version
@@ -23,6 +24,11 @@ class AbstractGameTest extends GroovyTestCase {
         @Override
         String getPreviousIdAsString() {
             return id
+        }
+
+        @Override
+        List<Player<String>> getAllPlayers() {
+            null
         }
     }
 
