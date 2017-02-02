@@ -4,6 +4,8 @@ import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.GamePhase
 import groovy.transform.CompileStatic
 
+import java.beans.Transient
+
 /**
  * Date: 2/18/15
  * Time: 6:55 PM
@@ -30,11 +32,13 @@ abstract class AbstractMaskedGame<FEATURES> implements MaskedGame<FEATURES> {
     Map<FEATURES, Object> featureData = [:]
 
     @Override
+    @Transient
     String getIdAsString() {
         return id
     }
 
     @Override
+    @Transient
     String getPreviousIdAsString() {
         return previousId
     }

@@ -26,34 +26,34 @@ import static com.jtbdevelopment.games.dao.caching.CacheConstants.*
  */
 @CompileStatic
 @NoRepositoryBean
-interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSortingRepository<Player<ID>, ID> {
+interface AbstractPlayerRepository<ID extends Serializable, P extends Player<ID>> extends PagingAndSortingRepository<P, ID> {
 
     @Cacheable(value = PLAYER_ID_CACHE)
-    Player<ID> findOne(ID id)
+    P findOne(ID id)
 
     @Cacheable(value = PLAYER_MD5_CACHE)
-    Player<ID> findByMd5(final String md5);
+    P findByMd5(final String md5)
 
     @Cacheable(value = PLAYER_MD5_CACHE)
-    List<Player<ID>> findByMd5In(final Collection<String> md5s);
+    List<P> findByMd5In(final Collection<String> md5s)
 
     @Cacheable(value = PLAYER_S_AND_SID_CACHE, key = 'T(com.jtbdevelopment.games.players.AbstractPlayer).getSourceAndSourceId(#p0, #p1)')
-    Player<ID> findBySourceAndSourceId(final String source, final String sourceId);
+    P findBySourceAndSourceId(final String source, final String sourceId)
 
     @Cacheable(value = PLAYER_S_AND_SID_CACHE, key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectSourceAndSourceIDs(#p0, #p1)')
-    List<Player<ID>> findBySourceAndSourceIdIn(final String source, final Collection<String> sourceId);
+    List<P> findBySourceAndSourceIdIn(final String source, final Collection<String> sourceId)
 
     //  Not caching - should mostly be used on startup to create system players
-    Player<ID> findByDisplayName(final String displayName)
+    P findByDisplayName(final String displayName)
 
     //  Not caching - should mostly be used by admin player search
-    Page<Player<ID>> findByDisplayNameContains(final String displayName, Pageable pageable)
+    Page<P> findByDisplayNameContains(final String displayName, Pageable pageable)
 
     //  Not caching - currently only used by manual players for testing
-    List<Player<ID>> findBySourceAndDisabled(final String source, final boolean disabled);
+    List<P> findBySourceAndDisabled(final String source, final boolean disabled)
 
     //  Not caching - loading in order to delete
-    List<Player<ID>> findByLastLoginLessThan(final ZonedDateTime cutoff)
+    List<P> findByLastLoginLessThan(final ZonedDateTime cutoff)
 
     @Caching(
             evict = [
@@ -71,7 +71,7 @@ interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSor
                     @CachePut(value = PLAYER_S_AND_SID_CACHE, key = '#result.sourceAndSourceId')
             ]
     )
-    Player<ID> save(Player<ID> entity)
+    P save(P entity)
 
     @Caching(
             put = [
@@ -80,7 +80,7 @@ interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSor
                     @CachePut(value = PLAYER_S_AND_SID_CACHE, key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectPlayerSourceAndSourceIDs(#result)')
             ]
     )
-    Iterable<Player<ID>> save(Iterable<Player<ID>> entities)
+    Iterable<P> save(Iterable<P> entities)
 
     @Override
     @Caching(
@@ -100,7 +100,7 @@ interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSor
                     @CacheEvict(value = PLAYER_S_AND_SID_CACHE, key = '#p0.sourceAndSourceId')
             ]
     )
-    void delete(Player<ID> entity)
+    void delete(P entity)
 
     @Override
     @Caching(
@@ -110,7 +110,7 @@ interface AbstractPlayerRepository<ID extends Serializable> extends PagingAndSor
                     @CacheEvict(value = PLAYER_S_AND_SID_CACHE, key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectPlayerSourceAndSourceIDs(#p0)')
             ]
     )
-    void delete(Iterable<? extends Player<ID>> entities)
+    void delete(Iterable<? extends P> entities)
 
     @Override
     @Caching(

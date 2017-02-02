@@ -151,7 +151,7 @@ class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
                 Sort.Direction.ASC,
                 'displayName')
         assert 0L == playerRepository.findByDisplayNameContains('Humpty Dumpty', page).getTotalElements()
-        Page<Player<ObjectId>> contains = playerRepository.findByDisplayNameContains('4', page)
+        Page<MongoPlayer> contains = playerRepository.findByDisplayNameContains('4', page)
         assert 2L == contains.getTotalElements()
         assert 1 == contains.getNumberOfElements()
         assert number4 == ++contains.iterator()
@@ -170,16 +170,16 @@ class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
     @Test
     void testFindBySourceAndDisabled() {
         assert playerRepository.findBySourceAndDisabled(systemPlayer.source, true).isEmpty()
-        assert playerRepository.findBySourceAndDisabled(systemPlayer.source, false) == [systemPlayer] as List<Player>
+        assert playerRepository.findBySourceAndDisabled(systemPlayer.source, false) == [systemPlayer] as List<MongoPlayer>
         assert playerRepository.findBySourceAndDisabled(manualPlayer.source, true).isEmpty()
-        assert playerRepository.findBySourceAndDisabled(manualPlayer.source, false) == [manualPlayer] as List<Player>
+        assert playerRepository.findBySourceAndDisabled(manualPlayer.source, false) == [manualPlayer] as List<MongoPlayer>
         assert playerRepository.findBySourceAndDisabled(player1.source, false) as Set == [player1, player2, player4, number4] as Set
-        assert playerRepository.findBySourceAndDisabled(player1.source, true) == [player3] as List<Player>
+        assert playerRepository.findBySourceAndDisabled(player1.source, true) == [player3] as List<MongoPlayer>
     }
 
     @Test
     void testFindBySourceAndSourceIds() {
-        List<Player> players = playerRepository.findBySourceAndSourceIdIn(player1.source, [player1.sourceId, player2.sourceId, 'X'])
+        List<MongoPlayer> players = playerRepository.findBySourceAndSourceIdIn(player1.source, [player1.sourceId, player2.sourceId, 'X'])
         assert players.size() == 2
         assert players.contains(player1)
         assert players.contains(player2)
@@ -201,7 +201,7 @@ class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
 
     @Test
     void testFindByMD5s() {
-        List<Player> players = playerRepository.findByMd5In([player1.md5, player3.md5, systemPlayer.md5])
+        List<MongoPlayer> players = playerRepository.findByMd5In([player1.md5, player3.md5, systemPlayer.md5])
         assert players.size() == 3
         assert players.contains(player1)
         assert players.contains(player3)
@@ -274,7 +274,7 @@ class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
         cache.clear()
         assert cache.get(player1.source + "/" + player1.sourceId) == null
 
-        playerRepository.save([player1, player2] as List<Player>)
+        playerRepository.save([player1, player2] as List<MongoPlayer>)
 
         cache = cacheManager.getCache(CacheConstants.PLAYER_ID_CACHE)
         assert cache.get(player1.id).get() == player1
@@ -341,7 +341,7 @@ class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
         cache = cacheManager.getCache(CacheConstants.PLAYER_S_AND_SID_CACHE)
         assert cache.get(player1.source + "/" + player1.sourceId).get() == player1
 
-        playerRepository.delete([player2, player1] as List<Player>)
+        playerRepository.delete([player2, player1] as List<MongoPlayer>)
 
         cache = cacheManager.getCache(CacheConstants.PLAYER_ID_CACHE)
         assert cache.get(player1.id) == null
@@ -382,7 +382,7 @@ class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
 
     @Test
     void testFindByLastLogin() {
-        List<Player> playerList = playerRepository.findByLastLoginLessThan(player1.created.minusMinutes(1))
+        List<MongoPlayer> playerList = playerRepository.findByLastLoginLessThan(player1.created.minusMinutes(1))
         assert 2 == playerList.size()
         playerList = playerRepository.findByLastLoginLessThan(systemPlayer.created.plusHours(1))
         assert 7 == playerList.size()

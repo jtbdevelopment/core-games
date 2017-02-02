@@ -34,32 +34,32 @@ class SpringSocialConfigTest extends GroovyTestCase {
     void testConnectionFactoryLocator() {
         SocialAuthenticationService service1 = [
                 getConnectionFactory: {
-                    return new FakeFacebookConnectionFactory();
+                    return new FakeFacebookConnectionFactory()
                 }
         ] as SocialAuthenticationService
         SocialAuthenticationService service2 = [
                 getConnectionFactory: {
-                    return new FakeTwitterConnectionFactory();
+                    return new FakeTwitterConnectionFactory()
                 }
         ] as SocialAuthenticationService
-        SocialAuthenticationServiceRegistry registry = config.connectionFactoryLocator([service1, service2])
+        SocialAuthenticationServiceRegistry registry = config.socialAuthenticationServiceLocator([service1, service2])
         assert registry.getAuthenticationService(FakeFacebookApi.FACEBOOK).is(service1)
         assert registry.getAuthenticationService(FakeTwitterApi.TWITTER).is(service2)
     }
 
     void testConnectionFactoryLocatorAnnotations() {
-        Method m = SpringSocialConfig.class.getMethod('connectionFactoryLocator', [List.class] as Class[])
+        Method m = SpringSocialConfig.class.getMethod('socialAuthenticationServiceLocator', [List.class] as Class[])
         assert m.getAnnotation(Autowired.class)
         assert m.getAnnotation(Bean.class)
     }
 
     void testConnectionRepositoryWithNullAuthentication() {
-        SecurityContextHolder.context = new SecurityContextImpl();
+        SecurityContextHolder.context = new SecurityContextImpl()
         assertNull config.connectionRepository(null)
     }
 
     void testConnectionRepositoryWithAuthentication() {
-        SecurityContextHolder.context = new SecurityContextImpl();
+        SecurityContextHolder.context = new SecurityContextImpl()
         String name = "name"
         def authentication = [
                 getName: {

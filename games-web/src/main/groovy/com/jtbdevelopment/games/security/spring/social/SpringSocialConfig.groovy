@@ -21,23 +21,24 @@ import org.springframework.social.security.provider.SocialAuthenticationService
 @Configuration
 @CompileStatic
 class SpringSocialConfig {
-    @Bean
     @Autowired
-    SocialAuthenticationServiceRegistry connectionFactoryLocator(final List<SocialAuthenticationService> services) {
-        SocialAuthenticationServiceRegistry socialAuthenticationServiceRegistry = new SocialAuthenticationServiceRegistry();
+    @Bean
+    SocialAuthenticationServiceRegistry socialAuthenticationServiceLocator(
+            final List<SocialAuthenticationService> services) {
+        SocialAuthenticationServiceRegistry socialAuthenticationServiceRegistry = new SocialAuthenticationServiceRegistry()
         for (final SocialAuthenticationService service : services) {
-            socialAuthenticationServiceRegistry.addAuthenticationService(service);
+            socialAuthenticationServiceRegistry.addAuthenticationService(service)
         }
-        return socialAuthenticationServiceRegistry;
+        return socialAuthenticationServiceRegistry
     }
 
-    @Bean
-    @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.INTERFACES)
     @Autowired
-    public ConnectionRepository connectionRepository(final UsersConnectionRepository userConnectionRepository) {
+    @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.INTERFACES)
+    @Bean
+    ConnectionRepository connectionRepository(final UsersConnectionRepository userConnectionRepository) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication()
         if (authentication == null) {
-            return null;
+            return null
         }
         return userConnectionRepository.createConnectionRepository(authentication.name)
     }

@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.mongo.dao
 
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
+import com.jtbdevelopment.games.mongo.players.MongoPlayer
 import groovy.transform.CompileStatic
 import org.bson.types.ObjectId
 import org.springframework.stereotype.Repository
@@ -11,6 +12,6 @@ import org.springframework.stereotype.Repository
  */
 @CompileStatic
 @Repository
-interface MongoPlayerRepository extends AbstractPlayerRepository<ObjectId> {
+interface MongoPlayerRepository extends AbstractPlayerRepository<ObjectId, MongoPlayer> {
 
 }

@@ -2,6 +2,8 @@ package com.jtbdevelopment.games.state
 
 import com.jtbdevelopment.games.players.Player
 
+import java.beans.Transient
+
 /**
  * Date: 1/7/15
  * Time: 6:54 AM
@@ -12,11 +14,13 @@ class AbstractMultiPlayerGameTest extends GroovyTestCase {
         Integer previousId
 
         @Override
+        @Transient
         String getIdAsString() {
             return id?.toString()
         }
 
         @Override
+        @Transient
         String getPreviousIdAsString() {
             return previousId?.toString()
         }

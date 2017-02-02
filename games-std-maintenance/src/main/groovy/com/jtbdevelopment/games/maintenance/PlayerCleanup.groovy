@@ -32,7 +32,7 @@ class PlayerCleanup {
     private static final int DAYS_BACK = 90
 
     @Autowired
-    AbstractPlayerRepository playerRepository
+    AbstractPlayerRepository<? extends Serializable, ? extends Player<? extends Serializable>> playerRepository
 
     @Autowired(required = false)
     AbstractUsersConnectionRepository usersConnectionRepository

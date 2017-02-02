@@ -17,7 +17,7 @@ abstract class AbstractHandler {
     private static final Logger logger = LoggerFactory.getLogger(AbstractHandler.class)
 
     @Autowired
-    AbstractPlayerRepository playerRepository
+    AbstractPlayerRepository<? extends Serializable, ? extends Player<? extends Serializable>> playerRepository
 
     protected Player loadPlayerMD5(final String md5) {
         Player p = playerRepository.findByMd5(md5)

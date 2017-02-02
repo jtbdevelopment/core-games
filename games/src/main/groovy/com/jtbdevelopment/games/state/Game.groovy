@@ -3,6 +3,8 @@ package com.jtbdevelopment.games.state
 import com.jtbdevelopment.games.players.Player
 import groovy.transform.CompileStatic
 
+import java.beans.Transient
+
 /**
  * Date: 12/31/2014
  * Time: 4:56 PM
@@ -11,6 +13,8 @@ import groovy.transform.CompileStatic
 interface Game<ID extends Serializable, TIMESTAMP, FEATURES> {
     ID getId()
     void setId(final ID id)
+
+    @Transient
     String getIdAsString()
 
     Integer getVersion()
@@ -19,6 +23,7 @@ interface Game<ID extends Serializable, TIMESTAMP, FEATURES> {
     ID getPreviousId()
     void setPreviousId(final ID previousID)
 
+    @Transient
     String getPreviousIdAsString()
 
     int getRound()

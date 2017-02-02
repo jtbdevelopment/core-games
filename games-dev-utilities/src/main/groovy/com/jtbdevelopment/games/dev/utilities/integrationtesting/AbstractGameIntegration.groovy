@@ -81,7 +81,7 @@ abstract class AbstractGameIntegration<G extends Game, R extends Game> extends A
 
 
     @BeforeClass
-    public static void initialize() {
+    static void initialize() {
         SERVER = JettyServer.makeServer(port)
         SERVER.start()
 
@@ -103,7 +103,7 @@ abstract class AbstractGameIntegration<G extends Game, R extends Game> extends A
     }
 
     @AfterClass
-    public static void tearDown() {
+    static void tearDown() {
         SERVER.stop()
     }
 

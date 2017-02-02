@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component
 class PlayerKeyUtility<ID extends Serializable> {
     private static AbstractPlayerRepository playerRepository
 
+    @SuppressWarnings("GrMethodMayBeStatic")
     @Autowired
     void setPlayerRepository(final AbstractPlayerRepository playerRepository) {
         PlayerKeyUtility.playerRepository = playerRepository
