@@ -8,6 +8,7 @@ import com.jtbdevelopment.games.mongo.dao.MongoPlayerRepository
 import com.jtbdevelopment.games.mongo.players.MongoPlayer
 import com.jtbdevelopment.games.mongo.state.utility.SimpleSinglePlayerGame
 import com.jtbdevelopment.games.state.Game
+import com.jtbdevelopment.games.state.GamePhase
 import com.mongodb.DBCollection
 import org.junit.AfterClass
 import org.junit.Before
@@ -18,6 +19,8 @@ import org.springframework.cache.Cache
 import org.springframework.cache.CacheManager
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.*
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.config.EnableMongoAuditing
 import org.springframework.data.mongodb.core.MongoOperations
 import org.springframework.data.mongodb.core.query.Criteria
@@ -195,10 +198,10 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringContextInte
 
     @Test
     void testFindGamesByPlayer() {
-        SimpleSinglePlayerGame p1g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 5, stringValue: 'X', player: player1))
-        SimpleSinglePlayerGame p1g2 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 10, stringValue: 'X', player: player1))
-        SimpleSinglePlayerGame p1g3 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 15, stringValue: '2', player: player1))
-        SimpleSinglePlayerGame p2g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 20, stringValue: '2', player: player2))
+        SimpleSinglePlayerGame p1g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 5, stringValue: 'X', player: player1, gamePhase: GamePhase.Playing))
+        SimpleSinglePlayerGame p1g2 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 10, stringValue: 'X', player: player1, gamePhase: GamePhase.Playing))
+        SimpleSinglePlayerGame p1g3 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 15, stringValue: '2', player: player1, gamePhase: GamePhase.Challenged))
+        SimpleSinglePlayerGame p2g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 20, stringValue: '2', player: player2, gamePhase: GamePhase.Challenged))
 
         List<SimpleSinglePlayerGame> p1g = (List<SimpleSinglePlayerGame>) gameRepository.findByPlayerId(player1.id)
         assert p1g.size() == 3
@@ -210,6 +213,13 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringContextInte
         assert p2g.contains(p2g1)
 
         assert gameRepository.findAll().collect { it }.size() == 4
+
+        Sort sort = new Sort(Sort.Direction.DESC, ["lastUpdate", "created"])
+        PageRequest page = new PageRequest(0, 20, sort)
+        List<SimpleSinglePlayerGame> by = (List<SimpleSinglePlayerGame>) gameRepository.findByPlayerIdAndGamePhaseAndLastUpdateGreaterThan(player1.id, GamePhase.Playing, ((ZonedDateTime) p1g1.created).minusDays(1), page)
+        assert 2 == by.size()
+        assert by.contains(p1g1)
+        assert by.contains(p1g2)
     }
 
     @Test

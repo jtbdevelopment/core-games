@@ -13,6 +13,6 @@ appender("CONSOLE", ConsoleAppender) {
 
 logger("org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver", WARN)
 logger("com.jtbdevelopment.games.push", TRACE)
-logger("org.springframework.beans", DEBUG)
+//logger("org.springframework.beans", DEBUG)
 //logger("com.jtbdevelopment.games.websocket.AtmosphereListener", TRACE)
 root(INFO, ["CONSOLE"])
