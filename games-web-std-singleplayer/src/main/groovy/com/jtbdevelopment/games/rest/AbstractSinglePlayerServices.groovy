@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType
  * Time: 10:26 PM
  */
 @CompileStatic
-abstract class AbstractMultiPlayerServices<ID extends Serializable> extends AbstractPlayerServices<ID> {
+abstract class AbstractSinglePlayerServices<ID extends Serializable> extends AbstractPlayerServices<ID> {
     @Autowired
     PlayerGamesFinderHandler playerGamesFinderHandler
 

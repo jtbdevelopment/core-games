@@ -14,6 +14,7 @@
         <module>games-websocket</module>
         <module>games-hazelcast</module>
         <module>games-web</module>
+        <module>games-web-std-singleplayer</module>
         <module>games-web-std-multiplayer</module>
         <module>games-mongo</module>
         <module>games-std-tracker</module>

@@ -25,7 +25,7 @@ class ChallengeToRematchHandler extends AbstractGameActionHandler<Object, MultiP
 
     @Override
     protected boolean requiresEligibilityCheck(final Object param) {
-        return true;
+        return true
     }
 
     @Override

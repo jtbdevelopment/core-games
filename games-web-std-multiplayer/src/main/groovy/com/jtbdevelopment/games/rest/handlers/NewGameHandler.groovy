@@ -81,7 +81,7 @@ class NewGameHandler extends AbstractHandler {
                 //  TODO - notification
                 logger.warn('Failed to revert players game eligibility ' + eligibilityResult, e2)
             }
-            throw e;
+            throw e
         }
         game
     }
