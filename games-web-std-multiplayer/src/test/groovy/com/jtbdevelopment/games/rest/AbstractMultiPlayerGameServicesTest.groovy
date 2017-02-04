@@ -29,10 +29,7 @@ class AbstractMultiPlayerGameServicesTest extends GroovyTestCase {
 
         Map<String, List<Object>> stuff = [
                 //  method: [name, params, path, path param values, consumes
-                "endRematch": ["endRematch", [], [], []],
-                "createRematch": ["rematch", [], [], []],
                 "rejectGame"   : ["reject", [], [], []],
-                "quitGame"     : ["quit", [], [], []],
                 "acceptGame"   : ["accept", [], [], []],
         ]
         stuff.each {
