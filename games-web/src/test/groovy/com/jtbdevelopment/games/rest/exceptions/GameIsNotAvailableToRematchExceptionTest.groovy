@@ -1,4 +1,4 @@
-package com.jtbdevelopment.games.exceptions.input
+package com.jtbdevelopment.games.rest.exceptions
 
 /**
  * Date: 4/8/2015

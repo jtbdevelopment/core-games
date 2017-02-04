@@ -3,9 +3,9 @@ package com.jtbdevelopment.games.rest.handlers
 import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.events.GamePublisher
-import com.jtbdevelopment.games.exceptions.input.GameIsNotAvailableToRematchException
 import com.jtbdevelopment.games.factory.AbstractMultiPlayerGameFactory
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.rest.exceptions.GameIsNotAvailableToRematchException
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.MultiPlayerGame
 import com.jtbdevelopment.games.state.transition.AbstractMPGamePhaseTransitionEngine

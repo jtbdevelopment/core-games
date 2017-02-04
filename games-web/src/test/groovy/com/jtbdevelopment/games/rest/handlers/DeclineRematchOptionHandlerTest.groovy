@@ -1,7 +1,7 @@
 package com.jtbdevelopment.games.rest.handlers
 
 import com.jtbdevelopment.games.GameCoreTestCase
-import com.jtbdevelopment.games.exceptions.input.GameIsNotAvailableToRematchException
+import com.jtbdevelopment.games.rest.exceptions.GameIsNotAvailableToRematchException
 import com.jtbdevelopment.games.state.GamePhase
 
 /**

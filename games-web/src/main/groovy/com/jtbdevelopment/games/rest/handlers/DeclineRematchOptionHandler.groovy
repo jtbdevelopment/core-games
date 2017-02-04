@@ -1,8 +1,8 @@
 package com.jtbdevelopment.games.rest.handlers
 
-import com.jtbdevelopment.games.exceptions.input.GameIsNotAvailableToRematchException
 import com.jtbdevelopment.games.factory.AbstractMultiPlayerGameFactory
 import com.jtbdevelopment.games.players.Player
+import com.jtbdevelopment.games.rest.exceptions.GameIsNotAvailableToRematchException
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.MultiPlayerGame
 import groovy.transform.CompileStatic

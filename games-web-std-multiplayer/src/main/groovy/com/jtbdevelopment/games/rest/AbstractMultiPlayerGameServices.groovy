@@ -1,9 +1,6 @@
 package com.jtbdevelopment.games.rest
 
 import com.jtbdevelopment.games.rest.handlers.ChallengeResponseHandler
-import com.jtbdevelopment.games.rest.handlers.ChallengeToRematchHandler
-import com.jtbdevelopment.games.rest.handlers.DeclineRematchOptionHandler
-import com.jtbdevelopment.games.rest.handlers.QuitHandler
 import com.jtbdevelopment.games.rest.services.AbstractGameServices
 import com.jtbdevelopment.games.state.PlayerState
 import groovy.transform.CompileStatic
@@ -21,28 +18,7 @@ import javax.ws.rs.core.MediaType
 @CompileStatic
 abstract class AbstractMultiPlayerGameServices<ID extends Serializable> extends AbstractGameServices<ID> {
     @Autowired
-    QuitHandler quitHandler
-    @Autowired
     ChallengeResponseHandler responseHandler
-    @Autowired
-    ChallengeToRematchHandler rematchHandler
-    @Autowired
-    DeclineRematchOptionHandler declineRematchOptionHandler
-
-    @PUT
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("endRematch")
-    Object endRematch() {
-        declineRematchOptionHandler.handleAction(playerID.get(), gameID.get())
-    }
-
-
-    @PUT
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("rematch")
-    Object createRematch() {
-        rematchHandler.handleAction(playerID.get(), gameID.get())
-    }
 
     @PUT
     @Path("reject")
@@ -56,13 +32,6 @@ abstract class AbstractMultiPlayerGameServices<ID extends Serializable> extends 
     @Produces(MediaType.APPLICATION_JSON)
     Object acceptGame() {
         responseHandler.handleAction(playerID.get(), gameID.get(), PlayerState.Accepted)
-    }
-
-    @PUT
-    @Path("quit")
-    @Produces(MediaType.APPLICATION_JSON)
-    Object quitGame() {
-        quitHandler.handleAction(playerID.get(), gameID.get())
     }
 
 }

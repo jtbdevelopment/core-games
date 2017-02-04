@@ -1,9 +1,6 @@
 package com.jtbdevelopment.games.rest
 
 import com.jtbdevelopment.games.rest.handlers.ChallengeResponseHandler
-import com.jtbdevelopment.games.rest.handlers.ChallengeToRematchHandler
-import com.jtbdevelopment.games.rest.handlers.DeclineRematchOptionHandler
-import com.jtbdevelopment.games.rest.handlers.QuitHandler
 import com.jtbdevelopment.games.state.PlayerState
 import com.jtbdevelopment.games.state.masking.AbstractMaskedMultiPlayerGame
 import groovy.transform.TypeChecked
@@ -65,18 +62,6 @@ class AbstractMultiPlayerGameServicesTest extends GroovyTestCase {
         }
     }
 
-    void testCreateRematch() {
-        services.rematchHandler = [
-                handleAction: {
-                    String p, String g ->
-                        assert p == PID
-                        assert g == GID
-                        result
-                }
-        ] as ChallengeToRematchHandler
-        assert result.is(services.createRematch())
-    }
-
     void testRejectGame() {
         services.responseHandler = [
                 handleAction: {
@@ -103,27 +88,4 @@ class AbstractMultiPlayerGameServicesTest extends GroovyTestCase {
         assert result.is(services.acceptGame())
     }
 
-    void testQuitGame() {
-        services.quitHandler = [
-                handleAction: {
-                    String p, String g ->
-                        assert p == PID
-                        assert g == GID
-                        result
-                }
-        ] as QuitHandler
-        assert result.is(services.quitGame())
-    }
-
-    void testEndRematches() {
-        services.declineRematchOptionHandler = [
-                handleAction: {
-                    String p, String g ->
-                        assert p == PID
-                        assert g == GID
-                        result
-                }
-        ] as DeclineRematchOptionHandler
-        assert result.is(services.endRematch())
-    }
 }

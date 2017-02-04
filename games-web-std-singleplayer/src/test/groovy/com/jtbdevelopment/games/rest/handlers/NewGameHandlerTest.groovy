@@ -1,15 +1,15 @@
 package com.jtbdevelopment.games.rest.handlers
 
 import com.jtbdevelopment.games.GameCoreTestCase
-import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
+import com.jtbdevelopment.games.dao.AbstractSinglePlayerGameRepository
 import com.jtbdevelopment.games.events.GamePublisher
 import com.jtbdevelopment.games.exceptions.input.OutOfGamesForTodayException
 import com.jtbdevelopment.games.exceptions.system.FailedToFindPlayersException
-import com.jtbdevelopment.games.factory.AbstractMultiPlayerGameFactory
+import com.jtbdevelopment.games.factory.AbstractSinglePlayerGameFactory
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.Game
-import com.jtbdevelopment.games.state.masking.AbstractMaskedMultiPlayerGame
+import com.jtbdevelopment.games.state.masking.AbstractMaskedSinglePlayerGame
 import com.jtbdevelopment.games.state.masking.GameMasker
 import com.jtbdevelopment.games.state.transition.GameTransitionEngine
 import com.jtbdevelopment.games.tracking.GameEligibilityTracker
@@ -25,35 +25,29 @@ class NewGameHandlerTest extends GameCoreTestCase {
 
     void testCreateGameAllOptionalPlugins() {
         Set<String> features = ["GameFeature.SystemPuzzles", "GameFeature.Thieving"]
-        List<Player> players = [PTWO, PTHREE, PFOUR]
         Player initiatingPlayer = PONE
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame()
+        GameCoreTestCase.StringSPGame game = new GameCoreTestCase.StringSPGame()
         game.features.addAll(features)
-        GameCoreTestCase.StringMPGame savedGame = new GameCoreTestCase.StringMPGame()
+        GameCoreTestCase.StringSPGame savedGame = new GameCoreTestCase.StringSPGame()
         savedGame.features = features
-        GameCoreTestCase.StringMPGame transitionedGame = new GameCoreTestCase.StringMPGame()
-        GameCoreTestCase.StringMPGame publishedGame = new GameCoreTestCase.StringMPGame()
-        handler.gameFactory = [createGame: { a, b, c ->
+        GameCoreTestCase.StringSPGame transitionedGame = new GameCoreTestCase.StringSPGame()
+        GameCoreTestCase.StringSPGame publishedGame = new GameCoreTestCase.StringSPGame()
+        handler.gameFactory = [createGame: { a, b ->
             assert a == features
-            assert b == players
-            assert c == initiatingPlayer
+            assert b == initiatingPlayer
             game
-        }] as AbstractMultiPlayerGameFactory
+        }] as AbstractSinglePlayerGameFactory
         handler.gameRepository = [
                 save: {
                     assert it.is(transitionedGame)
                     return savedGame
                 }
-        ] as AbstractMultiPlayerGameRepository
+        ] as AbstractSinglePlayerGameRepository
         handler.playerRepository = [
-                findByMd5In: {
-                    Iterable<String> it ->
-                        assert it.collect { it } as Set == players.collect { it.md5 } as Set
-                        return players
-                },
-                findOne    : {
-                    assert it == PONE.id
-                    return PONE
+                findOne: {
+                    String it ->
+                        assert it == initiatingPlayer.id
+                        return initiatingPlayer
                 }
         ] as AbstractPlayerRepository
         handler.transitionEngine = [
@@ -77,7 +71,7 @@ class NewGameHandlerTest extends GameCoreTestCase {
                         return new PlayerGameEligibilityResult(eligibility: PlayerGameEligibility.FreeGameUsed, player: PONE)
                 }
         ] as GameEligibilityTracker
-        AbstractMaskedMultiPlayerGame maskedGame = new AbstractMaskedMultiPlayerGame() {}
+        AbstractMaskedSinglePlayerGame maskedGame = new AbstractMaskedSinglePlayerGame() {}
         handler.gameMasker = [
                 maskGameForPlayer: {
                     Game g, Player p ->
@@ -87,66 +81,53 @@ class NewGameHandlerTest extends GameCoreTestCase {
                 }
         ] as GameMasker
 
-        assert maskedGame.is(handler.handleCreateNewGame(initiatingPlayer.id, players.collect { it.md5 }, features))
+        assert maskedGame.is(handler.handleCreateNewGame(initiatingPlayer.id, features))
     }
 
-    public void testCreateGameNoOptionalPlugins() {
+    void testCreateGameNoOptionalPlugins() {
         Set<String> features = ["GameFeature.SystemPuzzles", "GameFeature.Thieving"]
-        List<Player> players = [PTWO, PTHREE, PFOUR]
         Player initiatingPlayer = PONE
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame()
+        GameCoreTestCase.StringSPGame game = new GameCoreTestCase.StringSPGame()
         game.features.addAll(features)
-        GameCoreTestCase.StringMPGame savedGame = new GameCoreTestCase.StringMPGame()
+        GameCoreTestCase.StringSPGame savedGame = new GameCoreTestCase.StringSPGame()
         savedGame.features = features
-        handler.gameFactory = [createGame: { a, b, c ->
+        handler.gameFactory = [createGame: { a, b ->
             assert a == features
-            assert b == players
-            assert c == initiatingPlayer
+            assert b == initiatingPlayer
             game
-        }] as AbstractMultiPlayerGameFactory
+        }] as AbstractSinglePlayerGameFactory
         handler.gameRepository = [
                 save: {
                     assert it.is(game)
                     return savedGame
                 }
-        ] as AbstractMultiPlayerGameRepository
+        ] as AbstractSinglePlayerGameRepository
         handler.playerRepository = [
-                findByMd5In: {
-                    Iterable<String> it ->
-                        assert it.collect { it } as Set == players.collect { it.md5 } as Set
-                        return players
-                },
-                findOne    : {
+                findOne: {
                     assert it == PONE.id
-                    return PONE
+                    return initiatingPlayer
                 }
         ] as AbstractPlayerRepository
 
-        assert savedGame.is(handler.handleCreateNewGame(initiatingPlayer.id, players.collect { it.md5 }, features))
+        assert savedGame.is(handler.handleCreateNewGame(initiatingPlayer.id, features))
     }
 
-    public void testCreateGameAndTransitionExceptions() {
+    void testCreateGameAndTransitionExceptions() {
         Set<Object> features = ["GameFeature.SystemPuzzles", "GameFeature.Thieving"]
         List<Player> players = [PTWO, PTHREE, PFOUR]
         Player initiatingPlayer = PONE
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame()
+        GameCoreTestCase.StringSPGame game = new GameCoreTestCase.StringSPGame()
         game.features.addAll(features)
-        GameCoreTestCase.StringMPGame savedGame = new GameCoreTestCase.StringMPGame()
+        GameCoreTestCase.StringSPGame savedGame = new GameCoreTestCase.StringSPGame()
         savedGame.features = features
         boolean revertCalled = false
-        handler.gameFactory = [createGame: { a, b, c ->
+        handler.gameFactory = [createGame: { a, b ->
             assert a == features
-            assert b == players
-            assert c == initiatingPlayer
+            assert b == initiatingPlayer
             game
-        }] as AbstractMultiPlayerGameFactory
+        }] as AbstractSinglePlayerGameFactory
         handler.playerRepository = [
-                findByMd5In: {
-                    Iterable<String> it ->
-                        assert it.collect { it } as Set == players.collect { it.md5 } as Set
-                        return players
-                },
-                findOne    : {
+                findOne: {
                     assert it == PONE.id
                     return PONE
                 }
@@ -172,7 +153,7 @@ class NewGameHandlerTest extends GameCoreTestCase {
         ] as GameEligibilityTracker
 
         try {
-            handler.handleCreateNewGame(initiatingPlayer.id, players.collect { it.md5 }, features)
+            handler.handleCreateNewGame(initiatingPlayer.id, features)
             fail('exception expected')
         } catch (IllegalArgumentException e) {
             assert revertCalled
@@ -181,26 +162,19 @@ class NewGameHandlerTest extends GameCoreTestCase {
 
     void testCreateGameAndRevertExceptionWrapped() {
         Set<Object> features = [1, 3.4, "X"]
-        List<Player> players = [PTWO, PTHREE, PFOUR]
         Player initiatingPlayer = PONE
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame()
+        GameCoreTestCase.StringSPGame game = new GameCoreTestCase.StringSPGame()
         game.features.addAll(features)
-        GameCoreTestCase.StringMPGame savedGame = new GameCoreTestCase.StringMPGame()
+        GameCoreTestCase.StringSPGame savedGame = new GameCoreTestCase.StringSPGame()
         savedGame.features = features
         boolean revertCalled = false
-        handler.gameFactory = [createGame: { a, b, c ->
+        handler.gameFactory = [createGame: { a, b ->
             assert a == features
-            assert b == players
-            assert c == initiatingPlayer
+            assert b == initiatingPlayer
             game
-        }] as AbstractMultiPlayerGameFactory
+        }] as AbstractSinglePlayerGameFactory
         handler.playerRepository = [
-                findByMd5In: {
-                    Iterable<String> it ->
-                        assert it.collect { it } as Set == players.collect { it.md5 } as Set
-                        return players
-                },
-                findOne    : {
+                findOne: {
                     assert it == PONE.id
                     return PONE
                 }
@@ -227,7 +201,7 @@ class NewGameHandlerTest extends GameCoreTestCase {
         ] as GameEligibilityTracker
 
         try {
-            handler.handleCreateNewGame(initiatingPlayer.id, players.collect { it.md5 }, features)
+            handler.handleCreateNewGame(initiatingPlayer.id, features)
             fail('exception expected')
         } catch (IllegalArgumentException e) {
             assert revertCalled
@@ -236,28 +210,21 @@ class NewGameHandlerTest extends GameCoreTestCase {
         }
     }
 
-    public void testCreateGameAndGameCreateExceptions() {
+    void testCreateGameAndGameCreateExceptions() {
         Set<Object> features = ["1", 5]
-        List<Player> players = [PTWO, PTHREE, PFOUR]
         Player initiatingPlayer = PONE
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame()
+        GameCoreTestCase.StringSPGame game = new GameCoreTestCase.StringSPGame()
         game.features.addAll(features)
-        GameCoreTestCase.StringMPGame savedGame = new GameCoreTestCase.StringMPGame()
+        GameCoreTestCase.StringSPGame savedGame = new GameCoreTestCase.StringSPGame()
         boolean revertCalled = false
         savedGame.features = features
-        handler.gameFactory = [createGame: { a, b, c ->
+        handler.gameFactory = [createGame: { a, b ->
             assert a == features
-            assert b == players
-            assert c == initiatingPlayer
+            assert b == initiatingPlayer
             throw new NumberFormatException()
-        }] as AbstractMultiPlayerGameFactory
+        }] as AbstractSinglePlayerGameFactory
         handler.playerRepository = [
-                findByMd5In: {
-                    Iterable<String> it ->
-                        assert it.collect { it } as Set == players.collect { it.md5 } as Set
-                        return players
-                },
-                findOne    : {
+                findOne: {
                     assert it == PONE.id
                     return PONE
                 }
@@ -277,28 +244,22 @@ class NewGameHandlerTest extends GameCoreTestCase {
         ] as GameEligibilityTracker
 
         try {
-            handler.handleCreateNewGame(initiatingPlayer.id, players.collect { it.md5 }, features)
+            handler.handleCreateNewGame(initiatingPlayer.id, features)
             fail('exception expected')
         } catch (NumberFormatException e) {
             assert revertCalled
         }
     }
 
-    public void testCreateGameFailsIfNotEligible() {
+    void testCreateGameFailsIfNotEligible() {
         Set<Object> features = ["GameFeature.SystemPuzzles", "GameFeature.Thieving"]
-        List<Player> players = [PTWO, PTHREE, PFOUR]
         Player initiatingPlayer = PONE
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame()
+        GameCoreTestCase.StringSPGame game = new GameCoreTestCase.StringSPGame()
         game.features.addAll(features)
-        GameCoreTestCase.StringMPGame savedGame = new GameCoreTestCase.StringMPGame()
+        GameCoreTestCase.StringSPGame savedGame = new GameCoreTestCase.StringSPGame()
         savedGame.features = features
         handler.playerRepository = [
-                findByMd5In: {
-                    Iterable<String> it ->
-                        assert it.collect { it } as Set == players.collect { it.md5 } as Set
-                        return players
-                },
-                findOne    : {
+                findOne: {
                     assert it == PONE.id
                     return PONE
                 }
@@ -312,32 +273,27 @@ class NewGameHandlerTest extends GameCoreTestCase {
         ] as GameEligibilityTracker
 
         try {
-            handler.handleCreateNewGame(initiatingPlayer.id, players.collect { it.md5 }, features)
+            handler.handleCreateNewGame(initiatingPlayer.id, features)
             fail('should have failed')
         } catch (OutOfGamesForTodayException e) {
             //
         }
     }
 
-    public void testInvalidInitiator() {
+
+    void testInvalidInitiator() {
         Set<Object> features = ["1", 345, new HashMap()]
-        List<Player> players = [PONE, PTWO, PTHREE]
 
         String playerId = "unkw"
         handler.playerRepository = [
-                findByMd5In: {
-                    Iterable<String> it ->
-                        assert it.collect { it } as Set == players.collect { it.md5 } as Set
-                        return players
-                },
-                findOne    : {
+                findOne: {
                     assert it == playerId
                     return null
                 }
         ] as AbstractPlayerRepository
 
         try {
-            handler.handleCreateNewGame(playerId, players.collect { it.md5 }, features)
+            handler.handleCreateNewGame(playerId, features)
             fail("Should have failed")
         } catch (FailedToFindPlayersException e) {
             //
@@ -345,27 +301,4 @@ class NewGameHandlerTest extends GameCoreTestCase {
     }
 
 
-    public void testNotAllPlayersFound() {
-        Set<Object> features = [1.3, "X", 45]
-        List<Player> players = [PONE, PTWO, PTHREE]
-        Player initiatingPlayer = PFOUR
-        handler.playerRepository = [
-                findByMd5In: {
-                    Iterable<String> it ->
-                        assert it.collect { it } as Set == players.collect { it.md5 } as Set
-                        return [PONE, PTHREE]
-                },
-                findOne    : {
-                    assert it == PFOUR.id
-                    return PFOUR
-                }
-        ] as AbstractPlayerRepository
-
-        try {
-            handler.handleCreateNewGame(initiatingPlayer.id, players.collect { it.md5 }, features)
-            fail("Should have failed")
-        } catch (FailedToFindPlayersException e) {
-            //
-        }
-    }
 }
