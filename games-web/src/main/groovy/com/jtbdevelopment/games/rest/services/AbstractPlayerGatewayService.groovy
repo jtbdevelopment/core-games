@@ -26,7 +26,7 @@ abstract class AbstractPlayerGatewayService<ID extends Serializable> {
     AbstractPlayerServices playerServices
 
     @Path("player")
-    public Object gameServices() {
+    Object gameServices() {
         playerServices.playerID.set(((SessionUserInfo<ID>) SecurityContextHolder.context.authentication.principal).effectiveUser.id)
         return playerServices
     }
@@ -43,7 +43,7 @@ abstract class AbstractPlayerGatewayService<ID extends Serializable> {
     @Path("phases")
     @Produces(MediaType.APPLICATION_JSON)
     @SuppressWarnings("GrMethodMayBeStatic")
-    public Map<GamePhase, List<String>> phasesAndDescriptions() {
+    Map<GamePhase, List<String>> phasesAndDescriptions() {
         GamePhase.values().collectEntries() {
             GamePhase it ->
                 [(it): [it.description, it.groupLabel]]
