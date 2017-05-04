@@ -46,7 +46,6 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringContextInte
                     ),
             ]
     )
-
     @EnableMongoAuditing
     @ComponentScan(
             basePackages = ['com.jtbdevelopment'],
