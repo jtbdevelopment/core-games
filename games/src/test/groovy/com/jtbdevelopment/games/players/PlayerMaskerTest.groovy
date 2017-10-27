@@ -16,4 +16,12 @@ class PlayerMaskerTest extends GameCoreTestCase {
                 (PTHREE.md5): PTHREE.displayName
         ]
     }
+
+    void testMaskFriendsV2() {
+        assert masker.maskFriendsV2([PONE, PTWO, PTHREE] as Set) == [
+                [('md5'): PONE.md5, ('displayName'): PONE.displayName],
+                [('md5'): PTWO.md5, ('displayName'): PTWO.displayName],
+                [('md5'): PTHREE.md5, ('displayName'): PTHREE.displayName]
+        ]
+    }
 }

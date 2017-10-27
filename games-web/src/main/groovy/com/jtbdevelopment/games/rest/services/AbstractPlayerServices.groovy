@@ -37,7 +37,7 @@ abstract class AbstractPlayerServices<ID extends Serializable> implements Applic
     @Autowired
     StringToIDConverter<ID> stringToIDConverter
 
-    private ApplicationContext applicationContext;
+    private ApplicationContext applicationContext
 
     @Override
     void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
@@ -57,21 +57,36 @@ abstract class AbstractPlayerServices<ID extends Serializable> implements Applic
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Object playerInfo() {
+    Object playerInfo() {
         return playerRepository.findOne(playerID.get())
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("friends")
-    public Map<String, Object> getFriends() {
+    Map<String, Object> getFriends() {
         //  Social Media Requires Session Specific Requests
         if (applicationContext) {
-            logger.info("Able to retrieve FriendFinder from application context");
+            logger.info("Able to retrieve FriendFinder from application context")
             FriendFinder friendFinder = applicationContext.getBean(FriendFinder.class)
             return friendFinder?.findFriends(playerID.get())
         } else {
-            logger.warn("Unable to retrieve FriendFinder from application context");
+            logger.warn("Unable to retrieve FriendFinder from application context")
+            throw new IllegalStateException("No App Context")
+        }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("friendsV2")
+    Map<String, Object> getFriendsV2() {
+        //  Social Media Requires Session Specific Requests
+        if (applicationContext) {
+            logger.info("Able to retrieve FriendFinder from application context")
+            FriendFinder friendFinder = applicationContext.getBean(FriendFinder.class)
+            return friendFinder?.findFriendsV2(playerID.get())
+        } else {
+            logger.warn("Unable to retrieve FriendFinder from application context")
             throw new IllegalStateException("No App Context")
         }
     }
@@ -79,7 +94,7 @@ abstract class AbstractPlayerServices<ID extends Serializable> implements Applic
     @Path("lastVersionNotes/{versionNotes}")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Object updateLastVersionNotes(@PathParam("versionNotes") final String lastVersionNotes) {
+    Object updateLastVersionNotes(@PathParam("versionNotes") final String lastVersionNotes) {
         Player player = playerRepository.findOne((playerID.get()))
         player.lastVersionNotes = lastVersionNotes
         return playerRepository.save(player)
@@ -87,7 +102,7 @@ abstract class AbstractPlayerServices<ID extends Serializable> implements Applic
 
     @Path("admin")
     @RolesAllowed([PlayerRoles.ADMIN])
-    public Object adminServices() {
+    Object adminServices() {
         return adminServices
     }
 }

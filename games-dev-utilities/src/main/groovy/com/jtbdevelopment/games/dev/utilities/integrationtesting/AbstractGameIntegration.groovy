@@ -143,6 +143,24 @@ abstract class AbstractGameIntegration<G extends Game, R extends Game> extends A
     }
 
     @Test
+    void testGetFriendsV2() {
+        Client client = createConnection(TEST_PLAYER1)
+        WebTarget path = client
+                .target(PLAYER_API)
+                .path("friendsV2")
+        Map<String, Object> friends = path
+                .request(MediaType.APPLICATION_JSON)
+                .get(new GenericType<Map<String, Object>>() {});
+        List<Map<String, String>> players = (List<Map<String, String>>) friends[SourceBasedFriendFinder.MASKED_FRIENDS_KEY]
+        assert null != players.find {
+            it['md5'] == TEST_PLAYER2.md5 && it['displayName'] == TEST_PLAYER2.displayName
+        }
+        assert null != players.find {
+            it['md5'] == TEST_PLAYER3.md5 && it['displayName'] == TEST_PLAYER3.displayName
+        }
+    }
+
+    @Test
     void testGetPhases() {
         def client = createConnection(TEST_PLAYER3)
         def features = client

@@ -187,6 +187,51 @@ class AbstractPlayerServicesTest extends GameCoreTestCase {
         }
     }
 
+    void testGetFriendsV2() {
+        def id = PFOUR.id
+        playerServices.playerID.set(id)
+        def friendFinder = [
+                findFriendsV2: {
+                    String it ->
+                        assert it == id
+                        return ['1': '2', '3': '4', '5': '6']
+                }
+        ] as FriendFinder
+        playerServices.applicationContext = [
+                getBean: {
+                    Class<?> it ->
+                        assert it.is(FriendFinder.class)
+                        return friendFinder
+                }
+        ] as ApplicationContext
+
+
+        assert playerServices.getFriendsV2() == ['1': '2', '3': '4', '5': '6']
+    }
+
+    void testFriendsV2InfoAnnotations() {
+        def gameServices = AbstractPlayerServices.getMethod("getFriendsV2", [] as Class[])
+        assert (gameServices.annotations.size() == 3 ||
+                (gameServices.isAnnotationPresent(TypeChecked.TypeCheckingInfo) && gameServices.annotations.size() == 4)
+        )
+        assert gameServices.isAnnotationPresent(Path.class)
+        assert gameServices.getAnnotation(Path.class).value() == "friendsV2"
+        assert gameServices.isAnnotationPresent(Produces.class)
+        assert gameServices.getAnnotation(Produces.class).value() == [MediaType.APPLICATION_JSON]
+        assert gameServices.isAnnotationPresent(GET.class)
+        def params = gameServices.parameterAnnotations
+        assert params.length == 0
+    }
+
+    void testGetFriendsV2NoAppContext() {
+        playerServices.applicationContext = null
+        try {
+            playerServices.getFriendsV2()
+            fail("should fail")
+        } catch (IllegalStateException e) {
+            //
+        }
+    }
     void testAdminServicesAnnotation() {
         def gameServices = AbstractPlayerServices.getMethod("adminServices", [] as Class[])
         assert (gameServices.annotations.size() == 2 ||
