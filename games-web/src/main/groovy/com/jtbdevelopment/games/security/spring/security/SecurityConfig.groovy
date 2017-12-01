@@ -116,7 +116,15 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/auth/**",
                         "/signin/**",
 
-                        "/api/social/apis"
+                        "/api/social/apis",
+
+                        //  angular2/webpack build
+                        "/*.js",
+                        "/*.css",
+                        "/*.svg",
+                        "/*.eot",
+                        "/*.ttf",
+                        "/*.woff*",
                 ).permitAll().
                 antMatchers("/**").authenticated().
                 and().apply(mobileAwareFormLoginConfigurer.successHandler(successfulAuthenticationHandler).failureHandler(new MobileAwareFailureAuthenticationHandler(mobileAppChecker)).loginPage(LOGIN_PAGE).loginProcessingUrl(AUTHENTICATE_PAGE)).
