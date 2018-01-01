@@ -24,7 +24,7 @@
     </modules>
 
     <properties>
-        <core.common.version>1.9-SNAPSHOT</core.common.version>
+        <core.common.version>1.9</core.common.version>
         <spring.data.mongodb.version>1.10.0.RELEASE</spring.data.mongodb.version>
         <spring.data.common.version>1.13.0.RELEASE</spring.data.common.version>
         <spring.security.version>4.2.1.RELEASE</spring.security.version>
