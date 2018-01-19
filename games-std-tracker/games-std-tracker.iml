@@ -18,12 +18,20 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="games-mongo" />
     <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-web-mongo:1.9" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-web:1.9" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring:1.9" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-web:4.2.1.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: aopalliance:aopalliance:1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-core:4.2.1.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-web:4.3.6.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.social:spring-social-core:1.1.4.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-mongo:1.9" level="project" />
     <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-jackson:1.9" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.6" level="project" />
     <orderEntry type="module" module-name="games" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.10" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:1.13.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-mongodb:1.10.0.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-tx:4.3.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:mongo-java-driver:2.14.3" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.slf4j:jcl-over-slf4j:1.7.22" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.8.6" level="project" />
@@ -31,6 +39,10 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.8.6" level="project" />
     <orderEntry type="module" module-name="games-events" />
     <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-quartz:1.9" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-context-support:4.3.6.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-tx:4.3.6.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.quartz-scheduler:quartz:2.2.3" level="project" />
+    <orderEntry type="library" name="Maven: c3p0:c3p0:0.9.1.1" level="project" />
     <orderEntry type="module" module-name="games-mongo" scope="TEST" production-on-test="" />
     <orderEntry type="library" name="Maven: org.codehaus.groovy:groovy-all:2.4.8" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.gpars:gpars:1.2.1" level="project" />

@@ -42,7 +42,7 @@ class FriendFinder<ID extends Serializable> {
                             if (friends.containsKey(key)) {
                                 ((Set<Object>) friends[key]).addAll(values)
                             } else {
-                                friends[key] = values;
+                                friends[key] = values
                             }
                     }
                 }
@@ -71,7 +71,7 @@ class FriendFinder<ID extends Serializable> {
                             if (friends.containsKey(key)) {
                                 ((Set<Object>) friends[key]).addAll(values)
                             } else {
-                                friends[key] = values;
+                                friends[key] = values
                             }
                     }
                 }
@@ -80,7 +80,7 @@ class FriendFinder<ID extends Serializable> {
         if (playerFriends) {
             friends[SourceBasedFriendFinder.MASKED_FRIENDS_KEY] = friendMasker.maskFriendsV2(playerFriends)
         } else {
-            friends[SourceBasedFriendFinder.MASKED_FRIENDS_KEY] = [:]
+            friends[SourceBasedFriendFinder.MASKED_FRIENDS_KEY] = []
         }
         return friends
     }

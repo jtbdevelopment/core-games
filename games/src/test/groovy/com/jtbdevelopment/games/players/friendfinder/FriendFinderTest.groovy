@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ScopedProxyMode
  * Time: 4:18 PM
  */
 class FriendFinderTest extends GameCoreTestCase {
-    FriendFinder<String> finder = new FriendFinder<String>() {};
+    FriendFinder<String> finder = new FriendFinder<String>() {}
 
     void testClassAnnotations() {
         Scope scope = FriendFinder.class.getAnnotation(Scope.class)
@@ -27,7 +27,7 @@ class FriendFinderTest extends GameCoreTestCase {
         def f1 = [
                 handlesSource: {
                     String it ->
-                        true;
+                        true
                 },
                 findFriends  : {
                     StringPlayer p ->
@@ -38,7 +38,7 @@ class FriendFinderTest extends GameCoreTestCase {
         def f2 = [
                 handlesSource: {
                     String it ->
-                        true;
+                        true
                 },
                 findFriends  : {
                     StringPlayer p ->
@@ -49,7 +49,7 @@ class FriendFinderTest extends GameCoreTestCase {
         def f3 = [
                 handlesSource: {
                     String it ->
-                        false;
+                        false
                 }
         ] as SourceBasedFriendFinder
 
@@ -162,7 +162,7 @@ class FriendFinderTest extends GameCoreTestCase {
         def f1 = [
                 handlesSource: {
                     String it ->
-                        true;
+                        true
                 },
                 findFriends  : {
                     StringPlayer p ->
@@ -181,7 +181,7 @@ class FriendFinderTest extends GameCoreTestCase {
         ] as AbstractPlayerRepository<String>
 
         assert finder.findFriendsV2(PFOUR.id) == [
-                (SourceBasedFriendFinder.MASKED_FRIENDS_KEY): [:]
+                (SourceBasedFriendFinder.MASKED_FRIENDS_KEY): []
         ]
     }
 
