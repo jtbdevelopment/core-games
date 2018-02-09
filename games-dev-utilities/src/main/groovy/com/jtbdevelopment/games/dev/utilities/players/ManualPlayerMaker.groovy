@@ -24,12 +24,12 @@ class ManualPlayerMaker {
         passwordEncoder = ctx.getBean(PasswordEncoder.class)
 
         ManualPlayer[] players = [
-                makePlayer("Manual Player1", 'M1@MANUAL.COM', "M1", "images/avatars/maleprofile.png"),
-                makePlayer("Manual Player2", 'M2@MANUAL.COM', "M2", "images/avatars/femaleprofile.png"),
-                makePlayer("Manual Player3", 'M3@MANUAL.COM', "M3", "images/avatars/maleprofile.png"),
-                makePlayer("Manual Player4", 'M4@MANUAL.COM', "M4", "images/avatars/femaleprofile.png"),
-                makePlayer("Manual Player5", 'M5@MANUAL.COM', "M5", "images/avatars/maleprofile.png"),
-                makePlayer("Manual Player6", 'M6@MANUAL.COM', "M6", "images/avatars/femaleprofile.png"),
+                makePlayer("Manual Player1", 'M1@MANUAL.COM', "M1", "assets/avatars/maleprofile.png"),
+                makePlayer("Manual Player2", 'M2@MANUAL.COM', "M2", "assets/avatars/femaleprofile.png"),
+                makePlayer("Manual Player3", 'M3@MANUAL.COM', "M3", "assets/avatars/maleprofile.png"),
+                makePlayer("Manual Player4", 'M4@MANUAL.COM', "M4", "assets/avatars/femaleprofile.png"),
+                makePlayer("Manual Player5", 'M5@MANUAL.COM', "M5", "assets/avatars/maleprofile.png"),
+                makePlayer("Manual Player6", 'M6@MANUAL.COM', "M6", "assets/avatars/femaleprofile.png"),
         ]
 
         players.each {
@@ -39,7 +39,12 @@ class ManualPlayerMaker {
                     println "Creating player " + it
                     repository.save(it)
                 } else {
-                    println "Player already created " + it
+                    loaded.password = it.password
+                    loaded.imageUrl = it.imageUrl
+                    loaded.displayName = it.displayName
+                    loaded.sourceId = it.sourceId
+                    repository.save(loaded)
+                    println "Player already created " + it + ", updating"
                 }
         }
 

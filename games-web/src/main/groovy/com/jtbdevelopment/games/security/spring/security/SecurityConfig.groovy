@@ -101,15 +101,6 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
                 antMatchers(
                         "/favicon.ico",
                         "/index.html",
-                        "/images/**",
-
-                        "/views/**",
-                        "/templates/**",
-
-                        "/styles/**",
-
-                        "/scripts/**",
-                        "/bower_components/**",  //  dev sometimes
 
                         "/facebook/**",  // ??
 
@@ -118,7 +109,16 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                         "/api/social/apis",
 
+                        //  angularjs
+                        "/images/**",
+                        "/views/**",
+                        "/templates/**",
+                        "/styles/**",
+                        "/scripts/**",
+                        "/bower_components/**",  //  dev sometimes
+
                         //  angular2/webpack build
+                        "/assets/**",
                         "/*.js",
                         "/*.css",
                         "/*.svg",
