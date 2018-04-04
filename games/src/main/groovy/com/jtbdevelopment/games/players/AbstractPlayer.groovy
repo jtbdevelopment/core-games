@@ -103,7 +103,7 @@ abstract class AbstractPlayer<ID extends Serializable> implements Cloneable, Pla
 
     @Override
     String getSourceAndSourceId() {
-        return getSourceAndSourceId(this.source, sourceId)
+        return getSourceAndSourceId(source, sourceId)
     }
 
     static String getSourceAndSourceId(final String source, final String sourceId) {

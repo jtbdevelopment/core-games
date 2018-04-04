@@ -18,19 +18,17 @@ import static com.jtbdevelopment.games.dao.caching.CacheConstants.GAME_ID_CACHE
 @NoRepositoryBean
 interface AbstractGameRepository<ID extends Serializable, TIMESTAMP, FEATURES, IMPL extends Game<ID, TIMESTAMP, FEATURES>> extends PagingAndSortingRepository<IMPL, ID> {
 
+    @Override
     @CachePut(value = GAME_ID_CACHE, key = '#result.id')
-    IMPL save(IMPL entity)
+    <S extends IMPL> S save(S entity)
 
+    @Override
     @CachePut(value = GAME_ID_CACHE, key = 'T(com.jtbdevelopment.games.dao.caching.GameKeyUtility).collectGameIDs(#result)')
-    Iterable<IMPL> save(Iterable<IMPL> entities)
+    <S extends IMPL> Iterable<S> saveAll(Iterable<S> entities)
 
     @Override
     @Cacheable(value = GAME_ID_CACHE)
-    IMPL findOne(ID id)
-
-    @Override
-    @CacheEvict(value = GAME_ID_CACHE)
-    void delete(ID id)
+    Optional<IMPL> findById(ID id)
 
     @Override
     @CacheEvict(value = GAME_ID_CACHE, key = '#p0.id')
@@ -38,7 +36,7 @@ interface AbstractGameRepository<ID extends Serializable, TIMESTAMP, FEATURES, I
 
     @Override
     @CacheEvict(value = GAME_ID_CACHE, key = 'T(com.jtbdevelopment.games.dao.caching.GameKeyUtility).collectGameIDs(#p0)')
-    void delete(Iterable<? extends IMPL> entities)
+    void deleteAll(Iterable<? extends IMPL> entities)
 
     @Override
     @CacheEvict(value = GAME_ID_CACHE, allEntries = true)

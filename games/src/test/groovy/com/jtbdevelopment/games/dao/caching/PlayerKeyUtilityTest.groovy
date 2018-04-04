@@ -64,10 +64,10 @@ class PlayerKeyUtilityTest extends GroovyTestCase {
         String ID = 'ANID'
         String md5 = 'MD5'
         playerKeyUtility.playerRepository = [
-                findOne: {
+                findById: {
                     Serializable id ->
                         assert id.is(ID)
-                        return [getMd5: { md5 }] as Player
+                        return Optional.of([getMd5: { md5 }] as Player)
                 }
         ] as AbstractPlayerRepository
         assert PlayerKeyUtility.md5FromID(ID) == md5
@@ -76,10 +76,10 @@ class PlayerKeyUtilityTest extends GroovyTestCase {
     void testMd5FromIDNullResult() {
         String ID = 'ANID'
         playerKeyUtility.playerRepository = [
-                findOne: {
+                findById: {
                     Serializable id ->
                         assert id.is(ID)
-                        null
+                        Optional.empty()
                 }
         ] as AbstractPlayerRepository
         assertNull PlayerKeyUtility.md5FromID(ID)
@@ -89,10 +89,10 @@ class PlayerKeyUtilityTest extends GroovyTestCase {
         String ID = 'ANID'
         String ssid = 'XSID'
         playerKeyUtility.playerRepository = [
-                findOne: {
+                findById: {
                     Serializable id ->
                         assert id.is(ID)
-                        return [getSourceAndSourceId: { ssid }] as Player
+                        return Optional.of([getSourceAndSourceId: { ssid }] as Player)
                 }
         ] as AbstractPlayerRepository
         assert PlayerKeyUtility.sourceAndSourceIDFromID(ID) == ssid
@@ -101,10 +101,10 @@ class PlayerKeyUtilityTest extends GroovyTestCase {
     void testSourceAndSourceIDFromIDWithNull() {
         String ID = 'ANID'
         playerKeyUtility.playerRepository = [
-                findOne: {
+                findById: {
                     Serializable id ->
                         assert id.is(ID)
-                        return null
+                        return Optional.empty()
                 }
         ] as AbstractPlayerRepository
         assertNull PlayerKeyUtility.sourceAndSourceIDFromID(ID)

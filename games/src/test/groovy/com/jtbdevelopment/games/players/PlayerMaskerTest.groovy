@@ -9,14 +9,6 @@ import com.jtbdevelopment.games.GameCoreTestCase
 class PlayerMaskerTest extends GameCoreTestCase {
     PlayerMasker masker = new PlayerMasker();
 
-    void testMaskFriends() {
-        assert masker.maskFriends([PONE, PTWO, PTHREE] as Set) == [
-                (PONE.md5)  : PONE.displayName,
-                (PTWO.md5)  : PTWO.displayName,
-                (PTHREE.md5): PTHREE.displayName
-        ]
-    }
-
     void testMaskFriendsV2() {
         assert masker.maskFriendsV2([PONE, PTWO, PTHREE] as Set) == [
                 [('md5'): PONE.md5, ('displayName'): PONE.displayName],

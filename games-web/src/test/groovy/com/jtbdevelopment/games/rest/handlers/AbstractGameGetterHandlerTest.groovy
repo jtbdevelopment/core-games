@@ -45,10 +45,10 @@ class AbstractGameGetterHandlerTest extends GameCoreTestCase {
         GameCoreTestCase.StringMPGame mpGame = new GameCoreTestCase.StringMPGame()
         String id = 'X'
         handler.gameRepository = [
-                findOne: {
+                findById: {
                     String i ->
                         assert id == i
-                        mpGame
+                        Optional.of(mpGame)
                 }
         ] as AbstractGameRepository
         assert mpGame.is(handler.loadGame(id))
@@ -57,10 +57,10 @@ class AbstractGameGetterHandlerTest extends GameCoreTestCase {
     void testLoadGameFailed() {
         String id = 'X'
         handler.gameRepository = [
-                findOne: {
+                findById: {
                     String i ->
                         assert id == i
-                        null
+                        Optional.empty()
                 }
         ] as AbstractGameRepository
         shouldFail(FailedToFindGameException.class, {

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component
 @CompileStatic
 @Component
 class PlayerKeyUtility<ID extends Serializable> {
-    private static AbstractPlayerRepository playerRepository
+    private static AbstractPlayerRepository<? extends Serializable, ? extends Player> playerRepository
 
     @SuppressWarnings("GrMethodMayBeStatic")
     @Autowired
@@ -23,41 +23,44 @@ class PlayerKeyUtility<ID extends Serializable> {
     }
 
     static List<ID> collectPlayerIDs(final Iterable<Player<ID>> players) {
-        if (!players) {
+        if (players == null) {
             return Collections.<ID> emptyList()
         }
         return players.collect { Player<ID> p -> p.id }
     }
 
     static List<String> collectPlayerMD5s(final Iterable<Player<ID>> players) {
-        if (!players) {
+        if (players == null) {
             return Collections.<String> emptyList()
         }
         return players.collect { Player<ID> p -> p.md5 }
     }
 
     static List<String> collectPlayerSourceAndSourceIDs(final Iterable<Player<ID>> players) {
-        if (!players) {
+        if (players == null) {
             return Collections.<String> emptyList()
         }
         return players.collect { Player<ID> p -> (p.sourceAndSourceId) }
     }
 
     static List<String> collectSourceAndSourceIDs(final String source, final Iterable<String> sourceIds) {
-        if (!sourceIds || !source) {
+        if (sourceIds == null || source == null) {
             return Collections.<String> emptyList()
         }
         return sourceIds.collect { String sourceId -> (AbstractPlayer.getSourceAndSourceId(source, sourceId)) }
     }
 
     static String md5FromID(final ID id) {
-        return playerRepository.findOne(id)?.md5
+        def optional = playerRepository.findById(id)
+        if (optional.present) {
+            return optional.get().md5
+        }
     }
 
     static String sourceAndSourceIDFromID(final ID id) {
-        Player<ID> player = playerRepository.findOne(id)
-        if (player) {
-            return player.sourceAndSourceId
+        Optional<? extends Player> optional = playerRepository.findById(id)
+        if (optional.present) {
+            return optional.get().sourceAndSourceId
         }
         return null
     }

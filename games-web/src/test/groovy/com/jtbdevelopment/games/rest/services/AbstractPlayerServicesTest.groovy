@@ -77,10 +77,10 @@ class AbstractPlayerServicesTest extends GameCoreTestCase {
 
     void testPlayerInfo() {
         playerServices.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == PONE.id
-                        return PONE
+                        return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
 
@@ -105,12 +105,12 @@ class AbstractPlayerServicesTest extends GameCoreTestCase {
     void testUpdateLastVersionInfo() {
         String newNotes = "NewVersion"
         playerServices.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == PONE.id
-                        return PONE
+                        return Optional.of(PONE)
                 },
-                save   : {
+                save    : {
                     Player p ->
                         assert p.is(PONE)
                         assert newNotes == p.lastVersionNotes
@@ -145,7 +145,7 @@ class AbstractPlayerServicesTest extends GameCoreTestCase {
         def id = PFOUR.id
         playerServices.playerID.set(id)
         def friendFinder = [
-                findFriends: {
+                findFriendsV2: {
                     String it ->
                         assert it == id
                         return ['1': '2', '3': '4', '5': '6']

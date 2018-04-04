@@ -22,27 +22,27 @@ class AbstractGameGetterHandler extends AbstractHandler {
     private static final Logger logger = LoggerFactory.getLogger(AbstractGameGetterHandler.class)
 
     @Autowired
-    AbstractGameRepository gameRepository
+    AbstractGameRepository<? extends Serializable, ?, ?, ? extends Game> gameRepository
 
     @SuppressWarnings("GrMethodMayBeStatic")
     protected void validatePlayerForGame(final Game game, final Player player) {
         if (game instanceof MultiPlayerGame) {
-            if (!game.players.contains(player)) {
+            if (!game.allPlayers.contains(player)) {
                 throw new PlayerNotPartOfGameException()
             }
         } else if (game instanceof SinglePlayerGame) {
-            if (game.player != player) {
+            if (((SinglePlayerGame) game).player != player) {
                 throw new PlayerNotPartOfGameException()
             }
         }
     }
 
     protected Game loadGame(final Serializable gameID) {
-        Game game = gameRepository.findOne(gameID)
-        if (game == null) {
-            logger.info("Game was not loaded " + gameID)
-            throw new FailedToFindGameException()
+        def optional = gameRepository.findById(gameID)
+        if (optional.present) {
+            return optional.get()
         }
-        game
+        logger.info("Game was not loaded " + gameID)
+        throw new FailedToFindGameException()
     }
 }

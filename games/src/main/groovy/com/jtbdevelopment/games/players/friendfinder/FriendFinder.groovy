@@ -22,45 +22,16 @@ class FriendFinder<ID extends Serializable> {
     @Autowired
     List<SourceBasedFriendFinder> friendFinders
     @Autowired
-    AbstractPlayerRepository playerRepository
+    AbstractPlayerRepository<? extends Serializable, ? extends Player> playerRepository
     @Autowired
     PlayerMasker friendMasker
 
-    @Deprecated
-    Map<String, Object> findFriends(final ID playerId) {
-        Player player = playerRepository.findOne(playerId)
-        if (player == null || player.disabled) {
-            throw new FailedToFindPlayersException()
-        }
-        Map<String, Object> friends = [:]
-        friendFinders.each {
-            SourceBasedFriendFinder friendFinder ->
-                if (friendFinder.handlesSource(player.source)) {
-                    Map<String, Set<Object>> subFriends = friendFinder.findFriends(player)
-                    subFriends.each {
-                        String key, Set<Object> values ->
-                            if (friends.containsKey(key)) {
-                                ((Set<Object>) friends[key]).addAll(values)
-                            } else {
-                                friends[key] = values
-                            }
-                    }
-                }
-        }
-        Set<Player> playerFriends = (Set<Player>) friends.remove(SourceBasedFriendFinder.FRIENDS_KEY)
-        if (playerFriends) {
-            friends[SourceBasedFriendFinder.MASKED_FRIENDS_KEY] = friendMasker.maskFriends(playerFriends)
-        } else {
-            friends[SourceBasedFriendFinder.MASKED_FRIENDS_KEY] = [:]
-        }
-        return friends
-    }
-
     Map<String, Object> findFriendsV2(final ID playerId) {
-        Player player = playerRepository.findOne(playerId)
-        if (player == null || player.disabled) {
+        def optionalPlayer = playerRepository.findById(playerId)
+        if (!optionalPlayer.present || optionalPlayer.get().disabled) {
             throw new FailedToFindPlayersException()
         }
+        Player player = optionalPlayer.get()
         Map<String, Object> friends = [:]
         friendFinders.each {
             SourceBasedFriendFinder friendFinder ->

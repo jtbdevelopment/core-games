@@ -55,54 +55,54 @@ class AbstractGameActionHandlerTest extends GameCoreTestCase {
         }.requiresEligibilityCheck(null)
     }
 
-    public void testAbstractHandlerBasicWithNoOptionalFeatures() {
-        Game saved = new GameCoreTestCase.StringMPGame();
+    void testAbstractHandlerBasicWithNoOptionalFeatures() {
+        Game saved = new GameCoreTestCase.StringMPGame()
         gameParam.players = [PONE, PTWO]
         handler.gameRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == gameId
-                        return gameParam
+                        return Optional.of(gameParam)
                 },
-                save   : {
+                save    : {
                     Game it ->
                         assert it.is(handledGame)
                         return saved
                 }
         ] as AbstractGameRepository
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == PONE.id
-                        return PONE
+                        return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
 
         assert saved.is(handler.handleAction(PONE.id, gameId, testParam))
     }
 
-    public void testAbstractHandlerBasicWithAllFeaturesSinglePlayer() {
-        Game saved = new GameCoreTestCase.StringSPGame();
-        Game transitioned = new GameCoreTestCase.StringSPGame();
-        Game published = new GameCoreTestCase.StringSPGame();
+    void testAbstractHandlerBasicWithAllFeaturesSinglePlayer() {
+        Game saved = new GameCoreTestCase.StringSPGame()
+        Game transitioned = new GameCoreTestCase.StringSPGame()
+        Game published = new GameCoreTestCase.StringSPGame()
         gameParam.players = [PONE, PTWO]
         handler.gameRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == gameId
-                        return gameParam
+                        return Optional.of(gameParam)
                 },
-                save   : {
+                save    : {
                     Game it ->
                         assert it.is(transitioned)
                         return saved
                 }
         ] as AbstractGameRepository
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == PONE.id
-                        return PONE
+                        return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
         handler.transitionEngine = [
@@ -124,28 +124,28 @@ class AbstractGameActionHandlerTest extends GameCoreTestCase {
         assert published.is(handler.handleAction(PONE.id, gameId, testParam))
     }
 
-    public void testAbstractHandlerBasicWithAllFeatures() {
-        Game saved = new GameCoreTestCase.StringMPGame();
-        Game transitioned = new GameCoreTestCase.StringMPGame();
-        Game published = new GameCoreTestCase.StringMPGame();
+    void testAbstractHandlerBasicWithAllFeatures() {
+        Game saved = new GameCoreTestCase.StringMPGame()
+        Game transitioned = new GameCoreTestCase.StringMPGame()
+        Game published = new GameCoreTestCase.StringMPGame()
         gameParam.players = [PONE, PTWO]
         handler.gameRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == gameId
-                        return gameParam
+                        return Optional.of(gameParam)
                 },
-                save   : {
+                save    : {
                     Game it ->
                         assert it.is(transitioned)
                         return saved
                 }
         ] as AbstractGameRepository
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == PONE.id
-                        return PONE
+                        return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
         handler.transitionEngine = [
@@ -176,19 +176,19 @@ class AbstractGameActionHandlerTest extends GameCoreTestCase {
         assert maskedMultiPlayerGame.is(handler.handleAction(PONE.id, gameId, testParam))
     }
 
-    public void testAbstractHandlerWithEligibilityCheckAndEligible() {
+    void testAbstractHandlerWithEligibilityCheckAndEligible() {
         handler.checkEligibility = true
-        Game saved = new GameCoreTestCase.StringMPGame();
-        Game transitioned = new GameCoreTestCase.StringMPGame();
-        Game published = new GameCoreTestCase.StringMPGame();
+        Game saved = new GameCoreTestCase.StringMPGame()
+        Game transitioned = new GameCoreTestCase.StringMPGame()
+        Game published = new GameCoreTestCase.StringMPGame()
         gameParam.players = [PONE, PTWO]
         handler.gameRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == gameId
-                        return gameParam
+                        return Optional.of(gameParam)
                 },
-                save   : {
+                save    : {
                     Game it ->
                         assert it.is(transitioned)
                         return saved
@@ -202,10 +202,10 @@ class AbstractGameActionHandlerTest extends GameCoreTestCase {
                 }
         ] as GameEligibilityTracker
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == PONE.id
-                        return PONE
+                        return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
         handler.transitionEngine = [
@@ -236,14 +236,14 @@ class AbstractGameActionHandlerTest extends GameCoreTestCase {
         assert maskedMultiPlayerGame.is(handler.handleAction(PONE.id, gameId, testParam))
     }
 
-    public void testAbstractHandlerWithEligibilityCheckAndNotEligible() {
+    void testAbstractHandlerWithEligibilityCheckAndNotEligible() {
         handler.checkEligibility = true
         gameParam.players = [PONE, PTWO]
         handler.gameRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == gameId
-                        return gameParam
+                        return Optional.of(gameParam)
                 }
         ] as AbstractGameRepository
         handler.gameTracker = [
@@ -254,32 +254,32 @@ class AbstractGameActionHandlerTest extends GameCoreTestCase {
                 }
         ] as GameEligibilityTracker
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == PONE.id
-                        return PONE
+                        return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
 
         try {
             handler.handleAction(PONE.id, gameId, testParam)
             fail('should have exceptioned')
-        } catch (OutOfGamesForTodayException e) {
+        } catch (OutOfGamesForTodayException ignored) {
             //
         }
     }
 
-    public void testAbstractHandlerWithEligibilityCheckAndHandleInternalExceptions() {
+    void testAbstractHandlerWithEligibilityCheckAndHandleInternalExceptions() {
         handler.checkEligibility = true
         handler.internalException = true
         boolean revertCalled = false
         def eligibilityResult = new PlayerGameEligibilityResult(eligibility: PlayerGameEligibility.FreeGameUsed)
         gameParam.players = [PONE, PTWO]
         handler.gameRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == gameId
-                        return gameParam
+                        return Optional.of(gameParam)
                 }
         ] as AbstractGameRepository
         handler.gameTracker = [
@@ -296,31 +296,31 @@ class AbstractGameActionHandlerTest extends GameCoreTestCase {
                 }
         ] as GameEligibilityTracker
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == PONE.id
-                        return PONE
+                        return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
 
         try {
             handler.handleAction(PONE.id, gameId, testParam)
             fail('should have exception')
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException ignored) {
             assert revertCalled
         }
     }
 
-    public void testAbstractHandlerWithEligibilityCheckAndTransitionExceptions() {
+    void testAbstractHandlerWithEligibilityCheckAndTransitionExceptions() {
         handler.checkEligibility = true
         gameParam.players = [PONE, PTWO]
         boolean revertCalled = false
         def eligibilityResult = new PlayerGameEligibilityResult(eligibility: PlayerGameEligibility.FreeGameUsed)
         handler.gameRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == gameId
-                        return gameParam
+                        return Optional.of(gameParam)
                 }
         ] as AbstractGameRepository
         handler.gameTracker = [
@@ -337,10 +337,10 @@ class AbstractGameActionHandlerTest extends GameCoreTestCase {
                 }
         ] as GameEligibilityTracker
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == PONE.id
-                        return PONE
+                        return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
         handler.transitionEngine = [
@@ -354,21 +354,21 @@ class AbstractGameActionHandlerTest extends GameCoreTestCase {
         try {
             handler.handleAction(PONE.id, gameId, testParam)
             fail('should have exceptioned')
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException ignored) {
             assert revertCalled
         }
     }
 
-    public void testAbstractHandlerWithEligibilityCheckAndRevertExceptionsAlso() {
+    void testAbstractHandlerWithEligibilityCheckAndRevertExceptionsAlso() {
         handler.checkEligibility = true
         gameParam.players = [PONE, PTWO]
         boolean revertCalled = false
         def eligibilityResult = new PlayerGameEligibilityResult(eligibility: PlayerGameEligibility.FreeGameUsed)
         handler.gameRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == gameId
-                        return gameParam
+                        return Optional.of(gameParam)
                 }
         ] as AbstractGameRepository
         handler.gameTracker = [
@@ -385,10 +385,10 @@ class AbstractGameActionHandlerTest extends GameCoreTestCase {
                 }
         ] as GameEligibilityTracker
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == PONE.id
-                        return PONE
+                        return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
         handler.transitionEngine = [
@@ -402,60 +402,60 @@ class AbstractGameActionHandlerTest extends GameCoreTestCase {
         try {
             handler.handleAction(PONE.id, gameId, testParam)
             fail('should have exceptioned')
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException ignored) {
             assert revertCalled
-        } catch (IllegalAccessException e) {
+        } catch (IllegalAccessException ignored) {
             fail('Should have caught and discarded IllegalAccessException')
         }
     }
 
-    public void testAbstractHandlerCantLoadGame() {
+    void testAbstractHandlerCantLoadGame() {
         gameParam.players = [PONE, PTWO]
         handler.gameRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == gameId
-                        return null
+                        return Optional.empty()
                 }
         ] as AbstractGameRepository
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == PONE.id
-                        return PONE
+                        return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
 
         try {
             handler.handleAction(PONE.id, gameId, testParam)
             fail("should have failed")
-        } catch (FailedToFindGameException e) {
+        } catch (FailedToFindGameException ignored) {
 
         }
     }
 
 
-    public void testAbstractHandlerInvalidPlayer() {
+    void testAbstractHandlerInvalidPlayer() {
         gameParam.players = [PONE, PTWO]
         handler.gameRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == gameId
-                        return gameParam
+                        return Optional.of(gameParam)
                 }
         ] as AbstractGameRepository
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == PTHREE.id
-                        return PTHREE
+                        return Optional.of(PTHREE)
                 }
         ] as AbstractPlayerRepository
 
         try {
             handler.handleAction(PTHREE.id, gameId, testParam)
             fail("should have failed")
-        } catch (PlayerNotPartOfGameException e) {
+        } catch (PlayerNotPartOfGameException ignored) {
             //
         }
     }

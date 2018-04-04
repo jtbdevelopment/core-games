@@ -251,10 +251,10 @@ class AbstractAdminServicesTest extends GameCoreTestCase {
         SecurityContextHolder.context.authentication = authenticationToken
 
         def repo = [
-                findOne: {
+                findById: {
                     String id ->
                         assert id == PTWO.id
-                        return PTWO
+                        return Optional.of(PTWO)
                 }
         ] as AbstractPlayerRepository
 
@@ -291,10 +291,10 @@ class AbstractAdminServicesTest extends GameCoreTestCase {
         SecurityContextHolder.context.authentication = authenticationToken
 
         def repo = [
-                findOne: {
+                findById: {
                     String id ->
                         assert id == PTWO.id
-                        return null
+                        return Optional.empty()
                 }
         ] as AbstractPlayerRepository
 

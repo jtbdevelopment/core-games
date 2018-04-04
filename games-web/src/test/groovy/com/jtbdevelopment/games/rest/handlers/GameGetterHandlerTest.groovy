@@ -22,17 +22,17 @@ class GameGetterHandlerTest extends GameCoreTestCase {
         game.players = [PTWO, PONE]
 
         handler.gameRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == gameId
-                        return game
+                        return Optional.of(game)
                 },
         ] as AbstractGameRepository
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == PONE.id
-                        return PONE
+                        return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
         AbstractMaskedMultiPlayerGame maskedGame = new AbstractMaskedMultiPlayerGame() {}
@@ -52,17 +52,17 @@ class GameGetterHandlerTest extends GameCoreTestCase {
         game.players = [PTWO, PONE]
 
         handler.gameRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == gameId
-                        return game
+                        return Optional.of(game)
                 },
         ] as AbstractGameRepository
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == PONE.id
-                        return PONE
+                        return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
 
@@ -74,17 +74,17 @@ class GameGetterHandlerTest extends GameCoreTestCase {
         AbstractMaskedSinglePlayerGame maskedGame = new AbstractMaskedSinglePlayerGame() {}
 
         handler.gameRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == gameId
-                        return game
+                        return Optional.of(game)
                 },
         ] as AbstractGameRepository
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == PONE.id
-                        return PONE
+                        return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
         handler.gameMasker = [
@@ -103,17 +103,17 @@ class GameGetterHandlerTest extends GameCoreTestCase {
         GameCoreTestCase.StringGame game = new GameCoreTestCase.StringGame()
 
         handler.gameRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == gameId
-                        return game
+                        return Optional.of(game)
                 },
         ] as AbstractGameRepository
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == PONE.id
-                        return PONE
+                        return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
 

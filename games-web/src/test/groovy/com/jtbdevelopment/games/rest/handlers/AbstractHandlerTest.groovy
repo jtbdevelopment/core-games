@@ -14,7 +14,7 @@ class AbstractHandlerTest extends GameCoreTestCase {
     }
     TestHandler handler = new TestHandler()
 
-    public void testLoadPlayerMD5() {
+    void testLoadPlayerMD5() {
         handler.playerRepository = [
                 findByMd5: {
                     String it ->
@@ -25,7 +25,7 @@ class AbstractHandlerTest extends GameCoreTestCase {
         assert PTHREE.is(handler.loadPlayerMD5(PTHREE.md5))
     }
 
-    public void testLoadPlayerMD5Fails() {
+    void testLoadPlayerMD5Fails() {
         handler.playerRepository = [
                 findByMd5: {
                     String it ->
@@ -38,7 +38,7 @@ class AbstractHandlerTest extends GameCoreTestCase {
         })
     }
 
-    public void testLoadPlayerMD5s() {
+    void testLoadPlayerMD5s() {
         handler.playerRepository = [
                 findByMd5In: {
                     Collection<String> it ->
@@ -49,7 +49,7 @@ class AbstractHandlerTest extends GameCoreTestCase {
         assert handler.loadPlayerMD5s([PTWO.md5, PFOUR.md5, PTHREE.md5]) == [PTWO, PTHREE, PFOUR] as Set
     }
 
-    public void testLoadPlayerMD5sWithPartialLoad() {
+    void testLoadPlayerMD5sWithPartialLoad() {
         handler.playerRepository = [
                 findByMd5In: {
                     Collection<String> it ->
@@ -63,12 +63,12 @@ class AbstractHandlerTest extends GameCoreTestCase {
         })
     }
 
-    public void testLoadPlayer() {
+    void testLoadPlayer() {
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == PTWO.id
-                        return PTWO
+                        return Optional.of(PTWO)
                 }
         ] as AbstractPlayerRepository
 
@@ -76,12 +76,12 @@ class AbstractHandlerTest extends GameCoreTestCase {
     }
 
 
-    public void testLoadPlayerFindsNull() {
+    void testLoadPlayerFindsNull() {
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == PTWO.id
-                        return null
+                        return Optional.empty()
                 }
         ] as AbstractPlayerRepository
 

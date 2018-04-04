@@ -31,7 +31,7 @@ abstract class AbstractPlayerServices<ID extends Serializable> implements Applic
     @Autowired
     AbstractGameServices gamePlayServices
     @Autowired
-    AbstractPlayerRepository playerRepository
+    AbstractPlayerRepository<? extends Serializable, ? extends Player> playerRepository
     @Autowired
     AbstractAdminServices adminServices
     @Autowired
@@ -58,7 +58,7 @@ abstract class AbstractPlayerServices<ID extends Serializable> implements Applic
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     Object playerInfo() {
-        return playerRepository.findOne(playerID.get())
+        return playerRepository.findById(playerID.get()).get()
     }
 
     @GET
@@ -69,7 +69,7 @@ abstract class AbstractPlayerServices<ID extends Serializable> implements Applic
         if (applicationContext) {
             logger.info("Able to retrieve FriendFinder from application context")
             FriendFinder friendFinder = applicationContext.getBean(FriendFinder.class)
-            return friendFinder?.findFriends(playerID.get())
+            return friendFinder?.findFriendsV2(playerID.get())
         } else {
             logger.warn("Unable to retrieve FriendFinder from application context")
             throw new IllegalStateException("No App Context")
@@ -95,7 +95,7 @@ abstract class AbstractPlayerServices<ID extends Serializable> implements Applic
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     Object updateLastVersionNotes(@PathParam("versionNotes") final String lastVersionNotes) {
-        Player player = playerRepository.findOne((playerID.get()))
+        Player player = playerRepository.findById((playerID.get())).get()
         player.lastVersionNotes = lastVersionNotes
         return playerRepository.save(player)
     }

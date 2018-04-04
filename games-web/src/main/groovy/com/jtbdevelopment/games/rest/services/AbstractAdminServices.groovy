@@ -32,7 +32,7 @@ abstract class AbstractAdminServices {
     public static final int DEFAULT_PAGE = 0
     public static final int DEFAULT_PAGE_SIZE = 500
     @Autowired
-    AbstractPlayerRepository playerRepository
+    AbstractPlayerRepository<? extends Serializable, ? extends Player> playerRepository
     @Autowired
     AbstractGameRepository gameRepository
     public static final ZoneId GMT = ZoneId.of("GMT")
@@ -95,10 +95,10 @@ abstract class AbstractAdminServices {
     @Path("{playerID}")
     @Produces(MediaType.APPLICATION_JSON)
     Object switchEffectiveUser(@PathParam("playerID") final String effectivePlayerID) {
-        Player p = playerRepository.findOne(stringToIDConverter.convert(effectivePlayerID));
-        if (p != null) {
-            ((SessionUserInfo) SecurityContextHolder.context.authentication.principal).effectiveUser = p;
-            return p;
+        def optional = playerRepository.findById(stringToIDConverter.convert(effectivePlayerID))
+        if (optional.present) {
+            ((SessionUserInfo) SecurityContextHolder.context.authentication.principal).effectiveUser = optional.get()
+            return optional.get()
         }
         return Response.status(Response.Status.NOT_FOUND)
                 .type(MediaType.TEXT_PLAIN_TYPE)

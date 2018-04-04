@@ -11,11 +11,11 @@ class PlayersActiveGameValidatorTest extends GameCoreTestCase {
     PlayersActiveGameValidator validator = new PlayersActiveGameValidator()
 
 
-    public void testPassesAllActivesForMPGame() {
+    void testPassesAllActivesForMPGame() {
         StringMPGame game = new StringMPGame()
         game.players = [PONE, PTWO]
         validator.playerRepository = [
-                findAll: {
+                findAllById: {
                     Iterable<String> input ->
                         assert input.collect { it } as Set == [PONE.id, PTWO.id] as Set
                         return [PONE, PTWO]
@@ -24,11 +24,11 @@ class PlayersActiveGameValidatorTest extends GameCoreTestCase {
         assert validator.validateGame(game)
     }
 
-    public void testFailsActiveCountForMPGame() {
+    void testFailsActiveCountForMPGame() {
         StringMPGame game = new StringMPGame()
         game.players = [PONE, PTWO]
         validator.playerRepository = [
-                findAll: {
+                findAllById: {
                     Iterable<String> input ->
                         assert input.collect { it } as Set == [PONE.id, PTWO.id] as Set
                         return [PONE]
@@ -37,11 +37,11 @@ class PlayersActiveGameValidatorTest extends GameCoreTestCase {
         assertFalse validator.validateGame(game)
     }
 
-    public void testFailsAnInactivePlayerForMPGame() {
+    void testFailsAnInactivePlayerForMPGame() {
         StringMPGame game = new StringMPGame()
         game.players = [PONE, PINACTIVE2]
         validator.playerRepository = [
-                findAll: {
+                findAllById: {
                     Iterable<String> input ->
                         assert input.collect { it } as Set == [PONE.id, PINACTIVE2.id] as Set
                         return [PONE, PINACTIVE2]
@@ -51,47 +51,47 @@ class PlayersActiveGameValidatorTest extends GameCoreTestCase {
     }
 
 
-    public void testPassesAllActivesForSPGame() {
+    void testPassesAllActivesForSPGame() {
         StringSPGame game = new StringSPGame()
         game.player = PONE
         validator.playerRepository = [
-                findOne: {
+                findById: {
                     String id ->
                         assert id == PONE.id
-                        return PONE
+                        return Optional.of(PONE)
                 },
         ] as AbstractPlayerRepository
         assert validator.validateGame(game)
     }
 
 
-    public void testFailsAnInactivePlayerForSPGame() {
+    void testFailsAnInactivePlayerForSPGame() {
         StringSPGame game = new StringSPGame()
         game.player = PINACTIVE1
         validator.playerRepository = [
-                findOne: {
+                findById: {
                     String id ->
                         assert id == PINACTIVE1.id
-                        return PINACTIVE1
+                        return Optional.of(PINACTIVE1)
                 },
         ] as AbstractPlayerRepository
         assertFalse validator.validateGame(game)
     }
 
-    public void testFailsAnInactivePlayerViaNotLoadingForSPGame() {
+    void testFailsAnInactivePlayerViaNotLoadingForSPGame() {
         StringSPGame game = new StringSPGame()
         game.player = PINACTIVE1
         validator.playerRepository = [
-                findOne: {
+                findById: {
                     String id ->
                         assert id == PINACTIVE1.id
-                        return null
+                        return Optional.empty()
                 },
         ] as AbstractPlayerRepository
         assertFalse validator.validateGame(game)
     }
 
-    public void testErrorMessage() {
+    void testErrorMessage() {
         assert validator.errorMessage() == "Game contains inactive players."
     }
 }

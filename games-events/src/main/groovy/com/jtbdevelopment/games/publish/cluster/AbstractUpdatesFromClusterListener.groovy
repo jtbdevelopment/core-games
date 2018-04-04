@@ -23,13 +23,13 @@ abstract class AbstractUpdatesFromClusterListener {
     PlayerPublisher playerPublisher
 
     @Autowired
-    AbstractPlayerRepository playerRepository
+    AbstractPlayerRepository<? extends Serializable, ? extends Player> playerRepository
 
     @Autowired
     StringToIDConverter<? extends Serializable> stringToIDConverter
 
     @Autowired(required = false)
-    AbstractGameRepository gameRepository
+    AbstractGameRepository<? extends Serializable, ?, ?, ? extends Game> gameRepository
 
     protected void receiveClusterMessage(final ClusterMessage clusterMessage) {
         switch (clusterMessage.clusterMessageType) {
@@ -50,19 +50,22 @@ abstract class AbstractUpdatesFromClusterListener {
     }
 
     protected void receivePublishPlayer(final String id) {
-        Player p = (Player) playerRepository.findOne((Serializable) stringToIDConverter.convert(id))
-        if (p) {
-            playerPublisher.publish(p, false)
+        def optional = playerRepository.findById((Serializable) stringToIDConverter.convert(id))
+        if (optional.present) {
+            playerPublisher.publish(optional.get(), false)
         }
     }
 
     protected void receivePublishGame(final String gameId, final String playerId) {
         if (gameRepository) {
-            Player p = (Player) playerRepository.findOne(stringToIDConverter.convert(playerId))
-            if (!playerId || p) {
-                Game g = gameRepository.findOne(stringToIDConverter.convert(gameId))
-                if (g != null) {
-                    gamePublisher.publish(g, p, false)
+            def optionalPlayer = playerRepository.findById(stringToIDConverter.convert(playerId))
+            if (optionalPlayer.present || playerId == null) {
+                def optionalGame = gameRepository.findById(stringToIDConverter.convert(gameId))
+                if (optionalGame.present) {
+                    gamePublisher.publish(
+                            optionalGame.get(),
+                            optionalPlayer.present ? optionalPlayer.get() : null,
+                            false)
                 }
             }
         }

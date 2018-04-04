@@ -38,12 +38,12 @@ abstract class AbstractHandler {
     }
 
     protected Player loadPlayer(final Serializable playerID) {
-        Player player = playerRepository.findOne(playerID)
-        if (player == null) {
-            logger.info("Player was not loaded " + playerID.toString())
-            throw new FailedToFindPlayersException()
+        def optional = playerRepository.findById(playerID)
+        if (optional.present) {
+            return optional.get()
         }
-        player
+        logger.info("Player was not loaded " + playerID.toString())
+        throw new FailedToFindPlayersException()
     }
 
 }

@@ -37,10 +37,10 @@ class AbstractUpdatesFromClusterListenerTest extends GameCoreTestCase {
     void testReceivePublishPlayer() {
         boolean published = false
         listener.playerRepository = [
-                findOne: {
+                findById: {
                     String id ->
                         assert id == PTWO.idAsString.reverse()
-                        return PTWO
+                        return Optional.of(PTWO)
                 }
         ] as AbstractPlayerRepository
         listener.playerPublisher = [
@@ -63,17 +63,17 @@ class AbstractUpdatesFromClusterListenerTest extends GameCoreTestCase {
         boolean published = false
         MultiPlayerGame game = [] as MultiPlayerGame
         listener.playerRepository = [
-                findOne: {
+                findById: {
                     String id ->
                         assert id == PTHREE.idAsString.reverse()
-                        return PTHREE
+                        return Optional.of(PTHREE)
                 }
         ] as AbstractPlayerRepository
         listener.gameRepository = [
-                findOne: {
+                findById: {
                     String id ->
                         assert id == gameId.reverse()
-                        return game
+                        return Optional.of(game)
                 }
         ] as AbstractMultiPlayerGameRepository
         listener.gamePublisher = [
@@ -99,17 +99,17 @@ class AbstractUpdatesFromClusterListenerTest extends GameCoreTestCase {
         boolean published = false
         MultiPlayerGame game = [] as MultiPlayerGame
         listener.playerRepository = [
-                findOne: {
+                findById: {
                     String id ->
                         assertNull id
-                        return null
+                        return Optional.empty()
                 }
         ] as AbstractPlayerRepository
         listener.gameRepository = [
-                findOne: {
+                findById: {
                     String id ->
                         assert id == gameId.reverse()
-                        return game
+                        return Optional.of(game)
                 }
         ] as AbstractMultiPlayerGameRepository
         listener.gamePublisher = [
@@ -135,10 +135,10 @@ class AbstractUpdatesFromClusterListenerTest extends GameCoreTestCase {
         boolean published = false
         MultiPlayerGame game = [] as MultiPlayerGame
         listener.playerRepository = [
-                findOne: {
+                findById: {
                     String id ->
                         assert id == PINACTIVE1.id
-                        return null
+                        return Optional.empty()
                 }
         ] as AbstractPlayerRepository
         listener.gameRepository = null
@@ -156,7 +156,7 @@ class AbstractUpdatesFromClusterListenerTest extends GameCoreTestCase {
         boolean published = false
         MultiPlayerGame game = [] as MultiPlayerGame
         listener.playerRepository = [
-                findOne: {
+                findById: {
                     String id ->
                         assert id == PTHREE.idAsString
                         return PTHREE

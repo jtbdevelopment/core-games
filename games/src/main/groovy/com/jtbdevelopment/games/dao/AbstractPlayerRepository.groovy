@@ -28,8 +28,9 @@ import static com.jtbdevelopment.games.dao.caching.CacheConstants.*
 @NoRepositoryBean
 interface AbstractPlayerRepository<ID extends Serializable, P extends Player<ID>> extends PagingAndSortingRepository<P, ID> {
 
+    @Override
     @Cacheable(value = PLAYER_ID_CACHE)
-    P findOne(ID id)
+    Optional<P> findById(ID id)
 
     @Cacheable(value = PLAYER_MD5_CACHE)
     P findByMd5(final String md5)
@@ -64,6 +65,7 @@ interface AbstractPlayerRepository<ID extends Serializable, P extends Player<ID>
     )
     long deleteByLastLoginLessThan(final ZonedDateTime cutoff)
 
+    @Override
     @Caching(
             put = [
                     @CachePut(value = PLAYER_ID_CACHE, key = '#result.id'),
@@ -71,8 +73,9 @@ interface AbstractPlayerRepository<ID extends Serializable, P extends Player<ID>
                     @CachePut(value = PLAYER_S_AND_SID_CACHE, key = '#result.sourceAndSourceId')
             ]
     )
-    P save(P entity)
+    <S extends P> S save(S entity)
 
+    @Override
     @Caching(
             put = [
                     @CachePut(value = PLAYER_ID_CACHE, key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectPlayerIDs(#result)'),
@@ -80,7 +83,7 @@ interface AbstractPlayerRepository<ID extends Serializable, P extends Player<ID>
                     @CachePut(value = PLAYER_S_AND_SID_CACHE, key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectPlayerSourceAndSourceIDs(#result)')
             ]
     )
-    Iterable<P> save(Iterable<P> entities)
+    <S extends P> Iterable<S> saveAll(Iterable<S> entities)
 
     @Override
     @Caching(
