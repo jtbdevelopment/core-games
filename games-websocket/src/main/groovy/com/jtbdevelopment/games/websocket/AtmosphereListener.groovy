@@ -66,7 +66,7 @@ class AtmosphereListener implements GameListener<Game>, PlayerListener {
     GameMasker gameMasker
 
     @Autowired
-    AbstractPlayerRepository playerRepository
+    AbstractPlayerRepository<? extends Serializable, ? extends Player> playerRepository
 
     @Autowired
     StringToIDConverter<? extends Serializable> stringToIDConverter
@@ -90,10 +90,10 @@ class AtmosphereListener implements GameListener<Game>, PlayerListener {
                     Broadcaster broadcaster ->
                         try {
                             logger.trace("Looking up player for feed " + broadcaster.ID)
-                            Player p = (Player) playerRepository.findOne(stringToIDConverter.convert(broadcaster.ID.replace('/livefeed/', '')))
-                            if (p) {
-                                logger.trace("Publishing all player changed to " + p.id)
-                                broadcaster.broadcast(new WebSocketMessage(messageType: WebSocketMessage.MessageType.Player, player: p))
+                            def optional = playerRepository.findById(stringToIDConverter.convert(broadcaster.ID.replace('/livefeed/', '')))
+                            if (optional.present) {
+                                logger.trace("Publishing all player changed to " + optional.get().id)
+                                broadcaster.broadcast(new WebSocketMessage(messageType: WebSocketMessage.MessageType.Player, player: optional.get()))
                             }
                         } catch (Exception e) {
                             logger.error("Failed to notify broadcaster for all player changed " + broadcaster.ID, e)

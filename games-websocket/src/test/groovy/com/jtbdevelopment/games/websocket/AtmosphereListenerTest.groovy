@@ -38,12 +38,12 @@ class AtmosphereListenerTest extends GameCoreTestCase {
         listener.retries = 3
         listener.retryPause = 1
         listener.setUp()
-        listener.publicationListeners = [];
+        listener.publicationListeners = []
     }
 
     void testPublishPlayerToConnectedPlayer() {
-        boolean p2pub = false;
-        boolean p4pub = false;
+        boolean p2pub = false
+        boolean p4pub = false
         Broadcaster b2 = [
                 broadcast: {
                     Object o ->
@@ -73,13 +73,13 @@ class AtmosphereListenerTest extends GameCoreTestCase {
                             case LiveFeedService.PATH_ROOT + PTHREE.idAsString:
                             case LiveFeedService.PATH_ROOT + PONE.idAsString:
                                 return null
-                                break;
+                                break
                             case LiveFeedService.PATH_ROOT + PTWO.idAsString:
                                 return b2
-                                break;
+                                break
                             case LiveFeedService.PATH_ROOT + PFOUR.idAsString:
                                 return b4
-                                break;
+                                break
                         }
                         fail("Not sure how we got here")
                 }
@@ -115,8 +115,8 @@ class AtmosphereListenerTest extends GameCoreTestCase {
     }
 
     void testPublishRefreshPlayerToAllValidConnectedPlayers() {
-        boolean p2pub = false;
-        boolean p4pub = false;
+        boolean p2pub = false
+        boolean p4pub = false
         Broadcaster bJunk = [
                 broadcast: {
                     Object o ->
@@ -168,16 +168,16 @@ class AtmosphereListenerTest extends GameCoreTestCase {
         ] as AtmosphereBroadcasterFactory
         listener.broadcasterFactory = factoryFactory
         listener.playerRepository = [
-                findOne: {
+                findById: {
                     String id ->
                         if (id == PTWO.idAsString.reverse()) {
-                            return PTWO
+                            return Optional.of(PTWO)
                         }
                         if (id == PFOUR.idAsString.reverse()) {
-                            return PFOUR
+                            return Optional.of(PFOUR)
                         }
                         if (id == 'JUNK'.reverse()) {
-                            return null
+                            return Optional.empty()
                         }
                         fail('unknown id')
                 }
@@ -244,16 +244,16 @@ class AtmosphereListenerTest extends GameCoreTestCase {
                         switch (id) {
                             case LiveFeedService.PATH_ROOT + PONE.idAsString:
                                 fail("Should not be requesting PONE lookup")
-                                break;
+                                break
                             case LiveFeedService.PATH_ROOT + PTWO.idAsString:
                                 return b2
-                                break;
+                                break
                             case LiveFeedService.PATH_ROOT + PTHREE.idAsString:
                                 return null
-                                break;
+                                break
                             case LiveFeedService.PATH_ROOT + PFOUR.idAsString:
                                 return b4
-                                break;
+                                break
                         }
                         fail("Not sure how we got here")
                 }
