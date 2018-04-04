@@ -24,7 +24,7 @@ class PlayersActiveGameValidator implements GameValidator<Game> {
     @Override
     boolean validateGame(final Game game) {
         if (game instanceof MultiPlayerGame) {
-            Iterable<Player> loaded = playerRepository.findAll(game.players.collect { Player player -> player.id })
+            Iterable<Player> loaded = playerRepository.findAll(game.allPlayers.collect { Player player -> player.id })
 
             Collection<Player> all = loaded.findAll {
                 Player player ->
@@ -34,7 +34,7 @@ class PlayersActiveGameValidator implements GameValidator<Game> {
                 Player player ->
                     player.id
             }
-            return loadedActivePlayers.size() == game.players.size()
+            return loadedActivePlayers.size() == game.allPlayers.size()
         } else if (game instanceof SinglePlayerGame) {
             Player loaded = playerRepository.findOne(game.player.id)
             return (!loaded ? false : !loaded.disabled)

@@ -90,7 +90,7 @@ interface AbstractPlayerRepository<ID extends Serializable, P extends Player<ID>
                     @CacheEvict(value = PLAYER_S_AND_SID_CACHE, key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).sourceAndSourceIDFromID(#p0)', beforeInvocation = true)
             ]
     )
-    void delete(ID id)
+    void deleteById(ID id)
 
     @Override
     @Caching(
@@ -110,7 +110,7 @@ interface AbstractPlayerRepository<ID extends Serializable, P extends Player<ID>
                     @CacheEvict(value = PLAYER_S_AND_SID_CACHE, key = 'T(com.jtbdevelopment.games.dao.caching.PlayerKeyUtility).collectPlayerSourceAndSourceIDs(#p0)')
             ]
     )
-    void delete(Iterable<? extends P> entities)
+    void deleteAll(Iterable<? extends P> entities)
 
     @Override
     @Caching(
