@@ -51,9 +51,9 @@ class NewGameHandlerTest extends GameCoreTestCase {
                         assert it.collect { it } as Set == players.collect { it.md5 } as Set
                         return players
                 },
-                findOne    : {
+                findById   : {
                     assert it == PONE.id
-                    return PONE
+                    return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
         handler.transitionEngine = [
@@ -90,7 +90,7 @@ class NewGameHandlerTest extends GameCoreTestCase {
         assert maskedGame.is(handler.handleCreateNewGame(initiatingPlayer.id, players.collect { it.md5 }, features))
     }
 
-    public void testCreateGameNoOptionalPlugins() {
+    void testCreateGameNoOptionalPlugins() {
         Set<String> features = ["GameFeature.SystemPuzzles", "GameFeature.Thieving"]
         List<Player> players = [PTWO, PTHREE, PFOUR]
         Player initiatingPlayer = PONE
@@ -116,16 +116,16 @@ class NewGameHandlerTest extends GameCoreTestCase {
                         assert it.collect { it } as Set == players.collect { it.md5 } as Set
                         return players
                 },
-                findOne    : {
+                findById   : {
                     assert it == PONE.id
-                    return PONE
+                    return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
 
         assert savedGame.is(handler.handleCreateNewGame(initiatingPlayer.id, players.collect { it.md5 }, features))
     }
 
-    public void testCreateGameAndTransitionExceptions() {
+    void testCreateGameAndTransitionExceptions() {
         Set<Object> features = ["GameFeature.SystemPuzzles", "GameFeature.Thieving"]
         List<Player> players = [PTWO, PTHREE, PFOUR]
         Player initiatingPlayer = PONE
@@ -146,9 +146,9 @@ class NewGameHandlerTest extends GameCoreTestCase {
                         assert it.collect { it } as Set == players.collect { it.md5 } as Set
                         return players
                 },
-                findOne    : {
+                findById   : {
                     assert it == PONE.id
-                    return PONE
+                    return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
         handler.transitionEngine = [
@@ -174,7 +174,7 @@ class NewGameHandlerTest extends GameCoreTestCase {
         try {
             handler.handleCreateNewGame(initiatingPlayer.id, players.collect { it.md5 }, features)
             fail('exception expected')
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException ignored) {
             assert revertCalled
         }
     }
@@ -200,9 +200,9 @@ class NewGameHandlerTest extends GameCoreTestCase {
                         assert it.collect { it } as Set == players.collect { it.md5 } as Set
                         return players
                 },
-                findOne    : {
+                findById   : {
                     assert it == PONE.id
-                    return PONE
+                    return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
         handler.transitionEngine = [
@@ -229,14 +229,14 @@ class NewGameHandlerTest extends GameCoreTestCase {
         try {
             handler.handleCreateNewGame(initiatingPlayer.id, players.collect { it.md5 }, features)
             fail('exception expected')
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException ignored) {
             assert revertCalled
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException ignored) {
             fail('should have been wrapped')
         }
     }
 
-    public void testCreateGameAndGameCreateExceptions() {
+    void testCreateGameAndGameCreateExceptions() {
         Set<Object> features = ["1", 5]
         List<Player> players = [PTWO, PTHREE, PFOUR]
         Player initiatingPlayer = PONE
@@ -257,9 +257,9 @@ class NewGameHandlerTest extends GameCoreTestCase {
                         assert it.collect { it } as Set == players.collect { it.md5 } as Set
                         return players
                 },
-                findOne    : {
+                findById   : {
                     assert it == PONE.id
-                    return PONE
+                    return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
         def eligibilityResult = new PlayerGameEligibilityResult(eligibility: PlayerGameEligibility.FreeGameUsed, player: PONE)
@@ -279,12 +279,12 @@ class NewGameHandlerTest extends GameCoreTestCase {
         try {
             handler.handleCreateNewGame(initiatingPlayer.id, players.collect { it.md5 }, features)
             fail('exception expected')
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException ignored) {
             assert revertCalled
         }
     }
 
-    public void testCreateGameFailsIfNotEligible() {
+    void testCreateGameFailsIfNotEligible() {
         Set<Object> features = ["GameFeature.SystemPuzzles", "GameFeature.Thieving"]
         List<Player> players = [PTWO, PTHREE, PFOUR]
         Player initiatingPlayer = PONE
@@ -298,9 +298,9 @@ class NewGameHandlerTest extends GameCoreTestCase {
                         assert it.collect { it } as Set == players.collect { it.md5 } as Set
                         return players
                 },
-                findOne    : {
+                findById   : {
                     assert it == PONE.id
-                    return PONE
+                    return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
         handler.gameTracker = [
@@ -314,12 +314,12 @@ class NewGameHandlerTest extends GameCoreTestCase {
         try {
             handler.handleCreateNewGame(initiatingPlayer.id, players.collect { it.md5 }, features)
             fail('should have failed')
-        } catch (OutOfGamesForTodayException e) {
+        } catch (OutOfGamesForTodayException ignored) {
             //
         }
     }
 
-    public void testInvalidInitiator() {
+    void testInvalidInitiator() {
         Set<Object> features = ["1", 345, new HashMap()]
         List<Player> players = [PONE, PTWO, PTHREE]
 
@@ -330,22 +330,22 @@ class NewGameHandlerTest extends GameCoreTestCase {
                         assert it.collect { it } as Set == players.collect { it.md5 } as Set
                         return players
                 },
-                findOne    : {
+                findById   : {
                     assert it == playerId
-                    return null
+                    return Optional.empty()
                 }
         ] as AbstractPlayerRepository
 
         try {
             handler.handleCreateNewGame(playerId, players.collect { it.md5 }, features)
             fail("Should have failed")
-        } catch (FailedToFindPlayersException e) {
+        } catch (FailedToFindPlayersException ignored) {
             //
         }
     }
 
 
-    public void testNotAllPlayersFound() {
+    void testNotAllPlayersFound() {
         Set<Object> features = [1.3, "X", 45]
         List<Player> players = [PONE, PTWO, PTHREE]
         Player initiatingPlayer = PFOUR
@@ -355,16 +355,16 @@ class NewGameHandlerTest extends GameCoreTestCase {
                         assert it.collect { it } as Set == players.collect { it.md5 } as Set
                         return [PONE, PTHREE]
                 },
-                findOne    : {
+                findById   : {
                     assert it == PFOUR.id
-                    return PFOUR
+                    return Optional.of(PFOUR)
                 }
         ] as AbstractPlayerRepository
 
         try {
             handler.handleCreateNewGame(initiatingPlayer.id, players.collect { it.md5 }, features)
             fail("Should have failed")
-        } catch (FailedToFindPlayersException e) {
+        } catch (FailedToFindPlayersException ignored) {
             //
         }
     }

@@ -44,10 +44,10 @@ class NewGameHandlerTest extends GameCoreTestCase {
                 }
         ] as AbstractSinglePlayerGameRepository
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == initiatingPlayer.id
-                        return initiatingPlayer
+                        return Optional.of(initiatingPlayer)
                 }
         ] as AbstractPlayerRepository
         handler.transitionEngine = [
@@ -103,9 +103,9 @@ class NewGameHandlerTest extends GameCoreTestCase {
                 }
         ] as AbstractSinglePlayerGameRepository
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     assert it == PONE.id
-                    return initiatingPlayer
+                    return Optional.of(initiatingPlayer)
                 }
         ] as AbstractPlayerRepository
 
@@ -127,9 +127,9 @@ class NewGameHandlerTest extends GameCoreTestCase {
             game
         }] as AbstractSinglePlayerGameFactory
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     assert it == PONE.id
-                    return PONE
+                    return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
         handler.transitionEngine = [
@@ -155,7 +155,7 @@ class NewGameHandlerTest extends GameCoreTestCase {
         try {
             handler.handleCreateNewGame(initiatingPlayer.id, features)
             fail('exception expected')
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException ignored) {
             assert revertCalled
         }
     }
@@ -174,9 +174,9 @@ class NewGameHandlerTest extends GameCoreTestCase {
             game
         }] as AbstractSinglePlayerGameFactory
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     assert it == PONE.id
-                    return PONE
+                    return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
         handler.transitionEngine = [
@@ -203,9 +203,9 @@ class NewGameHandlerTest extends GameCoreTestCase {
         try {
             handler.handleCreateNewGame(initiatingPlayer.id, features)
             fail('exception expected')
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException ignored) {
             assert revertCalled
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException ignored) {
             fail('should have been wrapped')
         }
     }
@@ -224,9 +224,9 @@ class NewGameHandlerTest extends GameCoreTestCase {
             throw new NumberFormatException()
         }] as AbstractSinglePlayerGameFactory
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     assert it == PONE.id
-                    return PONE
+                    return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
         def eligibilityResult = new PlayerGameEligibilityResult(eligibility: PlayerGameEligibility.FreeGameUsed, player: PONE)
@@ -246,7 +246,7 @@ class NewGameHandlerTest extends GameCoreTestCase {
         try {
             handler.handleCreateNewGame(initiatingPlayer.id, features)
             fail('exception expected')
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException ignored) {
             assert revertCalled
         }
     }
@@ -259,9 +259,9 @@ class NewGameHandlerTest extends GameCoreTestCase {
         GameCoreTestCase.StringSPGame savedGame = new GameCoreTestCase.StringSPGame()
         savedGame.features = features
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     assert it == PONE.id
-                    return PONE
+                    return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository
         handler.gameTracker = [
@@ -275,7 +275,7 @@ class NewGameHandlerTest extends GameCoreTestCase {
         try {
             handler.handleCreateNewGame(initiatingPlayer.id, features)
             fail('should have failed')
-        } catch (OutOfGamesForTodayException e) {
+        } catch (OutOfGamesForTodayException ignored) {
             //
         }
     }
@@ -286,16 +286,16 @@ class NewGameHandlerTest extends GameCoreTestCase {
 
         String playerId = "unkw"
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     assert it == playerId
-                    return null
+                    return Optional.empty()
                 }
         ] as AbstractPlayerRepository
 
         try {
             handler.handleCreateNewGame(playerId, features)
             fail("Should have failed")
-        } catch (FailedToFindPlayersException e) {
+        } catch (FailedToFindPlayersException ignored) {
             //
         }
     }

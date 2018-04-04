@@ -81,29 +81,29 @@ class UpdatesFromClusterListenerTest extends GameCoreTestCase {
             }
     ] as PlayerPublisher
     def gameRepository = [
-            findOne: {
+            findById: {
                 String id ->
                     switch (id) {
                         case game1.idAsString.reverse():
-                            return game1
+                            return Optional.of(game1)
                         case game2.idAsString.reverse():
-                            return game2
+                            return Optional.of(game2)
                     }
                     return null
             }
     ] as AbstractMultiPlayerGameRepository
     def playerRepository = [
-            findOne: {
+            findById: {
                 String id ->
                     switch (id) {
                         case PONE.idAsString.reverse():
-                            return PONE
+                            return Optional.of(PONE)
                         case PTWO.idAsString.reverse():
-                            return PTWO
+                            return Optional.of(PTWO)
                         case PTHREE.idAsString.reverse():
-                            return PTHREE
+                            return Optional.of(PTHREE)
                         case PFOUR.idAsString.reverse():
-                            return PFOUR
+                            return Optional.of(PFOUR)
                     }
                     return null
             }

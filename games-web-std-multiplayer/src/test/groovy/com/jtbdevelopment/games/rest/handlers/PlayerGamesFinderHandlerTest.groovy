@@ -39,10 +39,10 @@ class PlayerGamesFinderHandlerTest extends GameCoreTestCase {
                 (game3): masked3
         ]
         handler.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == PONE.id
-                        return PONE
+                        return Optional.of(PONE)
                 }
         ] as AbstractPlayerRepository<String>
 
