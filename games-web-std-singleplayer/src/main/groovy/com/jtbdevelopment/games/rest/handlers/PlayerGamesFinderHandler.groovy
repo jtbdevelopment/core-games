@@ -43,7 +43,7 @@ class PlayerGamesFinderHandler extends AbstractGameGetterHandler {
                     def games = ((AbstractSinglePlayerGameRepository) gameRepository).findByPlayerIdAndGamePhaseAndLastUpdateGreaterThan(
                             player.id,
                             phase,
-                            days,
+                            days.toInstant(),
                             PAGE
                     )
                     def masked = games.collect {

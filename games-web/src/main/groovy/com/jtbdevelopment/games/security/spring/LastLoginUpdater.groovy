@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 import java.time.Duration
+import java.time.Instant
 import java.time.ZoneId
-import java.time.ZonedDateTime
 
 /**
  * Date: 8/16/2015
@@ -24,7 +24,7 @@ class LastLoginUpdater {
     AbstractPlayerRepository playerRepository
 
     Player updatePlayerLastLogin(final Player player) {
-        ZonedDateTime now = ZonedDateTime.now(GMT)
+        Instant now = Instant.now()
         if (player.lastLogin == null || Duration.between(player.lastLogin, now).toMinutes() > THRESHOLD) {
             player.lastLogin = now
             return playerRepository.save(player)

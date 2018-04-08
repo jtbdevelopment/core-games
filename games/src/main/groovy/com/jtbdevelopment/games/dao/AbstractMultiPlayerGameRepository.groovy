@@ -6,7 +6,7 @@ import groovy.transform.CompileStatic
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.NoRepositoryBean
 
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Date: 12/31/2014
@@ -18,5 +18,5 @@ interface AbstractMultiPlayerGameRepository<ID extends Serializable, TIMESTAMP, 
     List<MultiPlayerGame<ID, TIMESTAMP, FEATURES>> findByPlayersId(final ID id);
 
     List<MultiPlayerGame<ID, TIMESTAMP, FEATURES>> findByPlayersIdAndGamePhaseAndLastUpdateGreaterThan(
-            final ID id, final GamePhase gamePhase, final ZonedDateTime cutoff, final Pageable pageable)
+            final ID id, final GamePhase gamePhase, final Instant cutoff, final Pageable pageable)
 }

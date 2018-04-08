@@ -18,7 +18,6 @@ import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 import java.time.Instant
 import java.time.ZoneId
-import java.time.ZonedDateTime
 
 /**
  * Date: 11/27/2014
@@ -44,7 +43,7 @@ abstract class AbstractAdminServices {
     @Path("gamesSince/{since}")
     @Produces(MediaType.TEXT_PLAIN)
     long gamesSince(@PathParam("since") long since) {
-        return gameRepository.countByCreatedGreaterThan(ZonedDateTime.ofInstant(Instant.ofEpochSecond(since), GMT))
+        return gameRepository.countByCreatedGreaterThan(Instant.ofEpochSecond(since))
     }
 
     @GET
@@ -65,14 +64,14 @@ abstract class AbstractAdminServices {
     @Path("playersCreated/{since}")
     @Produces(MediaType.TEXT_PLAIN)
     long playersCreatedSince(@PathParam("since") long since) {
-        return playerRepository.countByCreatedGreaterThan(ZonedDateTime.ofInstant(Instant.ofEpochSecond(since), GMT))
+        return playerRepository.countByCreatedGreaterThan(Instant.ofEpochSecond(since))
     }
 
     @GET
     @Path("playersLoggedIn/{since}")
     @Produces(MediaType.TEXT_PLAIN)
     long playersLoggedInSince(@PathParam("since") long since) {
-        return playerRepository.countByLastLoginGreaterThan(ZonedDateTime.ofInstant(Instant.ofEpochSecond(since), GMT))
+        return playerRepository.countByLastLoginGreaterThan(Instant.ofEpochSecond(since))
     }
 
     @GET

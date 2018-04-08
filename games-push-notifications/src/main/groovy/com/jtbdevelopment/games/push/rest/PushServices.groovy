@@ -28,7 +28,7 @@ class PushServices {
     PushProperties pushProperties
 
     @Autowired
-    AbstractPlayerRepository playerRepository
+    AbstractPlayerRepository<? extends Serializable, ? extends Player> playerRepository
 
     @GET
     @Path("senderID")
@@ -46,9 +46,9 @@ class PushServices {
 
         //  TODO - register client /update client in GCM
 
-        Player player = playerRepository.findOne(
+        Player player = playerRepository.findById(
                 ((SessionUserInfo<Serializable>) SecurityContextHolder.context.authentication.principal).
-                        effectiveUser.id)
+                        effectiveUser.id).get()
 
         RegisteredDevice device = new RegisteredDevice(deviceID: deviceID)
         player.updateRegisteredDevice(device)
@@ -59,9 +59,9 @@ class PushServices {
     @Path("unregister/{deviceID}")
     @Produces(MediaType.APPLICATION_JSON)
     Object unregisteredDevice(@PathParam("deviceID") final String deviceID) {
-        Player player = playerRepository.findOne(
+        Player player = playerRepository.findById(
                 ((SessionUserInfo<Serializable>) SecurityContextHolder.context.authentication.principal).
-                        effectiveUser.id)
+                        effectiveUser.id).get()
 
         //  TODO - register client /update client in GCM
 

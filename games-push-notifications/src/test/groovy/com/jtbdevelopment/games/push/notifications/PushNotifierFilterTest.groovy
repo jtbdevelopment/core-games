@@ -49,17 +49,17 @@ class PushNotifierFilterTest extends GameCoreTestCase {
         Serializable pid = "XY12"
         Serializable gid = "113"
         filter.playerRepository = [
-                findOne: {
+                findById: {
                     Serializable id ->
                         assert pid == id
-                        return null
+                        return Optional.empty()
                 }
         ] as AbstractPlayerRepository
         filter.gameRepository = [
-                findOne: {
+                findById: {
                     Serializable id ->
                         assert gid == id
-                        return new GameCoreTestCase.StringMPGame()
+                        return Optional.of(new GameCoreTestCase.StringMPGame())
                 }
         ] as AbstractMultiPlayerGameRepository
         filter.entryEvicted(new EntryEvent<GamePublicationTracker, Boolean>("TEST", null, 0, new GamePublicationTracker(pid: pid, gid: gid), false, null))
@@ -70,17 +70,17 @@ class PushNotifierFilterTest extends GameCoreTestCase {
         Serializable pid = "XY12"
         Serializable gid = "113"
         filter.playerRepository = [
-                findOne: {
+                findById: {
                     Serializable id ->
                         assert pid == id
-                        return new GameCoreTestCase.StringPlayer()
+                        return Optional.of(new GameCoreTestCase.StringPlayer())
                 }
         ] as AbstractPlayerRepository
         filter.gameRepository = [
-                findOne: {
+                findById: {
                     Serializable id ->
                         assert gid == id
-                        return null
+                        return Optional.empty()
                 }
         ] as AbstractMultiPlayerGameRepository
         filter.entryEvicted(new EntryEvent<GamePublicationTracker, Boolean>("TEST", null, 0, new GamePublicationTracker(pid: pid, gid: gid), false, null))
@@ -94,17 +94,17 @@ class PushNotifierFilterTest extends GameCoreTestCase {
         def game = new GameCoreTestCase.StringMPGame()
         def player = new GameCoreTestCase.StringPlayer()
         filter.playerRepository = [
-                findOne: {
+                findById: {
                     Serializable id ->
                         assert pid == id
-                        return player
+                        return Optional.of(player)
                 }
         ] as AbstractPlayerRepository
         filter.gameRepository = [
-                findOne: {
+                findById: {
                     Serializable id ->
                         assert gid == id
-                        return game
+                        return Optional.of(game)
                 }
         ] as AbstractMultiPlayerGameRepository
         filter.filter = [
@@ -126,17 +126,17 @@ class PushNotifierFilterTest extends GameCoreTestCase {
         def game = new GameCoreTestCase.StringMPGame()
         def player = new GameCoreTestCase.StringPlayer()
         filter.playerRepository = [
-                findOne: {
+                findById: {
                     Serializable id ->
                         assert pid == id
-                        return player
+                        return Optional.of(player)
                 }
         ] as AbstractPlayerRepository
         filter.gameRepository = [
-                findOne: {
+                findById: {
                     Serializable id ->
                         assert gid == id
-                        return game
+                        return Optional.of(game)
                 }
         ] as AbstractMultiPlayerGameRepository
         filter.filter = [

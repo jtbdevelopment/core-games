@@ -25,12 +25,12 @@ class MongoManualPlayer extends MongoPlayer implements ManualPlayer<ObjectId> {
     boolean verified = false
     String verificationToken = ""
 
-    public MongoManualPlayer() {
+    MongoManualPlayer() {
         super.source = MANUAL_SOURCE
     }
 
     @PersistenceConstructor
-    public MongoManualPlayer(final GameSpecificPlayerAttributes gameSpecificPlayerAttributes) {
+    MongoManualPlayer(final GameSpecificPlayerAttributes gameSpecificPlayerAttributes) {
         super(gameSpecificPlayerAttributes)
         super.source = MANUAL_SOURCE
     }

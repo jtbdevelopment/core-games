@@ -5,14 +5,14 @@ import com.jtbdevelopment.games.state.MultiPlayerGame
 import com.jtbdevelopment.games.state.PlayerState
 import groovy.transform.CompileStatic
 
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Date: 2/19/15
  * Time: 7:20 AM
  */
 @CompileStatic
-abstract class AbstractMultiPlayerGameMasker<ID extends Serializable, FEATURES, U extends MultiPlayerGame<ID, ZonedDateTime, FEATURES>, M extends MaskedMultiPlayerGame<FEATURES>> extends AbstractGameMasker<ID, FEATURES, U, M> implements GameMasker<ID, U, M> {
+abstract class AbstractMultiPlayerGameMasker<ID extends Serializable, FEATURES, U extends MultiPlayerGame<ID, Instant, FEATURES>, M extends MaskedMultiPlayerGame<FEATURES>> extends AbstractGameMasker<ID, FEATURES, U, M> implements GameMasker<ID, U, M> {
     @Override
     M maskGameForPlayer(final U game, final Player<ID> player) {
         M playerMaskedGame = (M) super.maskGameForPlayer(game, player)
@@ -54,8 +54,8 @@ abstract class AbstractMultiPlayerGameMasker<ID extends Serializable, FEATURES, 
             final U game,
             final M playerMaskedGame) {
         super.copyUnmaskedData(game, playerMaskedGame)
-        playerMaskedGame.declinedTimestamp = convertTime((ZonedDateTime) game.declinedTimestamp)
-        playerMaskedGame.rematchTimestamp = convertTime((ZonedDateTime) game.rematchTimestamp)
+        playerMaskedGame.declinedTimestamp = convertTime((Instant) game.declinedTimestamp)
+        playerMaskedGame.rematchTimestamp = convertTime((Instant) game.rematchTimestamp)
     }
 
     @SuppressWarnings("GrMethodMayBeStatic")

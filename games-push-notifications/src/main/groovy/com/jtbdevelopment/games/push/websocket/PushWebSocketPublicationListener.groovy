@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 import javax.annotation.PostConstruct
+import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.concurrent.ConcurrentMap
@@ -31,7 +32,7 @@ class PushWebSocketPublicationListener implements WebSocketPublicationListener {
 
     protected static final ZoneId GMT = ZoneId.of("GMT")
     protected static final int CUTOFF_DAYS = 30
-    protected static ZonedDateTime registeredCutoff
+    protected static Instant registeredCutoff
 
     @Autowired
     HazelcastInstance hazelcastInstance
@@ -59,7 +60,7 @@ class PushWebSocketPublicationListener implements WebSocketPublicationListener {
     }
 
     protected static void computeRegistrationCutoff() {
-        registeredCutoff = ZonedDateTime.now(GMT).minusDays(CUTOFF_DAYS)
+        registeredCutoff = ZonedDateTime.now(GMT).minusDays(CUTOFF_DAYS).toInstant()
     }
 
     @Override

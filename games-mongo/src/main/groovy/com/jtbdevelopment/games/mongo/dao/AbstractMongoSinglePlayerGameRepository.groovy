@@ -6,7 +6,7 @@ import groovy.transform.CompileStatic
 import org.bson.types.ObjectId
 import org.springframework.data.repository.NoRepositoryBean
 
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Date: 1/9/15
@@ -14,5 +14,5 @@ import java.time.ZonedDateTime
  */
 @CompileStatic
 @NoRepositoryBean
-interface AbstractMongoSinglePlayerGameRepository<FEATURES, IMPL extends AbstractMongoSinglePlayerGame<FEATURES>> extends AbstractSinglePlayerGameRepository<ObjectId, ZonedDateTime, FEATURES, IMPL> {
+interface AbstractMongoSinglePlayerGameRepository<FEATURES, IMPL extends AbstractMongoSinglePlayerGame<FEATURES>> extends AbstractSinglePlayerGameRepository<ObjectId, Instant, FEATURES, IMPL> {
 }

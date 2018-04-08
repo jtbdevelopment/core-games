@@ -36,9 +36,9 @@ class PushNotifierFilter implements EntryEvictedListener<GamePublicationTracker,
     PushWorthyFilter filter
 
     @Autowired
-    AbstractMultiPlayerGameRepository gameRepository
+    AbstractMultiPlayerGameRepository<? extends Serializable, ?, ?, ? extends MultiPlayerGame> gameRepository
     @Autowired
-    AbstractPlayerRepository playerRepository
+    AbstractPlayerRepository<? extends Serializable, ? extends Player> playerRepository
 
     @Autowired
     PushNotifier pushNotifier
@@ -58,11 +58,11 @@ class PushNotifierFilter implements EntryEvictedListener<GamePublicationTracker,
         logger.trace('Checking push for ' + event.key + ', value ' + event.value)
         if (recentlyPushedPlayers.putIfAbsent(event.key.pid, event.key.pid) == null) {
             logger.trace('Not pushed recently ' + event.key)
-            Player player = playerRepository.findOne(event.key.pid)
-            MultiPlayerGame game = (MultiPlayerGame) gameRepository.findOne((event.key.gid))
-            if (player && game && filter.shouldPush(player, game)) {
+            def player = playerRepository.findById(event.key.pid)
+            def game = gameRepository.findById((event.key.gid))
+            if (player.present && game.present && filter.shouldPush(player.get(), game.get())) {
                 logger.trace('Deemed push worthy ' + event.key)
-                pushNotifier.notifyPlayer(player, game)
+                pushNotifier.notifyPlayer(player.get(), game.get())
             }
         }
         logger.trace('Completed push check for ' + event.key)

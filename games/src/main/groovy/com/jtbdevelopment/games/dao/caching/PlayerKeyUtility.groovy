@@ -55,6 +55,7 @@ class PlayerKeyUtility<ID extends Serializable> {
         if (optional.present) {
             return optional.get().md5
         }
+        return null
     }
 
     static String sourceAndSourceIDFromID(final ID id) {

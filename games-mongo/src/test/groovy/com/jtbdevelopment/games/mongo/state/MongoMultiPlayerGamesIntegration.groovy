@@ -11,7 +11,7 @@ import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.Game
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.PlayerState
-import com.mongodb.DBCollection
+import com.mongodb.client.MongoCollection
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
@@ -30,8 +30,7 @@ import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
 import org.springframework.social.connect.support.ConnectionFactoryRegistry
 
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Date: 1/10/15
@@ -72,21 +71,20 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringContextInteg
 
         @Override
         protected String getMappingBasePackage() {
-            Package mappingBasePackage = getClass().getPackage();
-            return mappingBasePackage == null ? null : mappingBasePackage.getName();
+            Package mappingBasePackage = getClass().getPackage()
+            return mappingBasePackage == null ? null : mappingBasePackage.getName()
         }
     }
 
     private static final String GAMES_COLLECTION_NAME = 'multi'
-    private DBCollection collection
-    private ZoneId GMT = ZoneId.of("GMT")
+    private MongoCollection collection
 
     MongoPlayerRepository playerRepository
     AbstractMultiPlayerGameRepository gameRepository
     MongoPlayer player1, player2, player3, player4
     CacheManager cacheManager
     Cache cache
-    ZonedDateTime start
+    Instant start
     static ApplicationContext context
 
     @SuppressWarnings("GroovyUnusedDeclaration")
@@ -104,9 +102,8 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringContextInteg
 
     @Before
     void setup() {
-        start = ZonedDateTime.now(ZoneId.of("GMT"));
+        start = Instant.now()
 
-        assert db.collectionExists(GAMES_COLLECTION_NAME)
         collection = db.getCollection(GAMES_COLLECTION_NAME)
 
         playerRepository = context.getBean(MongoPlayerRepository.class)
@@ -155,11 +152,11 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringContextInteg
         assert saved.featureData == save.featureData
         assert saved.features == save.features
 
-        loaded = (SimpleMultiPlayerGame) gameRepository.findOne(saved.id)
+        loaded = (SimpleMultiPlayerGame) gameRepository.findById(saved.id).get()
         assert loaded
         assert loaded.id == saved.id
-        assert ((ZonedDateTime) loaded.lastUpdate).withZoneSameInstant(GMT) == ((ZonedDateTime) saved.lastUpdate).withZoneSameInstant(GMT)
-        assert ((ZonedDateTime) loaded.created).withZoneSameInstant(GMT) == ((ZonedDateTime) save.created).withZoneSameInstant(GMT)
+        assert loaded.lastUpdate == saved.lastUpdate
+        assert loaded.created == save.created
         assert loaded.intValue == save.intValue
         assert loaded.stringValue == save.stringValue
         assert loaded.players == save.players
@@ -171,8 +168,8 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringContextInteg
         assert loaded.features == save.features
 
         assert gameRepository.count() == 1
-        assert gameRepository.countByCreatedGreaterThan(start) == 1
-        assert gameRepository.countByCreatedGreaterThan((ZonedDateTime) loaded.created) == 0
+        assert gameRepository.countByCreatedGreaterThan(start.minusSeconds(1)) == 1
+        assert gameRepository.countByCreatedGreaterThan(loaded.created) == 0
     }
 
     @Test
@@ -186,43 +183,43 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringContextInteg
                 playerStates: [(player1.id): PlayerState.Accepted, (player2.id): PlayerState.Pending])
         initial = (SimpleMultiPlayerGame) gameRepository.save(initial)
 
-        update = (SimpleMultiPlayerGame) gameRepository.findOne(initial.id)
+        update = (SimpleMultiPlayerGame) gameRepository.findById(initial.id).get()
         update.stringValue = update.stringValue + 'Z'
         update.features.add('23')
         update.featureData.put('23', '23')
-        update.completedTimestamp = ZonedDateTime.now()
+        update.completedTimestamp = Instant.now()
         update.intValue = update.intValue * 2
         update.initiatingPlayer = player2.id
         update.playerStates = [(player1.id): PlayerState.Accepted, (player2.id): PlayerState.Rejected]
         update.players = [player1, player2, player4, player3] as List<Player>
-        update.declinedTimestamp = ZonedDateTime.now()
+        update.declinedTimestamp = Instant.now()
         updated = (SimpleMultiPlayerGame) gameRepository.save(update)
         assert updated
         assert updated.id == initial.id
-        assert ((ZonedDateTime) updated.lastUpdate).withZoneSameInstant(GMT).compareTo(((ZonedDateTime) initial.lastUpdate).withZoneSameInstant(GMT)) > 0
-        assert ((ZonedDateTime) updated.created).withZoneSameInstant(GMT) == ((ZonedDateTime) initial.created).withZoneSameInstant(GMT)
+        assert updated.lastUpdate > initial.lastUpdate
+        assert updated.created == initial.created
         assert updated.intValue == update.intValue
         assert updated.stringValue == update.stringValue
         assert updated.players == update.players
         assert updated.playerStates == update.playerStates
         assert updated.initiatingPlayer == update.initiatingPlayer
-        assert ((ZonedDateTime) updated.declinedTimestamp).withZoneSameInstant(GMT) == ((ZonedDateTime) update.declinedTimestamp).withZoneSameInstant(GMT)
+        assert updated.declinedTimestamp == update.declinedTimestamp
         assert updated.completedTimestamp == update.completedTimestamp
         assert updated.featureData == update.featureData
         assert updated.features == updated.features
 
-        loaded = (SimpleMultiPlayerGame) gameRepository.findOne(update.id)
+        loaded = (SimpleMultiPlayerGame) gameRepository.findById(update.id).get()
         assert loaded
         assert loaded.id == updated.id
-        assert ((ZonedDateTime) loaded.lastUpdate).withZoneSameInstant(GMT) == ((ZonedDateTime) updated.lastUpdate).withZoneSameInstant(GMT)
-        assert ((ZonedDateTime) loaded.created).withZoneSameInstant(GMT) == ((ZonedDateTime) updated.created).withZoneSameInstant(GMT)
+        assert loaded.lastUpdate == updated.lastUpdate
+        assert loaded.created == updated.created
         assert loaded.intValue == updated.intValue
         assert loaded.stringValue == updated.stringValue
         assert loaded.players == updated.players
         assert loaded.playerStates == updated.playerStates
         assert loaded.initiatingPlayer == updated.initiatingPlayer
-        assert ((ZonedDateTime) loaded.declinedTimestamp).withZoneSameInstant(GMT) == ((ZonedDateTime) updated.declinedTimestamp).withZoneSameInstant(GMT)
-        assert ((ZonedDateTime) loaded.completedTimestamp).withZoneSameInstant(GMT) == ((ZonedDateTime) updated.completedTimestamp).withZoneSameInstant(GMT)
+        assert loaded.declinedTimestamp == updated.declinedTimestamp
+        assert loaded.completedTimestamp == updated.completedTimestamp
         assert loaded.featureData == update.featureData
         assert loaded.features == updated.features
 
@@ -251,7 +248,7 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringContextInteg
 
         Sort sort = new Sort(Sort.Direction.DESC, ["lastUpdate", "created"])
         PageRequest page = new PageRequest(0, 20, sort)
-        List<SimpleMultiPlayerGame> by = (List<SimpleMultiPlayerGame>) gameRepository.findByPlayersIdAndGamePhaseAndLastUpdateGreaterThan(player1.id, GamePhase.Playing, ((ZonedDateTime) p1g1.created).minusDays(1), page)
+        List<SimpleMultiPlayerGame> by = (List<SimpleMultiPlayerGame>) gameRepository.findByPlayersIdAndGamePhaseAndLastUpdateGreaterThan(player1.id, GamePhase.Playing, ((Instant) p1g1.created).minusSeconds(24 * 60 * 60), page)
         assert 2 == by.size()
         assert by.contains(p1g1)
         assert by.contains(p1g2)
@@ -264,7 +261,7 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringContextInteg
         gameRepository.save(p1g1)
         assert cache.get(p1g1.id).get() == p1g1
         p1g1.intValue = 150
-        gameRepository.save([p1g1, p2g1])
+        gameRepository.saveAll([p1g1, p2g1])
         assert ((SimpleMultiPlayerGame) cache.get(p1g1.id).get()).intValue == 150
         assert cache.get(p2g1.id).get() == p2g1
     }
@@ -279,7 +276,7 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringContextInteg
         assert !games.contains(p1g1)
         assert !games.contains(p2g1)
 
-        games = (List<SimpleMultiPlayerGame>) gameRepository.findByCreatedLessThan(ZonedDateTime.now(GMT))
+        games = (List<SimpleMultiPlayerGame>) gameRepository.findByCreatedLessThan(Instant.now())
         assert games.contains(p1g1)
         assert games.contains(p2g1)
     }
@@ -290,20 +287,20 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringContextInteg
         Thread.sleep(100)
         SimpleMultiPlayerGame p2g1 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 20, stringValue: '2', players: [player2, player4] as List<Player>))
 
-        assert gameRepository.findOne(p1g1.id)
-        assert gameRepository.findOne(p2g1.id)
+        assert gameRepository.findById(p1g1.id).present
+        assert gameRepository.findById(p2g1.id).present
 
         assert 1 <= gameRepository.deleteByCreatedLessThan(p2g1.created)
 
-        assert null == gameRepository.findOne(p1g1.id)
-        assert gameRepository.findOne(p2g1.id)
+        assert !gameRepository.findById(p1g1.id).present
+        assert gameRepository.findById(p2g1.id).present
     }
 
     @Test
     void testDeleteAllCache() {
         SimpleMultiPlayerGame p1g1 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 15, stringValue: '2', players: [player1, player4, player2] as List<Player>))
         SimpleMultiPlayerGame p2g1 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 20, stringValue: '2', players: [player2, player4] as List<Player>))
-        gameRepository.save([p1g1, p2g1])
+        gameRepository.saveAll([p1g1, p2g1])
         assert cache.get(p1g1.id).get() == p1g1
         assert cache.get(p2g1.id).get() == p2g1
 
@@ -317,12 +314,12 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringContextInteg
     void testSingleDeletesForCache() {
         SimpleMultiPlayerGame p1g1 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 15, stringValue: '2', players: [player1, player4, player2] as List<Player>))
         SimpleMultiPlayerGame p2g1 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 20, stringValue: '2', players: [player2, player4] as List<Player>))
-        gameRepository.save([p1g1, p2g1])
+        gameRepository.saveAll([p1g1, p2g1])
         assert cache.get(p1g1.id).get() == p1g1
         assert cache.get(p2g1.id).get() == p2g1
 
         gameRepository.delete((Game) p1g1)
-        gameRepository.delete(p2g1.id)
+        gameRepository.deleteById(p2g1.id)
 
         assert cache.get(p1g1.id) == null
         assert cache.get(p2g1.id) == null
@@ -332,11 +329,11 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringContextInteg
     void testIterableDeletesForCache() {
         SimpleMultiPlayerGame p1g1 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 15, stringValue: '2', players: [player1, player4, player2] as List<Player>))
         SimpleMultiPlayerGame p2g1 = (SimpleMultiPlayerGame) gameRepository.save(new SimpleMultiPlayerGame(intValue: 20, stringValue: '2', players: [player2, player4] as List<Player>))
-        gameRepository.save([p1g1, p2g1])
+        gameRepository.saveAll([p1g1, p2g1])
         assert cache.get(p1g1.id).get() == p1g1
         assert cache.get(p2g1.id).get() == p2g1
 
-        gameRepository.delete([p1g1, p2g1] as List<Game>)
+        gameRepository.deleteAll([p1g1, p2g1] as List<Game>)
 
         assert cache.get(p1g1.id) == null
         assert cache.get(p2g1.id) == null
@@ -351,11 +348,11 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringContextInteg
         MongoOperations operations = context.getBean(MongoOperations.class)
         operations.remove(Query.query(Criteria.where("_id").is(p1g1.id)), GAMES_COLLECTION_NAME)
 
-        assert gameRepository.findOne(p1g1.id) == p1g1
+        assert gameRepository.findById(p1g1.id).get() == p1g1
 
         cache.clear()
         assert cache.get(p1g1.id) == null
-        assert gameRepository.findOne(p1g1.id) == null
+        assert !gameRepository.findById(p1g1.id).present
     }
 
     @Test

@@ -6,7 +6,7 @@ import com.jtbdevelopment.games.state.MultiPlayerGame
 import com.jtbdevelopment.games.state.PlayerState
 import com.jtbdevelopment.games.state.scoring.GameScorer
 
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Date: 4/8/2015
@@ -100,7 +100,7 @@ class AbstractMPGamePhaseTransitionEngineTest extends GameCoreTestCase {
     public void testRematchToRematched() {
         assert transitionEngine.gameScorer == null
 
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(gamePhase: GamePhase.RoundOver, rematchTimestamp: ZonedDateTime.now())
+        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(gamePhase: GamePhase.RoundOver, rematchTimestamp: Instant.now())
         assert game.is(transitionEngine.evaluateGame(game))
         assert game.gamePhase == GamePhase.NextRoundStarted
     }

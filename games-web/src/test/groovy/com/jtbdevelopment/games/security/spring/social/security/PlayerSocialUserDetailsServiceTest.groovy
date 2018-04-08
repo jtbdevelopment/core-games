@@ -30,10 +30,10 @@ class PlayerSocialUserDetailsServiceTest extends GroovyTestCase {
         Player player = [] as Player
         Player playerCopy = [] as Player
         service.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == id.reverse()
-                        return player
+                        return Optional.of(player)
                 }
         ] as AbstractPlayerRepository
         service.lastLoginUpdater = [
@@ -52,10 +52,10 @@ class PlayerSocialUserDetailsServiceTest extends GroovyTestCase {
     void testReturnsNullIfNotFound() {
         String id = 'ANID'
         service.playerRepository = [
-                findOne: {
+                findById: {
                     String it ->
                         assert it == id.reverse()
-                        return null
+                        return Optional.empty()
                 }
         ] as AbstractPlayerRepository
 

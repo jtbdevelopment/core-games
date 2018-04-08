@@ -5,7 +5,7 @@ import com.jtbdevelopment.games.state.AbstractMultiPlayerGame
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.PlayerState
 
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Date: 2/19/15
@@ -82,14 +82,14 @@ class AbstractMultiPlayerGameMaskerTest extends GroovyTestCase {
         IntGame game = new IntGame(
                 gamePhase: GamePhase.Quit,
                 players: [PONE],
-                created: ZonedDateTime.now(),
-                completedTimestamp: ZonedDateTime.now(),
-                declinedTimestamp: ZonedDateTime.now(),
+                created: Instant.now(),
+                completedTimestamp: Instant.now(),
+                declinedTimestamp: Instant.now(),
                 featureData: [(Features.FeatureA): ""],
                 features: [Features.FeatureA, Features.FeatureB] as Set,
                 id: 101,
                 initiatingPlayer: PONE.id,
-                lastUpdate: ZonedDateTime.now(),
+                lastUpdate: Instant.now(),
                 playerStates: [(PONE.id): PlayerState.Accepted],
                 version: 10,
         )
@@ -111,14 +111,14 @@ class AbstractMultiPlayerGameMaskerTest extends GroovyTestCase {
         IntGame game = new IntGame(
                 players: [PONE, PTWO],
                 gamePhase: GamePhase.Challenged,
-                created: ZonedDateTime.now(),
-                completedTimestamp: ZonedDateTime.now(),
-                declinedTimestamp: ZonedDateTime.now(),
+                created: Instant.now(),
+                completedTimestamp: Instant.now(),
+                declinedTimestamp: Instant.now(),
                 featureData: [(Features.FeatureA): "", (Features.FeatureB): PTWO.id],
                 features: [Features.FeatureA, Features.FeatureB] as Set,
                 id: 105,
                 initiatingPlayer: PTWO.id,
-                lastUpdate: ZonedDateTime.now(),
+                lastUpdate: Instant.now(),
                 playerStates: [(PONE.id): PlayerState.Accepted, (PTWO.id): PlayerState.Rejected],
                 version: 10,
         )
@@ -138,11 +138,11 @@ class AbstractMultiPlayerGameMaskerTest extends GroovyTestCase {
 
     protected static void checkUnmaskedGameFields(MaskedIntGame maskedGame, IntGame game) {
         assert maskedGame.id == game.idAsString
-        assert maskedGame.completedTimestamp == (game.completedTimestamp ? game.completedTimestamp.toInstant().toEpochMilli() : null)
-        assert maskedGame.created == (game.created ? game.created.toInstant().toEpochMilli() : null)
-        assert maskedGame.declinedTimestamp == (game.declinedTimestamp ? game.declinedTimestamp.toInstant().toEpochMilli() : null)
-        assert maskedGame.rematchTimestamp == (game.rematchTimestamp ? game.rematchTimestamp.toInstant().toEpochMilli() : null)
-        assert maskedGame.lastUpdate == (game.lastUpdate ? game.lastUpdate.toInstant().toEpochMilli() : null)
+        assert maskedGame.completedTimestamp == (game.completedTimestamp ? game.completedTimestamp.toEpochMilli() : null)
+        assert maskedGame.created == (game.created ? game.created.toEpochMilli() : null)
+        assert maskedGame.declinedTimestamp == (game.declinedTimestamp ? game.declinedTimestamp.toEpochMilli() : null)
+        assert maskedGame.rematchTimestamp == (game.rematchTimestamp ? game.rematchTimestamp.toEpochMilli() : null)
+        assert maskedGame.lastUpdate == (game.lastUpdate ? game.lastUpdate.toEpochMilli() : null)
         assert maskedGame.features == game.features
         assert maskedGame.gamePhase == game.gamePhase
         assert maskedGame.round == game.round

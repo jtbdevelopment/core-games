@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component
 @CompileStatic
 class PlayerSocialUserDetailsService implements SocialUserDetailsService {
     @Autowired
-    AbstractPlayerRepository playerRepository
+    AbstractPlayerRepository<? extends Serializable, ? extends Player> playerRepository
 
     @Autowired
     StringToIDConverter<? extends Serializable> stringToIDConverter
@@ -32,9 +32,9 @@ class PlayerSocialUserDetailsService implements SocialUserDetailsService {
 
     @Override
     SocialUserDetails loadUserByUserId(final String userId) throws UsernameNotFoundException, DataAccessException {
-        Player player = (Player) playerRepository.findOne(stringToIDConverter.convert(userId));
-        if (player != null) {
-            return new PlayerUserDetails(lastLoginUpdater.updatePlayerLastLogin(player))
+        def optional = playerRepository.findById(stringToIDConverter.convert(userId))
+        if (optional.present) {
+            return new PlayerUserDetails(lastLoginUpdater.updatePlayerLastLogin(optional.get()))
         }
         return null
     }

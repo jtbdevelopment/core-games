@@ -4,7 +4,7 @@ import com.jtbdevelopment.games.players.AbstractPlayer
 import com.jtbdevelopment.games.state.AbstractSinglePlayerGame
 import com.jtbdevelopment.games.state.GamePhase
 
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Date: 2/19/15
@@ -80,13 +80,13 @@ class AbstractSinglePlayerGameMaskerTest extends GroovyTestCase {
         IntGame game = new IntGame(
                 gamePhase: GamePhase.Quit,
                 player: PONE,
-                created: ZonedDateTime.now(),
-                completedTimestamp: ZonedDateTime.now(),
+                created: Instant.now(),
+                completedTimestamp: Instant.now(),
                 featureData: [(Features.FeatureA): ""],
                 features: [Features.FeatureA, Features.FeatureB] as Set,
                 previousId: 100,
                 id: 101,
-                lastUpdate: ZonedDateTime.now(),
+                lastUpdate: Instant.now(),
                 version: 10,
         )
 
@@ -103,9 +103,9 @@ class AbstractSinglePlayerGameMaskerTest extends GroovyTestCase {
     protected static void checkUnmaskedGameFields(MaskedIntGame maskedGame, IntGame game) {
         assert maskedGame.id == game.idAsString
         assert game.previousIdAsString == maskedGame.previousId
-        assert maskedGame.completedTimestamp == (game.completedTimestamp ? game.completedTimestamp.toInstant().toEpochMilli() : null)
-        assert maskedGame.created == (game.created ? game.created.toInstant().toEpochMilli() : null)
-        assert maskedGame.lastUpdate == (game.lastUpdate ? game.lastUpdate.toInstant().toEpochMilli() : null)
+        assert maskedGame.completedTimestamp == (game.completedTimestamp ? game.completedTimestamp.toEpochMilli() : null)
+        assert maskedGame.created == (game.created ? game.created.toEpochMilli() : null)
+        assert maskedGame.lastUpdate == (game.lastUpdate ? game.lastUpdate.toEpochMilli() : null)
         assert maskedGame.features == game.features
         assert maskedGame.gamePhase == game.gamePhase
         assert maskedGame.round == game.round

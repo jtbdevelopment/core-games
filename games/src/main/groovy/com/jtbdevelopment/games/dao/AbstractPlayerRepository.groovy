@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.NoRepositoryBean
 import org.springframework.data.repository.PagingAndSortingRepository
 
-import java.time.ZonedDateTime
+import java.time.Instant
 
 import static com.jtbdevelopment.games.dao.caching.CacheConstants.*
 
@@ -54,7 +54,7 @@ interface AbstractPlayerRepository<ID extends Serializable, P extends Player<ID>
     List<P> findBySourceAndDisabled(final String source, final boolean disabled)
 
     //  Not caching - loading in order to delete
-    List<P> findByLastLoginLessThan(final ZonedDateTime cutoff)
+    List<P> findByLastLoginLessThan(final Instant cutoff)
 
     @Caching(
             evict = [
@@ -63,7 +63,7 @@ interface AbstractPlayerRepository<ID extends Serializable, P extends Player<ID>
                     @CacheEvict(value = PLAYER_S_AND_SID_CACHE, allEntries = true),
             ]
     )
-    long deleteByLastLoginLessThan(final ZonedDateTime cutoff)
+    long deleteByLastLoginLessThan(final Instant cutoff)
 
     @Override
     @Caching(
@@ -125,7 +125,7 @@ interface AbstractPlayerRepository<ID extends Serializable, P extends Player<ID>
     )
     void deleteAll()
 
-    long countByCreatedGreaterThan(final ZonedDateTime cutoff)
+    long countByCreatedGreaterThan(final Instant cutoff)
 
-    long countByLastLoginGreaterThan(final ZonedDateTime cutoff)
+    long countByLastLoginGreaterThan(final Instant cutoff)
 }

@@ -7,6 +7,7 @@ import org.springframework.social.connect.*
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 
+import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
@@ -21,13 +22,13 @@ class PlayerCleanupTest extends GameCoreTestCase {
     GameCoreTestCase.StringManualPlayer manual = makeSimpleManualPlayer("manual 1")
 
     void testDeleteOlderPlayersWithoutSocialConnection() {
-        ZonedDateTime start = ZonedDateTime.now(ZoneId.of('GMT')).minusDays(90)
+        Instant start = ZonedDateTime.now(ZoneId.of('GMT')).minusDays(90).toInstant()
         def deleted = [] as Set
         playerCleanup.playerRepository = [
                 findByLastLoginLessThan: {
-                    ZonedDateTime cutoff ->
+                    Instant cutoff ->
                         assert start <= cutoff
-                        assert start.plusMinutes(1) > cutoff
+                        assert start.plusSeconds(60) > cutoff
                         return [PONE, system, manual]
                 },
                 delete                 : {
@@ -40,13 +41,13 @@ class PlayerCleanupTest extends GameCoreTestCase {
     }
 
     void testDeleteOlderPLayersWithSomeSocialConnections() {
-        ZonedDateTime start = ZonedDateTime.now(ZoneId.of('GMT')).minusDays(90)
+        Instant start = ZonedDateTime.now(ZoneId.of('GMT')).minusDays(90).toInstant()
         def deleted = [] as Set
         playerCleanup.playerRepository = [
                 findByLastLoginLessThan: {
-                    ZonedDateTime cutoff ->
+                    Instant cutoff ->
                         assert start <= cutoff
-                        assert start.plusMinutes(1) > cutoff
+                        assert start.plusSeconds(60) > cutoff
                         return [PONE, PTWO, manual, system, PTHREE]
                 },
                 delete                 : {

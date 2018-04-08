@@ -1,7 +1,6 @@
 package com.jtbdevelopment.games.players.notifications
 
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Date: 10/16/15
@@ -14,13 +13,13 @@ class RegisteredDeviceTest extends GroovyTestCase {
     RegisteredDevice device4 = new RegisteredDevice(deviceID: "4hjx")
 
     void testConstructorDevice() {
-        ZonedDateTime start = ZonedDateTime.now(ZoneId.of("GMT"))
+        Instant start = Instant.now()
         RegisteredDevice defaultDevice = new RegisteredDevice()
-        ZonedDateTime end = ZonedDateTime.now(ZoneId.of("GMT"))
+        Instant end = Instant.now()
 
         assert "" == defaultDevice.deviceID
-        assert 0 >= start.compareTo(defaultDevice.lastRegistered)
-        assert 0 <= end.compareTo(defaultDevice.lastRegistered)
+        assert start <= defaultDevice.lastRegistered
+        assert end >= defaultDevice.lastRegistered
     }
 
     void testEquals() {

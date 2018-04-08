@@ -6,8 +6,7 @@ import org.apache.commons.codec.digest.DigestUtils
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.util.StringUtils
 
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Date: 11/3/14
@@ -15,7 +14,6 @@ import java.time.ZonedDateTime
  */
 @CompileStatic
 abstract class AbstractPlayer<ID extends Serializable> implements Cloneable, Player<ID>, Serializable {
-    public static final ZoneId GMT = ZoneId.of("GMT")
 
     String source
     String sourceId
@@ -26,8 +24,8 @@ abstract class AbstractPlayer<ID extends Serializable> implements Cloneable, Pla
     Set<RegisteredDevice> registeredDevices = [] as Set
 
     @CreatedDate
-    ZonedDateTime created = ZonedDateTime.now(GMT)
-    ZonedDateTime lastLogin = ZonedDateTime.now(GMT).minusYears(5)
+    Instant created = Instant.now()
+    Instant lastLogin = Instant.now().minusSeconds(60 * 60 * 24 * 365)
 
     String lastVersionNotes = ""
 
@@ -68,7 +66,7 @@ abstract class AbstractPlayer<ID extends Serializable> implements Cloneable, Pla
         computeMD5Hex()
     }
 
-    abstract protected void setMd5(final String md5);
+    abstract protected void setMd5(final String md5)
 
     abstract protected String getMd5Internal()
 
@@ -80,7 +78,7 @@ abstract class AbstractPlayer<ID extends Serializable> implements Cloneable, Pla
     }
 
     @Override
-    public String toString() {
+    String toString() {
         return "Player{" +
                 "id='" + id + '\'' +
                 ", source='" + source + '\'' +

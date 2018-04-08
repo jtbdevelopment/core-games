@@ -21,11 +21,11 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
     static int DEFAULT_FREE = 22
     static int DEFAULT_PREMIUM = 37
     public static
-    final String FREETOPLAYFREEGAMEFIND = "Query: { \"_id\" : { \"\$oid\" : \"100000000000000000000000\"} , \"gameSpecificPlayerAttributes.freeGamesUsedToday\" : { \"\$lt\" : " + DEFAULT_FREE + "}}, Fields: null, Sort: null"
+    final String FREETOPLAYFREEGAMEFIND = "Query: { \"_id\" : { \"\$oid\" : \"100000000000000000000000\" }, \"gameSpecificPlayerAttributes.freeGamesUsedToday\" : { \"\$lt\" : " + DEFAULT_FREE + " } }, Fields: { }, Sort: { }"
     public static
-    final String UPDATEFREEPLAYED = "{ \"\$inc\" : { \"gameSpecificPlayerAttributes.freeGamesUsedToday\" : 1}}"
+    final String UPDATEFREEPLAYED = "{ \"\$inc\" : { \"gameSpecificPlayerAttributes.freeGamesUsedToday\" : 1 } }"
     public static
-    final String FRRETOPLAYPREMIUMFIND = "Query: { \"_id\" : { \"\$oid\" : \"100000000000000000000000\"} , \"gameSpecificPlayerAttributes.freeGamesUsedToday\" : { \"\$lt\" : " + DEFAULT_PREMIUM + "}}, Fields: null, Sort: null"
+    final String FRRETOPLAYPREMIUMFIND = "Query: { \"_id\" : { \"\$oid\" : \"100000000000000000000000\" }, \"gameSpecificPlayerAttributes.freeGamesUsedToday\" : { \"\$lt\" : " + DEFAULT_PREMIUM + " } }, Fields: { }, Sort: { }"
     PlayerGameTracker tracker = new PlayerGameTracker()
 
     private static class PlayerAttributes extends AbstractPlayerGameTrackingAttributes {
@@ -39,7 +39,6 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
     }
 
     void testSystemPlayer() {
-        int callNumber = 0
         boolean published = false
         MongoSystemPlayer input = new MongoSystemPlayer()
         PlayerGameEligibilityResult result = tracker.getGameEligibility(input)
@@ -52,7 +51,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
     void testRegularEligibilityWithPlayerHavingFreeGames() {
         int callNumber = 0
         boolean published = false
-        MongoPlayer input = (MongoPlayer) PONE.clone();
+        MongoPlayer input = (MongoPlayer) PONE.clone()
         input.payLevel = PlayerPayLevel.FreeToPlay
         input.gameSpecificPlayerAttributes = new PlayerAttributes(freeGamesUsedToday: 0, availablePurchasedGames: 5, player: input)
         MongoPlayer output = (MongoPlayer) input.clone()
@@ -84,7 +83,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
     void testRegularEligibilityWithPlayerHavingNoFreeGamesButHasPaid() {
         int callNumber = 0
         boolean published = false
-        MongoPlayer input = (MongoPlayer) PONE.clone();
+        MongoPlayer input = (MongoPlayer) PONE.clone()
         input.payLevel = PlayerPayLevel.FreeToPlay
         input.gameSpecificPlayerAttributes = new PlayerAttributes(freeGamesUsedToday: 10, availablePurchasedGames: 5)
         MongoPlayer output = (MongoPlayer) input.clone()
@@ -97,7 +96,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
                             return simulateFreePlayUpdate(query, FREETOPLAYFREEGAMEFIND, update, options, entityClass, null)
                         }
                         if (callNumber == 2) {
-                            return simulatePaidGameUpdate(query, update, options, entityClass, output)
+                            return simulatePaidGameUpdate(update, options, entityClass, output)
                         }
                         fail("Invalid call number")
                 }
@@ -119,7 +118,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
     void testRegularEligibilityWithPlayerHavingNoGames() {
         int callNumber = 0
         boolean published = false
-        MongoPlayer input = (MongoPlayer) PONE.clone();
+        MongoPlayer input = (MongoPlayer) PONE.clone()
         input.payLevel = PlayerPayLevel.FreeToPlay
         input.gameSpecificPlayerAttributes = new PlayerAttributes(freeGamesUsedToday: 10, availablePurchasedGames: 0)
         tracker.mongoOperations = [
@@ -130,7 +129,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
                             return simulateFreePlayUpdate(query, FREETOPLAYFREEGAMEFIND, update, options, entityClass, null)
                         }
                         if (callNumber == 2) {
-                            return simulatePaidGameUpdate(query, update, options, entityClass, null)
+                            return simulatePaidGameUpdate(update, options, entityClass, null)
                         }
                         fail("Invalid call number")
                 }
@@ -151,7 +150,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
     void testPremiumEligibilityWithPlayerHavingFreeGames() {
         int callNumber = 0
         boolean published = false
-        MongoPlayer input = (MongoPlayer) PONE.clone();
+        MongoPlayer input = (MongoPlayer) PONE.clone()
         input.payLevel = PlayerPayLevel.PremiumPlayer
         input.gameSpecificPlayerAttributes = new PlayerAttributes(freeGamesUsedToday: 0, availablePurchasedGames: 5)
         MongoPlayer output = (MongoPlayer) input.clone()
@@ -183,7 +182,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
     void testPremiumEligibilityWithPlayerHavingNoFreeGamesButHasPaid() {
         int callNumber = 0
         boolean published = false
-        MongoPlayer input = (MongoPlayer) PONE.clone();
+        MongoPlayer input = (MongoPlayer) PONE.clone()
         input.payLevel = PlayerPayLevel.PremiumPlayer
         input.gameSpecificPlayerAttributes = new PlayerAttributes(freeGamesUsedToday: 25, availablePurchasedGames: 5)
         MongoPlayer output = (MongoPlayer) input.clone()
@@ -196,7 +195,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
                             return simulateFreePlayUpdate(query, FRRETOPLAYPREMIUMFIND, update, options, entityClass, null)
                         }
                         if (callNumber == 2) {
-                            return simulatePaidGameUpdate(query, update, options, entityClass, output)
+                            return simulatePaidGameUpdate(update, options, entityClass, output)
                         }
                         fail("Invalid call number")
                 }
@@ -218,7 +217,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
     void testPremiumEligibilityWithPlayerHavingNoGames() {
         int callNumber = 0
         boolean published = false
-        MongoPlayer input = (MongoPlayer) PONE.clone();
+        MongoPlayer input = (MongoPlayer) PONE.clone()
         input.payLevel = PlayerPayLevel.PremiumPlayer
         input.gameSpecificPlayerAttributes = new PlayerAttributes(freeGamesUsedToday: 25, availablePurchasedGames: 0)
         tracker.mongoOperations = [
@@ -229,7 +228,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
                             return simulateFreePlayUpdate(query, FRRETOPLAYPREMIUMFIND, update, options, entityClass, null)
                         }
                         if (callNumber == 2) {
-                            return simulatePaidGameUpdate(query, update, options, entityClass, null)
+                            return simulatePaidGameUpdate(update, options, entityClass, null)
                         }
                         fail("Invalid call number")
                 }
@@ -250,7 +249,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
     void testRevertingFreeGameUsage() {
         int callNumber = 0
         boolean published = false
-        MongoPlayer input = (MongoPlayer) PONE.clone();
+        MongoPlayer input = (MongoPlayer) PONE.clone()
         input.gameSpecificPlayerAttributes = new PlayerAttributes(freeGamesUsedToday: 1, availablePurchasedGames: 5)
         PlayerGameEligibilityResult result = new PlayerGameEligibilityResult(
                 eligibility: PlayerGameEligibility.FreeGameUsed,
@@ -282,7 +281,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
     void testRevertingPaidGameUsage() {
         int callNumber = 0
         boolean published = false
-        MongoPlayer input = (MongoPlayer) PONE.clone();
+        MongoPlayer input = (MongoPlayer) PONE.clone()
         input.gameSpecificPlayerAttributes = new PlayerAttributes(freeGamesUsedToday: 1, availablePurchasedGames: 5)
         PlayerGameEligibilityResult result = new PlayerGameEligibilityResult(
                 eligibility: PlayerGameEligibility.PaidGameUsed,
@@ -313,7 +312,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
 
     void testRevertingNotEligibleGameDoesNothing() {
         boolean published = false
-        MongoPlayer input = (MongoPlayer) PONE.clone();
+        MongoPlayer input = (MongoPlayer) PONE.clone()
         input.gameSpecificPlayerAttributes = new PlayerAttributes(freeGamesUsedToday: 1, availablePurchasedGames: 5)
         PlayerGameEligibilityResult result = new PlayerGameEligibilityResult(
                 eligibility: PlayerGameEligibility.NoGamesAvailable,
@@ -346,9 +345,8 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
     }
 
     protected
-    static MongoPlayer simulatePaidGameUpdate(Query query, Update update, FindAndModifyOptions options, Class entityClass, MongoPlayer output) {
-        assert query.toString() == "Query: { \"_id\" : { \"\$oid\" : \"100000000000000000000000\"} , \"gameSpecificPlayerAttributes.availablePurchasedGames\" : { \"\$gt\" : 0}}, Fields: null, Sort: null"
-        assert update.toString() == "{ \"\$inc\" : { \"gameSpecificPlayerAttributes.availablePurchasedGames\" : -1}}"
+    static MongoPlayer simulatePaidGameUpdate(Update update, FindAndModifyOptions options, Class entityClass, MongoPlayer output) {
+        assert update.toString() == "{ \"\$inc\" : { \"gameSpecificPlayerAttributes.availablePurchasedGames\" : -1 } }"
         assert options.returnNew
         assertFalse options.remove
         assertFalse options.upsert
@@ -358,8 +356,8 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
 
     protected
     static MongoPlayer simulateFreeGameRevert(Query query, Update update, FindAndModifyOptions options, Class entityClass, MongoPlayer output) {
-        assert query.toString() == "Query: { \"_id\" : { \"\$oid\" : \"100000000000000000000000\"}}, Fields: null, Sort: null"
-        assert update.toString() == "{ \"\$inc\" : { \"gameSpecificPlayerAttributes.freeGamesUsedToday\" : -1}}"
+        assert query.toString() == "Query: { \"_id\" : { \"\$oid\" : \"100000000000000000000000\" } }, Fields: { }, Sort: { }"
+        assert update.toString() == "{ \"\$inc\" : { \"gameSpecificPlayerAttributes.freeGamesUsedToday\" : -1 } }"
         assert options.returnNew
         assertFalse options.remove
         assertFalse options.upsert
@@ -369,8 +367,8 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
 
     protected
     static MongoPlayer simulatePaidGameRevert(Query query, Update update, FindAndModifyOptions options, Class entityClass, MongoPlayer output) {
-        assert query.toString() == "Query: { \"_id\" : { \"\$oid\" : \"100000000000000000000000\"}}, Fields: null, Sort: null"
-        assert update.toString() == "{ \"\$inc\" : { \"gameSpecificPlayerAttributes.availablePurchasedGames\" : 1}}"
+        assert query.toString() == "Query: { \"_id\" : { \"\$oid\" : \"100000000000000000000000\" } }, Fields: { }, Sort: { }"
+        assert update.toString() == "{ \"\$inc\" : { \"gameSpecificPlayerAttributes.availablePurchasedGames\" : 1 } }"
         assert options.returnNew
         assertFalse options.remove
         assertFalse options.upsert

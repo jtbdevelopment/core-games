@@ -8,7 +8,7 @@ import com.jtbdevelopment.games.state.MultiPlayerGame
 import com.jtbdevelopment.games.state.masking.GameMasker
 import org.springframework.data.domain.PageRequest
 
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Date: 12/4/2014
@@ -48,7 +48,7 @@ class PlayerGamesFinderHandlerTest extends GameCoreTestCase {
 
         handler.gameRepository = [
                 findByPlayersIdAndGamePhaseAndLastUpdateGreaterThan: {
-                    String id, GamePhase gp, ZonedDateTime dt, PageRequest pr ->
+                    String id, GamePhase gp, Instant dt, PageRequest pr ->
                         return queryResults[gp]
                 }
         ] as AbstractMultiPlayerGameRepository

@@ -10,8 +10,7 @@ import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.MultiPlayerGame
 import com.jtbdevelopment.games.state.transition.AbstractMPGamePhaseTransitionEngine
 
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Date: 4/8/2015
@@ -26,9 +25,9 @@ class ChallengeToRematchHandlerTest extends GameCoreTestCase {
         assert handler.requiresEligibilityCheck(1L)
     }
 
-    public void testSetsUpRematch() {
-        ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT"))
-        Thread.sleep(100);
+    void testSetsUpRematch() {
+        Instant now = Instant.now()
+        Thread.sleep(100)
         GameCoreTestCase.StringMPGame previous = new GameCoreTestCase.StringMPGame(gamePhase: GamePhase.RoundOver, id: 'x')
         GameCoreTestCase.StringMPGame previousT = previous.clone()
         GameCoreTestCase.StringMPGame previousS = previous.clone()
@@ -70,7 +69,7 @@ class ChallengeToRematchHandlerTest extends GameCoreTestCase {
         newGame.is(handler.handleActionInternal(PONE, previous, null))
     }
 
-    public void testNotInRematchPhase() {
+    void testNotInRematchPhase() {
         GamePhase.values().find { it != GamePhase.RoundOver }.each {
             GameCoreTestCase.StringMPGame previous = new GameCoreTestCase.StringMPGame(gamePhase: it, id: "XXXXR")
             try {

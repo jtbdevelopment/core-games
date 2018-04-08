@@ -8,7 +8,7 @@ import com.jtbdevelopment.games.mongo.dao.MongoPlayerRepository
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.PlayerPayLevel
 import com.jtbdevelopment.games.players.notifications.RegisteredDevice
-import com.mongodb.DBCollection
+import com.mongodb.client.MongoCollection
 import groovy.transform.CompileStatic
 import org.bson.types.ObjectId
 import org.junit.AfterClass
@@ -29,6 +29,7 @@ import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
 import org.springframework.social.connect.support.ConnectionFactoryRegistry
 
+import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
@@ -72,13 +73,13 @@ class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
 
         @Override
         protected String getMappingBasePackage() {
-            Package mappingBasePackage = getClass().getPackage();
-            return mappingBasePackage == null ? null : mappingBasePackage.getName();
+            Package mappingBasePackage = getClass().getPackage()
+            return mappingBasePackage == null ? null : mappingBasePackage.getName()
         }
     }
 
     private static final String PLAYER_COLLECTION_NAME = 'player'
-    private DBCollection collection
+    private MongoCollection collection
 
     MongoPlayerRepository playerRepository
     MongoPlayer player1, player2, player3, player4, number4
@@ -94,7 +95,7 @@ class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
                 displayName: id,
                 disabled: disabled,
                 lastVersionNotes: 'X.Y',
-                lastLogin: ZonedDateTime.now(ZoneId.of("GMT")),
+                lastLogin: Instant.now(),
                 imageUrl: "http://somewhere.com/image/" + id,
                 profileUrl: "http://somewhere.com/profile/" + id))
     }
@@ -114,7 +115,6 @@ class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
 
     @Before
     void setup() {
-        assert db.collectionExists(PLAYER_COLLECTION_NAME)
         collection = db.getCollection(PLAYER_COLLECTION_NAME)
 
         playerRepository = context.getBean(MongoPlayerRepository.class)
@@ -162,7 +162,7 @@ class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
                 Sort.Direction.ASC,
                 'displayName')
         contains = playerRepository.findByDisplayNameContains('', page)
-        assert 7 == contains.getTotalElements()
+        assert 7L == contains.getTotalElements()
         assert 3 == contains.getNumberOfElements()
         assert player1 == ++contains.iterator()
     }
@@ -212,11 +212,11 @@ class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
     void testSerialization() {
         ObjectMapper mapper = context.getBean(ObjectMapper.class)
 
-        ZonedDateTime ll = player1.lastLogin
-        ZonedDateTime c = player1.created
+        Instant ll = player1.lastLogin
+        Instant c = player1.created
         try {
-            player1.lastLogin = ZonedDateTime.of(2015, 11, 10, 1, 2, 3, 100, ZoneId.of("GMT"))
-            player1.created = ZonedDateTime.of(200, 1, 30, 4, 5, 6, 100, ZoneId.of("GMT"))
+            player1.lastLogin = ZonedDateTime.of(2015, 11, 10, 1, 2, 3, 100, ZoneId.of("GMT")).toInstant()
+            player1.created = ZonedDateTime.of(200, 1, 30, 4, 5, 6, 100, ZoneId.of("GMT")).toInstant()
             player1.updateRegisteredDevice(new RegisteredDevice(deviceID: "ADevice", lastRegistered: player1.lastLogin))
 
             assert mapper.writeValueAsString(player1) == '{"source":"MADEUP","sourceId":"MADEUP1","displayName":"1","imageUrl":"http://somewhere.com/image/1","profileUrl":"http://somewhere.com/profile/1","registeredDevices":[{"deviceID":"ADevice","lastRegistered":1447117323.000000100}],"created":-55853265294.000000100,"lastLogin":1447117323.000000100,"lastVersionNotes":"X.Y","disabled":false,"adminUser":false,"payLevel":"PremiumPlayer","gameSpecificPlayerAttributes":null,"id":"' + player1.idAsString + '","md5":"' + player1.md5 + '"}'
@@ -243,7 +243,7 @@ class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
         assert !player.registeredDevices.empty
         RegisteredDevice device = player.registeredDevices.iterator().next()
         assert "ADevice" == device.deviceID
-        assert ZonedDateTime.of(2015, 11, 10, 1, 2, 3, 100, ZoneId.of("UTC")) == device.lastRegistered
+        assert ZonedDateTime.of(2015, 11, 10, 1, 2, 3, 100, ZoneId.of("UTC")).toInstant() == device.lastRegistered
     }
 
     @Test
@@ -274,7 +274,7 @@ class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
         cache.clear()
         assert cache.get(player1.source + "/" + player1.sourceId) == null
 
-        playerRepository.save([player1, player2] as List<MongoPlayer>)
+        playerRepository.saveAll([player1, player2] as List<MongoPlayer>)
 
         cache = cacheManager.getCache(CacheConstants.PLAYER_ID_CACHE)
         assert cache.get(player1.id).get() == player1
@@ -318,7 +318,7 @@ class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
         cache = cacheManager.getCache(CacheConstants.PLAYER_S_AND_SID_CACHE)
         assert cache.get(player1.source + "/" + player1.sourceId).get() == player1
 
-        playerRepository.delete(player1.id)
+        playerRepository.deleteById(player1.id)
         playerRepository.delete(player2)
 
         cache = cacheManager.getCache(CacheConstants.PLAYER_ID_CACHE)
@@ -341,7 +341,7 @@ class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
         cache = cacheManager.getCache(CacheConstants.PLAYER_S_AND_SID_CACHE)
         assert cache.get(player1.source + "/" + player1.sourceId).get() == player1
 
-        playerRepository.delete([player2, player1] as List<MongoPlayer>)
+        playerRepository.deleteAll([player2, player1] as List<MongoPlayer>)
 
         cache = cacheManager.getCache(CacheConstants.PLAYER_ID_CACHE)
         assert cache.get(player1.id) == null
@@ -360,7 +360,7 @@ class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
         MongoOperations operations = context.getBean(MongoOperations)
         operations.remove(Query.query(Criteria.where('source').is(player1.source)), 'player')
 
-        assert playerRepository.findOne(player1.id) == player1
+        assert playerRepository.findById(player1.id).get() == player1
         assert playerRepository.findBySourceAndSourceId(player2.source, player2.sourceId) == player2
         assert playerRepository.findByMd5In([player3.md5, player4.md5]) as Set == [player3, player4] as Set
         assert playerRepository.findBySourceAndSourceIdIn(player2.source, [player2.sourceId, player1.sourceId]) as Set == [player2, player1] as Set
@@ -370,7 +370,7 @@ class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
 
         def cache = cacheManager.getCache(CacheConstants.PLAYER_ID_CACHE)
         cache.clear()
-        assert playerRepository.findOne(player1.id) == null
+        assert !playerRepository.findById(player1.id).present
         cache = cacheManager.getCache(CacheConstants.PLAYER_S_AND_SID_CACHE)
         cache.clear()
         assert playerRepository.findBySourceAndSourceId(player2.source, player2.sourceId) == null
@@ -382,22 +382,22 @@ class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
 
     @Test
     void testFindByLastLogin() {
-        List<MongoPlayer> playerList = playerRepository.findByLastLoginLessThan(player1.created.minusMinutes(1))
+        List<MongoPlayer> playerList = playerRepository.findByLastLoginLessThan(player1.created.minusSeconds(60))
         assert 2 == playerList.size()
-        playerList = playerRepository.findByLastLoginLessThan(systemPlayer.created.plusHours(1))
+        playerList = playerRepository.findByLastLoginLessThan(systemPlayer.created.plusSeconds(60 * 60))
         assert 7 == playerList.size()
     }
 
     @Test
     void testDeleteByLastLogin() {
         Player p = makeSimplePlayer('DELETEME')
-        ZonedDateTime oldDate = ZonedDateTime.of(2000, 1, 1, 0, 0, 0, 0, ZoneId.of("GMT"))
+        Instant oldDate = ZonedDateTime.of(2000, 1, 1, 0, 0, 0, 0, ZoneId.of("GMT")).toInstant()
         assert ((long) 0) == playerRepository.deleteByLastLoginLessThan(oldDate)
-        p.lastLogin = oldDate.minusMinutes(1)
+        p.lastLogin = oldDate.minusSeconds(60)
         playerRepository.save(p)
 
         assert ((long) 1) == playerRepository.deleteByLastLoginLessThan(oldDate)
-        assert null == playerRepository.findOne((ObjectId) p.id)
+        assert !playerRepository.findById((ObjectId) p.id).present
     }
 }
 

@@ -4,14 +4,14 @@ import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.SinglePlayerGame
 import groovy.transform.CompileStatic
 
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Date: 2/19/15
  * Time: 7:20 AM
  */
 @CompileStatic
-abstract class AbstractSinglePlayerGameMasker<ID extends Serializable, FEATURES, U extends SinglePlayerGame<ID, ZonedDateTime, FEATURES>, M extends MaskedSinglePlayerGame<FEATURES>> extends AbstractGameMasker<ID, FEATURES, U, M> implements GameMasker<ID, U, M> {
+abstract class AbstractSinglePlayerGameMasker<ID extends Serializable, FEATURES, U extends SinglePlayerGame<ID, Instant, FEATURES>, M extends MaskedSinglePlayerGame<FEATURES>> extends AbstractGameMasker<ID, FEATURES, U, M> implements GameMasker<ID, U, M> {
     @Override
     M maskGameForPlayer(final U game, final Player<ID> player) {
         M playerMaskedGame = (M) super.maskGameForPlayer(game, player)

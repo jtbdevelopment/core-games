@@ -41,7 +41,7 @@ class PlayerCleanup {
         def cutoff = ZonedDateTime.now(GMT).minusDays(DAYS_BACK)
         logger.info('Deleting players not logged in since ' + cutoff)
 
-        def actualPlayers = playerRepository.findByLastLoginLessThan(cutoff).findAll {
+        def actualPlayers = playerRepository.findByLastLoginLessThan(cutoff.toInstant()).findAll {
             Player p ->
                 !(p in ManualPlayer || p in SystemPlayer)
         }

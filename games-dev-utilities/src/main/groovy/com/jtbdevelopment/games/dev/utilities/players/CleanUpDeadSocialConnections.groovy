@@ -26,7 +26,8 @@ class CleanUpDeadSocialConnections {
         Iterable<AbstractSocialConnection> all = socialRepository.findAll()
         all.each {
             AbstractSocialConnection socialConnection ->
-                if (playerRepository.findOne(new ObjectId(socialConnection.userId)) == null) {
+                def player = playerRepository.findById(new ObjectId(socialConnection.userId))
+                if (!player.present) {
                     deletable.add(socialConnection)
                 }
         }

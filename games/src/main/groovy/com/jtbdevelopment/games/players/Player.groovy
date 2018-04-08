@@ -4,7 +4,7 @@ import com.jtbdevelopment.games.players.notifications.RegisteredDevice
 import groovy.transform.CompileStatic
 import org.springframework.data.annotation.Transient
 
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Date: 12/30/2014
@@ -64,11 +64,11 @@ interface Player<ID extends Serializable> {
 
     String getSourceAndSourceId()
 
-    ZonedDateTime getCreated()
+    Instant getCreated()
 
-    ZonedDateTime getLastLogin()
+    Instant getLastLogin()
 
-    void setLastLogin(final ZonedDateTime lastLogin)
+    void setLastLogin(final Instant lastLogin)
 
     String getLastVersionNotes()
 

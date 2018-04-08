@@ -6,7 +6,6 @@ import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.masking.GameMasker
 import com.jtbdevelopment.games.state.masking.MaskedGame
 import groovy.transform.CompileStatic
-import groovyx.gpars.GParsPool
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -36,22 +35,20 @@ class PlayerGamesFinderHandler extends AbstractGameGetterHandler {
         ZonedDateTime now = ZonedDateTime.now(GMT)
 
         List<MaskedGame> result = []
-        GParsPool.withPool {
-            GamePhase.values().each {
-                GamePhase phase ->
-                    def days = now.minusDays(phase.historyCutoffDays)
-                    def games = ((AbstractMultiPlayerGameRepository) gameRepository).findByPlayersIdAndGamePhaseAndLastUpdateGreaterThan(
-                            player.id,
-                            phase,
-                            days,
-                            PAGE
-                    )
-                    def masked = games.collect {
-                        game ->
-                            gameMasker.maskGameForPlayer(game, player)
-                    }
-                    result.addAll(masked)
-            }
+        GamePhase.values().each {
+            GamePhase phase ->
+                def days = now.minusDays(phase.historyCutoffDays)
+                def games = ((AbstractMultiPlayerGameRepository) gameRepository).findByPlayersIdAndGamePhaseAndLastUpdateGreaterThan(
+                        player.id,
+                        phase,
+                        days.toInstant(),
+                        PAGE
+                )
+                def masked = games.collect {
+                    game ->
+                        gameMasker.maskGameForPlayer(game, player)
+                }
+                result.addAll(masked)
         }
         result
     }

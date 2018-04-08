@@ -90,6 +90,6 @@ class AbstractGameTest extends GroovyTestCase {
         assert game.features.isEmpty()
         assert 0 == game.round
         assertNull game.previousId
-        assertNull game.gamePhase
+        assert GamePhase.Setup == game.gamePhase
     }
 }

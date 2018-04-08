@@ -5,7 +5,7 @@ import org.springframework.security.web.header.HeaderWriter
 
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Date: 6/8/15
@@ -21,7 +21,7 @@ class SmarterCacheControlHeaderWriter implements HeaderWriter {
     @Override
     void writeHeaders(final HttpServletRequest request, final HttpServletResponse response) {
         if (allowCaching(request)) {
-            response.addHeader(EXPIRES, "" + ZonedDateTime.now().plusHours(1).toInstant().epochSecond)
+            response.addHeader(EXPIRES, "" + Instant.now().plusSeconds(60 * 60).epochSecond)
         } else {
             response.addHeader(CACHE_CONTROL, "no-cache, no-store, max-age=0, must-revalidate")
             response.addHeader(PRAGMA, "no-cache")

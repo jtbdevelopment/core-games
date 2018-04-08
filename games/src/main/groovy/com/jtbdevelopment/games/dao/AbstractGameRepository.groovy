@@ -35,6 +35,10 @@ interface AbstractGameRepository<ID extends Serializable, TIMESTAMP, FEATURES, I
     void delete(IMPL entity)
 
     @Override
+    @CacheEvict(value = GAME_ID_CACHE, key = '#p0')
+    void deleteById(ID id)
+
+    @Override
     @CacheEvict(value = GAME_ID_CACHE, key = 'T(com.jtbdevelopment.games.dao.caching.GameKeyUtility).collectGameIDs(#p0)')
     void deleteAll(Iterable<? extends IMPL> entities)
 

@@ -3,7 +3,7 @@ package com.jtbdevelopment.games.security.spring.security.cachecontrol
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.mock.web.MockHttpServletResponse
 
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Date: 6/8/15
@@ -20,14 +20,14 @@ class SmarterCacheControlHeaderWriterTest extends GroovyTestCase {
         MockHttpServletResponse response = new MockHttpServletResponse()
         request.servletPath = "/images/animage.png"
 
-        ZonedDateTime nowPlus1Hour = ZonedDateTime.now().plusHours(1)
-        ZonedDateTime plus30seconds = nowPlus1Hour.plusSeconds(30)
+        Instant nowPlus1Hour = Instant.now().plusSeconds(60 * 60)
+        Instant plus30seconds = nowPlus1Hour.plusSeconds(30)
 
         writer.writeHeaders(request, response)
 
         assert response.containsHeader(EXPIRES)
-        assert Long.parseLong(response.getHeader(EXPIRES)) >= nowPlus1Hour.toInstant().epochSecond
-        assert Long.parseLong(response.getHeader(EXPIRES)) <= plus30seconds.toInstant().epochSecond
+        assert Long.parseLong(response.getHeader(EXPIRES)) >= nowPlus1Hour.epochSecond
+        assert Long.parseLong(response.getHeader(EXPIRES)) <= plus30seconds.epochSecond
         assertFalse response.containsHeader(PRAGMA)
         assertFalse response.containsHeader(CACHE_CONTROL)
     }

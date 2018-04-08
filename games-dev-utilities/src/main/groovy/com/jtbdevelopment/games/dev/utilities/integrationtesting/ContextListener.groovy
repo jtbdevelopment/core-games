@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
  */
 @Component
 class ContextListener implements ApplicationContextAware {
-    public ContainerListener() {
+    def ContainerListener() {
         println "ContainerListener made"
     }
 

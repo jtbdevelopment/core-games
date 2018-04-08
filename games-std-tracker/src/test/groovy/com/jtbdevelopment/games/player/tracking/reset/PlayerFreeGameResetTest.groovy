@@ -14,15 +14,15 @@ class PlayerFreeGameResetTest extends GroovyTestCase {
     PlayerFreeGameReset freeGameReset = new PlayerFreeGameReset()
 
     void testResetsAndPublishes() {
-        boolean reset = false;
-        boolean published = false;
+        boolean reset = false
+        boolean published = false
 
 
         freeGameReset.mongoOperations = [
                 updateMulti: {
                     Query q, Update u, Class c ->
-                        assert q.toString() == 'Query: { "gameSpecificPlayerAttributes.freeGamesUsedToday" : { "$gt" : 0}}, Fields: null, Sort: null'
-                        assert u.toString() == '{ "$set" : { "gameSpecificPlayerAttributes.freeGamesUsedToday" : 0}}'
+                        assert q.toString() == 'Query: { "gameSpecificPlayerAttributes.freeGamesUsedToday" : { "$gt" : 0 } }, Fields: { }, Sort: { }'
+                        assert u.toString() == '{ "$set" : { "gameSpecificPlayerAttributes.freeGamesUsedToday" : 0 } }'
                         assert MongoPlayer.class.is(c)
                         reset = true
                         null

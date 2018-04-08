@@ -20,8 +20,6 @@ import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 import java.lang.reflect.Method
 import java.time.Instant
-import java.time.ZoneId
-import java.time.ZonedDateTime
 
 /**
  * Date: 12/24/14
@@ -83,19 +81,16 @@ class AbstractAdminServicesTest extends GameCoreTestCase {
 
     void testPlayerCreatedSinceCount() {
         long expectedCount = 5
-        def now = ZonedDateTime.now(ZoneId.of("GMT"))
-        ZonedDateTime since = ZonedDateTime.ofInstant(
-                Instant.ofEpochSecond(now.toEpochSecond()),
-                ZoneId.of("GMT"))
+        def since = Instant.ofEpochSecond(Instant.now().epochSecond)
         adminServices.playerRepository = [
                 countByCreatedGreaterThan: {
                     z ->
-                        assert since.equals(z)
+                        assert since == z
                         return expectedCount
                 }
         ] as AbstractPlayerRepository
 
-        assert expectedCount == adminServices.playersCreatedSince(since.toEpochSecond())
+        assert expectedCount == adminServices.playersCreatedSince(since.epochSecond)
     }
 
     void testGetPlayersCreatedSinceAnnotations() {
@@ -117,19 +112,16 @@ class AbstractAdminServicesTest extends GameCoreTestCase {
 
     void testPlayerLastLoginSinceCount() {
         long expectedCount = 5
-        def now = ZonedDateTime.now(ZoneId.of("GMT"))
-        ZonedDateTime since = ZonedDateTime.ofInstant(
-                Instant.ofEpochSecond(now.toEpochSecond()),
-                ZoneId.of("GMT"))
+        def since = Instant.ofEpochSecond(Instant.now().epochSecond)
         adminServices.playerRepository = [
                 countByLastLoginGreaterThan: {
                     z ->
-                        assert since.equals(z)
+                        assert since == z
                         return expectedCount
                 }
         ] as AbstractPlayerRepository
 
-        assert expectedCount == adminServices.playersLoggedInSince(since.toEpochSecond())
+        assert expectedCount == adminServices.playersLoggedInSince(since.epochSecond)
     }
 
     void testGetPlayersLastLoginSinceAnnotations() {
@@ -152,19 +144,16 @@ class AbstractAdminServicesTest extends GameCoreTestCase {
     void testGamesSinceCount() {
         long expectedCount = 5
 
-        def now = ZonedDateTime.now(ZoneId.of("GMT"))
-        ZonedDateTime since = ZonedDateTime.ofInstant(
-                Instant.ofEpochSecond(now.toEpochSecond()),
-                ZoneId.of("GMT"))
+        def since = Instant.ofEpochSecond(Instant.now().epochSecond)
         adminServices.gameRepository = [
                 countByCreatedGreaterThan: {
                     z ->
-                        assert since.equals(z)
+                        assert since == z
                         expectedCount
                 }
         ] as AbstractGameRepository
 
-        assert expectedCount == adminServices.gamesSince(since.toEpochSecond())
+        assert expectedCount == adminServices.gamesSince(since.epochSecond)
     }
 
     void testGamesSinceAnnotations() {
@@ -192,8 +181,12 @@ class AbstractAdminServicesTest extends GameCoreTestCase {
                         assert likeString == like
                         assert pageRequest.pageNumber == AbstractAdminServices.DEFAULT_PAGE
                         assert pageRequest.pageSize == AbstractAdminServices.DEFAULT_PAGE_SIZE
-                        assert pageRequest.sort.properties.size() == 1
-                        assert pageRequest.sort.getOrderFor("displayName").direction == Sort.Direction.ASC
+                        assert pageRequest.sort.orders.size() == 1
+                        Iterator<org.springframework.data.domain.Sort.Order> iterator = pageRequest.sort.iterator()
+                        org.springframework.data.domain.Sort.Order firstSort = iterator.next()
+                        assert firstSort.property == 'displayName'
+                        assert firstSort.direction == Sort.Direction.ASC
+                        assertFalse iterator.hasNext()
                         repoResult
                 }
         ] as AbstractPlayerRepository

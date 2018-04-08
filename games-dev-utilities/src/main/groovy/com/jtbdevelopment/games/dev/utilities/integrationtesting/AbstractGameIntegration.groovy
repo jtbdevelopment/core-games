@@ -8,6 +8,7 @@ import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dev.utilities.jetty.JettyServer
 import com.jtbdevelopment.games.mongo.dao.MongoPlayerRepository
 import com.jtbdevelopment.games.mongo.players.MongoManualPlayer
+import com.jtbdevelopment.games.mongo.players.MongoPlayer
 import com.jtbdevelopment.games.mongo.players.MongoPlayerFactory
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.friendfinder.SourceBasedFriendFinder
@@ -32,7 +33,7 @@ import javax.ws.rs.client.WebTarget
 import javax.ws.rs.core.GenericType
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.UriBuilder
-import java.time.ZoneId
+import java.util.function.Consumer
 
 /**
  * Date: 11/15/2014
@@ -44,12 +45,11 @@ import java.time.ZoneId
 abstract class AbstractGameIntegration<G extends Game, R extends Game> extends AbstractMongoDefaultSpringContextIntegration {
     protected static final Entity EMPTY_PUT_POST = Entity.entity("", MediaType.TEXT_PLAIN)
 
-    private static Server SERVER;
-    private static final int port = 8998;
-    static final URI BASE_URI = UriBuilder.fromUri("http://localhost/").port(port).build();
+    private static Server SERVER
+    private static final int port = 8998
+    static final URI BASE_URI = UriBuilder.fromUri("http://localhost/").port(port).build()
     static final URI API_URI = BASE_URI.resolve("/api")
     static final URI PLAYER_API = BASE_URI.resolve("api/player")
-    static final ZoneId GMT = ZoneId.of("UTC")
 
     static MongoManualPlayer TEST_PLAYER1
     static MongoManualPlayer TEST_PLAYER2
@@ -57,7 +57,7 @@ abstract class AbstractGameIntegration<G extends Game, R extends Game> extends A
 
     static MongoManualPlayer createPlayer(final String id, final String sourceId, final String displayName) {
         MongoPlayerFactory factory = applicationContext.getBean(MongoPlayerFactory.class)
-        MongoManualPlayer player = (MongoManualPlayer) factory.newManualPlayer();
+        MongoManualPlayer player = (MongoManualPlayer) factory.newManualPlayer()
         player.id = new ObjectId(id.padRight(24, "0"))
         player.sourceId = sourceId
         player.password = passwordEncoder.encode(sourceId)
@@ -93,9 +93,24 @@ abstract class AbstractGameIntegration<G extends Game, R extends Game> extends A
         TEST_PLAYER2 = createPlayer("f2345", "ITP2", "TEST PLAYER2")
         TEST_PLAYER3 = createPlayer("f3456", "ITP3", "TEST PLAYER3")
 
-        playerRepository.delete(TEST_PLAYER1.id)
-        playerRepository.delete(TEST_PLAYER2.id)
-        playerRepository.delete(TEST_PLAYER3.id)
+        playerRepository.findById(TEST_PLAYER1.id).ifPresent(new Consumer<MongoPlayer>() {
+            @Override
+            void accept(MongoPlayer mongoPlayer) {
+                playerRepository.deleteById(TEST_PLAYER1.id)
+            }
+        })
+        playerRepository.findById(TEST_PLAYER2.id).ifPresent(new Consumer<MongoPlayer>() {
+            @Override
+            void accept(MongoPlayer mongoPlayer) {
+                playerRepository.deleteById(TEST_PLAYER2.id)
+            }
+        })
+        playerRepository.findById(TEST_PLAYER3.id).ifPresent(new Consumer<MongoPlayer>() {
+            @Override
+            void accept(MongoPlayer mongoPlayer) {
+                playerRepository.deleteById(TEST_PLAYER3.id)
+            }
+        })
 
         TEST_PLAYER1 = (MongoManualPlayer) playerRepository.save(TEST_PLAYER1)
         TEST_PLAYER2 = (MongoManualPlayer) playerRepository.save(TEST_PLAYER2)
@@ -121,25 +136,11 @@ abstract class AbstractGameIntegration<G extends Game, R extends Game> extends A
     @Test
     void testGetCurrentPlayer() {
         Client client = createConnection(TEST_PLAYER1)
-        def p = client.target(PLAYER_API).request(MediaType.APPLICATION_JSON).get(MongoManualPlayer.class);
+        def p = client.target(PLAYER_API).request(MediaType.APPLICATION_JSON).get(MongoManualPlayer.class)
         assert p.id == TEST_PLAYER1.id
         assert p.disabled == TEST_PLAYER1.disabled
         assert p.displayName == TEST_PLAYER1.displayName
         assert p.md5 == TEST_PLAYER1.md5
-    }
-
-    @Test
-    void testGetFriends() {
-        Client client = createConnection(TEST_PLAYER1)
-        WebTarget path = client
-                .target(PLAYER_API)
-                .path("friends")
-        Map<String, Object> friends = path
-                .request(MediaType.APPLICATION_JSON)
-                .get(new GenericType<Map<String, Object>>() {});
-        Map<String, String> players = (Map<String, String>) friends[SourceBasedFriendFinder.MASKED_FRIENDS_KEY]
-        assert players[TEST_PLAYER2.md5] == TEST_PLAYER2.displayName
-        assert players[TEST_PLAYER3.md5] == TEST_PLAYER3.displayName
     }
 
     @Test
@@ -150,7 +151,7 @@ abstract class AbstractGameIntegration<G extends Game, R extends Game> extends A
                 .path("friendsV2")
         Map<String, Object> friends = path
                 .request(MediaType.APPLICATION_JSON)
-                .get(new GenericType<Map<String, Object>>() {});
+                .get(new GenericType<Map<String, Object>>() {})
         List<Map<String, String>> players = (List<Map<String, String>>) friends[SourceBasedFriendFinder.MASKED_FRIENDS_KEY]
         assert null != players.find {
             it['md5'] == TEST_PLAYER2.md5 && it['displayName'] == TEST_PLAYER2.displayName
@@ -201,7 +202,7 @@ abstract class AbstractGameIntegration<G extends Game, R extends Game> extends A
             g3.initiatingPlayer = TEST_PLAYER1.id
             g4.initiatingPlayer = TEST_PLAYER1.id
 
-            ((AbstractMultiPlayerGameRepository) gameRepository()).save([g1, g2, g3, g4])
+            ((AbstractMultiPlayerGameRepository) gameRepository()).saveAll([g1, g2, g3, g4])
 
             GenericType<List<MaskedMultiPlayerGame>> type = new GenericType<List<MaskedMultiPlayerGame>>() {}
             def client = createPlayerAPITarget(TEST_PLAYER1).path("games")

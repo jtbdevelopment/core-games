@@ -91,12 +91,12 @@ class PushServicesTest extends GameCoreTestCase {
         RegisteredDevice device = new RegisteredDevice(deviceID: "some id over here")
         Player saved = new GameCoreTestCase.StringPlayer()
         def repo = [
-                findOne: {
+                findById: {
                     String id ->
                         assert id == PONE.id
-                        return PONE
+                        return Optional.of(PONE)
                 },
-                save   : {
+                save    : {
                     Player p ->
                         assert p.registeredDevices.contains(device)
                         return saved
@@ -153,12 +153,12 @@ class PushServicesTest extends GameCoreTestCase {
         PONE.updateRegisteredDevice(device)
         Player saved = new GameCoreTestCase.StringPlayer()
         def repo = [
-                findOne: {
+                findById: {
                     String id ->
                         assert id == PONE.id
-                        return PONE
+                        return Optional.of(PONE)
                 },
-                save   : {
+                save    : {
                     Player p ->
                         assert p.registeredDevices.empty
                         return saved

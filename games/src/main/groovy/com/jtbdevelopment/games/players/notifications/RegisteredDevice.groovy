@@ -2,8 +2,7 @@ package com.jtbdevelopment.games.players.notifications
 
 import org.springframework.stereotype.Component
 
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Date: 10/16/15
@@ -11,10 +10,8 @@ import java.time.ZonedDateTime
  */
 @Component
 class RegisteredDevice implements Serializable {
-    private final static ZoneId GMT = ZoneId.of("GMT")
-
     String deviceID = ""
-    ZonedDateTime lastRegistered = ZonedDateTime.now(GMT)
+    Instant lastRegistered = Instant.now()
 
     boolean equals(final o) {
         if (this.is(o)) return true

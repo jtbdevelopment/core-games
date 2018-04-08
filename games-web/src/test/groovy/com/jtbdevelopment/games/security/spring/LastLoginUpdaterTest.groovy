@@ -3,8 +3,7 @@ package com.jtbdevelopment.games.security.spring
 import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Date: 8/16/2015
@@ -12,7 +11,7 @@ import java.time.ZonedDateTime
  */
 class LastLoginUpdaterTest extends GameCoreTestCase {
     LastLoginUpdater updater = new LastLoginUpdater()
-    ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT"))
+    Instant now = Instant.now()
 
     void testUpdatesPlayerIfLastLoginIsNull() {
         def player = new GameCoreTestCase.StringPlayer(lastLogin: null)
@@ -22,38 +21,38 @@ class LastLoginUpdaterTest extends GameCoreTestCase {
                     p ->
                         assert p.is(player)
                         assertNotNull player.lastLogin
-                        assert now.compareTo(player.lastLogin) <= 0
+                        assert now <= player.lastLogin
                         playerCopy
                 }
         ] as AbstractPlayerRepository
         assert playerCopy.is(updater.updatePlayerLastLogin(player));
 
         assertNotNull player.lastLogin
-        assert now.compareTo(player.lastLogin) <= 0
+        assert now <= player.lastLogin
     }
 
     void testUpdatesPlayerIfLastLoginIsOlderThan15Minutes() {
-        def player = new GameCoreTestCase.StringPlayer(lastLogin: now.minusMinutes(16))
+        def player = new GameCoreTestCase.StringPlayer(lastLogin: now.minusSeconds(16 * 60))
         def playerCopy = new GameCoreTestCase.StringPlayer(lastLogin: null)
         updater.playerRepository = [
                 save: {
                     p ->
                         assert p.is(player)
                         assertNotNull player.lastLogin
-                        assert now.compareTo(player.lastLogin) <= 0
-                        assert now.minusMinutes(1).compareTo(player.lastLogin) < 0
+                        assert now <= player.lastLogin
+                        assert now.minusSeconds(60) < player.lastLogin
                         playerCopy
                 }
         ] as AbstractPlayerRepository
-        assert playerCopy.is(updater.updatePlayerLastLogin(player));
+        assert playerCopy.is(updater.updatePlayerLastLogin(player))
 
         assertNotNull player.lastLogin
-        assert now.compareTo(player.lastLogin) <= 0
-        assert now.minusMinutes(1).compareTo(player.lastLogin) <= 0
+        assert now <= player.lastLogin
+        assert now.minusSeconds(60) <= player.lastLogin
     }
 
     void testDoesNotUpdatePlayerIfLastLoginIs15Minutes() {
-        def fifteenMinutes = now.minusMinutes(15)
+        def fifteenMinutes = now.minusSeconds(15 * 60)
         def player = new GameCoreTestCase.StringPlayer(lastLogin: fifteenMinutes)
         updater.playerRepository = [
                 save: {
@@ -63,6 +62,6 @@ class LastLoginUpdaterTest extends GameCoreTestCase {
         ] as AbstractPlayerRepository
         assert player.is(updater.updatePlayerLastLogin(player));
 
-        assert fifteenMinutes.compareTo(player.lastLogin) == 0
+        assert fifteenMinutes == player.lastLogin
     }
 }

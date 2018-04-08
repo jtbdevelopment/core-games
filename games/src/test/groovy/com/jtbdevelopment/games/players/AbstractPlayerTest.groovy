@@ -5,8 +5,7 @@ import com.jtbdevelopment.games.players.notifications.RegisteredDevice
 import org.apache.commons.codec.digest.DigestUtils
 import org.springframework.data.annotation.Transient
 
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Date: 1/11/15
@@ -15,13 +14,15 @@ import java.time.ZonedDateTime
 class AbstractPlayerTest extends GameCoreTestCase {
 
     void testInitializesDefaults() {
-        ZonedDateTime start = ZonedDateTime.now(ZoneId.of("GMT"))
-        Thread.sleep(100);
+        Instant start = Instant.now()
+        Thread.sleep(100)
         Player p = new StringPlayer()
         assertFalse p.disabled
         assertFalse p.adminUser
-        assert start.compareTo(p.created) < 0
-        assert start.minusYears(5).compareTo(p.lastLogin) < 0
+        assert start < p.created
+        assert start.minusSeconds(365 * 24 * 60 * 60) < p.lastLogin
+        assert p.lastLogin <= Instant.now()
+        assert p.created <= Instant.now()
         assert p.registeredDevices.empty
     }
 
@@ -155,12 +156,12 @@ class AbstractPlayerTest extends GameCoreTestCase {
 
     void testRemovingAnExistingDevice() {
         Player p = new StringPlayer()
-        RegisteredDevice device = new RegisteredDevice(deviceID: "X", lastRegistered: ZonedDateTime.now())
+        RegisteredDevice device = new RegisteredDevice(deviceID: "X", lastRegistered: Instant.now())
         p.updateRegisteredDevice(device)
 
         assertTrue p.registeredDevices.contains(device)
 
-        RegisteredDevice remove = new RegisteredDevice(deviceID: "X", lastRegistered: ZonedDateTime.now())
+        RegisteredDevice remove = new RegisteredDevice(deviceID: "X", lastRegistered: Instant.now())
         p.removeRegisteredDevice(remove)
         assertFalse p.registeredDevices.contains(device)
     }

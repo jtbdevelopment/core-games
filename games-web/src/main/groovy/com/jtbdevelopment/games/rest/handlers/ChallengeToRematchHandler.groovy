@@ -9,8 +9,8 @@ import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
+import java.time.Instant
 import java.time.ZoneId
-import java.time.ZonedDateTime
 
 /**
  * Date: 11/4/2014
@@ -34,7 +34,7 @@ class ChallengeToRematchHandler extends AbstractGameActionHandler<Object, MultiP
         if (previousGame.gamePhase != GamePhase.RoundOver) {
             throw new GameIsNotAvailableToRematchException()
         }
-        previousGame.rematchTimestamp = ZonedDateTime.now(GMT)
+        previousGame.rematchTimestamp = Instant.now()
         MultiPlayerGame transitioned = (MultiPlayerGame) gamePublisher.publish(
                 (MultiPlayerGame) gameRepository.save(
                         transitionEngine.evaluateGame(previousGame)),
