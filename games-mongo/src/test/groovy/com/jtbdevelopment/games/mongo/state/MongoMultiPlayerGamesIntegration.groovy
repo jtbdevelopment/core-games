@@ -2,6 +2,8 @@ package com.jtbdevelopment.games.mongo.state
 
 import com.jtbdevelopment.core.mongo.spring.AbstractCoreMongoConfiguration
 import com.jtbdevelopment.core.mongo.spring.AbstractMongoNoSpringContextIntegration
+import com.jtbdevelopment.core.mongo.spring.MongoProperties
+import com.jtbdevelopment.core.mongo.spring.converters.MongoConverter
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.caching.CacheConstants
 import com.jtbdevelopment.games.mongo.dao.MongoPlayerRepository
@@ -62,6 +64,11 @@ class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringContextInteg
             ]
     )
     static class MongoMultiPlayerGameIntegrationConfiguration extends AbstractCoreMongoConfiguration {
+        MongoMultiPlayerGameIntegrationConfiguration(
+                final List<MongoConverter> mongoConverters, final MongoProperties mongoProperties) {
+            super(mongoConverters, mongoProperties)
+        }
+
         @Bean
         @Autowired
         ConnectionFactoryRegistry connectionFactoryLocator() {

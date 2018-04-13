@@ -3,6 +3,8 @@ package com.jtbdevelopment.games.mongo.players
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.jtbdevelopment.core.mongo.spring.AbstractCoreMongoConfiguration
 import com.jtbdevelopment.core.mongo.spring.AbstractMongoNoSpringContextIntegration
+import com.jtbdevelopment.core.mongo.spring.MongoProperties
+import com.jtbdevelopment.core.mongo.spring.converters.MongoConverter
 import com.jtbdevelopment.games.dao.caching.CacheConstants
 import com.jtbdevelopment.games.mongo.dao.MongoPlayerRepository
 import com.jtbdevelopment.games.players.Player
@@ -64,6 +66,11 @@ class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
             ]
     )
     static class MongoPlayerIntegrationConfiguration extends AbstractCoreMongoConfiguration {
+        MongoPlayerIntegrationConfiguration(
+                final List<MongoConverter> mongoConverters, final MongoProperties mongoProperties) {
+            super(mongoConverters, mongoProperties)
+        }
+
         @Bean
         @Autowired
         ConnectionFactoryRegistry connectionFactoryLocator() {
