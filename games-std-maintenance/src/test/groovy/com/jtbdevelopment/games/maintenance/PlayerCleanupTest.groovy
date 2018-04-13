@@ -11,6 +11,9 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
+import static org.mockito.Mockito.mock
+import static org.mockito.Mockito.when
+
 /**
  * Date: 8/18/15
  * Time: 10:50 PM
@@ -90,25 +93,13 @@ class PlayerCleanupTest extends GameCoreTestCase {
                 }
         ] as ConnectionRepository
 
-        playerCleanup.usersConnectionRepository = [
-                createConnectionRepository: {
-                    String id ->
-                        switch (id) {
-                            case PONE.id:
-                                return poneRepo
-                                break
-                            case PTWO.id:
-                                return ptwoRepo
-                                break
-                            case PTHREE.id:
-                                return null
-                                break
-                                fail "should not be here"
-                        }
-                }
-        ] as AbstractUsersConnectionRepository
-
+        AbstractUsersConnectionRepository connectionRepository = mock(AbstractUsersConnectionRepository.class)
+        when(connectionRepository.createConnectionRepository(PONE.id)).thenReturn(poneRepo)
+        when(connectionRepository.createConnectionRepository(PTWO.id)).thenReturn(ptwoRepo)
+        when(connectionRepository.createConnectionRepository(PTHREE.id)).thenReturn(null)
+        playerCleanup.usersConnectionRepository = connectionRepository
         playerCleanup.deleteInactivePlayers()
+
         assert [PONE, PTWO, PTHREE] as Set == deleted
         assert removedConnections == [poneKey1, poneKey2, poneKey3, ptwoKey1] as Set
     }
