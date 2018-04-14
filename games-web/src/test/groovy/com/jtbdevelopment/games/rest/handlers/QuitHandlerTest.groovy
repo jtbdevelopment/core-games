@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.rest.handlers
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringMPGame
 import com.jtbdevelopment.games.rest.exceptions.GameIsNotPossibleToQuitNowException
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.PlayerState
@@ -14,7 +15,7 @@ class QuitHandlerTest extends GameCoreTestCase {
 
     void testExceptionsOnQuitRematchRematchedPhases() {
         [GamePhase.Quit, GamePhase.RoundOver, GamePhase.NextRoundStarted, GamePhase.Declined].each {
-            GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(gamePhase: it)
+            StringMPGame game = new StringMPGame(gamePhase: it)
             try {
                 handler.handleActionInternal(null, game, null)
                 fail()
@@ -26,9 +27,9 @@ class QuitHandlerTest extends GameCoreTestCase {
 
     void testQuitsGamesInOtherStates() {
         [GamePhase.Challenged, GamePhase.Setup, GamePhase.Playing].each {
-            GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(gamePhase: it, playerStates: [(PONE.id): PlayerState.Pending, (PTWO.id): PlayerState.Rejected])
+            StringMPGame game = new StringMPGame(gamePhase: it, playerStates: [(PONE.id): PlayerState.Pending, (PTWO.id): PlayerState.Rejected])
 
-            GameCoreTestCase.StringMPGame ret = handler.handleActionInternal(PTWO, game, null)
+            StringMPGame ret = handler.handleActionInternal(PTWO, game, null)
 
             assert game.is(ret)
             assert game.gamePhase == GamePhase.Quit

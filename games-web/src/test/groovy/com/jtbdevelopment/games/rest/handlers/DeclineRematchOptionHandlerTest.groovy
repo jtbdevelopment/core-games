@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.rest.handlers
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringMPGame
 import com.jtbdevelopment.games.rest.exceptions.GameIsNotAvailableToRematchException
 import com.jtbdevelopment.games.state.GamePhase
 
@@ -17,7 +18,7 @@ class DeclineRematchOptionHandlerTest extends GameCoreTestCase {
                 gp != GamePhase.RoundOver
         }.each {
             GamePhase gp ->
-                GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(gamePhase: gp)
+                StringMPGame game = new StringMPGame(gamePhase: gp)
                 shouldFail(GameIsNotAvailableToRematchException.class, {
                     handler.handleActionInternal(null, game, null)
                 })
@@ -25,7 +26,7 @@ class DeclineRematchOptionHandlerTest extends GameCoreTestCase {
     }
 
     void testMarksGameAsNextRoundStarted() {
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(gamePhase: GamePhase.RoundOver)
+        StringMPGame game = new StringMPGame(gamePhase: GamePhase.RoundOver)
         assert game.is(handler.handleActionInternal(null, game, null))
         assert GamePhase.NextRoundStarted == game.gamePhase
     }

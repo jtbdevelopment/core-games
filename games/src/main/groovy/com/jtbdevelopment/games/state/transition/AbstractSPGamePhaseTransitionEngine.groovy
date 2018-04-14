@@ -1,8 +1,8 @@
 package com.jtbdevelopment.games.state.transition
 
+import com.jtbdevelopment.games.scoring.GameScorer
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.SinglePlayerGame
-import com.jtbdevelopment.games.state.scoring.GameScorer
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 

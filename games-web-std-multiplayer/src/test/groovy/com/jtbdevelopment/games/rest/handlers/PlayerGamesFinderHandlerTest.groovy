@@ -1,6 +1,8 @@
 package com.jtbdevelopment.games.rest.handlers
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringMaskedMPGame
+import com.jtbdevelopment.games.StringPlayer
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.state.GamePhase
@@ -21,9 +23,9 @@ class PlayerGamesFinderHandlerTest extends GameCoreTestCase {
         def game1 = makeSimpleMPGame("1")
         def game2 = makeSimpleMPGame("2")
         def game3 = makeSimpleMPGame("3")
-        def masked1 = new GameCoreTestCase.StringMaskedMPGame(id: "1")
-        def masked2 = new GameCoreTestCase.StringMaskedMPGame(id: "2")
-        def masked3 = new GameCoreTestCase.StringMaskedMPGame(id: "3")
+        def masked1 = new StringMaskedMPGame(id: "1")
+        def masked2 = new StringMaskedMPGame(id: "2")
+        def masked3 = new StringMaskedMPGame(id: "3")
         def queryResults = [
                 (GamePhase.Challenged)      : [game1],
                 (GamePhase.Declined)        : [],
@@ -54,7 +56,7 @@ class PlayerGamesFinderHandlerTest extends GameCoreTestCase {
         ] as AbstractMultiPlayerGameRepository
         handler.gameMasker = [
                 maskGameForPlayer: {
-                    MultiPlayerGame game, GameCoreTestCase.StringPlayer player ->
+                    MultiPlayerGame game, StringPlayer player ->
                         assert player.is(PONE)
                         return maskResults[game]
                 }

@@ -17,8 +17,8 @@ class GameCleanupTest extends GroovyTestCase {
         gameCleanup.gameRepository = [
                 deleteByCreatedLessThan: {
                     ZonedDateTime cutoff ->
-                        assert start.compareTo(cutoff) <= 0
-                        assert start.plusMinutes(1).compareTo(cutoff) > 0
+                        assert start <= cutoff
+                        assert start.plusMinutes(1) > cutoff
                         return 1L
                 }
         ] as AbstractMultiPlayerGameRepository

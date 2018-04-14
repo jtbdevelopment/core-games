@@ -2,6 +2,8 @@ package com.jtbdevelopment.games.maintenance
 
 import com.jtbdevelopment.core.spring.social.dao.AbstractUsersConnectionRepository
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringManualPlayer
+import com.jtbdevelopment.games.StringSystemPlayer
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import org.springframework.social.connect.*
 import org.springframework.util.LinkedMultiValueMap
@@ -21,8 +23,8 @@ import static org.mockito.Mockito.when
 class PlayerCleanupTest extends GameCoreTestCase {
     PlayerCleanup playerCleanup = new PlayerCleanup()
 
-    GameCoreTestCase.StringSystemPlayer system = makeSimpleSystemPlayer("system 1")
-    GameCoreTestCase.StringManualPlayer manual = makeSimpleManualPlayer("manual 1")
+    StringSystemPlayer system = makeSimpleSystemPlayer("system 1")
+    StringManualPlayer manual = makeSimpleManualPlayer("manual 1")
 
     void testDeleteOlderPlayersWithoutSocialConnection() {
         Instant start = ZonedDateTime.now(ZoneId.of('GMT')).minusDays(90).toInstant()

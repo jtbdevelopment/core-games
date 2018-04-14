@@ -1,6 +1,8 @@
 package com.jtbdevelopment.games.rest.handlers
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringMPGame
+import com.jtbdevelopment.games.StringSPGame
 import com.jtbdevelopment.games.dao.AbstractGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.events.GamePublisher
@@ -22,8 +24,8 @@ import com.jtbdevelopment.games.tracking.PlayerGameEligibilityResult
  */
 class AbstractGameActionHandlerTest extends GameCoreTestCase {
     private static final String testParam = "TESTPARAM"
-    private GameCoreTestCase.StringMPGame handledGame = new GameCoreTestCase.StringMPGame()
-    private final GameCoreTestCase.StringMPGame gameParam = new GameCoreTestCase.StringMPGame()
+    private StringMPGame handledGame = new StringMPGame()
+    private final StringMPGame gameParam = new StringMPGame()
     private final String gameId = "238njcn33"
 
     private class TestHandler extends AbstractGameActionHandler<String, Game> {
@@ -56,7 +58,7 @@ class AbstractGameActionHandlerTest extends GameCoreTestCase {
     }
 
     void testAbstractHandlerBasicWithNoOptionalFeatures() {
-        Game saved = new GameCoreTestCase.StringMPGame()
+        Game saved = new StringMPGame()
         gameParam.players = [PONE, PTWO]
         handler.gameRepository = [
                 findById: {
@@ -82,9 +84,9 @@ class AbstractGameActionHandlerTest extends GameCoreTestCase {
     }
 
     void testAbstractHandlerBasicWithAllFeaturesSinglePlayer() {
-        Game saved = new GameCoreTestCase.StringSPGame()
-        Game transitioned = new GameCoreTestCase.StringSPGame()
-        Game published = new GameCoreTestCase.StringSPGame()
+        Game saved = new StringSPGame()
+        Game transitioned = new StringSPGame()
+        Game published = new StringSPGame()
         gameParam.players = [PONE, PTWO]
         handler.gameRepository = [
                 findById: {
@@ -125,9 +127,9 @@ class AbstractGameActionHandlerTest extends GameCoreTestCase {
     }
 
     void testAbstractHandlerBasicWithAllFeatures() {
-        Game saved = new GameCoreTestCase.StringMPGame()
-        Game transitioned = new GameCoreTestCase.StringMPGame()
-        Game published = new GameCoreTestCase.StringMPGame()
+        Game saved = new StringMPGame()
+        Game transitioned = new StringMPGame()
+        Game published = new StringMPGame()
         gameParam.players = [PONE, PTWO]
         handler.gameRepository = [
                 findById: {
@@ -178,9 +180,9 @@ class AbstractGameActionHandlerTest extends GameCoreTestCase {
 
     void testAbstractHandlerWithEligibilityCheckAndEligible() {
         handler.checkEligibility = true
-        Game saved = new GameCoreTestCase.StringMPGame()
-        Game transitioned = new GameCoreTestCase.StringMPGame()
-        Game published = new GameCoreTestCase.StringMPGame()
+        Game saved = new StringMPGame()
+        Game transitioned = new StringMPGame()
+        Game published = new StringMPGame()
         gameParam.players = [PONE, PTWO]
         handler.gameRepository = [
                 findById: {

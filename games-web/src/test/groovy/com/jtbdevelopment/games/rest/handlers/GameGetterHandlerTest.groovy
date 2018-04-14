@@ -1,6 +1,9 @@
 package com.jtbdevelopment.games.rest.handlers
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringGame
+import com.jtbdevelopment.games.StringMPGame
+import com.jtbdevelopment.games.StringPlayer
 import com.jtbdevelopment.games.dao.AbstractGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.state.Game
@@ -15,7 +18,7 @@ import com.jtbdevelopment.games.state.masking.GameMasker
 class GameGetterHandlerTest extends GameCoreTestCase {
     GameGetterHandler handler = new GameGetterHandler()
 
-    private final GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame()
+    private final StringMPGame game = new StringMPGame()
     private final String gameId = "G-id"
 
     void testHandlerBasicMultiPlayerWithMasking() {
@@ -38,7 +41,7 @@ class GameGetterHandlerTest extends GameCoreTestCase {
         AbstractMaskedMultiPlayerGame maskedGame = new AbstractMaskedMultiPlayerGame() {}
         handler.gameMasker = [
                 maskGameForPlayer: {
-                    Game g, GameCoreTestCase.StringPlayer p ->
+                    Game g, StringPlayer p ->
                         assert g.is(game)
                         assert p.is(PONE)
                         return maskedGame
@@ -70,7 +73,7 @@ class GameGetterHandlerTest extends GameCoreTestCase {
     }
 
     void testHandlerBasicSinglePlayer() {
-        GameCoreTestCase.StringGame game = new GameCoreTestCase.StringGame()
+        StringGame game = new StringGame()
         AbstractMaskedSinglePlayerGame maskedGame = new AbstractMaskedSinglePlayerGame() {}
 
         handler.gameRepository = [
@@ -89,7 +92,7 @@ class GameGetterHandlerTest extends GameCoreTestCase {
         ] as AbstractPlayerRepository
         handler.gameMasker = [
                 maskGameForPlayer: {
-                    Game g, GameCoreTestCase.StringPlayer p ->
+                    Game g, StringPlayer p ->
                         assert g.is(game)
                         assert p.is(PONE)
                         return maskedGame
@@ -100,7 +103,7 @@ class GameGetterHandlerTest extends GameCoreTestCase {
     }
 
     void testHandlerBasicSinglePlayerWithoutMasking() {
-        GameCoreTestCase.StringGame game = new GameCoreTestCase.StringGame()
+        StringGame game = new StringGame()
 
         handler.gameRepository = [
                 findById: {

@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.push.notifications
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringPlayer
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.notifications.RegisteredDevice
@@ -31,7 +32,7 @@ class PushNotifierTest extends GameCoreTestCase {
                 }
         ] as Invocation.Builder
 
-        Player player = new GameCoreTestCase.StringPlayer(registeredDevices: [new RegisteredDevice(deviceID: "dev1"), new RegisteredDevice(deviceID: "dev2")] as Set)
+        Player player = new StringPlayer(registeredDevices: [new RegisteredDevice(deviceID: "dev1"), new RegisteredDevice(deviceID: "dev2")] as Set)
         assert notifier.notifyPlayer(player, null)
     }
 
@@ -60,7 +61,7 @@ class PushNotifierTest extends GameCoreTestCase {
                 }
         ] as Invocation.Builder
 
-        Player player = new GameCoreTestCase.StringPlayer(
+        Player player = new StringPlayer(
                 registeredDevices: [
                         new RegisteredDevice(deviceID: "good1"),
                         new RegisteredDevice(deviceID: "old1"),
@@ -68,7 +69,7 @@ class PushNotifierTest extends GameCoreTestCase {
                         new RegisteredDevice(deviceID: "notreg"),
                         new RegisteredDevice(deviceID: "invalid"),
                 ] as Set)
-        Player saved = new GameCoreTestCase.StringPlayer()
+        Player saved = new StringPlayer()
         boolean savedCalled = false
         notifier.playerRepository = [
                 save: {

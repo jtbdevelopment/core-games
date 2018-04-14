@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.rest.handlers
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringMPGame
 import com.jtbdevelopment.games.exceptions.input.TooLateToRespondToChallengeException
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.PlayerState
@@ -21,7 +22,7 @@ class ChallengeResponseHandlerTest extends GameCoreTestCase {
 
     public void testExceptionOnBadPhases() {
         GamePhase.values().findAll { it != GamePhase.Declined && it != GamePhase.Challenged }.each {
-            GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(gamePhase: it)
+            StringMPGame game = new StringMPGame(gamePhase: it)
             try {
                 handler.handleActionInternal(PONE, game, PlayerState.Rejected)
                 fail("Should have exceptioned on state " + it)
@@ -37,7 +38,7 @@ class ChallengeResponseHandlerTest extends GameCoreTestCase {
             GamePhase gamePhase ->
                 PlayerState.findAll { it != PlayerState.Pending }.each {
                     PlayerState response ->
-                        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(
+                        StringMPGame game = new StringMPGame(
                                 gamePhase: gamePhase,
                                 playerStates: [(PONE.id)  : PlayerState.Pending,
                                                (PTWO.id)  : PlayerState.Rejected,
@@ -59,7 +60,7 @@ class ChallengeResponseHandlerTest extends GameCoreTestCase {
             GamePhase gamePhase ->
                 PlayerState.findAll { it != PlayerState.Pending }.each {
                     PlayerState response ->
-                        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(
+                        StringMPGame game = new StringMPGame(
                                 gamePhase: gamePhase,
                                 playerStates: [(PONE.id)  : PlayerState.Accepted,
                                                (PTWO.id)  : PlayerState.Rejected,

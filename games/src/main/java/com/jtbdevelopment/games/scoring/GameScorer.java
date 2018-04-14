@@ -1,4 +1,4 @@
-package com.jtbdevelopment.games.state.scoring;
+package com.jtbdevelopment.games.scoring;
 
 import com.jtbdevelopment.games.state.Game;
 

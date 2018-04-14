@@ -4,6 +4,8 @@ import com.hazelcast.core.EntryEvent
 import com.hazelcast.core.HazelcastInstance
 import com.hazelcast.core.IMap
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringMPGame
+import com.jtbdevelopment.games.StringPlayer
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.Player
@@ -59,7 +61,7 @@ class PushNotifierFilterTest extends GameCoreTestCase {
                 findById: {
                     Serializable id ->
                         assert gid == id
-                        return Optional.of(new GameCoreTestCase.StringMPGame())
+                        return Optional.of(new StringMPGame())
                 }
         ] as AbstractMultiPlayerGameRepository
         filter.entryEvicted(new EntryEvent<GamePublicationTracker, Boolean>("TEST", null, 0, new GamePublicationTracker(pid: pid, gid: gid), false, null))
@@ -73,7 +75,7 @@ class PushNotifierFilterTest extends GameCoreTestCase {
                 findById: {
                     Serializable id ->
                         assert pid == id
-                        return Optional.of(new GameCoreTestCase.StringPlayer())
+                        return Optional.of(new StringPlayer())
                 }
         ] as AbstractPlayerRepository
         filter.gameRepository = [
@@ -91,8 +93,8 @@ class PushNotifierFilterTest extends GameCoreTestCase {
         Serializable pid = "XY12"
         Serializable gid = "113"
 
-        def game = new GameCoreTestCase.StringMPGame()
-        def player = new GameCoreTestCase.StringPlayer()
+        def game = new StringMPGame()
+        def player = new StringPlayer()
         filter.playerRepository = [
                 findById: {
                     Serializable id ->
@@ -123,8 +125,8 @@ class PushNotifierFilterTest extends GameCoreTestCase {
         Serializable pid = "XY12"
         Serializable gid = "113"
 
-        def game = new GameCoreTestCase.StringMPGame()
-        def player = new GameCoreTestCase.StringPlayer()
+        def game = new StringMPGame()
+        def player = new StringPlayer()
         filter.playerRepository = [
                 findById: {
                     Serializable id ->

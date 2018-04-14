@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.rest.handlers
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringSPGame
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.dao.AbstractSinglePlayerGameRepository
 import com.jtbdevelopment.games.events.GamePublisher
@@ -16,6 +17,9 @@ import com.jtbdevelopment.games.tracking.GameEligibilityTracker
 import com.jtbdevelopment.games.tracking.PlayerGameEligibility
 import com.jtbdevelopment.games.tracking.PlayerGameEligibilityResult
 
+import static org.mockito.Mockito.mock
+import static org.mockito.Mockito.when
+
 /**
  * Date: 11/7/14
  * Time: 9:26 PM
@@ -26,17 +30,15 @@ class NewGameHandlerTest extends GameCoreTestCase {
     void testCreateGameAllOptionalPlugins() {
         Set<String> features = ["GameFeature.SystemPuzzles", "GameFeature.Thieving"]
         Player initiatingPlayer = PONE
-        GameCoreTestCase.StringSPGame game = new GameCoreTestCase.StringSPGame()
+        StringSPGame game = new StringSPGame()
         game.features.addAll(features)
-        GameCoreTestCase.StringSPGame savedGame = new GameCoreTestCase.StringSPGame()
+        StringSPGame savedGame = new StringSPGame()
         savedGame.features = features
-        GameCoreTestCase.StringSPGame transitionedGame = new GameCoreTestCase.StringSPGame()
-        GameCoreTestCase.StringSPGame publishedGame = new GameCoreTestCase.StringSPGame()
-        handler.gameFactory = [createGame: { a, b ->
-            assert a == features
-            assert b == initiatingPlayer
-            game
-        }] as AbstractSinglePlayerGameFactory
+        StringSPGame transitionedGame = new StringSPGame()
+        StringSPGame publishedGame = new StringSPGame()
+        AbstractSinglePlayerGameFactory gameFactory = mock(AbstractSinglePlayerGameFactory.class)
+        when(gameFactory.createGame(features, initiatingPlayer)).thenReturn(game)
+        handler.gameFactory = gameFactory;
         handler.gameRepository = [
                 save: {
                     assert it.is(transitionedGame)
@@ -87,15 +89,13 @@ class NewGameHandlerTest extends GameCoreTestCase {
     void testCreateGameNoOptionalPlugins() {
         Set<String> features = ["GameFeature.SystemPuzzles", "GameFeature.Thieving"]
         Player initiatingPlayer = PONE
-        GameCoreTestCase.StringSPGame game = new GameCoreTestCase.StringSPGame()
+        StringSPGame game = new StringSPGame()
         game.features.addAll(features)
-        GameCoreTestCase.StringSPGame savedGame = new GameCoreTestCase.StringSPGame()
+        StringSPGame savedGame = new StringSPGame()
         savedGame.features = features
-        handler.gameFactory = [createGame: { a, b ->
-            assert a == features
-            assert b == initiatingPlayer
-            game
-        }] as AbstractSinglePlayerGameFactory
+        AbstractSinglePlayerGameFactory gameFactory = mock(AbstractSinglePlayerGameFactory.class)
+        when(gameFactory.createGame(features, initiatingPlayer)).thenReturn(game)
+        handler.gameFactory = gameFactory;
         handler.gameRepository = [
                 save: {
                     assert it.is(game)
@@ -114,18 +114,15 @@ class NewGameHandlerTest extends GameCoreTestCase {
 
     void testCreateGameAndTransitionExceptions() {
         Set<Object> features = ["GameFeature.SystemPuzzles", "GameFeature.Thieving"]
-        List<Player> players = [PTWO, PTHREE, PFOUR]
         Player initiatingPlayer = PONE
-        GameCoreTestCase.StringSPGame game = new GameCoreTestCase.StringSPGame()
+        StringSPGame game = new StringSPGame()
         game.features.addAll(features)
-        GameCoreTestCase.StringSPGame savedGame = new GameCoreTestCase.StringSPGame()
+        StringSPGame savedGame = new StringSPGame()
         savedGame.features = features
         boolean revertCalled = false
-        handler.gameFactory = [createGame: { a, b ->
-            assert a == features
-            assert b == initiatingPlayer
-            game
-        }] as AbstractSinglePlayerGameFactory
+        AbstractSinglePlayerGameFactory gameFactory = mock(AbstractSinglePlayerGameFactory.class)
+        when(gameFactory.createGame(features, initiatingPlayer)).thenReturn(game)
+        handler.gameFactory = gameFactory;
         handler.playerRepository = [
                 findById: {
                     assert it == PONE.id
@@ -163,16 +160,14 @@ class NewGameHandlerTest extends GameCoreTestCase {
     void testCreateGameAndRevertExceptionWrapped() {
         Set<Object> features = [1, 3.4, "X"]
         Player initiatingPlayer = PONE
-        GameCoreTestCase.StringSPGame game = new GameCoreTestCase.StringSPGame()
+        StringSPGame game = new StringSPGame()
         game.features.addAll(features)
-        GameCoreTestCase.StringSPGame savedGame = new GameCoreTestCase.StringSPGame()
+        StringSPGame savedGame = new StringSPGame()
         savedGame.features = features
         boolean revertCalled = false
-        handler.gameFactory = [createGame: { a, b ->
-            assert a == features
-            assert b == initiatingPlayer
-            game
-        }] as AbstractSinglePlayerGameFactory
+        AbstractSinglePlayerGameFactory gameFactory = mock(AbstractSinglePlayerGameFactory.class)
+        when(gameFactory.createGame(features, initiatingPlayer)).thenReturn(game)
+        handler.gameFactory = gameFactory;
         handler.playerRepository = [
                 findById: {
                     assert it == PONE.id
@@ -213,16 +208,14 @@ class NewGameHandlerTest extends GameCoreTestCase {
     void testCreateGameAndGameCreateExceptions() {
         Set<Object> features = ["1", 5]
         Player initiatingPlayer = PONE
-        GameCoreTestCase.StringSPGame game = new GameCoreTestCase.StringSPGame()
+        StringSPGame game = new StringSPGame()
         game.features.addAll(features)
-        GameCoreTestCase.StringSPGame savedGame = new GameCoreTestCase.StringSPGame()
+        StringSPGame savedGame = new StringSPGame()
         boolean revertCalled = false
         savedGame.features = features
-        handler.gameFactory = [createGame: { a, b ->
-            assert a == features
-            assert b == initiatingPlayer
-            throw new NumberFormatException()
-        }] as AbstractSinglePlayerGameFactory
+        AbstractSinglePlayerGameFactory gameFactory = mock(AbstractSinglePlayerGameFactory.class)
+        when(gameFactory.createGame(features, initiatingPlayer)).thenThrow(new NumberFormatException())
+        handler.gameFactory = gameFactory
         handler.playerRepository = [
                 findById: {
                     assert it == PONE.id
@@ -254,9 +247,9 @@ class NewGameHandlerTest extends GameCoreTestCase {
     void testCreateGameFailsIfNotEligible() {
         Set<Object> features = ["GameFeature.SystemPuzzles", "GameFeature.Thieving"]
         Player initiatingPlayer = PONE
-        GameCoreTestCase.StringSPGame game = new GameCoreTestCase.StringSPGame()
+        StringSPGame game = new StringSPGame()
         game.features.addAll(features)
-        GameCoreTestCase.StringSPGame savedGame = new GameCoreTestCase.StringSPGame()
+        StringSPGame savedGame = new StringSPGame()
         savedGame.features = features
         handler.playerRepository = [
                 findById: {

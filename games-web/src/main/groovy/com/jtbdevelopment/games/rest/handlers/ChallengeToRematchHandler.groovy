@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 import java.time.Instant
-import java.time.ZoneId
 
 /**
  * Date: 11/4/2014
@@ -19,7 +18,6 @@ import java.time.ZoneId
 @Component
 @CompileStatic
 class ChallengeToRematchHandler extends AbstractGameActionHandler<Object, MultiPlayerGame> {
-    public static final ZoneId GMT = ZoneId.of("GMT")
     @Autowired
     protected AbstractMultiPlayerGameFactory gameFactory
 
@@ -45,7 +43,8 @@ class ChallengeToRematchHandler extends AbstractGameActionHandler<Object, MultiP
         newGame
     }
 
-    protected MultiPlayerGame setupGame(final MultiPlayerGame previousGame, final Player initiatingPlayer) {
+    protected MultiPlayerGame setupGame(
+            final MultiPlayerGame previousGame, final Player initiatingPlayer) {
         gameFactory.createGame(previousGame, initiatingPlayer)
     }
 }

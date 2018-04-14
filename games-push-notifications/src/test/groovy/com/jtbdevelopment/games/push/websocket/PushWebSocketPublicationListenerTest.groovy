@@ -4,6 +4,8 @@ import com.hazelcast.core.HazelcastInstance
 import com.hazelcast.core.IMap
 import com.hazelcast.map.listener.MapListener
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringMPGame
+import com.jtbdevelopment.games.StringPlayer
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.notifications.RegisteredDevice
 import com.jtbdevelopment.games.push.PushProperties
@@ -60,24 +62,24 @@ class PushWebSocketPublicationListenerTest extends GameCoreTestCase {
 
     void testIgnoresPlayerWithNoDevices() {
         listener.trackingMap = new ConcurrentHashMap<>()
-        Player player = new GameCoreTestCase.StringPlayer(id: "X")
-        MultiPlayerGame game = new GameCoreTestCase.StringMPGame(id: "Y")
+        Player player = new StringPlayer(id: "X")
+        MultiPlayerGame game = new StringMPGame(id: "Y")
         listener.publishedGameUpdateToPlayer(player, game, true)
         assert listener.trackingMap.isEmpty()
     }
 
     void testIgnoresPlayerWithNoDevicesRegistedInLast30Days() {
         listener.trackingMap = new ConcurrentHashMap<>()
-        Player player = new GameCoreTestCase.StringPlayer(id: "X", registeredDevices: [new RegisteredDevice(lastRegistered: ZonedDateTime.now(ZoneId.of("GMT")).minusDays(30).minusSeconds(60).toInstant())])
-        MultiPlayerGame game = new GameCoreTestCase.StringMPGame(id: "Y")
+        Player player = new StringPlayer(id: "X", registeredDevices: [new RegisteredDevice(lastRegistered: ZonedDateTime.now(ZoneId.of("GMT")).minusDays(30).minusSeconds(60).toInstant())])
+        MultiPlayerGame game = new StringMPGame(id: "Y")
         listener.publishedGameUpdateToPlayer(player, game, true)
         assert listener.trackingMap.isEmpty()
     }
 
     void testSetsValueForTruePublishWhenNotSet() {
         listener.trackingMap = new ConcurrentHashMap<>()
-        Player player = new GameCoreTestCase.StringPlayer(id: "X", registeredDevices: [new RegisteredDevice()] as Set)
-        MultiPlayerGame game = new GameCoreTestCase.StringMPGame(id: "Y")
+        Player player = new StringPlayer(id: "X", registeredDevices: [new RegisteredDevice()] as Set)
+        MultiPlayerGame game = new StringMPGame(id: "Y")
         listener.publishedGameUpdateToPlayer(player, game, true)
         assert 1 == listener.trackingMap.size()
         assert listener.trackingMap[new GamePublicationTracker(pid: player.id, gid: game.id)]
@@ -85,8 +87,8 @@ class PushWebSocketPublicationListenerTest extends GameCoreTestCase {
 
     void testSetsValueForFalsePublishWhenNotSet() {
         listener.trackingMap = new ConcurrentHashMap<>()
-        Player player = new GameCoreTestCase.StringPlayer(id: "X", registeredDevices: [new RegisteredDevice()] as Set)
-        MultiPlayerGame game = new GameCoreTestCase.StringMPGame(id: "Y")
+        Player player = new StringPlayer(id: "X", registeredDevices: [new RegisteredDevice()] as Set)
+        MultiPlayerGame game = new StringMPGame(id: "Y")
         listener.publishedGameUpdateToPlayer(player, game, false)
         assert 1 == listener.trackingMap.size()
         assertFalse listener.trackingMap[new GamePublicationTracker(pid: player.id, gid: game.id)]
@@ -95,16 +97,16 @@ class PushWebSocketPublicationListenerTest extends GameCoreTestCase {
     void testDoesNotSetsValueForFalsePublishWhenPushDisabled() {
         listener.pushProperties.enabled = false
         listener.trackingMap = new ConcurrentHashMap<>()
-        Player player = new GameCoreTestCase.StringPlayer(id: "X", registeredDevices: [new RegisteredDevice()] as Set)
-        MultiPlayerGame game = new GameCoreTestCase.StringMPGame(id: "Y")
+        Player player = new StringPlayer(id: "X", registeredDevices: [new RegisteredDevice()] as Set)
+        MultiPlayerGame game = new StringMPGame(id: "Y")
         listener.publishedGameUpdateToPlayer(player, game, false)
         assert listener.trackingMap.isEmpty()
     }
 
     void testSetsValueForTruePublishWhenAlreadySetToFalse() {
         listener.trackingMap = new ConcurrentHashMap<>()
-        Player player = new GameCoreTestCase.StringPlayer(id: "X", registeredDevices: [new RegisteredDevice()] as Set)
-        MultiPlayerGame game = new GameCoreTestCase.StringMPGame(id: "Y")
+        Player player = new StringPlayer(id: "X", registeredDevices: [new RegisteredDevice()] as Set)
+        MultiPlayerGame game = new StringMPGame(id: "Y")
         listener.trackingMap[new GamePublicationTracker(pid: player.id, gid: game.id)] = false
         listener.publishedGameUpdateToPlayer(player, game, true)
         assert 1 == listener.trackingMap.size()
@@ -113,8 +115,8 @@ class PushWebSocketPublicationListenerTest extends GameCoreTestCase {
 
     void testDoesNotSetValueForFalsePublishWhenAlreadySetToTrue() {
         listener.trackingMap = new ConcurrentHashMap<>()
-        Player player = new GameCoreTestCase.StringPlayer(id: "X", registeredDevices: [new RegisteredDevice()] as Set)
-        MultiPlayerGame game = new GameCoreTestCase.StringMPGame(id: "Y")
+        Player player = new StringPlayer(id: "X", registeredDevices: [new RegisteredDevice()] as Set)
+        MultiPlayerGame game = new StringMPGame(id: "Y")
         listener.trackingMap[new GamePublicationTracker(pid: player.id, gid: game.id)] = true
         listener.publishedGameUpdateToPlayer(player, game, false)
         assert 1 == listener.trackingMap.size()

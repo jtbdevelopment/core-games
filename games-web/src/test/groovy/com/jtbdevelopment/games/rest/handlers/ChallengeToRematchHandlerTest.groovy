@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.rest.handlers
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringMPGame
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.events.GamePublisher
 import com.jtbdevelopment.games.factory.AbstractMultiPlayerGameFactory
@@ -11,6 +12,9 @@ import com.jtbdevelopment.games.state.MultiPlayerGame
 import com.jtbdevelopment.games.state.transition.AbstractMPGamePhaseTransitionEngine
 
 import java.time.Instant
+
+import static org.mockito.Mockito.mock
+import static org.mockito.Mockito.when
 
 /**
  * Date: 4/8/2015
@@ -28,19 +32,14 @@ class ChallengeToRematchHandlerTest extends GameCoreTestCase {
     void testSetsUpRematch() {
         Instant now = Instant.now()
         Thread.sleep(100)
-        GameCoreTestCase.StringMPGame previous = new GameCoreTestCase.StringMPGame(gamePhase: GamePhase.RoundOver, id: 'x')
-        GameCoreTestCase.StringMPGame previousT = previous.clone()
-        GameCoreTestCase.StringMPGame previousS = previous.clone()
-        GameCoreTestCase.StringMPGame previousP = previous.clone()
-        GameCoreTestCase.StringMPGame newGame = new GameCoreTestCase.StringMPGame(previousId: previous.id)
-        handler.gameFactory = [
-                createGame: {
-                    GameCoreTestCase.StringMPGame g, Player p ->
-                        assert g.is(previousP)
-                        assert p.is(PONE)
-                        newGame
-                }
-        ] as AbstractMultiPlayerGameFactory
+        StringMPGame previous = new StringMPGame(gamePhase: GamePhase.RoundOver, id: 'x')
+        StringMPGame previousT = previous.clone()
+        StringMPGame previousS = previous.clone()
+        StringMPGame previousP = previous.clone()
+        StringMPGame newGame = new StringMPGame(previousId: previous.id)
+        AbstractMultiPlayerGameFactory gameFactory = mock(AbstractMultiPlayerGameFactory.class)
+        when(gameFactory.createGame(previousP, PONE)).thenReturn(newGame)
+        handler.gameFactory = gameFactory
         handler.transitionEngine = [
                 evaluateGame: {
                     MultiPlayerGame g ->
@@ -59,7 +58,7 @@ class ChallengeToRematchHandlerTest extends GameCoreTestCase {
         ] as AbstractMultiPlayerGameRepository
         handler.gamePublisher = [
                 publish: {
-                    GameCoreTestCase.StringMPGame g, Player p ->
+                    StringMPGame g, Player p ->
                         assert g.is(previousS)
                         assertNull p
                         previousP
@@ -71,7 +70,7 @@ class ChallengeToRematchHandlerTest extends GameCoreTestCase {
 
     void testNotInRematchPhase() {
         GamePhase.values().find { it != GamePhase.RoundOver }.each {
-            GameCoreTestCase.StringMPGame previous = new GameCoreTestCase.StringMPGame(gamePhase: it, id: "XXXXR")
+            StringMPGame previous = new StringMPGame(gamePhase: it, id: "XXXXR")
             try {
                 handler.handleActionInternal(PONE, previous, null)
                 fail("Should have exceptioned in phase " + it)

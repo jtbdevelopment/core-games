@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.push.rest
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringPlayer
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.PlayerRoles
@@ -89,7 +90,7 @@ class PushServicesTest extends GameCoreTestCase {
         SecurityContextHolder.context.authentication = authenticationToken
 
         RegisteredDevice device = new RegisteredDevice(deviceID: "some id over here")
-        Player saved = new GameCoreTestCase.StringPlayer()
+        Player saved = new StringPlayer()
         def repo = [
                 findById: {
                     String id ->
@@ -151,7 +152,7 @@ class PushServicesTest extends GameCoreTestCase {
 
         RegisteredDevice device = new RegisteredDevice(deviceID: "some id over here")
         PONE.updateRegisteredDevice(device)
-        Player saved = new GameCoreTestCase.StringPlayer()
+        Player saved = new StringPlayer()
         def repo = [
                 findById: {
                     String id ->

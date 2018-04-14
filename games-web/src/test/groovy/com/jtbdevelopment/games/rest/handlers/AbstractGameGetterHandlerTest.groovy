@@ -1,6 +1,8 @@
 package com.jtbdevelopment.games.rest.handlers
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringMPGame
+import com.jtbdevelopment.games.StringSPGame
 import com.jtbdevelopment.games.dao.AbstractGameRepository
 import com.jtbdevelopment.games.exceptions.input.PlayerNotPartOfGameException
 import com.jtbdevelopment.games.exceptions.system.FailedToFindGameException
@@ -13,14 +15,14 @@ class AbstractGameGetterHandlerTest extends GameCoreTestCase {
     AbstractGameGetterHandler handler = new AbstractGameGetterHandler() {}
 
     void testValidatePlayerForMultiPlayerGame() {
-        GameCoreTestCase.StringMPGame mpGame = new GameCoreTestCase.StringMPGame()
+        StringMPGame mpGame = new StringMPGame()
         mpGame.players = [PONE, PTWO]
         handler.validatePlayerForGame(mpGame, PONE)
         handler.validatePlayerForGame(mpGame, PTWO)
     }
 
     void testInvalidValidatePlayerForMultiPlayerGame() {
-        GameCoreTestCase.StringMPGame mpGame = new GameCoreTestCase.StringMPGame()
+        StringMPGame mpGame = new StringMPGame()
         mpGame.players = [PONE, PTWO]
         shouldFail(PlayerNotPartOfGameException.class, {
             handler.validatePlayerForGame(mpGame, PTHREE)
@@ -28,13 +30,13 @@ class AbstractGameGetterHandlerTest extends GameCoreTestCase {
     }
 
     void testValidatePlayerForSinglePlayerGame() {
-        GameCoreTestCase.StringSPGame mpGame = new GameCoreTestCase.StringSPGame()
+        StringSPGame mpGame = new StringSPGame()
         mpGame.player = PONE
         handler.validatePlayerForGame(mpGame, PONE)
     }
 
     void testInvalidValidatePlayerForSinglePlayerGame() {
-        GameCoreTestCase.StringSPGame mpGame = new GameCoreTestCase.StringSPGame()
+        StringSPGame mpGame = new StringSPGame()
         mpGame.player = PONE
         shouldFail(PlayerNotPartOfGameException.class, {
             handler.validatePlayerForGame(mpGame, PTHREE)
@@ -42,7 +44,7 @@ class AbstractGameGetterHandlerTest extends GameCoreTestCase {
     }
 
     void testLoadGame() {
-        GameCoreTestCase.StringMPGame mpGame = new GameCoreTestCase.StringMPGame()
+        StringMPGame mpGame = new StringMPGame()
         String id = 'X'
         handler.gameRepository = [
                 findById: {

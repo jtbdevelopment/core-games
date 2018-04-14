@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.security.spring
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringPlayer
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 
 import java.time.Instant
@@ -14,8 +15,8 @@ class LastLoginUpdaterTest extends GameCoreTestCase {
     Instant now = Instant.now()
 
     void testUpdatesPlayerIfLastLoginIsNull() {
-        def player = new GameCoreTestCase.StringPlayer(lastLogin: null)
-        def playerCopy = new GameCoreTestCase.StringPlayer(lastLogin: null)
+        def player = new StringPlayer(lastLogin: null)
+        def playerCopy = new StringPlayer(lastLogin: null)
         updater.playerRepository = [
                 save: {
                     p ->
@@ -32,8 +33,8 @@ class LastLoginUpdaterTest extends GameCoreTestCase {
     }
 
     void testUpdatesPlayerIfLastLoginIsOlderThan15Minutes() {
-        def player = new GameCoreTestCase.StringPlayer(lastLogin: now.minusSeconds(16 * 60))
-        def playerCopy = new GameCoreTestCase.StringPlayer(lastLogin: null)
+        def player = new StringPlayer(lastLogin: now.minusSeconds(16 * 60))
+        def playerCopy = new StringPlayer(lastLogin: null)
         updater.playerRepository = [
                 save: {
                     p ->
@@ -53,7 +54,7 @@ class LastLoginUpdaterTest extends GameCoreTestCase {
 
     void testDoesNotUpdatePlayerIfLastLoginIs15Minutes() {
         def fifteenMinutes = now.minusSeconds(15 * 60)
-        def player = new GameCoreTestCase.StringPlayer(lastLogin: fifteenMinutes)
+        def player = new StringPlayer(lastLogin: fifteenMinutes)
         updater.playerRepository = [
                 save: {
                     p ->

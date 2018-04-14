@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.rest.handlers
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringMPGame
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.events.GamePublisher
@@ -16,6 +17,9 @@ import com.jtbdevelopment.games.tracking.GameEligibilityTracker
 import com.jtbdevelopment.games.tracking.PlayerGameEligibility
 import com.jtbdevelopment.games.tracking.PlayerGameEligibilityResult
 
+import static org.mockito.Mockito.mock
+import static org.mockito.Mockito.when
+
 /**
  * Date: 11/7/14
  * Time: 9:26 PM
@@ -27,18 +31,15 @@ class NewGameHandlerTest extends GameCoreTestCase {
         Set<String> features = ["GameFeature.SystemPuzzles", "GameFeature.Thieving"]
         List<Player> players = [PTWO, PTHREE, PFOUR]
         Player initiatingPlayer = PONE
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame()
+        StringMPGame game = new StringMPGame()
         game.features.addAll(features)
-        GameCoreTestCase.StringMPGame savedGame = new GameCoreTestCase.StringMPGame()
+        StringMPGame savedGame = new StringMPGame()
         savedGame.features = features
-        GameCoreTestCase.StringMPGame transitionedGame = new GameCoreTestCase.StringMPGame()
-        GameCoreTestCase.StringMPGame publishedGame = new GameCoreTestCase.StringMPGame()
-        handler.gameFactory = [createGame: { a, b, c ->
-            assert a == features
-            assert b == players
-            assert c == initiatingPlayer
-            game
-        }] as AbstractMultiPlayerGameFactory
+        StringMPGame transitionedGame = new StringMPGame()
+        StringMPGame publishedGame = new StringMPGame()
+        AbstractMultiPlayerGameFactory gameFactory = mock(AbstractMultiPlayerGameFactory.class)
+        when(gameFactory.createGame(features, players, initiatingPlayer)).thenReturn(game)
+        handler.gameFactory = gameFactory
         handler.gameRepository = [
                 save: {
                     assert it.is(transitionedGame)
@@ -94,16 +95,13 @@ class NewGameHandlerTest extends GameCoreTestCase {
         Set<String> features = ["GameFeature.SystemPuzzles", "GameFeature.Thieving"]
         List<Player> players = [PTWO, PTHREE, PFOUR]
         Player initiatingPlayer = PONE
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame()
+        StringMPGame game = new StringMPGame()
         game.features.addAll(features)
-        GameCoreTestCase.StringMPGame savedGame = new GameCoreTestCase.StringMPGame()
+        StringMPGame savedGame = new StringMPGame()
         savedGame.features = features
-        handler.gameFactory = [createGame: { a, b, c ->
-            assert a == features
-            assert b == players
-            assert c == initiatingPlayer
-            game
-        }] as AbstractMultiPlayerGameFactory
+        AbstractMultiPlayerGameFactory gameFactory = mock(AbstractMultiPlayerGameFactory.class)
+        when(gameFactory.createGame(features, players, initiatingPlayer)).thenReturn(game)
+        handler.gameFactory = gameFactory
         handler.gameRepository = [
                 save: {
                     assert it.is(game)
@@ -129,17 +127,14 @@ class NewGameHandlerTest extends GameCoreTestCase {
         Set<Object> features = ["GameFeature.SystemPuzzles", "GameFeature.Thieving"]
         List<Player> players = [PTWO, PTHREE, PFOUR]
         Player initiatingPlayer = PONE
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame()
+        StringMPGame game = new StringMPGame()
         game.features.addAll(features)
-        GameCoreTestCase.StringMPGame savedGame = new GameCoreTestCase.StringMPGame()
+        StringMPGame savedGame = new StringMPGame()
         savedGame.features = features
         boolean revertCalled = false
-        handler.gameFactory = [createGame: { a, b, c ->
-            assert a == features
-            assert b == players
-            assert c == initiatingPlayer
-            game
-        }] as AbstractMultiPlayerGameFactory
+        AbstractMultiPlayerGameFactory gameFactory = mock(AbstractMultiPlayerGameFactory.class)
+        when(gameFactory.createGame(features, players, initiatingPlayer)).thenReturn(game)
+        handler.gameFactory = gameFactory
         handler.playerRepository = [
                 findByMd5In: {
                     Iterable<String> it ->
@@ -183,17 +178,14 @@ class NewGameHandlerTest extends GameCoreTestCase {
         Set<Object> features = [1, 3.4, "X"]
         List<Player> players = [PTWO, PTHREE, PFOUR]
         Player initiatingPlayer = PONE
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame()
+        StringMPGame game = new StringMPGame()
         game.features.addAll(features)
-        GameCoreTestCase.StringMPGame savedGame = new GameCoreTestCase.StringMPGame()
+        StringMPGame savedGame = new StringMPGame()
         savedGame.features = features
         boolean revertCalled = false
-        handler.gameFactory = [createGame: { a, b, c ->
-            assert a == features
-            assert b == players
-            assert c == initiatingPlayer
-            game
-        }] as AbstractMultiPlayerGameFactory
+        AbstractMultiPlayerGameFactory gameFactory = mock(AbstractMultiPlayerGameFactory.class)
+        when(gameFactory.createGame(features, players, initiatingPlayer)).thenReturn(game)
+        handler.gameFactory = gameFactory
         handler.playerRepository = [
                 findByMd5In: {
                     Iterable<String> it ->
@@ -240,17 +232,14 @@ class NewGameHandlerTest extends GameCoreTestCase {
         Set<Object> features = ["1", 5]
         List<Player> players = [PTWO, PTHREE, PFOUR]
         Player initiatingPlayer = PONE
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame()
+        StringMPGame game = new StringMPGame()
         game.features.addAll(features)
-        GameCoreTestCase.StringMPGame savedGame = new GameCoreTestCase.StringMPGame()
+        StringMPGame savedGame = new StringMPGame()
         boolean revertCalled = false
         savedGame.features = features
-        handler.gameFactory = [createGame: { a, b, c ->
-            assert a == features
-            assert b == players
-            assert c == initiatingPlayer
-            throw new NumberFormatException()
-        }] as AbstractMultiPlayerGameFactory
+        AbstractMultiPlayerGameFactory gameFactory = mock(AbstractMultiPlayerGameFactory.class)
+        when(gameFactory.createGame(features, players, initiatingPlayer)).thenThrow(new NumberFormatException())
+        handler.gameFactory = gameFactory
         handler.playerRepository = [
                 findByMd5In: {
                     Iterable<String> it ->
@@ -288,9 +277,9 @@ class NewGameHandlerTest extends GameCoreTestCase {
         Set<Object> features = ["GameFeature.SystemPuzzles", "GameFeature.Thieving"]
         List<Player> players = [PTWO, PTHREE, PFOUR]
         Player initiatingPlayer = PONE
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame()
+        StringMPGame game = new StringMPGame()
         game.features.addAll(features)
-        GameCoreTestCase.StringMPGame savedGame = new GameCoreTestCase.StringMPGame()
+        StringMPGame savedGame = new StringMPGame()
         savedGame.features = features
         handler.playerRepository = [
                 findByMd5In: {

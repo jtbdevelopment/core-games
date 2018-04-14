@@ -2,9 +2,9 @@ package com.jtbdevelopment.games.state.transition
 
 import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.StringSPGame
+import com.jtbdevelopment.games.scoring.GameScorer
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.SinglePlayerGame
-import com.jtbdevelopment.games.state.scoring.GameScorer
 
 /**
  * Date: 4/8/2015
