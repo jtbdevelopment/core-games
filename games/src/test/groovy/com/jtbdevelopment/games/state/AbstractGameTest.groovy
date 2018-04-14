@@ -63,12 +63,12 @@ class AbstractGameTest extends GroovyTestCase {
 
     void testEquals() {
         StringGame game = new StringGame(id: 'TEST')
-        assert game.equals(new StringGame(id: game.id))
-        assert game.equals(new DerivedStringGame(id: game.id, anotherField: 'X'))
-        assert game.equals(new ComplexStringIdGame(id: game.id))
-        assertFalse game.equals(new StringGame(id: game.id.toLowerCase()))
-        assertFalse game.equals(game.id)
-        assertFalse game.equals(null)
+        assert game == new StringGame(id: game.id)
+        assert game == new DerivedStringGame(id: game.id, anotherField: 'X')
+        assert game == new ComplexStringIdGame(id: game.id)
+        assertFalse game == new StringGame(id: game.id.toLowerCase())
+        assertFalse game == game.id
+        assertFalse game == null
     }
 
     void testHashCodeNullId() {
@@ -82,12 +82,12 @@ class AbstractGameTest extends GroovyTestCase {
 
     void testConstructor() {
         StringGame game = new StringGame()
-        assert game.id == null
-        assert game.lastUpdate == null
-        assert game.created == null
-        assert game.completedTimestamp == null
-        assert game.featureData.isEmpty()
-        assert game.features.isEmpty()
+        assertNull game.id
+        assertNull game.lastUpdate
+        assertNull game.created
+        assertNull game.completedTimestamp
+        assertTrue game.featureData.isEmpty()
+        assertTrue game.features.isEmpty()
         assert 0 == game.round
         assertNull game.previousId
         assert GamePhase.Setup == game.gamePhase
