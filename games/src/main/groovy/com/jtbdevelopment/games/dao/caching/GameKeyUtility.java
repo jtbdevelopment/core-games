@@ -3,8 +3,9 @@ package com.jtbdevelopment.games.dao.caching;
 import com.jtbdevelopment.games.state.Game;
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,11 +18,9 @@ public class GameKeyUtility {
     if (games == null) {
       return Collections.emptyList();
     }
-    List<Serializable> ids = new LinkedList<>();
-    for (Game game : games) {
-      ids.add(game.getId());
-    }
-    return ids;
+    return StreamSupport.stream(games.spliterator(), false)
+        .map(Game::getId)
+        .collect(Collectors.toList());
   }
 
 }
