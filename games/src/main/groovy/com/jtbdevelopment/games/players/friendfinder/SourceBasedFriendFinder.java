@@ -1,14 +1,12 @@
 package com.jtbdevelopment.games.players.friendfinder;
 
 import com.jtbdevelopment.games.players.Player;
-import groovy.transform.CompileStatic;
 import java.util.Map;
 import java.util.Set;
 
 /**
  * Date: 12/30/2014 Time: 12:03 PM
  */
-@CompileStatic
 public interface SourceBasedFriendFinder {
 
   String FRIENDS_KEY = "friends";
@@ -22,5 +20,5 @@ public interface SourceBasedFriendFinder {
    * Return a set of data regarding friends At a minimum, the FRIENDS_KEY needs to be provided with
    * a list of Players
    */
-  Map<String, Set<Object>> findFriends(final Player player);
+  Map<String, Set<? extends Player>> findFriends(final Player player);
 }

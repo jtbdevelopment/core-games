@@ -4,12 +4,16 @@ import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.ManualPlayer
 
+import static org.mockito.Mockito.mock
+import static org.mockito.Mockito.when
+
 /**
  * Date: 11/26/14
  * Time: 1:12 PM
  */
 class ManualFriendFinderTest extends GameCoreTestCase {
-    ManualFriendFinder finder = new ManualFriendFinder()
+    AbstractPlayerRepository abstractPlayerRepository = mock(AbstractPlayerRepository.class)
+    ManualFriendFinder finder = new ManualFriendFinder(abstractPlayerRepository)
 
     void testHandlesSource() {
         assert finder.handlesSource(ManualPlayer.MANUAL_SOURCE)
@@ -22,15 +26,7 @@ class ManualFriendFinderTest extends GameCoreTestCase {
         def pY = makeSimplePlayer("c")
         def pZ = makeSimplePlayer("d")
         def ps = [pX, pY, pZ, playerA]
-        finder.playerRepository = [
-                findBySourceAndDisabled: {
-                    String source, boolean disabled ->
-                        assert source == ManualPlayer.MANUAL_SOURCE
-                        assertFalse disabled
-                        return ps
-                }
-        ] as AbstractPlayerRepository<String>
-
+        when(abstractPlayerRepository.findBySourceAndDisabled(ManualPlayer.MANUAL_SOURCE, false)).thenReturn(ps)
         assert finder.findFriends(playerA) == [(SourceBasedFriendFinder.FRIENDS_KEY): [pX, pY, pZ] as Set]
     }
 }
