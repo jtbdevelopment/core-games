@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 @Component
 class GameKeyUtility<ID extends Serializable> {
     static List collectGameIDs(final Iterable<Game> games) {
-        if (!games) {
+        if (games == null) {
             return Collections.<ID> emptyList()
         }
         return games.collect { Game g -> g.id }
