@@ -11,6 +11,12 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 abstract class AbstractSinglePlayerGameFactory<IMPL extends SinglePlayerGame, FEATURES> extends AbstractGameFactory<IMPL> implements SinglePlayerGameFactory<IMPL, FEATURES> {
+    AbstractSinglePlayerGameFactory(
+            final List<GameInitializer<IMPL>> gameInitializers,
+            final List<GameValidator<IMPL>> gameValidators) {
+        super(gameInitializers, gameValidators)
+    }
+
     IMPL createGame(
             final Set<FEATURES> features,
             final Player player) {

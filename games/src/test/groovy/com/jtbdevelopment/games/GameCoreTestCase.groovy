@@ -1,14 +1,9 @@
 package com.jtbdevelopment.games
 
 import com.jtbdevelopment.games.dao.StringToIDConverter
-import com.jtbdevelopment.games.players.AbstractPlayer
 import com.jtbdevelopment.games.players.ManualPlayer
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.SystemPlayer
-import com.jtbdevelopment.games.state.AbstractGame
-import com.jtbdevelopment.games.state.AbstractMultiPlayerGame
-import com.jtbdevelopment.games.state.AbstractSinglePlayerGame
-import com.jtbdevelopment.games.state.masking.AbstractMaskedMultiPlayerGame
 
 /**
  * Date: 11/8/14
@@ -30,99 +25,8 @@ abstract class GameCoreTestCase extends GroovyTestCase {
         }
     }
 
-    static class StringGame extends AbstractGame<String, Object> {
-        String id
-
-        @Override
-        String getIdAsString() {
-            return id
-        }
-
-        String previousId
-
-        @Override
-        String getPreviousIdAsString() {
-            return previousId
-        }
-
-        @Override
-        List<Player<String>> getAllPlayers() {
-            null
-        }
-    }
-
-    static class StringSPGame extends AbstractSinglePlayerGame<String, Object> {
-        String id
-
-        @Override
-        String getIdAsString() {
-            return id
-        }
-
-        String previousId
-
-        @Override
-        String getPreviousIdAsString() {
-            return previousId
-        }
-    }
-
-    static class StringMPGame extends AbstractMultiPlayerGame<String, Object> implements Cloneable {
-        String id
-
-        @Override
-        String getIdAsString() {
-            return id
-        }
-
-        String previousId
-
-        @Override
-        String getPreviousIdAsString() {
-            return previousId
-        }
-    }
-
-    static class StringMaskedMPGame extends AbstractMaskedMultiPlayerGame<Object> implements Cloneable {
-
-    }
-
-    static class StringPlayer extends AbstractPlayer<String> {
-        private String md5
-        String id
-
-        void setId(final String id) {
-            this.id = id
-            computeMD5Hex()
-        }
-
-        @Override
-        protected void setMd5(final String md5) {
-            this.md5 = md5
-        }
-
-        @Override
-        protected String getMd5Internal() {
-            return this.md5
-        }
-
-        @Override
-        String getIdAsString() {
-            return id
-        }
-    }
-
-    static class StringManualPlayer extends StringPlayer implements ManualPlayer<String> {
-        String password
-        String verificationToken
-        boolean verified
-    }
-
-    static class StringSystemPlayer extends StringPlayer implements SystemPlayer<String> {
-
-    }
-
-    protected static Player<String> makeSimplePlayer(final String id, final boolean disabled = false) {
+    protected static Player<String> makeSimplePlayer(
+            final String id, final boolean disabled = false) {
         return new StringPlayer(
                 id: id,
                 source: "MADEUP",

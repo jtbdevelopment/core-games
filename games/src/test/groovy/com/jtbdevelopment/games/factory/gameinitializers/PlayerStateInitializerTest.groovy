@@ -1,6 +1,8 @@
 package com.jtbdevelopment.games.factory.gameinitializers
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringMPGame
+import com.jtbdevelopment.games.StringSPGame
 import com.jtbdevelopment.games.state.PlayerState
 
 /**

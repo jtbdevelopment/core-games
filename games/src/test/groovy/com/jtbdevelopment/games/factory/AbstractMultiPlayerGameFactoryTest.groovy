@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.factory
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringMPGame
 import com.jtbdevelopment.games.exceptions.input.FailedToCreateValidGameException
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.GamePhase
@@ -11,12 +12,22 @@ import com.jtbdevelopment.games.state.MultiPlayerGame
  * Time: 9:41 PM
  */
 class AbstractMultiPlayerGameFactoryTest extends GameCoreTestCase {
-    AbstractMultiPlayerGameFactory gameFactory = new AbstractMultiPlayerGameFactory<GameCoreTestCase.StringMPGame, Object>() {
+    private
+    static class TestAbstractMultiPlayerGameFactory extends AbstractMultiPlayerGameFactory<StringMPGame, Object> {
+
+        TestAbstractMultiPlayerGameFactory(
+                final List<GameInitializer<StringMPGame>> gameInitializers,
+                final List<GameValidator<StringMPGame>> gameValidators) {
+            super(gameInitializers, gameValidators)
+        }
+
         @Override
-        protected GameCoreTestCase.StringMPGame newGame() {
-            return new GameCoreTestCase.StringMPGame()
+        protected StringMPGame newGame() {
+            return new StringMPGame()
         }
     }
+
+    TestAbstractMultiPlayerGameFactory gameFactory
 
     void testCreatingNewGame() {
         int validatorsCalled = 0
@@ -28,9 +39,11 @@ class AbstractMultiPlayerGameFactoryTest extends GameCoreTestCase {
                     fail("Should not be called")
                 }] as GameValidator
 
-        gameFactory.gameValidators = [validator, validator]
-        gameFactory.gameInitializers = [initializer, initializer, initializer, initializer]
 
+        gameFactory = new TestAbstractMultiPlayerGameFactory(
+                [initializer, initializer, initializer, initializer],
+                [validator, validator]
+        )
 
         Set<Object> expectedFeatures = ["1", 2] as Set
         Player initiatingPlayer = PONE
@@ -61,8 +74,10 @@ class AbstractMultiPlayerGameFactoryTest extends GameCoreTestCase {
                     fail("Should not be called")
                 }] as GameValidator
 
-        gameFactory.gameValidators = [validator, validator]
-        gameFactory.gameInitializers = [initializer, initializer, initializer, initializer]
+        gameFactory = new TestAbstractMultiPlayerGameFactory(
+                [initializer, initializer, initializer, initializer],
+                [validator, validator]
+        )
 
         Set<Object> expectedFeatures = [32.1, new StringBuilder()] as Set
         Player initiatingPlayer = PONE
@@ -100,7 +115,10 @@ class AbstractMultiPlayerGameFactoryTest extends GameCoreTestCase {
                     "TADA!"
                 }] as GameValidator
 
-        gameFactory.gameValidators = [validator, validator]
+        gameFactory = new TestAbstractMultiPlayerGameFactory(
+                [],
+                [validator, validator]
+        )
 
 
         Set<Object> expectedFeatures = [54, 55, "56"] as Set
@@ -117,7 +135,7 @@ class AbstractMultiPlayerGameFactoryTest extends GameCoreTestCase {
             fail("Should have failed")
         } catch (FailedToCreateValidGameException e) {
             assert validatorsCalled == 2
-            assert e.message == "System failed to create a valid game.  TADA!  TADA!  "
+            assert e.message == "System failed to create a valid game.  TADA!  TADA!"
         }
     }
 }

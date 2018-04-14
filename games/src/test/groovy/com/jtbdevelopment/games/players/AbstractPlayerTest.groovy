@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.players
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringPlayer
 import com.jtbdevelopment.games.players.notifications.RegisteredDevice
 import org.apache.commons.codec.digest.DigestUtils
 import org.springframework.data.annotation.Transient

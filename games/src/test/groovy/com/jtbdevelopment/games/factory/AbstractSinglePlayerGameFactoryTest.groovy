@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.factory
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringSPGame
 import com.jtbdevelopment.games.exceptions.input.FailedToCreateValidGameException
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.SinglePlayerGame
@@ -10,12 +11,18 @@ import com.jtbdevelopment.games.state.SinglePlayerGame
  * Time: 9:41 PM
  */
 class AbstractSinglePlayerGameFactoryTest extends GameCoreTestCase {
-    AbstractSinglePlayerGameFactory gameFactory = new AbstractSinglePlayerGameFactory<GameCoreTestCase.StringSPGame, Object>() {
+    private
+    static class TestSinglePlayerGameFactory extends AbstractSinglePlayerGameFactory<StringSPGame, Object> {
+        TestSinglePlayerGameFactory(List<GameInitializer<StringSPGame>> gameInitializers, List<GameValidator<StringSPGame>> gameValidators) {
+            super(gameInitializers, gameValidators)
+        }
+
         @Override
-        protected GameCoreTestCase.StringSPGame newGame() {
-            return new GameCoreTestCase.StringSPGame()
+        protected StringSPGame newGame() {
+            return new StringSPGame()
         }
     }
+    TestSinglePlayerGameFactory gameFactory
 
     void testCreatingNewGame() {
         int validatorsCalled = 0
@@ -27,8 +34,7 @@ class AbstractSinglePlayerGameFactoryTest extends GameCoreTestCase {
                     fail("Should not be called")
                 }] as GameValidator
 
-        gameFactory.gameValidators = [validator, validator]
-        gameFactory.gameInitializers = [initializer, initializer, initializer, initializer]
+        gameFactory = new TestSinglePlayerGameFactory([initializer, initializer, initializer, initializer], [validator, validator])
 
 
         Set<Object> expectedFeatures = ["1", 2] as Set
@@ -56,8 +62,7 @@ class AbstractSinglePlayerGameFactoryTest extends GameCoreTestCase {
                     fail("Should not be called")
                 }] as GameValidator
 
-        gameFactory.gameValidators = [validator, validator]
-        gameFactory.gameInitializers = [initializer, initializer, initializer, initializer]
+        gameFactory = new TestSinglePlayerGameFactory([initializer, initializer, initializer, initializer], [validator, validator])
 
         Set<Object> expectedFeatures = [32.1, new StringBuilder()] as Set
 
@@ -88,7 +93,7 @@ class AbstractSinglePlayerGameFactoryTest extends GameCoreTestCase {
                     "TADA!"
                 }] as GameValidator
 
-        gameFactory.gameValidators = [validator, validator]
+        gameFactory = new TestSinglePlayerGameFactory([], [validator, validator])
 
 
         Set<Object> expectedFeatures = [54, 55, "56"] as Set
@@ -101,7 +106,7 @@ class AbstractSinglePlayerGameFactoryTest extends GameCoreTestCase {
             fail("Should have failed")
         } catch (FailedToCreateValidGameException e) {
             assert validatorsCalled == 2
-            assert e.message == "System failed to create a valid game.  TADA!  TADA!  "
+            assert e.message == "System failed to create a valid game.  TADA!  TADA!"
         }
     }
 }

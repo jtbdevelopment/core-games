@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.players.friendfinder
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringPlayer
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.exceptions.system.FailedToFindPlayersException
 import com.jtbdevelopment.games.players.Player

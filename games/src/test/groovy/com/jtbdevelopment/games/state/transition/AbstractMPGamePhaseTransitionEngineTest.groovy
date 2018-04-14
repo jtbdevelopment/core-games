@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.state.transition
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringMPGame
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.MultiPlayerGame
 import com.jtbdevelopment.games.state.PlayerState
@@ -13,12 +14,13 @@ import java.time.Instant
  * Time: 8:30 PM
  */
 class AbstractMPGamePhaseTransitionEngineTest extends GameCoreTestCase {
-    AbstractMPGamePhaseTransitionEngine transitionEngine = new AbstractMPGamePhaseTransitionEngine() {}
+    AbstractMPGamePhaseTransitionEngine transitionEngine = new AbstractMPGamePhaseTransitionEngine() {
+    }
 
 
     public void testSinglePlayerChallengeTransitionsToSetup() {
         assert transitionEngine.gameScorer == null
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(
+        StringMPGame game = new StringMPGame(
                 gamePhase: GamePhase.Challenged,
                 playerStates: [(PONE.id): PlayerState.Accepted],
         )
@@ -30,7 +32,7 @@ class AbstractMPGamePhaseTransitionEngineTest extends GameCoreTestCase {
 
     public void testChallengeStayingChallenge() {
         assert transitionEngine.gameScorer == null
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(
+        StringMPGame game = new StringMPGame(
                 gamePhase: GamePhase.Challenged,
                 playerStates: [(PONE.id): PlayerState.Accepted, (PTWO.id): PlayerState.Pending],
         )
@@ -41,7 +43,7 @@ class AbstractMPGamePhaseTransitionEngineTest extends GameCoreTestCase {
 
     public void testChallengeToDeclined() {
         assert transitionEngine.gameScorer == null
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(
+        StringMPGame game = new StringMPGame(
                 gamePhase: GamePhase.Challenged,
                 playerStates: [(PONE.id): PlayerState.Rejected, (PTWO.id): PlayerState.Pending],
         )
@@ -53,7 +55,7 @@ class AbstractMPGamePhaseTransitionEngineTest extends GameCoreTestCase {
 
     public void testChallengeToSetup() {
         assert transitionEngine.gameScorer == null
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(
+        StringMPGame game = new StringMPGame(
                 gamePhase: GamePhase.Challenged,
                 playerStates: [(PONE.id): PlayerState.Accepted, (PTWO.id): PlayerState.Accepted],
         )
@@ -65,7 +67,7 @@ class AbstractMPGamePhaseTransitionEngineTest extends GameCoreTestCase {
 
     public void testSetup() {
         assert transitionEngine.gameScorer == null
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(
+        StringMPGame game = new StringMPGame(
                 gamePhase: GamePhase.Setup,
         )
 
@@ -75,7 +77,7 @@ class AbstractMPGamePhaseTransitionEngineTest extends GameCoreTestCase {
 
     public void testPlayingToPlaying() {
         assert transitionEngine.gameScorer == null
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(
+        StringMPGame game = new StringMPGame(
                 gamePhase: GamePhase.Playing,
                 features: [] as Set,
         )
@@ -84,8 +86,8 @@ class AbstractMPGamePhaseTransitionEngineTest extends GameCoreTestCase {
     }
 
     public void testRematchToRematch() {
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(gamePhase: GamePhase.RoundOver, rematchTimestamp: null)
-        GameCoreTestCase.StringMPGame scoredGame = new GameCoreTestCase.StringMPGame(gamePhase: GamePhase.RoundOver, rematchTimestamp: null)
+        StringMPGame game = new StringMPGame(gamePhase: GamePhase.RoundOver, rematchTimestamp: null)
+        StringMPGame scoredGame = new StringMPGame(gamePhase: GamePhase.RoundOver, rematchTimestamp: null)
         transitionEngine.gameScorer = [
                 scoreGame: {
                     MultiPlayerGame g ->
@@ -100,27 +102,27 @@ class AbstractMPGamePhaseTransitionEngineTest extends GameCoreTestCase {
     public void testRematchToRematched() {
         assert transitionEngine.gameScorer == null
 
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(gamePhase: GamePhase.RoundOver, rematchTimestamp: Instant.now())
+        StringMPGame game = new StringMPGame(gamePhase: GamePhase.RoundOver, rematchTimestamp: Instant.now())
         assert game.is(transitionEngine.evaluateGame(game))
         assert game.gamePhase == GamePhase.NextRoundStarted
     }
 
     public void testRematchedToRematched() {
         assert transitionEngine.gameScorer == null
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(gamePhase: GamePhase.NextRoundStarted)
+        StringMPGame game = new StringMPGame(gamePhase: GamePhase.NextRoundStarted)
         assert game.is(transitionEngine.evaluateGame(game))
     }
 
 
     public void testDeclinedToDeclined() {
         assert transitionEngine.gameScorer == null
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(gamePhase: GamePhase.Declined)
+        StringMPGame game = new StringMPGame(gamePhase: GamePhase.Declined)
         assert game.is(transitionEngine.evaluateGame(game))
     }
 
     public void testQuitToQuit() {
         assert transitionEngine.gameScorer == null
-        GameCoreTestCase.StringMPGame game = new GameCoreTestCase.StringMPGame(gamePhase: GamePhase.Quit)
+        StringMPGame game = new StringMPGame(gamePhase: GamePhase.Quit)
         assert game.is(transitionEngine.evaluateGame(game))
     }
 }

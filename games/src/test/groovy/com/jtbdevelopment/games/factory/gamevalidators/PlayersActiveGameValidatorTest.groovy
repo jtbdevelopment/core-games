@@ -1,6 +1,8 @@
 package com.jtbdevelopment.games.factory.gamevalidators
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import com.jtbdevelopment.games.StringMPGame
+import com.jtbdevelopment.games.StringSPGame
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 
 /**

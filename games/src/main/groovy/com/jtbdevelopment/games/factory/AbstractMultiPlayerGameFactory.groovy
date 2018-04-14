@@ -12,6 +12,12 @@ import groovy.transform.CompileStatic
 @CompileStatic
 abstract class AbstractMultiPlayerGameFactory<IMPL extends MultiPlayerGame, FEATURES> extends AbstractGameFactory<IMPL> implements MultiPlayerGameFactory<IMPL, FEATURES> {
 
+    AbstractMultiPlayerGameFactory(
+            final List<GameInitializer<IMPL>> gameInitializers,
+            final List<GameValidator<IMPL>> gameValidators) {
+        super(gameInitializers, gameValidators)
+    }
+
     IMPL createGame(
             final Set<FEATURES> features,
             final List<Player> players,

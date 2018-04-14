@@ -8,11 +8,11 @@ import org.springframework.core.Ordered;
  */
 public interface GameInitializer<IMPL extends Game> extends Ordered {
 
-    @SuppressWarnings("unused")
-    int EARLY_ORDER = 1;
-    int DEFAULT_ORDER = 1000;
-    @SuppressWarnings("unused")
-    int LATE_ORDER = 10000;
+  @SuppressWarnings("unused")
+  int EARLY_ORDER = 1;
+  int DEFAULT_ORDER = 1000;
+  @SuppressWarnings("unused")
+  int LATE_ORDER = 10000;
 
-    void initializeGame(final IMPL game);
+  void initializeGame(final IMPL game);
 }
