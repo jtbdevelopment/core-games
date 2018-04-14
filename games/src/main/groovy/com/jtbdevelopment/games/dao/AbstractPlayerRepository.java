@@ -21,10 +21,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
  * Date: 12/30/2014 Time: 11:07 AM
- *
- * If using a dynamic language like groovy, you may need to compile statically due to some of the
- * overloaded methods on delete not being resolvable at runtime since both ID and Player implement
- * Serializable
  */
 @NoRepositoryBean
 public interface AbstractPlayerRepository<ID extends Serializable, P extends Player<ID>> extends
