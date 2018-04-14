@@ -5,9 +5,9 @@ package com.jtbdevelopment.games.players;
  */
 public interface GameSpecificPlayerAttributesFactory {
 
-    GameSpecificPlayerAttributes newPlayerAttributes();
+  GameSpecificPlayerAttributes newPlayerAttributes();
 
-    GameSpecificPlayerAttributes newManualPlayerAttributes();
+  GameSpecificPlayerAttributes newManualPlayerAttributes();
 
-    GameSpecificPlayerAttributes newSystemPlayerAttributes();
+  GameSpecificPlayerAttributes newSystemPlayerAttributes();
 }

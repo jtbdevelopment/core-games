@@ -7,19 +7,19 @@ import java.io.Serializable;
  */
 public interface ManualPlayer<ID extends Serializable> extends Player<ID> {
 
-    String MANUAL_SOURCE = "MANUAL";
+  String MANUAL_SOURCE = "MANUAL";
 
-    String getPassword();
+  String getPassword();
 
-    void setPassword(final String password);
+  void setPassword(final String password);
 
-    String getVerificationToken();
+  String getVerificationToken();
 
-    void setVerificationToken(final String password);
+  void setVerificationToken(final String password);
 
-    boolean isVerified();
+  boolean isVerified();
 
-    boolean getVerified();
+  boolean getVerified();
 
-    void setVerified(boolean verified);
+  void setVerified(boolean verified);
 }
