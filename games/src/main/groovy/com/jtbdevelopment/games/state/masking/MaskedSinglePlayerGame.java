@@ -1,13 +1,9 @@
-package com.jtbdevelopment.games.state.masking
-
-import groovy.transform.CompileStatic
+package com.jtbdevelopment.games.state.masking;
 
 /**
- * Date: 2/18/15
- * Time: 6:54 PM
+ * Date: 2/18/15 Time: 6:54 PM
  */
-@CompileStatic
-interface MaskedSinglePlayerGame<FEATURES> extends MaskedGame<FEATURES> {
+public interface MaskedSinglePlayerGame<FEATURES> extends MaskedGame<FEATURES> {
     /*  TODO - review if any of these should move to common
 
     String getMaskedForPlayerID()
@@ -35,5 +31,6 @@ interface MaskedSinglePlayerGame<FEATURES> extends MaskedGame<FEATURES> {
     void setPlayerStates(final Map<String, PlayerState> playerStates)
 
     */
+
 
 }
