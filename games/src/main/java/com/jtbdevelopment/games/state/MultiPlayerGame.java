@@ -1,36 +1,34 @@
 package com.jtbdevelopment.games.state;
 
 import com.jtbdevelopment.games.players.Player;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Date: 12/31/2014
- * Time: 5:07 PM
- * <p>
- * A MultiPlayerGame may still be played by a single player
- * It just has the potential to be played by more than one
+ * Date: 12/31/2014 Time: 5:07 PM <p> A MultiPlayerGame may still be played by a single player It
+ * just has the potential to be played by more than one
  */
-public interface MultiPlayerGame<ID extends Serializable, TIMESTAMP, FEATURES> extends Game<ID, TIMESTAMP, FEATURES> {
-    ID getInitiatingPlayer();
+public interface MultiPlayerGame<ID extends Serializable, TIMESTAMP, FEATURES> extends
+    Game<ID, TIMESTAMP, FEATURES> {
 
-    void setInitiatingPlayer(final ID initiatingPlayer);
+  ID getInitiatingPlayer();
 
-    List<Player<ID>> getPlayers();
+  void setInitiatingPlayer(final ID initiatingPlayer);
 
-    void setPlayers(final List<Player<ID>> players);
+  List<Player<ID>> getPlayers();
 
-    Map<ID, PlayerState> getPlayerStates();
+  void setPlayers(final List<Player<ID>> players);
 
-    void setPlayerStates(final Map<ID, PlayerState> playerState);
+  Map<ID, PlayerState> getPlayerStates();
 
-    TIMESTAMP getDeclinedTimestamp();
+  void setPlayerStates(final Map<ID, PlayerState> playerState);
 
-    void setDeclinedTimestamp(final TIMESTAMP declinedTimestamp);
+  TIMESTAMP getDeclinedTimestamp();
 
-    TIMESTAMP getRematchTimestamp();
+  void setDeclinedTimestamp(final TIMESTAMP declinedTimestamp);
 
-    void setRematchTimestamp(final TIMESTAMP rematchTimestamp);
+  TIMESTAMP getRematchTimestamp();
+
+  void setRematchTimestamp(final TIMESTAMP rematchTimestamp);
 }

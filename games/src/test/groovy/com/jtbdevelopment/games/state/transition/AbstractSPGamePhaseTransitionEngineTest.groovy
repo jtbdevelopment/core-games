@@ -4,19 +4,25 @@ import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.StringSPGame
 import com.jtbdevelopment.games.scoring.GameScorer
 import com.jtbdevelopment.games.state.GamePhase
-import com.jtbdevelopment.games.state.SinglePlayerGame
+
+import static org.mockito.Mockito.mock
+import static org.mockito.Mockito.when
 
 /**
  * Date: 4/8/2015
  * Time: 8:30 PM
  */
 class AbstractSPGamePhaseTransitionEngineTest extends GameCoreTestCase {
-    AbstractSPGamePhaseTransitionEngine transitionEngine = new AbstractSPGamePhaseTransitionEngine() {
+    private
+    static class TestSPGamePhaseTransitionEngine extends AbstractSPGamePhaseTransitionEngine {
+        TestSPGamePhaseTransitionEngine(GameScorer gameScorer) {
+            super(gameScorer)
+        }
     }
+    TestSPGamePhaseTransitionEngine transitionEngine = new TestSPGamePhaseTransitionEngine(null)
 
 
     void testSinglePlayerChallengeDoesNothing() {
-        assert transitionEngine.gameScorer == null
         StringSPGame game = new StringSPGame(
                 gamePhase: GamePhase.Challenged
         )
@@ -27,7 +33,6 @@ class AbstractSPGamePhaseTransitionEngineTest extends GameCoreTestCase {
 
 
     void testSetup() {
-        assert transitionEngine.gameScorer == null
         StringSPGame game = new StringSPGame(
                 gamePhase: GamePhase.Setup,
         )
@@ -38,7 +43,6 @@ class AbstractSPGamePhaseTransitionEngineTest extends GameCoreTestCase {
 
 
     void testPlayingToPlaying() {
-        assert transitionEngine.gameScorer == null
         StringSPGame game = new StringSPGame(
                 gamePhase: GamePhase.Playing,
                 features: [] as Set,
@@ -49,15 +53,11 @@ class AbstractSPGamePhaseTransitionEngineTest extends GameCoreTestCase {
     }
 
     void testRematchToRematch() {
-        StringSPGame game = new StringSPGame(gamePhase: GamePhase.RoundOver)
-        StringSPGame scoredGame = new StringSPGame(gamePhase: GamePhase.RoundOver)
-        transitionEngine.gameScorer = [
-                scoreGame: {
-                    SinglePlayerGame g ->
-                        assert game.is(g)
-                        return scoredGame
-                }
-        ] as GameScorer
+        StringSPGame game = new StringSPGame(id: '1', gamePhase: GamePhase.RoundOver)
+        StringSPGame scoredGame = new StringSPGame(id: '1', gamePhase: GamePhase.RoundOver)
+        GameScorer scorer = mock(GameScorer.class)
+        when(scorer.scoreGame(game)).thenReturn(scoredGame)
+        transitionEngine = new TestSPGamePhaseTransitionEngine(scorer)
         assert scoredGame.is(transitionEngine.evaluateGame(game))
         assert GamePhase.RoundOver == scoredGame.gamePhase
     }
@@ -73,7 +73,6 @@ class AbstractSPGamePhaseTransitionEngineTest extends GameCoreTestCase {
     */
 
     void testRematchedToRematched() {
-        assert transitionEngine.gameScorer == null
         StringSPGame game = new StringSPGame(gamePhase: GamePhase.NextRoundStarted)
         assert game.is(transitionEngine.evaluateGame(game))
         assert GamePhase.NextRoundStarted == game.gamePhase
@@ -81,14 +80,12 @@ class AbstractSPGamePhaseTransitionEngineTest extends GameCoreTestCase {
 
 
     void testDeclinedToDeclined() {
-        assert transitionEngine.gameScorer == null
         StringSPGame game = new StringSPGame(gamePhase: GamePhase.Declined)
         assert game.is(transitionEngine.evaluateGame(game))
         assert GamePhase.Declined == game.gamePhase
     }
 
     void testQuitToQuit() {
-        assert transitionEngine.gameScorer == null
         StringSPGame game = new StringSPGame(gamePhase: GamePhase.Quit)
         assert game.is(transitionEngine.evaluateGame(game))
         assert GamePhase.Quit == game.gamePhase

@@ -1,7 +1,6 @@
 package com.jtbdevelopment.games.state;
 
 import com.jtbdevelopment.games.players.Player;
-
 import java.beans.Transient;
 import java.io.Serializable;
 import java.util.List;
@@ -9,57 +8,57 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Date: 12/31/2014
- * Time: 4:56 PM
+ * Date: 12/31/2014 Time: 4:56 PM
  */
 public interface Game<ID extends Serializable, TIMESTAMP, FEATURES> {
-    ID getId();
 
-    void setId(final ID id);
+  ID getId();
 
-    @Transient
-    String getIdAsString();
+  void setId(final ID id);
 
-    Integer getVersion();
+  @Transient
+  String getIdAsString();
 
-    void setVersion(final Integer version);
+  Integer getVersion();
 
-    ID getPreviousId();
+  void setVersion(final Integer version);
 
-    void setPreviousId(final ID previousID);
+  ID getPreviousId();
 
-    @Transient
-    String getPreviousIdAsString();
+  void setPreviousId(final ID previousID);
 
-    int getRound();
+  @Transient
+  String getPreviousIdAsString();
 
-    void setRound(final int round);
+  int getRound();
 
-    TIMESTAMP getCreated();
+  void setRound(final int round);
 
-    void setCreated(final TIMESTAMP created);
+  TIMESTAMP getCreated();
 
-    TIMESTAMP getLastUpdate();
+  void setCreated(final TIMESTAMP created);
 
-    void setLastUpdate(final TIMESTAMP lastUpdate);
+  TIMESTAMP getLastUpdate();
 
-    TIMESTAMP getCompletedTimestamp();
+  void setLastUpdate(final TIMESTAMP lastUpdate);
 
-    void setCompletedTimestamp(final TIMESTAMP completed);
+  TIMESTAMP getCompletedTimestamp();
 
-    Set<FEATURES> getFeatures();
+  void setCompletedTimestamp(final TIMESTAMP completed);
 
-    void setFeatures(final Set<FEATURES> features);
+  Set<FEATURES> getFeatures();
 
-    @Deprecated
-    Map<FEATURES, Object> getFeatureData();
+  void setFeatures(final Set<FEATURES> features);
 
-    @Deprecated
-    void setFeatureData(final Map<FEATURES, Object> featureData);
+  @Deprecated
+  Map<FEATURES, Object> getFeatureData();
 
-    GamePhase getGamePhase();
+  @Deprecated
+  void setFeatureData(final Map<FEATURES, Object> featureData);
 
-    void setGamePhase(final GamePhase gamePhase);
+  GamePhase getGamePhase();
 
-    List<Player<ID>> getAllPlayers();
+  void setGamePhase(final GamePhase gamePhase);
+
+  List<Player<ID>> getAllPlayers();
 }
