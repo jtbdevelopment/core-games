@@ -20,7 +20,7 @@ public class ObjectIdSerializer extends AutoRegistrableJsonSerializer<ObjectId> 
   }
 
   @Override
-  public Class<ObjectId> registerForClass() {
+  public Class<ObjectId> handledType() {
     return ObjectId.class;
   }
 

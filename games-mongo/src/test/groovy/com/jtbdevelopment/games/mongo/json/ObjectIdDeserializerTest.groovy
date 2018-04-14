@@ -206,7 +206,7 @@ class ObjectIdDeserializerTest extends GroovyTestCase {
     }
 
     void testGetRegisterForClass() {
-        assert ObjectId.class.is(objectIdDeserializer.registerForClass())
+        assert ObjectId.class.is(objectIdDeserializer.handledType())
     }
 }
 

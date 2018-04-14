@@ -22,6 +22,6 @@ class ObjectIdSerializerTest extends GroovyTestCase {
     }
 
     void testGetRegisterForClass() {
-        assert ObjectId.class.is(serializer.registerForClass())
+        assert ObjectId.class.is(serializer.handledType())
     }
 }
