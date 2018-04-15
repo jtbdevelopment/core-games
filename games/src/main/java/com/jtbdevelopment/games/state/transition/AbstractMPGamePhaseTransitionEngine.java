@@ -1,9 +1,9 @@
 package com.jtbdevelopment.games.state.transition;
 
-import com.jtbdevelopment.games.scoring.GameScorer;
 import com.jtbdevelopment.games.state.GamePhase;
 import com.jtbdevelopment.games.state.MultiPlayerGame;
 import com.jtbdevelopment.games.state.PlayerState;
+import com.jtbdevelopment.games.state.scoring.GameScorer;
 import java.util.Optional;
 
 /**

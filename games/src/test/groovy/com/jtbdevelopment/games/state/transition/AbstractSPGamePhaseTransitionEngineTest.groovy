@@ -2,8 +2,8 @@ package com.jtbdevelopment.games.state.transition
 
 import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.StringSPGame
-import com.jtbdevelopment.games.scoring.GameScorer
 import com.jtbdevelopment.games.state.GamePhase
+import com.jtbdevelopment.games.state.scoring.GameScorer
 
 import static org.mockito.Mockito.mock
 import static org.mockito.Mockito.when

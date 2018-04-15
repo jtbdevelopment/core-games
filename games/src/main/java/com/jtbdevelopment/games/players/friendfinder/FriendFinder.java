@@ -25,11 +25,11 @@ import org.springframework.stereotype.Component;
 public class FriendFinder {
 
   private final List<SourceBasedFriendFinder> friendFinders;
-  private final AbstractPlayerRepository<Serializable, ? extends Player> playerRepository;
+  private final AbstractPlayerRepository playerRepository;
   private final PlayerMasker friendMasker;
 
   public FriendFinder(
-      @SuppressWarnings("SpringJavaAutowiringInspection") final AbstractPlayerRepository<Serializable, ? extends Player> playerRepository,
+      final AbstractPlayerRepository playerRepository,
       final List<SourceBasedFriendFinder> friendFinders,
       final PlayerMasker friendMasker) {
     this.friendFinders = friendFinders;
