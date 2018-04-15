@@ -18,6 +18,9 @@ import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
+import static org.mockito.Mockito.mock
+import static org.mockito.Mockito.when
+
 /**
  * Date: 11/15/2014
  * Time: 12:02 PM
@@ -141,62 +144,12 @@ class AbstractPlayerServicesTest extends GameCoreTestCase {
         assert gameServices.getAnnotation(Path.class).value() == "lastVersionNotes/{versionNotes}"
     }
 
-    void testGetFriends() {
-        def id = PFOUR.id
-        playerServices.playerID.set(id)
-        def friendFinder = [
-                findFriendsV2: {
-                    String it ->
-                        assert it == id
-                        return ['1': '2', '3': '4', '5': '6']
-                }
-        ] as FriendFinder
-        playerServices.applicationContext = [
-                getBean: {
-                    Class<?> it ->
-                        assert it.is(FriendFinder.class)
-                        return friendFinder
-                }
-        ] as ApplicationContext
-
-
-        assert playerServices.getFriends() == ['1': '2', '3': '4', '5': '6']
-    }
-
-    void testFriendsInfoAnnotations() {
-        def gameServices = AbstractPlayerServices.getMethod("getFriends", [] as Class[])
-        assert (gameServices.annotations.size() == 3 ||
-                (gameServices.isAnnotationPresent(TypeChecked.TypeCheckingInfo) && gameServices.annotations.size() == 4)
-        )
-        assert gameServices.isAnnotationPresent(Path.class)
-        assert gameServices.getAnnotation(Path.class).value() == "friends"
-        assert gameServices.isAnnotationPresent(Produces.class)
-        assert gameServices.getAnnotation(Produces.class).value() == [MediaType.APPLICATION_JSON]
-        assert gameServices.isAnnotationPresent(GET.class)
-        def params = gameServices.parameterAnnotations
-        assert params.length == 0
-    }
-
-    void testGetFriendsNoAppContext() {
-        playerServices.applicationContext = null
-        try {
-            playerServices.getFriends()
-            fail("should fail")
-        } catch (IllegalStateException e) {
-            //
-        }
-    }
-
     void testGetFriendsV2() {
         def id = PFOUR.id
         playerServices.playerID.set(id)
-        def friendFinder = [
-                findFriendsV2: {
-                    String it ->
-                        assert it == id
-                        return ['1': '2', '3': '4', '5': '6']
-                }
-        ] as FriendFinder
+        FriendFinder friendFinder = mock(FriendFinder.class)
+        def friends = ['1': ['2'] as Set, '3': ['4', 'X'] as Set, '5': ['6'] as Set]
+        when(friendFinder.findFriendsV2(id)).thenReturn(friends)
         playerServices.applicationContext = [
                 getBean: {
                     Class<?> it ->
@@ -206,7 +159,7 @@ class AbstractPlayerServicesTest extends GameCoreTestCase {
         ] as ApplicationContext
 
 
-        assert playerServices.getFriendsV2() == ['1': '2', '3': '4', '5': '6']
+        assert friends == playerServices.getFriendsV2()
     }
 
     void testFriendsV2InfoAnnotations() {
@@ -232,6 +185,7 @@ class AbstractPlayerServicesTest extends GameCoreTestCase {
             //
         }
     }
+
     void testAdminServicesAnnotation() {
         def gameServices = AbstractPlayerServices.getMethod("adminServices", [] as Class[])
         assert (gameServices.annotations.size() == 2 ||

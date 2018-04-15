@@ -20,5 +20,5 @@ public interface SourceBasedFriendFinder {
    * Return a set of data regarding friends At a minimum, the FRIENDS_KEY needs to be provided with
    * a list of Players
    */
-  Map<String, Set<? extends Player>> findFriends(final Player player);
+  Map<String, Set<?>> findFriends(final Player player);
 }

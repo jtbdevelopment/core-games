@@ -63,23 +63,8 @@ abstract class AbstractPlayerServices<ID extends Serializable> implements Applic
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("friends")
-    Map<String, Object> getFriends() {
-        //  Social Media Requires Session Specific Requests
-        if (applicationContext) {
-            logger.info("Able to retrieve FriendFinder from application context")
-            FriendFinder friendFinder = applicationContext.getBean(FriendFinder.class)
-            return friendFinder?.findFriendsV2(playerID.get())
-        } else {
-            logger.warn("Unable to retrieve FriendFinder from application context")
-            throw new IllegalStateException("No App Context")
-        }
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("friendsV2")
-    Map<String, Object> getFriendsV2() {
+    Map<String, Set<? super Object>> getFriendsV2() {
         //  Social Media Requires Session Specific Requests
         if (applicationContext) {
             logger.info("Able to retrieve FriendFinder from application context")

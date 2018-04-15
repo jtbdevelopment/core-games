@@ -29,11 +29,11 @@ public class ManualFriendFinder implements SourceBasedFriendFinder {
   }
 
   @Override
-  public Map<String, Set<? extends Player>> findFriends(final Player player) {
+  public Map<String, Set<?>> findFriends(final Player player) {
     Set<Player> friends = new HashSet<>(
         playerRepository.findBySourceAndDisabled(ManualPlayer.MANUAL_SOURCE, false));
     friends.remove(player);
-    Map<String, Set<? extends Player>> result = new HashMap<>();
+    Map<String, Set<?>> result = new HashMap<>();
     result.put(FRIENDS_KEY, friends);
     return result;
   }

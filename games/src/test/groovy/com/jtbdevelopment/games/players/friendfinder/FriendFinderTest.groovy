@@ -15,7 +15,7 @@ import org.springframework.context.annotation.ScopedProxyMode
  * Time: 4:18 PM
  */
 class FriendFinderTest extends GameCoreTestCase {
-    FriendFinder<String> finder = new FriendFinder<String>() {}
+    FriendFinder finder
 
     void testClassAnnotations() {
         Scope scope = FriendFinder.class.getAnnotation(Scope.class)
@@ -54,28 +54,28 @@ class FriendFinderTest extends GameCoreTestCase {
                 }
         ] as SourceBasedFriendFinder
 
-        finder.friendFinders = [f1, f2, f3]
-        finder.playerRepository = [
+        def repository = [
                 findById: {
                     String it ->
                         assert it == PFOUR.id
                         return Optional.of(PFOUR)
                 }
-        ] as AbstractPlayerRepository<String>
+        ] as AbstractPlayerRepository<String, StringPlayer>
         def masked = [['md5': 'x', 'displayName': 'y'], ['id': '1', 'displayName': '2']]
-        finder.friendMasker = [
+        def masker = [
                 maskFriendsV2: {
                     Set<Player> friends ->
                         assert friends == [PONE, PTWO, PTHREE] as Set
                         return masked
                 }
         ] as PlayerMasker
+        finder = new FriendFinder(repository, [f1, f2, f3], masker)
 
-        assert finder.findFriendsV2(PFOUR.id) == [
-                (SourceBasedFriendFinder.MASKED_FRIENDS_KEY): masked,
-                'Y'                                         : ['Yes'] as Set,
-                'X'                                         : [1, 2, 3] as Set
-        ]
+        def results = finder.findFriendsV2(PFOUR.id)
+        assert 3 == results.size()
+        assert ['Yes'] as Set == results.get('Y')
+        assert [1, 2, 3] as Set == results.get('X')
+        assert masked as Set == results.get(SourceBasedFriendFinder.MASKED_FRIENDS_KEY)
     }
 
     void testEmptyMaskedFriendsIfNoFriendsV2() {
@@ -91,28 +91,29 @@ class FriendFinderTest extends GameCoreTestCase {
                 }
         ] as SourceBasedFriendFinder
 
-        finder.friendFinders = [f1]
-        finder.playerRepository = [
+        def repository = [
                 findById: {
                     String it ->
                         assert it == PFOUR.id
                         return Optional.of(PFOUR)
                 }
-        ] as AbstractPlayerRepository<String>
+        ] as AbstractPlayerRepository<String, StringPlayer>
+        finder = new FriendFinder(repository, [f1], null)
 
         assert finder.findFriendsV2(PFOUR.id) == [
-                (SourceBasedFriendFinder.MASKED_FRIENDS_KEY): []
+                (SourceBasedFriendFinder.MASKED_FRIENDS_KEY): [] as Set
         ]
     }
 
     void testNoPlayerInRepositoryV2() {
-        finder.playerRepository = [
+        def repository = [
                 findById: {
                     String it ->
                         assert it == PFOUR.id
                         return Optional.empty()
                 }
-        ] as AbstractPlayerRepository<String>
+        ] as AbstractPlayerRepository<String, StringPlayer>
+        finder = new FriendFinder(repository, [], null)
 
         try {
             finder.findFriendsV2(PFOUR.id)
@@ -123,13 +124,14 @@ class FriendFinderTest extends GameCoreTestCase {
     }
 
     void testDisabledPlayerV2() {
-        finder.playerRepository = [
+        def repository = [
                 findById: {
                     String it ->
                         assert it == PINACTIVE1.id
                         return Optional.of(PINACTIVE1)
                 }
-        ] as AbstractPlayerRepository<String>
+        ] as AbstractPlayerRepository<String, StringPlayer>
+        finder = new FriendFinder(repository, [], null)
 
         try {
             finder.findFriendsV2(PINACTIVE1.id)

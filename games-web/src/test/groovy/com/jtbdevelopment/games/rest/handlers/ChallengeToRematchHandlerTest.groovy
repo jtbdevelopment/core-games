@@ -10,6 +10,8 @@ import com.jtbdevelopment.games.rest.exceptions.GameIsNotAvailableToRematchExcep
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.MultiPlayerGame
 import com.jtbdevelopment.games.state.transition.AbstractMPGamePhaseTransitionEngine
+import org.mockito.invocation.InvocationOnMock
+import org.mockito.stubbing.Answer
 
 import java.time.Instant
 
@@ -40,15 +42,17 @@ class ChallengeToRematchHandlerTest extends GameCoreTestCase {
         AbstractMultiPlayerGameFactory gameFactory = mock(AbstractMultiPlayerGameFactory.class)
         when(gameFactory.createGame(previousP, PONE)).thenReturn(newGame)
         handler.gameFactory = gameFactory
-        handler.transitionEngine = [
-                evaluateGame: {
-                    MultiPlayerGame g ->
-                        assert g.is(previous)
-                        assert g.rematchTimestamp != null
-                        assert now < g.rematchTimestamp
-                        return previousT
-                }
-        ] as AbstractMPGamePhaseTransitionEngine
+        def transitionEngine = mock(AbstractMPGamePhaseTransitionEngine.class)
+        when(transitionEngine.evaluateGame(previous)).then(new Answer<Object>() {
+            @Override
+            Object answer(InvocationOnMock invocation) throws Throwable {
+                MultiPlayerGame game = invocation.getArguments()[0]
+                assert game.rematchTimestamp != null
+                assert now < game.rematchTimestamp
+                return previousT
+            }
+        })
+        handler.transitionEngine = transitionEngine
         handler.gameRepository = [
                 save: {
                     MultiPlayerGame g ->

@@ -15,7 +15,7 @@ public abstract class AbstractSPGamePhaseTransitionEngine<IMPL extends SinglePla
   private final GameScorer<IMPL> gameScorer;
 
   public AbstractSPGamePhaseTransitionEngine(
-      GameScorer<IMPL> gameScorer) {
+      final GameScorer<IMPL> gameScorer) {
     this.gameScorer = gameScorer;
   }
 

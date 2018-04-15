@@ -4,7 +4,6 @@ import com.jtbdevelopment.games.scoring.GameScorer;
 import com.jtbdevelopment.games.state.GamePhase;
 import com.jtbdevelopment.games.state.MultiPlayerGame;
 import com.jtbdevelopment.games.state.PlayerState;
-import groovy.transform.CompileStatic;
 import java.util.Optional;
 
 /**
@@ -12,13 +11,12 @@ import java.util.Optional;
  *
  * You will most likely need to override the evaluate setup and playing functions
  */
-@CompileStatic
 public abstract class AbstractMPGamePhaseTransitionEngine<IMPL extends MultiPlayerGame>
     implements GameTransitionEngine<IMPL> {
 
   private final GameScorer<IMPL> gameScorer;
 
-  public AbstractMPGamePhaseTransitionEngine(GameScorer<IMPL> gameScorer) {
+  public AbstractMPGamePhaseTransitionEngine(final GameScorer<IMPL> gameScorer) {
     this.gameScorer = gameScorer;
   }
 
