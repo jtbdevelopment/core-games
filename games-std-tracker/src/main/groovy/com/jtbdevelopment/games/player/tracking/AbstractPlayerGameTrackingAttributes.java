@@ -15,8 +15,6 @@ public abstract class AbstractPlayerGameTrackingAttributes implements GameSpecif
   public static final String PAID_GAMES_FIELD = "gameSpecificPlayerAttributes.availablePurchasedGames";
   private int freeGamesUsedToday = 0;
   private int availablePurchasedGames = 0;
-  @Transient
-  @JsonIgnore
   private Player player;
 
   public abstract int getMaxDailyFreeGames();
@@ -46,8 +44,6 @@ public abstract class AbstractPlayerGameTrackingAttributes implements GameSpecif
     return player;
   }
 
-  @Transient
-  @JsonIgnore
   public void setPlayer(Player player) {
     this.player = player;
   }
