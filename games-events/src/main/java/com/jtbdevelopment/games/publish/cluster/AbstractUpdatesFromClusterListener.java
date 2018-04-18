@@ -9,7 +9,6 @@ import com.jtbdevelopment.games.publish.PlayerPublisher;
 import com.jtbdevelopment.games.state.Game;
 import java.io.Serializable;
 import java.util.Optional;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -56,7 +55,7 @@ public abstract class AbstractUpdatesFromClusterListener {
   }
 
   protected void receivePublishGame(final String gameId, final String playerId) {
-    if (DefaultGroovyMethods.asBoolean(gameRepository)) {
+    if (gameRepository != null) {
       Optional<? extends Player> optionalPlayer = playerRepository
           .findById(stringToIDConverter.convert(playerId));
       if (optionalPlayer.isPresent() || playerId == null) {

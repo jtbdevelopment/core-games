@@ -12,6 +12,7 @@ import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.publish.PlayerPublisher
 import com.jtbdevelopment.games.publish.cluster.ClusterMessage
 import com.jtbdevelopment.games.state.MultiPlayerGame
+import org.springframework.test.util.ReflectionTestUtils
 
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -122,8 +123,8 @@ class UpdatesFromClusterListenerTest extends GameCoreTestCase {
         super.setUp()
         topicFrom1 = hazelcastInstance1.getTopic(UpdatesToClusterPublisher.PUB_SUB_TOPIC)
         topicFrom2 = hazelcastInstance2.getTopic(UpdatesToClusterPublisher.PUB_SUB_TOPIC)
-        listener2.setStringToIDConverter(converter)
-        listener1.setStringToIDConverter(converter)
+        ReflectionTestUtils.setField(listener2, "stringToIDConverter", converter)
+        ReflectionTestUtils.setField(listener1, "stringToIDConverter", converter)
         listener1.playerPublisher = playerPublisher1
         listener2.playerPublisher = playerPublisher2
         listener1.gamePublisher = gamePublisher1
