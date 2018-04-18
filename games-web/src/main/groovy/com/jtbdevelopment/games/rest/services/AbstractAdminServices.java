@@ -19,7 +19,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -84,8 +83,8 @@ public abstract class AbstractAdminServices {
   public Object playersToSimulateLike(@QueryParam("like") String like,
       @QueryParam("page") Integer page, @QueryParam("pageSize") Integer pageSize) {
     return playerRepository.findByDisplayNameContains(like,
-        new PageRequest(DefaultGroovyMethods.asBoolean(page) ? page : DEFAULT_PAGE,
-            DefaultGroovyMethods.asBoolean(pageSize) ? pageSize
+        new PageRequest(page != null ? page : DEFAULT_PAGE,
+            pageSize != null ? pageSize
                 : DEFAULT_PAGE_SIZE,
             Direction.ASC, "displayName"));
   }

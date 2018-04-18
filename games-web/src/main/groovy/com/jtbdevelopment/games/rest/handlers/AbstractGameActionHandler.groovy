@@ -31,9 +31,11 @@ abstract class AbstractGameActionHandler<T, IMPL extends Game> extends AbstractG
     @Autowired(required = false)
     protected GameMasker gameMasker
 
-    abstract protected IMPL handleActionInternal(final Player player, final IMPL game, final T param)
+    abstract protected IMPL handleActionInternal(
+            final Player player, final IMPL game, final T param)
 
-    Game handleAction(final Serializable playerID, final Serializable gameID, final T param = null) {
+    Game handleAction(
+            final Serializable playerID, final Serializable gameID, final T param = null) {
         Player player = loadPlayer(playerID)
         IMPL game = (IMPL) loadGame(gameID)
         validatePlayerForGame(game, player)
@@ -49,7 +51,8 @@ abstract class AbstractGameActionHandler<T, IMPL extends Game> extends AbstractG
         }
     }
 
-    protected Game updateGameWithEligibilityWrapper(final Player player, final IMPL game, final T param) {
+    protected Game updateGameWithEligibilityWrapper(
+            final Player player, final IMPL game, final T param) {
         Game updatedGame
         PlayerGameEligibilityResult eligibilityResult = null
         if (gameTracker && requiresEligibilityCheck(param)) {

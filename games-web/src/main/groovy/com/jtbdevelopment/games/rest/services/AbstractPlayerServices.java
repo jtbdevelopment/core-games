@@ -17,7 +17,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -73,7 +72,7 @@ public abstract class AbstractPlayerServices<ID extends Serializable>
   @Path("friendsV2")
   public Map<String, Set<? super Object>> getFriendsV2() {
     //  Social Media Requires Session Specific Requests
-    if (DefaultGroovyMethods.asBoolean(applicationContext)) {
+    if (applicationContext != null) {
       logger.info("Able to retrieve FriendFinder from application context");
       FriendFinder friendFinder = applicationContext.getBean(FriendFinder.class);
       return friendFinder.findFriendsV2(playerID.get());
