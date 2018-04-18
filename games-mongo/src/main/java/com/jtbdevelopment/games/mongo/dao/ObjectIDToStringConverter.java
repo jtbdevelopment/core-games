@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class ObjectIDToStringConverter implements IDToStringConverter<ObjectId> {
 
-    @Override
-    public String convert(final ObjectId source) {
-        return source == null ? null : source.toHexString();
-    }
+  @Override
+  public String convert(final ObjectId source) {
+    return source == null ? null : source.toHexString();
+  }
 
 }
