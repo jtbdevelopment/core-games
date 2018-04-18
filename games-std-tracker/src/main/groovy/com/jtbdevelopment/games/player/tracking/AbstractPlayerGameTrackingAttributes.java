@@ -40,10 +40,14 @@ public abstract class AbstractPlayerGameTrackingAttributes implements GameSpecif
     this.availablePurchasedGames = availablePurchasedGames;
   }
 
+  @Transient
+  @JsonIgnore
   public Player getPlayer() {
     return player;
   }
 
+  @Transient
+  @JsonIgnore
   public void setPlayer(Player player) {
     this.player = player;
   }
