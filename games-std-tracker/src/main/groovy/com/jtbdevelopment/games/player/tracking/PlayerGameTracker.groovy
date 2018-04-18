@@ -34,7 +34,8 @@ class PlayerGameTracker implements GameEligibilityTracker<PlayerGameEligibilityR
     final Update UPDATE_PAID_GAMES = new Update().inc(AbstractPlayerGameTrackingAttributes.PAID_GAMES_FIELD, -1)
     private static
     final Update REVERT_PAID_GAMES = new Update().inc(AbstractPlayerGameTrackingAttributes.PAID_GAMES_FIELD, 1)
-    private static final FindAndModifyOptions RETURN_NEW_OPTION = new FindAndModifyOptions().returnNew(true)
+    private static
+    final FindAndModifyOptions RETURN_NEW_OPTION = new FindAndModifyOptions().returnNew(true)
 
     @Autowired
     MongoOperations mongoOperations
@@ -106,14 +107,14 @@ class PlayerGameTracker implements GameEligibilityTracker<PlayerGameEligibilityR
     )
     @Override
     void revertGameEligibility(final PlayerGameEligibilityResult gameEligibilityResult) {
-        Update revertToUse;
+        Update revertToUse
         switch (gameEligibilityResult.eligibility) {
             case PlayerGameEligibility.FreeGameUsed:
                 revertToUse = REVERT_FREE_GAMES
-                break;
+                break
             case PlayerGameEligibility.PaidGameUsed:
                 revertToUse = REVERT_PAID_GAMES
-                break;
+                break
         }
 
         if (revertToUse) {
