@@ -237,10 +237,10 @@ public abstract class AbstractGameIntegration<G extends Game, R extends Game> ex
 
       //  Other tests can make this result set ambiguous
       assertTrue(3 <= foundGames.size());
-      assertTrue(foundGames.stream().anyMatch(x -> g1.getId().equals(x.getId())));
-      assertTrue(foundGames.stream().anyMatch(x -> g2.getId().equals(x.getId())));
-      assertTrue(foundGames.stream().anyMatch(x -> g3.getId().equals(x.getId())));
-      assertTrue(foundGames.stream().noneMatch(x -> g4.getId().equals(x.getId())));
+      assertTrue(foundGames.stream().anyMatch(x -> g1.getIdAsString().equals(x.getIdAsString())));
+      assertTrue(foundGames.stream().anyMatch(x -> g2.getIdAsString().equals(x.getIdAsString())));
+      assertTrue(foundGames.stream().anyMatch(x -> g3.getIdAsString().equals(x.getIdAsString())));
+      assertTrue(foundGames.stream().noneMatch(x -> g4.getIdAsString().equals(x.getIdAsString())));
     }
 
   }

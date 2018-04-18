@@ -5,11 +5,9 @@ import com.jtbdevelopment.games.state.MultiPlayerGame;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
- * Date: 2/19/15
- * Time: 7:20 AM
+ * Date: 2/19/15 Time: 7:20 AM
  */
 public abstract class AbstractMultiPlayerGameMasker<ID extends Serializable, FEATURES, U extends MultiPlayerGame<ID, Instant, FEATURES>, M extends MaskedMultiPlayerGame<FEATURES>> extends
     AbstractGameMasker<ID, FEATURES, U, M> implements GameMasker<ID, U, M> {
@@ -20,15 +18,13 @@ public abstract class AbstractMultiPlayerGameMasker<ID extends Serializable, FEA
     super.copyMaskedData(game, player, playerMaskedGame, idMap);
     playerMaskedGame.setMaskedForPlayerMD5(player.getMd5());
     playerMaskedGame.setMaskedForPlayerID(player.getIdAsString());
-    playerMaskedGame.setPlayers(game.getAllPlayers().stream().collect(Collectors.toMap(
-        Player::getMd5, Player::getDisplayName)));
-    playerMaskedGame.setPlayerImages(game.getAllPlayers().stream().collect(Collectors.toMap(
-        Player::getMd5, Player::getImageUrl)));
-    playerMaskedGame.setPlayerProfiles(game.getAllPlayers().stream().collect(Collectors.toMap(
-        Player::getMd5, Player::getProfileUrl)));
+    game.getAllPlayers().forEach(p -> {
+      playerMaskedGame.getPlayers().put(p.getMd5(), p.getDisplayName());
+      playerMaskedGame.getPlayerImages().put(p.getMd5(), p.getImageUrl());
+      playerMaskedGame.getPlayerProfiles().put(p.getMd5(), p.getProfileUrl());
+      playerMaskedGame.getPlayerStates().put(p.getMd5(), game.getPlayerStates().get(p.getId()));
+    });
     playerMaskedGame.setInitiatingPlayer(idMap.get(game.getInitiatingPlayer()).getMd5());
-    playerMaskedGame.setPlayerStates(game.getAllPlayers().stream().collect(Collectors.toMap(
-        Player::getMd5, p -> game.getPlayerStates().get(p.getId()))));
   }
 
   @Override
