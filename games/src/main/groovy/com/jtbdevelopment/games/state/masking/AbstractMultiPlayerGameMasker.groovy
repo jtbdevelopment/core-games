@@ -25,7 +25,6 @@ abstract class AbstractMultiPlayerGameMasker<ID extends Serializable, FEATURES, 
         playerMaskedGame
     }
 
-    @SuppressWarnings("GroovyUnusedDeclaration")
     @Override
     protected void copyMaskedData(
             final U game,
@@ -48,7 +47,6 @@ abstract class AbstractMultiPlayerGameMasker<ID extends Serializable, FEATURES, 
         }
     }
 
-    @SuppressWarnings("GrMethodMayBeStatic")
     @Override
     protected void copyUnmaskedData(
             final U game,
@@ -56,15 +54,5 @@ abstract class AbstractMultiPlayerGameMasker<ID extends Serializable, FEATURES, 
         super.copyUnmaskedData(game, playerMaskedGame)
         playerMaskedGame.declinedTimestamp = convertTime((Instant) game.declinedTimestamp)
         playerMaskedGame.rematchTimestamp = convertTime((Instant) game.rematchTimestamp)
-    }
-
-    @SuppressWarnings("GrMethodMayBeStatic")
-    protected Map<ID, Player<ID>> createIDMap(final U game) {
-        Map<ID, Player<ID>> idmap = [:]
-        game.players.each {
-            Player<ID> p ->
-                idmap[p.id] = p
-        }
-        idmap
     }
 }

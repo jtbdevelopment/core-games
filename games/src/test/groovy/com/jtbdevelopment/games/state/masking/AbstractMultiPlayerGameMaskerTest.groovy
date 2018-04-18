@@ -76,7 +76,7 @@ class AbstractMultiPlayerGameMaskerTest extends GroovyTestCase {
 
     MaskedIntGameMasker masker = new MaskedIntGameMasker()
     private static IntPlayer PONE = makeSimplePlayer(1)
-    private static IntPlayer PTWO = makeSimplePlayer(1)
+    private static IntPlayer PTWO = makeSimplePlayer(2)
 
     void testMaskingSinglePlayerGame() {
         IntGame game = new IntGame(
