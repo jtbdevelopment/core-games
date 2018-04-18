@@ -1,9 +1,9 @@
 package com.jtbdevelopment.games.mongo.json
 
 import com.fasterxml.jackson.databind.module.SimpleModule
+import com.jtbdevelopment.core.spring.jackson.JacksonModuleCustomization
 import com.jtbdevelopment.games.mongo.players.MongoPlayer
 import com.jtbdevelopment.games.players.Player
-import com.jtbdevelopment.spring.jackson.JacksonModuleCustomization
 import groovy.transform.CompileStatic
 import org.springframework.stereotype.Component
 

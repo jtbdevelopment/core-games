@@ -2,7 +2,7 @@ package com.jtbdevelopment.games.mongo.json;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.jtbdevelopment.spring.jackson.AutoRegistrableJsonSerializer;
+import com.jtbdevelopment.core.spring.jackson.AutoRegistrableJsonSerializer;
 import java.io.IOException;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
