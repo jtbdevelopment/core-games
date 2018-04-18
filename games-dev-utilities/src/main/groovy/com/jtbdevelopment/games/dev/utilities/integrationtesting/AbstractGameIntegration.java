@@ -56,10 +56,10 @@ public abstract class AbstractGameIntegration<G extends Game, R extends Game> ex
   private static final URI API_URI = BASE_URI.resolve("/api");
   private static final URI PLAYER_API = BASE_URI.resolve("api/player");
   private static Server SERVER;
-  private static MongoManualPlayer TEST_PLAYER1;
-  private static MongoManualPlayer TEST_PLAYER2;
-  private static MongoManualPlayer TEST_PLAYER3;
-  private static ApplicationContext applicationContext;
+  protected static MongoManualPlayer TEST_PLAYER1;
+  protected static MongoManualPlayer TEST_PLAYER2;
+  protected static MongoManualPlayer TEST_PLAYER3;
+  protected static ApplicationContext applicationContext;
   private static PasswordEncoder passwordEncoder;
   private static MongoPlayerRepository playerRepository;
 

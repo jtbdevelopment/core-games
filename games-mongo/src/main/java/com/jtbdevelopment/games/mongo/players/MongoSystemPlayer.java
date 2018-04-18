@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "player")
 public class MongoSystemPlayer extends MongoPlayer implements SystemPlayer<ObjectId> {
 
-    public MongoSystemPlayer() {
-        super.setSource(SYSTEM_SOURCE);
-    }
+  public MongoSystemPlayer() {
+    super.setSource(SYSTEM_SOURCE);
+  }
 }
