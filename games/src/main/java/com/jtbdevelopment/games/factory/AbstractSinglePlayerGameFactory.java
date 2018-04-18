@@ -12,8 +12,9 @@ import java.util.Set;
 public abstract class AbstractSinglePlayerGameFactory<IMPL extends SinglePlayerGame, FEATURES> extends
     AbstractGameFactory<IMPL> implements SinglePlayerGameFactory<IMPL, FEATURES> {
 
-  public AbstractSinglePlayerGameFactory(final List<GameInitializer<IMPL>> gameInitializers,
-      final List<GameValidator<IMPL>> gameValidators) {
+  public AbstractSinglePlayerGameFactory(
+      final List<GameInitializer> gameInitializers,
+      final List<GameValidator> gameValidators) {
     super(gameInitializers, gameValidators);
   }
 

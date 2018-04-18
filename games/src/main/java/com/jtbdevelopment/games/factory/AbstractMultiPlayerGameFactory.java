@@ -13,8 +13,9 @@ import java.util.Set;
 public abstract class AbstractMultiPlayerGameFactory<IMPL extends MultiPlayerGame, FEATURES> extends
     AbstractGameFactory<IMPL> implements MultiPlayerGameFactory<IMPL, FEATURES> {
 
-  public AbstractMultiPlayerGameFactory(final List<GameInitializer<IMPL>> gameInitializers,
-      final List<GameValidator<IMPL>> gameValidators) {
+  public AbstractMultiPlayerGameFactory(
+      final List<GameInitializer> gameInitializers,
+      final List<GameValidator> gameValidators) {
     super(gameInitializers, gameValidators);
   }
 

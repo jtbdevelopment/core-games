@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractGameFactory<IMPL extends Game> {
 
-  private final List<GameInitializer<IMPL>> gameInitializers;
-  private final List<GameValidator<IMPL>> gameValidators;
+  private final List<GameInitializer> gameInitializers;
+  private final List<GameValidator> gameValidators;
 
   public AbstractGameFactory(
-      List<GameInitializer<IMPL>> gameInitializers,
-      List<GameValidator<IMPL>> gameValidators) {
+      List<GameInitializer> gameInitializers,
+      List<GameValidator> gameValidators) {
     this.gameInitializers = gameInitializers;
     this.gameValidators = gameValidators;
   }
