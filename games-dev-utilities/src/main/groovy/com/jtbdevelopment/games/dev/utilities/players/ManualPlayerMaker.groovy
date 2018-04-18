@@ -53,7 +53,8 @@ class ManualPlayerMaker {
     }
 
     static ManualPlayer makePlayer(
-            final String displayName, final String sourceId, final String password, final String imageUrl) {
+            final String displayName,
+            final String sourceId, final String password, final String imageUrl) {
         ManualPlayer manualPlayer = (ManualPlayer) playerFactory.newManualPlayer()
         manualPlayer.disabled = false
         manualPlayer.adminUser = true
