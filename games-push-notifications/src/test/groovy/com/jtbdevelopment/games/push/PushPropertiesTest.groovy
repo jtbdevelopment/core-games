@@ -20,7 +20,7 @@ class PushPropertiesTest extends GroovyTestCase {
         assert PushProperties.class.
                 getDeclaredField('senderID')?.
                 getAnnotation(Value.class)?.
-                value() == '${push.senderID:NOTSET}'
+                value() == '${push.senderID:}'
     }
 
     void testEnabledFlagSetWithBothValuesSet() {
@@ -32,13 +32,13 @@ class PushPropertiesTest extends GroovyTestCase {
 
     void testEnabledFlagSetWithNoAPIKey() {
         properties.senderID = "1234"
-        properties.apiKey = "NOTSET"
+        properties.apiKey = ""
         properties.testSetup()
         assertFalse properties.enabled
     }
 
     void testEnabledFlagSetWithNoSenderID() {
-        properties.senderID = "NOTSET"
+        properties.senderID = ""
         properties.apiKey = "3z35df"
         properties.testSetup()
         assertFalse properties.enabled

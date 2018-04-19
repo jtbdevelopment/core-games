@@ -10,7 +10,7 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 interface WebSocketPublicationListener {
-    void publishedPlayerUpdate(final Player player, boolean status)
+    void publishedPlayerUpdate(final Player<?> player, boolean status)
 
-    void publishedGameUpdateToPlayer(final Player player, final Game game, boolean status)
+    void publishedGameUpdateToPlayer(final Player<?> player, final Game game, boolean status)
 }
