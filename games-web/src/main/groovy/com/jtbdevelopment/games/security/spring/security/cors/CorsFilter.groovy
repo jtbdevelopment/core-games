@@ -26,7 +26,8 @@ class CorsFilter implements Filter {
     @Override
     void doFilter(
             final ServletRequest request,
-            final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
+            final ServletResponse response,
+            final FilterChain chain) throws IOException, ServletException {
         if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
             HttpServletRequest httpServletRequest = (HttpServletRequest) request
             HttpServletResponse httpServletResponse = (HttpServletResponse) response

@@ -26,8 +26,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.StringUtils;
 
 /**
- * Date: 11/14/14
- * Time: 6:40 AM
+ * Date: 11/14/14 Time: 6:40 AM
  */
 public abstract class AbstractPlayerServices<ID extends Serializable>
     implements ApplicationContextAware {

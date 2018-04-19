@@ -16,10 +16,12 @@ import javax.servlet.http.HttpServletResponse
  */
 @CompileStatic
 class MobileAwareLoginUrlAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoint {
-    protected final static Logger logger = LoggerFactory.getLogger(MobileAwareFailureAuthenticationHandler.class)
+    protected final
+    static Logger logger = LoggerFactory.getLogger(MobileAwareFailureAuthenticationHandler.class)
     private final MobileAppChecker mobileAppChecker
 
-    MobileAwareLoginUrlAuthenticationEntryPoint(final String loginFormUrl, final MobileAppChecker mobileAppChecker) {
+    MobileAwareLoginUrlAuthenticationEntryPoint(
+            final String loginFormUrl, final MobileAppChecker mobileAppChecker) {
         super(loginFormUrl)
         this.mobileAppChecker = mobileAppChecker
     }

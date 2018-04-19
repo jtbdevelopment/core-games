@@ -31,7 +31,8 @@ class PlayerSocialUserDetailsService implements SocialUserDetailsService {
     LastLoginUpdater lastLoginUpdater
 
     @Override
-    SocialUserDetails loadUserByUserId(final String userId) throws UsernameNotFoundException, DataAccessException {
+    SocialUserDetails loadUserByUserId(
+            final String userId) throws UsernameNotFoundException, DataAccessException {
         def optional = playerRepository.findById(stringToIDConverter.convert(userId))
         if (optional.present) {
             return new PlayerUserDetails(lastLoginUpdater.updatePlayerLastLogin(optional.get()))

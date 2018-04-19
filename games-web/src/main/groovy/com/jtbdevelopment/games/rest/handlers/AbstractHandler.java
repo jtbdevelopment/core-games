@@ -14,8 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Date: 11/4/2014
- * Time: 9:54 PM
+ * Date: 11/4/2014 Time: 9:54 PM
  */
 public abstract class AbstractHandler {
 

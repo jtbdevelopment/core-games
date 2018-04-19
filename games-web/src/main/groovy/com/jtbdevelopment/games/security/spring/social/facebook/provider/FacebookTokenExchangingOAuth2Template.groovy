@@ -21,7 +21,8 @@ class FacebookTokenExchangingOAuth2Template extends OAuth2Template {
     private String accessTokenUrl
 
     FacebookTokenExchangingOAuth2Template(
-            final String clientId, final String clientSecret, final String authorizeUrl, final String accessTokenUrl) {
+            final String clientId,
+            final String clientSecret, final String authorizeUrl, final String accessTokenUrl) {
         super(clientId, clientSecret, authorizeUrl, accessTokenUrl)
         this.clientId = clientId
         this.clientSecret = clientSecret

@@ -18,7 +18,8 @@ import javax.servlet.http.HttpServletResponse
  */
 @CompileStatic
 class MobileAwareSocialFailureAuthenticationHandler extends SocialAuthenticationFailureHandler {
-    protected final static Logger logger = LoggerFactory.getLogger(MobileAwareSocialFailureAuthenticationHandler.class)
+    protected final
+    static Logger logger = LoggerFactory.getLogger(MobileAwareSocialFailureAuthenticationHandler.class)
 
     private final MobileAppChecker checker
     private final MobileAppProperties mobileAppProperties

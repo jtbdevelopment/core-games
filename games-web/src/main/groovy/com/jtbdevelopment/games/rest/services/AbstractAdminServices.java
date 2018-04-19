@@ -25,8 +25,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
- * Date: 11/27/2014
- * Time: 6:34 PM
+ * Date: 11/27/2014 Time: 6:34 PM
  *
  * Abstract to allow additional changes
  */

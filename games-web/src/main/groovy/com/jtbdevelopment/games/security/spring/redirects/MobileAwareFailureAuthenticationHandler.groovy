@@ -16,7 +16,8 @@ import javax.servlet.http.HttpServletResponse
  */
 @CompileStatic
 class MobileAwareFailureAuthenticationHandler extends SimpleUrlAuthenticationFailureHandler {
-    protected final static Logger logger = LoggerFactory.getLogger(MobileAwareFailureAuthenticationHandler.class)
+    protected final
+    static Logger logger = LoggerFactory.getLogger(MobileAwareFailureAuthenticationHandler.class)
 
     private final MobileAppChecker checker
 

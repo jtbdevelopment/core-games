@@ -13,8 +13,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Date: 11/11/14
- * Time: 9:42 PM
+ * Date: 11/11/14 Time: 9:42 PM
  */
 public abstract class AbstractGameServices<ID extends Serializable> {
 

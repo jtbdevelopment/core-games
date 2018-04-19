@@ -17,8 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
- * Date: 11/14/14
- * Time: 6:36 AM
+ * Date: 11/14/14 Time: 6:36 AM
  */
 @RolesAllowed({PlayerRoles.PLAYER})
 public abstract class AbstractPlayerGatewayService<ID extends Serializable> {

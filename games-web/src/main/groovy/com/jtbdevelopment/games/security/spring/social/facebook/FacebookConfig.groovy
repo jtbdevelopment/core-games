@@ -21,7 +21,8 @@ import org.springframework.social.facebook.api.Facebook
 class FacebookConfig {
     @Bean
     @Autowired
-    CustomFacebookAuthenticationService facebookAuthenticationService(final FacebookProperties facebookProperties) {
+    CustomFacebookAuthenticationService facebookAuthenticationService(
+            final FacebookProperties facebookProperties) {
         def service = new CustomFacebookAuthenticationService(facebookProperties.getClientID(), facebookProperties.getClientSecret())
         service.setDefaultScope(facebookProperties.permissions)
         return service
