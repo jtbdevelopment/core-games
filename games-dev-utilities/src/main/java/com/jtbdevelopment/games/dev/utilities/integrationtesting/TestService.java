@@ -7,8 +7,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.stereotype.Component;
 
 /**
- * Date: 12/20/2014
- * Time: 4:12 PM
+ * Date: 12/20/2014 Time: 4:12 PM
  *
  * Useful sanity check to verify if non-authenticated rest is working
  */
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class TestService {
 
-  @SuppressWarnings("GrMethodMayBeStatic")
   @GET
   @Produces(MediaType.TEXT_PLAIN)
   public String get() {

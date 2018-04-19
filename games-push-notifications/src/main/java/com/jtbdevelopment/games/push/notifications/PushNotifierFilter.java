@@ -8,7 +8,6 @@ import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.push.PushWorthyFilter;
 import com.jtbdevelopment.games.state.MultiPlayerGame;
-import groovy.transform.CompileStatic;
 import java.io.Serializable;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentMap;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Component;
  * Date: 10/10/2015 Time: 4:22 PM
  */
 @Component
-@CompileStatic
 public class PushNotifierFilter implements EntryEvictedListener<GamePublicationTracker, Boolean> {
 
   private static final Logger logger = LoggerFactory.getLogger(PushNotifierFilter.class);
