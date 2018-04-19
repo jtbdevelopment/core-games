@@ -7,7 +7,6 @@ import com.hazelcast.core.MessageListener;
 import com.jtbdevelopment.games.publish.cluster.AbstractUpdatesFromClusterListener;
 import com.jtbdevelopment.games.publish.cluster.ClusterMessage;
 import javax.annotation.PostConstruct;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +31,7 @@ public class UpdatesFromClusterListener extends AbstractUpdatesFromClusterListen
   public void onMessage(final Message<ClusterMessage> message) {
     if (message != null && !message.getPublishingMember().localMember()) {
       ClusterMessage clusterMessage = message.getMessageObject();
-      if (DefaultGroovyMethods.asBoolean(clusterMessage)) {
+      if (clusterMessage != null) {
         receiveClusterMessage(clusterMessage);
       }
 
