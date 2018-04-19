@@ -6,8 +6,7 @@ import com.jtbdevelopment.games.players.Player;
 import org.springframework.data.annotation.Transient;
 
 /**
- * Date: 1/30/15
- * Time: 6:34 PM
+ * Date: 1/30/15 Time: 6:34 PM
  */
 public abstract class AbstractPlayerGameTrackingAttributes implements GameSpecificPlayerAttributes {
 

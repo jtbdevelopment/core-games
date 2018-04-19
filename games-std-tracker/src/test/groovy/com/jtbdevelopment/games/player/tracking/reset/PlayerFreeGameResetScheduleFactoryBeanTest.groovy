@@ -22,7 +22,7 @@ class PlayerFreeGameResetScheduleFactoryBeanTest extends GroovyTestCase {
                 }
         ] as PlayerFreeGameResetJobDetailFactoryBean
         PlayerFreeGameResetScheduleFactoryBean factoryBean = new PlayerFreeGameResetScheduleFactoryBean()
-        factoryBean.jobDetail = job
+        factoryBean.resetJobDetailFactoryBean = job
         factoryBean.setup()
         factoryBean.afterPropertiesSet()
         CronTriggerImpl impl = (CronTriggerImpl) factoryBean.object
