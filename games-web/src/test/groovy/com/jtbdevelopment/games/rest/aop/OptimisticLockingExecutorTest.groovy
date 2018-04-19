@@ -16,7 +16,7 @@ class OptimisticLockingExecutorTest extends GroovyTestCase {
         assert OptimisticLockingExecutor.class.
                 getMethod('doConcurrentOperation', [ProceedingJoinPoint.class] as Class[]).
                 getAnnotation(Around.class).
-                value() == 'com.jtbdevelopment.games.rest.aop.RestSystemArchitecture.inRestServices()'
+                value() == 'RestSystemArchitecture.inRestServices()'
     }
 
     void testValueAnnotations() {
