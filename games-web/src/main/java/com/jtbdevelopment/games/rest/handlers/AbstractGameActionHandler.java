@@ -94,12 +94,10 @@ public abstract class AbstractGameActionHandler<T, IMPL extends Game> extends
     return gameRepository.save(updated);
   }
 
-  @SuppressWarnings("GrMethodMayBeStatic")
   protected IMPL rotateTurnBasedGame(final IMPL game) {
     return game;
   }
 
-  @SuppressWarnings("GrMethodMayBeStatic")
   protected boolean requiresEligibilityCheck(final T param) {
     return false;
   }
