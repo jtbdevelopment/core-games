@@ -8,10 +8,14 @@ import com.jtbdevelopment.games.players.PlayerPayLevel
 import com.jtbdevelopment.games.publish.PlayerPublisher
 import com.jtbdevelopment.games.tracking.PlayerGameEligibility
 import com.jtbdevelopment.games.tracking.PlayerGameEligibilityResult
+import org.junit.Test
 import org.springframework.data.mongodb.core.FindAndModifyOptions
 import org.springframework.data.mongodb.core.MongoOperations
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update
+
+import static org.junit.Assert.assertFalse
+import static org.junit.Assert.assertNotNull
 
 /**
  * Date: 4/9/15
@@ -38,6 +42,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
         }
     }
 
+    @Test
     void testSystemPlayer() {
         boolean published = false
         MongoSystemPlayer input = new MongoSystemPlayer()
@@ -48,6 +53,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
         assertFalse published
     }
 
+    @Test
     void testRegularEligibilityWithPlayerHavingFreeGames() {
         int callNumber = 0
         boolean published = false
@@ -80,6 +86,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
         assert published
     }
 
+    @Test
     void testRegularEligibilityWithPlayerHavingNoFreeGamesButHasPaid() {
         int callNumber = 0
         boolean published = false
@@ -115,6 +122,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
         assert published
     }
 
+    @Test
     void testRegularEligibilityWithPlayerHavingNoGames() {
         int callNumber = 0
         boolean published = false
@@ -147,6 +155,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
         assertFalse published
     }
 
+    @Test
     void testPremiumEligibilityWithPlayerHavingFreeGames() {
         int callNumber = 0
         boolean published = false
@@ -179,6 +188,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
         assert published
     }
 
+    @Test
     void testPremiumEligibilityWithPlayerHavingNoFreeGamesButHasPaid() {
         int callNumber = 0
         boolean published = false
@@ -214,6 +224,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
         assert published
     }
 
+    @Test
     void testPremiumEligibilityWithPlayerHavingNoGames() {
         int callNumber = 0
         boolean published = false
@@ -246,6 +257,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
         assertFalse published
     }
 
+    @Test
     void testRevertingFreeGameUsage() {
         int callNumber = 0
         boolean published = false
@@ -278,6 +290,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
         assert published
     }
 
+    @Test
     void testRevertingPaidGameUsage() {
         int callNumber = 0
         boolean published = false
@@ -310,6 +323,7 @@ class PlayerGameTrackerTest extends MongoGameCoreTestCase {
         assert published
     }
 
+    @Test
     void testRevertingNotEligibleGameDoesNothing() {
         boolean published = false
         MongoPlayer input = (MongoPlayer) PONE.clone()
