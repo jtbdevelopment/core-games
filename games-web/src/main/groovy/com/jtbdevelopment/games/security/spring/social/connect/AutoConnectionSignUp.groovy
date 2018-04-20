@@ -30,7 +30,7 @@ class AutoConnectionSignUp implements ConnectionSignUp {
     String execute(final Connection<?> connection) {
         try {
             Player player = playerRepository.findBySourceAndSourceId(connection.key.providerId, connection.key.providerUserId)
-            if (player) {
+            if (player != null) {
                 return player.id
             } else {
                 Player p = playerFactory.newPlayer()

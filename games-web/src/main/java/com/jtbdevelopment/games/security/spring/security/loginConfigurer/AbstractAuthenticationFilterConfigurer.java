@@ -76,7 +76,6 @@ public abstract class AbstractAuthenticationFilterConfigurer extends AbstractHtt
 
   protected abstract RequestMatcher createLoginProcessingUrlMatcher(String loginProcessingUrl);
 
-  @SuppressWarnings("GroovyUnusedDeclaration")
   public final MobileAwareFormLoginConfigurer authenticationDetailsSource(
       AuthenticationDetailsSource<HttpServletRequest, ?> authenticationDetailsSource) {
     this.authenticationDetailsSource = authenticationDetailsSource;

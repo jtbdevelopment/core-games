@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.security.spring.security.cors;
 
-import groovy.transform.CompileStatic;
 import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -18,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
  *
  * No tests for same reason
  */
-@CompileStatic
 public class CorsFilter implements Filter {
 
   private CorsHeaderWriter headerWriter = new CorsHeaderWriter();

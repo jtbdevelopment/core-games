@@ -1,7 +1,6 @@
 package com.jtbdevelopment.games.security.spring.social;
 
 import com.jtbdevelopment.games.security.spring.social.filter.CustomSocialAuthenticationFilter;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -71,11 +70,11 @@ public class MobileAwareSocialConfigurer extends
 
 
         /*  Custom code begin */
-    if (DefaultGroovyMethods.asBoolean(authenticationFailureHandler)) {
+    if (authenticationFailureHandler != null) {
       filter.setAuthenticationFailureHandler(authenticationFailureHandler);
     }
 
-    if (DefaultGroovyMethods.asBoolean(authenticationSuccessHandler)) {
+    if (authenticationSuccessHandler != null) {
       filter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
     }
 
