@@ -74,4 +74,8 @@ abstract class GameCoreTestCase extends GroovyTestCase {
     protected static StringMPGame makeSimpleMPGame(final String id) {
         return new StringMPGame(id: id)
     }
+
+    protected static StringSPGame makeSimpleSPGame(final String id) {
+        return new StringSPGame(id: id)
+    }
 }

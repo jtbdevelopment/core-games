@@ -1,12 +1,12 @@
 package com.jtbdevelopment.games.rest.handlers
 
 import com.jtbdevelopment.games.GameCoreTestCase
-import com.jtbdevelopment.games.StringMaskedMPGame
+import com.jtbdevelopment.games.StringMaskedSPGame
 import com.jtbdevelopment.games.StringPlayer
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.dao.AbstractSinglePlayerGameRepository
 import com.jtbdevelopment.games.state.GamePhase
-import com.jtbdevelopment.games.state.MultiPlayerGame
+import com.jtbdevelopment.games.state.SinglePlayerGame
 import com.jtbdevelopment.games.state.masking.GameMasker
 import org.springframework.data.domain.PageRequest
 
@@ -20,12 +20,12 @@ class PlayerGamesFinderHandlerTest extends GameCoreTestCase {
     PlayerGamesFinderHandler handler = new PlayerGamesFinderHandler()
 
     void testTest() {
-        def game1 = makeSimpleMPGame("1")
-        def game2 = makeSimpleMPGame("2")
-        def game3 = makeSimpleMPGame("3")
-        def masked1 = new StringMaskedMPGame(id: "1")
-        def masked2 = new StringMaskedMPGame(id: "2")
-        def masked3 = new StringMaskedMPGame(id: "3")
+        def game1 = makeSimpleSPGame("1")
+        def game2 = makeSimpleSPGame("2")
+        def game3 = makeSimpleSPGame("3")
+        def masked1 = new StringMaskedSPGame(id: "1")
+        def masked2 = new StringMaskedSPGame(id: "2")
+        def masked3 = new StringMaskedSPGame(id: "3")
         def queryResults = [
                 (GamePhase.Challenged)      : [game1],
                 (GamePhase.Declined)        : [],
@@ -56,7 +56,7 @@ class PlayerGamesFinderHandlerTest extends GameCoreTestCase {
         ] as AbstractSinglePlayerGameRepository
         handler.gameMasker = [
                 maskGameForPlayer: {
-                    MultiPlayerGame game, StringPlayer player ->
+                    SinglePlayerGame game, StringPlayer player ->
                         assert player.is(PONE)
                         return maskResults[game]
                 }
