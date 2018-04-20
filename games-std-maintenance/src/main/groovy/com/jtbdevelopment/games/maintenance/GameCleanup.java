@@ -1,7 +1,6 @@
 package com.jtbdevelopment.games.maintenance;
 
 import com.jtbdevelopment.games.dao.AbstractGameRepository;
-import groovy.transform.CompileStatic;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import org.slf4j.Logger;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Component;
  * TODO - perhaps we should archive them in the future and/or move them to a compressed collection
  */
 @Component
-@CompileStatic
 public class GameCleanup {
 
   private static final Logger logger = LoggerFactory.getLogger(GameCleanup.class);

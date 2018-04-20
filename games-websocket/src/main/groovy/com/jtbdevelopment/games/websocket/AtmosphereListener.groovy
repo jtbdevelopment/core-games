@@ -60,19 +60,19 @@ class AtmosphereListener implements GameListener<Game>, PlayerListener {
     }
 
     @Autowired(required = false)
-    List<WebSocketPublicationListener> publicationListeners
+    protected List<WebSocketPublicationListener> publicationListeners
 
     @Autowired
-    GameMasker gameMasker
+    protected GameMasker gameMasker
 
     @Autowired
-    AbstractPlayerRepository<? extends Serializable, ? extends Player> playerRepository
+    protected AbstractPlayerRepository<? extends Serializable, ? extends Player> playerRepository
 
     @Autowired
-    StringToIDConverter<? extends Serializable> stringToIDConverter
+    protected StringToIDConverter<? extends Serializable> stringToIDConverter
 
     @Autowired
-    AtmosphereBroadcasterFactory broadcasterFactory
+    protected AtmosphereBroadcasterFactory broadcasterFactory
 
     @PostConstruct
     void setUp() {
@@ -192,7 +192,7 @@ class AtmosphereListener implements GameListener<Game>, PlayerListener {
         boolean status = false
         try {
             Broadcaster broadcaster = broadcasterFactory.broadcasterFactory.lookup(LiveFeedService.PATH_ROOT + player.idAsString)
-            if (broadcaster) {
+            if (broadcaster != null) {
                 broadcaster.broadcast(
                         new WebSocketMessage(
                                 messageType: WebSocketMessage.MessageType.Game,
