@@ -44,7 +44,6 @@
     <slf4j.version>1.7.25</slf4j.version>
     <junit.version>4.12</junit.version>
     <groovy.version>2.4.15</groovy.version>
-    <gpars.version>1.2.1</gpars.version>
     <flapdoodle.mongo.version>2.0.3</flapdoodle.mongo.version>
     <mockito.version>1.9.5</mockito.version>
   </properties>
@@ -227,11 +226,6 @@
       <artifactId>groovy-all</artifactId>
       <version>${groovy.version}</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.gpars</groupId>
-      <artifactId>gpars</artifactId>
-      <version>${gpars.version}</version>
     </dependency>
 
     <dependency>
