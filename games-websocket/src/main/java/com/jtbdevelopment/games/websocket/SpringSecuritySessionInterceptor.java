@@ -15,7 +15,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * Date: 12/18/14 Time: 6:53 PM
- *
  */
 public class SpringSecuritySessionInterceptor implements AtmosphereInterceptor {
 

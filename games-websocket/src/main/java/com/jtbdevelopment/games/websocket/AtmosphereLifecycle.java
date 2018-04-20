@@ -10,19 +10,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class AtmosphereLifecycle implements Lifecycle {
 
-    @Override
-    public void start() {
+  @Override
+  public void start() {
 
-    }
+  }
 
-    @Override
-    public void stop() {
-        Universe.framework().destroy();
-    }
+  @Override
+  public void stop() {
+    Universe.framework().destroy();
+  }
 
-    @Override
-    public boolean isRunning() {
-        return false;
-    }
+  @Override
+  public boolean isRunning() {
+    return false;
+  }
 
 }
