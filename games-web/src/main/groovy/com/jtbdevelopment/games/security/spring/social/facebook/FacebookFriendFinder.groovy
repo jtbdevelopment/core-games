@@ -3,7 +3,6 @@ package com.jtbdevelopment.games.security.spring.social.facebook
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.friendfinder.SourceBasedFriendFinder
-import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
@@ -19,14 +18,13 @@ import org.springframework.stereotype.Component
  */
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.INTERFACES)
-@CompileStatic
 class FacebookFriendFinder implements SourceBasedFriendFinder {
     @Autowired
-    AbstractPlayerRepository playerRepository
+    protected AbstractPlayerRepository playerRepository
 
     //  required = false - primarily for integration tests
     @Autowired(required = false)
-    Facebook facebook
+    protected Facebook facebook
 
     @Override
     boolean handlesSource(final String source) {
