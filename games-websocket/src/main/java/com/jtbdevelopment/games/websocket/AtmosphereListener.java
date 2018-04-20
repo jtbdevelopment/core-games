@@ -22,7 +22,6 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import org.atmosphere.cpr.Broadcaster;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,7 +159,7 @@ public class AtmosphereListener implements GameListener<Game>, PlayerListener {
   @Override
   public void gameChanged(final Game game, final Player initiatingPlayer,
       final boolean initiatingServer) {
-    if (DefaultGroovyMethods.asBoolean(broadcasterFactory.getBroadcasterFactory())) {
+    if (broadcasterFactory.getBroadcasterFactory() != null) {
       try {
         List<Player> players = (List<Player>) game.getAllPlayers().stream()
             .filter(x -> initiatingPlayer == null || !x.equals(initiatingPlayer)).collect(

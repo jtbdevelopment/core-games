@@ -41,7 +41,7 @@ public class PlayerGamesFinderHandler extends AbstractGameGetterHandler {
     final List<MaskedGame> result = new ArrayList<>();
     Arrays.stream(GamePhase.values()).forEach(phase -> {
       ZonedDateTime days = now.minusDays(phase.getHistoryCutoffDays());
-      List<MultiPlayerGame> games = ((AbstractMultiPlayerGameRepository) getGameRepository())
+      List<MultiPlayerGame> games = ((AbstractMultiPlayerGameRepository) gameRepository)
           .findByPlayersIdAndGamePhaseAndLastUpdateGreaterThan(player.getId(), phase,
               days.toInstant(), PAGE);
       result.addAll(games
