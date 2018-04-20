@@ -32,10 +32,10 @@ class PlayerCleanup {
     private static final int DAYS_BACK = 90
 
     @Autowired
-    AbstractPlayerRepository<? extends Serializable, ? extends Player<? extends Serializable>> playerRepository
+    protected AbstractPlayerRepository<? extends Serializable, ? extends Player<? extends Serializable>> playerRepository
 
     @Autowired(required = false)
-    AbstractUsersConnectionRepository usersConnectionRepository
+    protected AbstractUsersConnectionRepository usersConnectionRepository
 
     void deleteInactivePlayers() {
         def cutoff = ZonedDateTime.now(GMT).minusDays(DAYS_BACK)
