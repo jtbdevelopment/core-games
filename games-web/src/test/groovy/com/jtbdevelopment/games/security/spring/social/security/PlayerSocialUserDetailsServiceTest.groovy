@@ -1,5 +1,6 @@
 package com.jtbdevelopment.games.security.spring.social.security
 
+import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.dao.StringToIDConverter
 import com.jtbdevelopment.games.players.Player
@@ -11,7 +12,7 @@ import org.springframework.social.security.SocialUserDetails
  * Date: 1/7/15
  * Time: 6:51 PM
  */
-class PlayerSocialUserDetailsServiceTest extends GroovyTestCase {
+class PlayerSocialUserDetailsServiceTest extends GameCoreTestCase {
     PlayerSocialUserDetailsService service = new PlayerSocialUserDetailsService()
 
     @Override
@@ -26,13 +27,12 @@ class PlayerSocialUserDetailsServiceTest extends GroovyTestCase {
     }
 
     void testReturnsWrappedPlayerIfFoundAfterCallingLoginUpdated() {
-        String id = 'ANID'
-        Player player = [] as Player
-        Player playerCopy = [] as Player
+        Player player = makeSimplePlayer("4524")
+        Player playerCopy = makeSimplePlayer("4524")
         service.playerRepository = [
                 findById: {
                     String it ->
-                        assert it == id.reverse()
+                        assert it == player.idAsString.reverse()
                         return Optional.of(player)
                 }
         ] as AbstractPlayerRepository
@@ -44,7 +44,7 @@ class PlayerSocialUserDetailsServiceTest extends GroovyTestCase {
                 }
         ] as LastLoginUpdater
 
-        SocialUserDetails userDetails = service.loadUserByUserId(id)
+        SocialUserDetails userDetails = service.loadUserByUserId(player.id)
         assert userDetails instanceof PlayerUserDetails
         assert userDetails.sessionUser.is(playerCopy)
     }

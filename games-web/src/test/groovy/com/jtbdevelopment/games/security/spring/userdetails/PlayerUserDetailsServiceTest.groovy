@@ -6,6 +6,9 @@ import com.jtbdevelopment.games.players.ManualPlayer
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.security.spring.LastLoginUpdater
 import com.jtbdevelopment.games.security.spring.PlayerUserDetails
+import org.mockito.Mockito
+
+import static org.mockito.Mockito.when
 
 /**
  * Date: 12/24/14
@@ -15,39 +18,23 @@ class PlayerUserDetailsServiceTest extends GameCoreTestCase {
     PlayerUserDetailsService userDetailsService = new PlayerUserDetailsService()
 
     void testLoadUserByUsername() {
-        def repo = [
-                findBySourceAndSourceId: {
-                    String source, String username ->
-                        assert source == ManualPlayer.MANUAL_SOURCE
-                        assert username == PTWO.sourceId
-                        PTWO
-                }
-        ] as AbstractPlayerRepository<String>
-        userDetailsService.playerRepository = repo
-        Player updatedPlayer = [] as Player
-        userDetailsService.lastLoginUpdater = [
-                updatePlayerLastLogin: {
-                    Player p ->
-                        assert p.is(PTWO)
-                        return updatedPlayer
-                }
-        ] as LastLoginUpdater
+        AbstractPlayerRepository repository = Mockito.mock(AbstractPlayerRepository.class)
+        when(repository.findBySourceAndSourceId(ManualPlayer.MANUAL_SOURCE, PTWO.sourceId)).thenReturn(PTWO)
+        userDetailsService.playerRepository = repository
+        LastLoginUpdater updater = Mockito.mock(LastLoginUpdater.class)
+        Player updated = Mockito.mock(Player.class)
+        when(updater.updatePlayerLastLogin(PTWO)).thenReturn(updated)
+        userDetailsService.lastLoginUpdater = updater
 
         PlayerUserDetails d = userDetailsService.loadUserByUsername(PTWO.sourceId)
-        assert d.effectiveUser == updatedPlayer
-        assert d.sessionUser == updatedPlayer
+        assert d.effectiveUser == updated
+        assert d.sessionUser == updated
     }
 
     void testNoLoadUserByUsername() {
-        def repo = [
-                findBySourceAndSourceId: {
-                    String source, String username ->
-                        assert source == ManualPlayer.MANUAL_SOURCE
-                        assert username == PTWO.sourceId
-                        null
-                }
-        ] as AbstractPlayerRepository
-        userDetailsService.playerRepository = repo
+        AbstractPlayerRepository repository = Mockito.mock(AbstractPlayerRepository.class)
+        when(repository.findBySourceAndSourceId(ManualPlayer.MANUAL_SOURCE, PTWO.sourceId)).thenReturn(null)
+        userDetailsService.playerRepository = repository
 
         assert userDetailsService.loadUserByUsername(PTWO.sourceId) == null
     }

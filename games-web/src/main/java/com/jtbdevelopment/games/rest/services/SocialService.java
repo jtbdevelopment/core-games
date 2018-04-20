@@ -25,7 +25,7 @@ public class SocialService {
   @Path("apis")
   public Map<String, String> apiInfo() {
     Map<String, String> apis = new HashMap<String, String>() {{
-      if (facebookProperties != null && !facebookProperties.getWarnings()) {
+      if (facebookProperties != null && !facebookProperties.isWarnings()) {
         put("facebookAppId", facebookProperties.getClientID());
         put("facebookPermissions", facebookProperties.getPermissions());
       }
