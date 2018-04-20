@@ -20,7 +20,8 @@ import org.springframework.security.core.context.SecurityContextHolder
  */
 @CompileStatic
 class SpringSecuritySessionInterceptor implements AtmosphereInterceptor {
-    private static final Logger logger = LoggerFactory.getLogger(SpringSecuritySessionInterceptor.class)
+    private static
+    final Logger logger = LoggerFactory.getLogger(SpringSecuritySessionInterceptor.class)
     public static final String SPRING__SECURITY__CONTEXT = "SPRING_SECURITY_CONTEXT"
 
     @Override

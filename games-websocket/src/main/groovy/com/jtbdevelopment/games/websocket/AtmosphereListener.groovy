@@ -156,7 +156,8 @@ class AtmosphereListener implements GameListener<Game>, PlayerListener {
     }
 
     @Override
-    void gameChanged(final Game game, final Player initiatingPlayer, final boolean initiatingServer) {
+    void gameChanged(
+            final Game game, final Player initiatingPlayer, final boolean initiatingServer) {
         if (broadcasterFactory.broadcasterFactory) {
             try {
                 Collection<Player> players = game.allPlayers.findAll {
