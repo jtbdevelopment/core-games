@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class MongoPlayerFactory implements PlayerFactory<ObjectId> {
 
   @Autowired(required = false)
-  private GameSpecificPlayerAttributesFactory gameSpecificPlayerAttributesFactory;
+  protected GameSpecificPlayerAttributesFactory gameSpecificPlayerAttributesFactory;
 
   @Override
   public Player<ObjectId> newPlayer() {
