@@ -10,13 +10,13 @@ import com.jtbdevelopment.games.players.SystemPlayer
  * Time: 9:09 AM
  */
 abstract class GameCoreTestCase extends GroovyTestCase {
-    protected static final Player<String> PONE = makeSimplePlayer("1")
-    protected static final Player<String> PTWO = makeSimplePlayer("2")
-    protected static final Player<String> PTHREE = makeSimplePlayer("3")
-    protected static final Player<String> PFOUR = makeSimplePlayer("4")
-    protected static final Player<String> PFIVE = makeSimplePlayer("5")
-    protected static final Player<String> PINACTIVE1 = makeSimplePlayer("A1", true)
-    protected static final Player<String> PINACTIVE2 = makeSimplePlayer("A2", true)
+    public static final Player<String> PONE = makeSimplePlayer("1")
+    public static final Player<String> PTWO = makeSimplePlayer("2")
+    public static final Player<String> PTHREE = makeSimplePlayer("3")
+    public static final Player<String> PFOUR = makeSimplePlayer("4")
+    public static final Player<String> PFIVE = makeSimplePlayer("5")
+    public static final Player<String> PINACTIVE1 = makeSimplePlayer("A1", true)
+    public static final Player<String> PINACTIVE2 = makeSimplePlayer("A2", true)
 
     static class StringToStringConverter implements StringToIDConverter<String> {
         @Override
