@@ -25,7 +25,7 @@ abstract class GameCoreTestCase extends GroovyTestCase {
         }
     }
 
-    protected static Player<String> makeSimplePlayer(
+    public static Player<String> makeSimplePlayer(
             final String id, final boolean disabled = false) {
         return new StringPlayer(
                 id: id,
@@ -37,7 +37,7 @@ abstract class GameCoreTestCase extends GroovyTestCase {
                 profileUrl: "http://somewhere.com/profile/" + id)
     }
 
-    protected static ManualPlayer<String> makeSimpleManualPlayer(
+    public static ManualPlayer<String> makeSimpleManualPlayer(
             final String id,
             final String password = "",
             final boolean verified = true, final boolean disabled = false, final admin = false) {
