@@ -12,6 +12,6 @@ public class FailedToFindPlayersExceptionTest {
   public void testMessage() {
     Assert.assertEquals("Not all players in this game are valid anymore.",
         new FailedToFindPlayersException().getMessage());
-    }
+  }
 
 }

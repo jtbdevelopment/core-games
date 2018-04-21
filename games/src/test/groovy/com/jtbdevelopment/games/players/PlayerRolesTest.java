@@ -8,14 +8,14 @@ import org.junit.Test;
  */
 public class PlayerRolesTest {
 
-    @Test
-    public void testPlayer() {
-        Assert.assertEquals("ROLE_Player", PlayerRoles.PLAYER);
-    }
+  @Test
+  public void testPlayer() {
+    Assert.assertEquals("ROLE_Player", PlayerRoles.PLAYER);
+  }
 
-    @Test
-    public void testAdmin() {
-        Assert.assertEquals("ROLE_Admin", PlayerRoles.ADMIN);
-    }
+  @Test
+  public void testAdmin() {
+    Assert.assertEquals("ROLE_Admin", PlayerRoles.ADMIN);
+  }
 
 }

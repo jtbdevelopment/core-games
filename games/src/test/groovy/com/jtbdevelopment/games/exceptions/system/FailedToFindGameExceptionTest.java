@@ -11,6 +11,6 @@ public class FailedToFindGameExceptionTest {
   @Test
   public void testMessage() {
     Assert.assertEquals("Was not able to load game.", new FailedToFindGameException().getMessage());
-    }
+  }
 
 }

@@ -12,6 +12,6 @@ public class GameExceptionTest {
   public void testMessage() {
     String m = "message";
     Assert.assertEquals(m, new GameException(m).getMessage());
-    }
+  }
 
 }

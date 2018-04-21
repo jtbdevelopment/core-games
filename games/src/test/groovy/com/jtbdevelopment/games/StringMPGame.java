@@ -7,32 +7,32 @@ import com.jtbdevelopment.games.state.AbstractMultiPlayerGame;
  */
 public class StringMPGame extends AbstractMultiPlayerGame<String, Object> implements Cloneable {
 
-    private String id;
-    private String previousId;
+  private String id;
+  private String previousId;
 
-    @Override
-    public String getIdAsString() {
-        return id;
-    }
+  @Override
+  public String getIdAsString() {
+    return id;
+  }
 
-    @Override
-    public String getPreviousIdAsString() {
-        return previousId;
-    }
+  @Override
+  public String getPreviousIdAsString() {
+    return previousId;
+  }
 
-    public String getId() {
-        return id;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public String getPreviousId() {
-        return previousId;
-    }
+  public String getPreviousId() {
+    return previousId;
+  }
 
-    public void setPreviousId(String previousId) {
-        this.previousId = previousId;
-    }
+  public void setPreviousId(String previousId) {
+    this.previousId = previousId;
+  }
 }

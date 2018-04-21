@@ -9,37 +9,37 @@ import java.util.List;
  */
 public class StringGame extends AbstractGame<String, Object> {
 
-    private String id;
-    private String previousId;
+  private String id;
+  private String previousId;
 
-    @Override
-    public String getIdAsString() {
-        return id;
-    }
+  @Override
+  public String getIdAsString() {
+    return id;
+  }
 
-    @Override
-    public String getPreviousIdAsString() {
-        return previousId;
-    }
+  @Override
+  public String getPreviousIdAsString() {
+    return previousId;
+  }
 
-    @Override
-    public List<Player<String>> getAllPlayers() {
-        return null;
-    }
+  @Override
+  public List<Player<String>> getAllPlayers() {
+    return null;
+  }
 
-    public String getId() {
-        return id;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public String getPreviousId() {
-        return previousId;
-    }
+  public String getPreviousId() {
+    return previousId;
+  }
 
-    public void setPreviousId(String previousId) {
-        this.previousId = previousId;
-    }
+  public void setPreviousId(String previousId) {
+    this.previousId = previousId;
+  }
 }
