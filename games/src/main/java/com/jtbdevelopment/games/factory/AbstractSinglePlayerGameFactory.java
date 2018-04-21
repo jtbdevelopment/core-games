@@ -38,6 +38,7 @@ public abstract class AbstractSinglePlayerGameFactory<IMPL extends SinglePlayerG
     game.setVersion(null);
     game.getFeatures().addAll(features);
     game.setGamePhase(GamePhase.Setup);
+    game.setRound(1);
     return game;
   }
 
