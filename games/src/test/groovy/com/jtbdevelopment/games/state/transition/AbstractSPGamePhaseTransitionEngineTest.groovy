@@ -4,6 +4,7 @@ import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.StringSPGame
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.scoring.GameScorer
+import org.junit.Test
 
 import static org.mockito.Mockito.mock
 import static org.mockito.Mockito.when
@@ -21,73 +22,71 @@ class AbstractSPGamePhaseTransitionEngineTest extends GameCoreTestCase {
     }
     TestSPGamePhaseTransitionEngine transitionEngine = new TestSPGamePhaseTransitionEngine(null)
 
-
+    @Test
     void testSinglePlayerChallengeDoesNothing() {
-        StringSPGame game = new StringSPGame(
-                gamePhase: GamePhase.Challenged
-        )
+        StringSPGame game = new StringSPGame()
+        game.setGamePhase(GamePhase.Challenged)
 
-        assert game.is(transitionEngine.evaluateGame(game))
-        assert game.gamePhase == GamePhase.Challenged
+        assertSame(game, transitionEngine.evaluateGame(game))
+        assertEquals game.gamePhase, GamePhase.Challenged
     }
 
 
+    @Test
     void testSetup() {
-        StringSPGame game = new StringSPGame(
-                gamePhase: GamePhase.Setup,
-        )
+        StringSPGame game = new StringSPGame()
+        game.setGamePhase(GamePhase.Setup)
 
-        assert game.is(transitionEngine.evaluateGame(game))
-        assert GamePhase.Setup == game.gamePhase
+        assertSame(game, transitionEngine.evaluateGame(game))
+        assertEquals GamePhase.Setup, game.gamePhase
     }
 
-
+    @Test
     void testPlayingToPlaying() {
-        StringSPGame game = new StringSPGame(
-                gamePhase: GamePhase.Playing,
-                features: [] as Set,
-        )
+        StringSPGame game = new StringSPGame()
+        game.setGamePhase(GamePhase.Playing)
 
-        assert game.is(transitionEngine.evaluateGame(game))
-        assert GamePhase.Playing == game.gamePhase
+        assertSame(game, transitionEngine.evaluateGame(game))
+        assertEquals GamePhase.Playing, game.gamePhase
     }
 
+    @Test
     void testRematchToRematch() {
-        StringSPGame game = new StringSPGame(id: '1', gamePhase: GamePhase.RoundOver)
+        StringSPGame game = new StringSPGame()
+        game.setGamePhase(GamePhase.RoundOver)
+        game.setId("game")
         StringSPGame scoredGame = new StringSPGame(id: '1', gamePhase: GamePhase.RoundOver)
+        scoredGame.setGamePhase(GamePhase.RoundOver)
+        scoredGame.setId("scored")
         GameScorer scorer = mock(GameScorer.class)
         when(scorer.scoreGame(game)).thenReturn(scoredGame)
         transitionEngine = new TestSPGamePhaseTransitionEngine(scorer)
-        assert scoredGame.is(transitionEngine.evaluateGame(game))
-        assert GamePhase.RoundOver == scoredGame.gamePhase
+        assertSame(scoredGame, transitionEngine.evaluateGame(game))
+        assertEquals GamePhase.RoundOver, scoredGame.gamePhase
     }
 
-    /*  TODO
-    void testRematchToRematched() {
-        assert transitionEngine.gameScorer == null
-
-        StringSPGame game = new StringSPGame(gamePhase: GamePhase.RoundOver, rematchTimestamp: ZonedDateTime.now())
-        assert game.is(transitionEngine.evaluateGame(game))
-        assert game.gamePhase == GamePhase.NextRoundStarted
-    }
-    */
-
+    @Test
     void testRematchedToRematched() {
-        StringSPGame game = new StringSPGame(gamePhase: GamePhase.NextRoundStarted)
-        assert game.is(transitionEngine.evaluateGame(game))
-        assert GamePhase.NextRoundStarted == game.gamePhase
+        StringSPGame game = new StringSPGame()
+        game.setGamePhase(GamePhase.NextRoundStarted)
+        assertSame(game, transitionEngine.evaluateGame(game))
+        assertEquals GamePhase.NextRoundStarted, game.gamePhase
     }
 
 
+    @Test
     void testDeclinedToDeclined() {
-        StringSPGame game = new StringSPGame(gamePhase: GamePhase.Declined)
-        assert game.is(transitionEngine.evaluateGame(game))
-        assert GamePhase.Declined == game.gamePhase
+        StringSPGame game = new StringSPGame()
+        game.setGamePhase(GamePhase.Declined)
+        assertSame(game, transitionEngine.evaluateGame(game))
+        assertEquals GamePhase.Declined, game.gamePhase
     }
 
+    @Test
     void testQuitToQuit() {
-        StringSPGame game = new StringSPGame(gamePhase: GamePhase.Quit)
-        assert game.is(transitionEngine.evaluateGame(game))
-        assert GamePhase.Quit == game.gamePhase
+        StringSPGame game = new StringSPGame()
+        game.setGamePhase(GamePhase.Quit)
+        assertSame(game, transitionEngine.evaluateGame(game))
+        assertEquals GamePhase.Quit, game.gamePhase
     }
 }

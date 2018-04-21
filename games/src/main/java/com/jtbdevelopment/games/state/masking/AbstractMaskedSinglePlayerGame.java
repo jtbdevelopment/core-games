@@ -1,8 +1,7 @@
 package com.jtbdevelopment.games.state.masking;
 
 /**
- * Date: 2/18/15
- * Time: 6:55 PM
+ * Date: 2/18/15 Time: 6:55 PM
  */
 public abstract class AbstractMaskedSinglePlayerGame<FEATURES> extends
     AbstractMaskedGame<FEATURES> implements MaskedSinglePlayerGame<FEATURES> {

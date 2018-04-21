@@ -5,8 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Date: 2/18/15
- * Time: 6:55 PM
+ * Date: 2/18/15 Time: 6:55 PM
  */
 public abstract class AbstractMaskedMultiPlayerGame<FEATURES> extends
     AbstractMaskedGame<FEATURES> implements MaskedMultiPlayerGame<FEATURES> {

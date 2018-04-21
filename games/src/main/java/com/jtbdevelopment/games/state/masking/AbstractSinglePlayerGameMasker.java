@@ -7,8 +7,7 @@ import java.time.Instant;
 import java.util.Map;
 
 /**
- * Date: 2/19/15
- * Time: 7:20 AM
+ * Date: 2/19/15 Time: 7:20 AM
  */
 public abstract class AbstractSinglePlayerGameMasker<ID extends Serializable, FEATURES, U extends SinglePlayerGame<ID, Instant, FEATURES>, M extends MaskedSinglePlayerGame<FEATURES>> extends
     AbstractGameMasker<ID, FEATURES, U, M> implements GameMasker<ID, U, M> {

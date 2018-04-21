@@ -10,8 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Date: 2/18/15
- * Time: 6:55 PM
+ * Date: 2/18/15 Time: 6:55 PM
  */
 public abstract class AbstractMaskedGame<FEATURES> implements MaskedGame<FEATURES> {
 

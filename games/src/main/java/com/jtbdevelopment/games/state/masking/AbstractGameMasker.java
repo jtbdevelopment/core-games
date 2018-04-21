@@ -9,8 +9,7 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 /**
- * Date: 2/19/15
- * Time: 7:20 AM
+ * Date: 2/19/15 Time: 7:20 AM
  */
 public abstract class AbstractGameMasker<ID extends Serializable, FEATURES, U extends Game<ID, Instant, FEATURES>, M extends MaskedGame<FEATURES>> implements
     GameMasker<ID, U, M> {
