@@ -1,14 +1,16 @@
 package com.jtbdevelopment.games.players
 
 import com.jtbdevelopment.games.GameCoreTestCase
+import org.junit.Test
 
 /**
  * Date: 11/26/14
  * Time: 9:00 PM
  */
 class PlayerMaskerTest extends GameCoreTestCase {
-    PlayerMasker masker = new PlayerMasker();
+    private PlayerMasker masker = new PlayerMasker();
 
+    @Test
     void testMaskFriendsV2() {
         assert masker.maskFriendsV2([PONE, PTWO, PTHREE] as Set) == [
                 [('md5'): PONE.md5, ('displayName'): PONE.displayName],
