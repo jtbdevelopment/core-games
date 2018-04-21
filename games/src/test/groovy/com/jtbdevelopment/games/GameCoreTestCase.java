@@ -5,7 +5,6 @@ import com.jtbdevelopment.games.players.ManualPlayer;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.players.SystemPlayer;
 import groovy.util.GroovyTestCase;
-import org.codehaus.groovy.runtime.StringGroovyMethods;
 
 /**
  * Date: 11/8/14 Time: 9:09 AM
@@ -118,7 +117,10 @@ public abstract class GameCoreTestCase extends GroovyTestCase {
 
     @Override
     public String convert(final String source) {
-      return StringGroovyMethods.reverse(source);
+      if (source == null) {
+        return source;
+      }
+      return new StringBuilder(source).reverse().toString();
     }
 
   }
