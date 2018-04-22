@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.rest
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.rest.handlers.PlayerGamesFinderHandler
 import groovy.transform.TypeChecked
 
@@ -9,11 +8,13 @@ import javax.ws.rs.Path
 import javax.ws.rs.Produces
 import javax.ws.rs.core.MediaType
 
+import static com.jtbdevelopment.games.GameCoreTestCase.makeSimpleMPGame
+
 /**
  * Date: 4/8/2015
  * Time: 10:28 PM
  */
-class AbstractSinglePlayerServicesTest extends GameCoreTestCase {
+class AbstractSinglePlayerServicesTest extends GroovyTestCase {
     AbstractSinglePlayerServices services = new AbstractSinglePlayerServices() {}
     private static final String PID = "PID-122"
 

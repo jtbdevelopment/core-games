@@ -1,17 +1,18 @@
 package com.jtbdevelopment.games.rest.handlers
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractGameRepository
 import com.jtbdevelopment.games.exceptions.input.PlayerNotPartOfGameException
 import com.jtbdevelopment.games.exceptions.system.FailedToFindGameException
 import com.jtbdevelopment.games.stringimpl.StringMPGame
 import com.jtbdevelopment.games.stringimpl.StringSPGame
 
+import static com.jtbdevelopment.games.GameCoreTestCase.*
+
 /**
  * Date: 3/27/15
  * Time: 6:45 PM
  */
-class AbstractGameGetterHandlerTest extends GameCoreTestCase {
+class AbstractGameGetterHandlerTest extends GroovyTestCase {
     AbstractGameGetterHandler handler = new AbstractGameGetterHandler() {}
 
     void testValidatePlayerForMultiPlayerGame() {

@@ -3,7 +3,6 @@ package com.jtbdevelopment.games.push.notifications
 import com.hazelcast.core.EntryEvent
 import com.hazelcast.core.HazelcastInstance
 import com.hazelcast.core.IMap
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.Player
@@ -18,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap
  * Date: 10/11/2015
  * Time: 8:36 PM
  */
-class PushNotifierFilterTest extends GameCoreTestCase {
+class PushNotifierFilterTest extends GroovyTestCase {
     PushNotifierFilter filter = new PushNotifierFilter()
 
     void testSetup() {

@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.publish.cluster
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.events.GamePublisher
@@ -10,11 +9,13 @@ import com.jtbdevelopment.games.state.Game
 import com.jtbdevelopment.games.state.MultiPlayerGame
 import com.jtbdevelopment.games.stringimpl.StringToStringConverter
 
+import static com.jtbdevelopment.games.GameCoreTestCase.*
+
 /**
  * Date: 2/21/15
  * Time: 6:24 PM
  */
-class AbstractUpdatesFromClusterListenerTest extends GameCoreTestCase {
+class AbstractUpdatesFromClusterListenerTest extends GroovyTestCase {
     private AbstractUpdatesFromClusterListener listener = new AbstractUpdatesFromClusterListener() {}
 
     @Override

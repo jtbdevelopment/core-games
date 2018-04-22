@@ -1,14 +1,15 @@
 package com.jtbdevelopment.games.rest.handlers
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.exceptions.system.FailedToFindPlayersException
+
+import static com.jtbdevelopment.games.GameCoreTestCase.*
 
 /**
  * Date: 11/10/14
  * Time: 6:56 PM
  */
-class AbstractHandlerTest extends GameCoreTestCase {
+class AbstractHandlerTest extends GroovyTestCase {
     private class TestHandler extends AbstractHandler {
 
     }

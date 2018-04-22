@@ -3,7 +3,6 @@ package com.jtbdevelopment.games.datagrid.hazelcast.cluster
 import com.hazelcast.core.Hazelcast
 import com.hazelcast.core.HazelcastInstance
 import com.hazelcast.core.ITopic
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.dao.StringToIDConverter
@@ -17,11 +16,13 @@ import org.springframework.test.util.ReflectionTestUtils
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
+import static com.jtbdevelopment.games.GameCoreTestCase.*
+
 /**
  * Date: 3/4/15
  * Time: 7:36 AM
  */
-class UpdatesFromClusterListenerTest extends GameCoreTestCase {
+class UpdatesFromClusterListenerTest extends GroovyTestCase {
     static HazelcastInstance hazelcastInstance1 = Hazelcast.newHazelcastInstance()
     static HazelcastInstance hazelcastInstance2 = Hazelcast.newHazelcastInstance()
 

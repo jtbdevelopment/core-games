@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.publish
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.state.Game
 import com.jtbdevelopment.games.state.MultiPlayerGame
@@ -10,11 +9,13 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
+import static com.jtbdevelopment.games.GameCoreTestCase.*
+
 /**
  * Date: 12/8/14
  * Time: 7:11 PM
  */
-class GamePublisherImplTest extends GameCoreTestCase {
+class GamePublisherImplTest extends GroovyTestCase {
     GamePublisherImpl publisher = new GamePublisherImpl()
 
     void testCreatesExecutorService() {

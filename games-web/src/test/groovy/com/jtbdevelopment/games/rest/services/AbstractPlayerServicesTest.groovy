@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.rest.services
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.PlayerRoles
@@ -19,6 +18,7 @@ import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
+import static com.jtbdevelopment.games.GameCoreTestCase.*
 import static org.mockito.Mockito.mock
 import static org.mockito.Mockito.when
 
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when
  * Date: 11/15/2014
  * Time: 12:02 PM
  */
-class AbstractPlayerServicesTest extends GameCoreTestCase {
+class AbstractPlayerServicesTest extends GroovyTestCase {
     AbstractPlayerServices playerServices = new AbstractPlayerServices() {}
 
     void testValidPlayer() {

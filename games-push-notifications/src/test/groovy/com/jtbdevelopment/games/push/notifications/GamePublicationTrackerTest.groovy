@@ -1,12 +1,11 @@
 package com.jtbdevelopment.games.push.notifications
 
-import com.jtbdevelopment.games.GameCoreTestCase
 
 /**
  * Date: 10/30/15
  * Time: 6:26 PM
  */
-class GamePublicationTrackerTest extends GameCoreTestCase {
+class GamePublicationTrackerTest extends GroovyTestCase {
     GamePublicationTracker t1 = new GamePublicationTracker(gid: "GID1", pid: "PID1")
     GamePublicationTracker t2 = new GamePublicationTracker(gid: "GID1", pid: "PID1")
     GamePublicationTracker t3 = new GamePublicationTracker(gid: "GID2", pid: "PID1")

@@ -1,15 +1,16 @@
 package com.jtbdevelopment.games.security.spring
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.players.ManualPlayer
 import com.jtbdevelopment.games.players.PlayerRoles
 import org.springframework.security.core.authority.SimpleGrantedAuthority
+
+import static com.jtbdevelopment.games.GameCoreTestCase.*
 
 /**
  * Date: 12/24/14
  * Time: 3:06 PM
  */
-class PlayerUserDetailsTest extends GameCoreTestCase {
+class PlayerUserDetailsTest extends GroovyTestCase {
     static ManualPlayer adminPlayer = makeSimpleManualPlayer("M1", "YAR!", true, false, true)
     static ManualPlayer manualPlayer = makeSimpleManualPlayer("M2", "YAR!", true, false, false)
     static ManualPlayer nonVerifiedPlayer = makeSimpleManualPlayer("M2", "YAR!", false, false, false)

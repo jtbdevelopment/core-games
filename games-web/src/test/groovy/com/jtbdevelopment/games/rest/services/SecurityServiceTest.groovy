@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.rest.services
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.PlayerRoles
 import com.jtbdevelopment.games.security.SessionUserInfo
@@ -16,11 +15,14 @@ import javax.ws.rs.Produces
 import javax.ws.rs.core.MediaType
 import java.lang.reflect.Method
 
+import static com.jtbdevelopment.games.GameCoreTestCase.PONE
+import static com.jtbdevelopment.games.GameCoreTestCase.PTWO
+
 /**
  * Date: 12/24/14
  * Time: 2:57 PM
  */
-class SecurityServiceTest extends GameCoreTestCase {
+class SecurityServiceTest extends GroovyTestCase {
     SecurityService service = new SecurityService()
 
     void testClassAnnotations() {

@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.rest.handlers
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.state.GamePhase
@@ -12,11 +11,14 @@ import org.springframework.data.domain.PageRequest
 
 import java.time.Instant
 
+import static com.jtbdevelopment.games.GameCoreTestCase.PONE
+import static com.jtbdevelopment.games.GameCoreTestCase.makeSimpleMPGame
+
 /**
  * Date: 12/4/2014
  * Time: 9:59 PM
  */
-class PlayerGamesFinderHandlerTest extends GameCoreTestCase {
+class PlayerGamesFinderHandlerTest extends GroovyTestCase {
     PlayerGamesFinderHandler handler = new PlayerGamesFinderHandler()
 
     void testTest() {

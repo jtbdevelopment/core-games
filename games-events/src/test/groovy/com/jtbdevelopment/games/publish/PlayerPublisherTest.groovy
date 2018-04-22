@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.publish
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.players.Player
 
 import java.util.concurrent.Callable
@@ -8,11 +7,14 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
+import static com.jtbdevelopment.games.GameCoreTestCase.PONE
+import static com.jtbdevelopment.games.GameCoreTestCase.PTWO
+
 /**
  * Date: 2/6/15
  * Time: 7:02 PM
  */
-class PlayerPublisherTest extends GameCoreTestCase {
+class PlayerPublisherTest extends GroovyTestCase {
     PlayerPublisher publisher = new PlayerPublisher()
 
     void testCreatesExecutorService() {

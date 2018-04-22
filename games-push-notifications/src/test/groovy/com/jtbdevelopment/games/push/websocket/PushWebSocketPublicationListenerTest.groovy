@@ -3,7 +3,6 @@ package com.jtbdevelopment.games.push.websocket
 import com.hazelcast.core.HazelcastInstance
 import com.hazelcast.core.IMap
 import com.hazelcast.map.listener.MapListener
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.notifications.RegisteredDevice
 import com.jtbdevelopment.games.push.PushProperties
@@ -21,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap
  * Date: 10/11/2015
  * Time: 8:59 PM
  */
-class PushWebSocketPublicationListenerTest extends GameCoreTestCase {
+class PushWebSocketPublicationListenerTest extends GroovyTestCase {
     PushWebSocketPublicationListener listener = new PushWebSocketPublicationListener()
 
     @Override

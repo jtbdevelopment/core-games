@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.rest.handlers
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.events.GamePublisher
@@ -18,11 +17,13 @@ import com.jtbdevelopment.games.tracking.GameEligibilityTracker
 import com.jtbdevelopment.games.tracking.PlayerGameEligibility
 import com.jtbdevelopment.games.tracking.PlayerGameEligibilityResult
 
+import static com.jtbdevelopment.games.GameCoreTestCase.*
+
 /**
  * Date: 11/10/14
  * Time: 7:06 PM
  */
-class AbstractGameActionHandlerTest extends GameCoreTestCase {
+class AbstractGameActionHandlerTest extends GroovyTestCase {
     private static final String testParam = "TESTPARAM"
     private StringMPGame handledGame = new StringMPGame()
     private final StringMPGame gameParam = new StringMPGame()

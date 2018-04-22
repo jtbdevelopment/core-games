@@ -1,7 +1,6 @@
 package com.jtbdevelopment.games.maintenance
 
 import com.jtbdevelopment.core.spring.social.dao.AbstractUsersConnectionRepository
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.stringimpl.StringManualPlayer
 import com.jtbdevelopment.games.stringimpl.StringSystemPlayer
@@ -13,6 +12,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
+import static com.jtbdevelopment.games.GameCoreTestCase.*
 import static org.mockito.Mockito.mock
 import static org.mockito.Mockito.when
 
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when
  * Date: 8/18/15
  * Time: 10:50 PM
  */
-class PlayerCleanupTest extends GameCoreTestCase {
+class PlayerCleanupTest extends GroovyTestCase {
     PlayerCleanup playerCleanup = new PlayerCleanup()
 
     StringSystemPlayer system = makeSimpleSystemPlayer("system 1")

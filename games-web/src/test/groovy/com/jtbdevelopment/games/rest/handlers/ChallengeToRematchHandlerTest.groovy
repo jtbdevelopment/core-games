@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.rest.handlers
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.events.GamePublisher
 import com.jtbdevelopment.games.factory.AbstractMultiPlayerGameFactory
@@ -15,6 +14,7 @@ import org.mockito.stubbing.Answer
 
 import java.time.Instant
 
+import static com.jtbdevelopment.games.GameCoreTestCase.PONE
 import static org.mockito.Mockito.mock
 import static org.mockito.Mockito.when
 
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when
  * Date: 4/8/2015
  * Time: 10:16 PM
  */
-class ChallengeToRematchHandlerTest extends GameCoreTestCase {
+class ChallengeToRematchHandlerTest extends GroovyTestCase {
     ChallengeToRematchHandler handler = new ChallengeToRematchHandler() {}
 
     void testEligibilityCheck() {

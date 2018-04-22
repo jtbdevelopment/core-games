@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.security.spring.userdetails
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.ManualPlayer
 import com.jtbdevelopment.games.players.Player
@@ -8,13 +7,14 @@ import com.jtbdevelopment.games.security.spring.LastLoginUpdater
 import com.jtbdevelopment.games.security.spring.PlayerUserDetails
 import org.mockito.Mockito
 
+import static com.jtbdevelopment.games.GameCoreTestCase.PTWO
 import static org.mockito.Mockito.when
 
 /**
  * Date: 12/24/14
  * Time: 4:48 PM
  */
-class PlayerUserDetailsServiceTest extends GameCoreTestCase {
+class PlayerUserDetailsServiceTest extends GroovyTestCase {
     PlayerUserDetailsService userDetailsService = new PlayerUserDetailsService()
 
     void testLoadUserByUsername() {

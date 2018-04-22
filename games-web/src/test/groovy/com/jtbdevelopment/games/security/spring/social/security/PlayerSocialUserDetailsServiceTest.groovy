@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.security.spring.social.security
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.dao.StringToIDConverter
 import com.jtbdevelopment.games.players.Player
@@ -8,11 +7,13 @@ import com.jtbdevelopment.games.security.spring.LastLoginUpdater
 import com.jtbdevelopment.games.security.spring.PlayerUserDetails
 import org.springframework.social.security.SocialUserDetails
 
+import static com.jtbdevelopment.games.GameCoreTestCase.makeSimplePlayer
+
 /**
  * Date: 1/7/15
  * Time: 6:51 PM
  */
-class PlayerSocialUserDetailsServiceTest extends GameCoreTestCase {
+class PlayerSocialUserDetailsServiceTest extends GroovyTestCase {
     PlayerSocialUserDetailsService service = new PlayerSocialUserDetailsService()
 
     @Override

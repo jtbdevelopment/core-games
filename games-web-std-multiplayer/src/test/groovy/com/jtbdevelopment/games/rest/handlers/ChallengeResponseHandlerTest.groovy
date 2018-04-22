@@ -1,16 +1,17 @@
 package com.jtbdevelopment.games.rest.handlers
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.exceptions.input.TooLateToRespondToChallengeException
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.PlayerState
 import com.jtbdevelopment.games.stringimpl.StringMPGame
 
+import static com.jtbdevelopment.games.GameCoreTestCase.*
+
 /**
  * Date: 11/9/2014
  * Time: 8:21 PM
  */
-class ChallengeResponseHandlerTest extends GameCoreTestCase {
+class ChallengeResponseHandlerTest extends GroovyTestCase {
     ChallengeResponseHandler handler = new ChallengeResponseHandler()
 
     public void testRequiresEligibilityForAcceptButNotOtherStates() {

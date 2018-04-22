@@ -1,16 +1,17 @@
 package com.jtbdevelopment.games.security.spring.social.facebook
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.ManualPlayer
 import com.jtbdevelopment.games.players.friendfinder.SourceBasedFriendFinder
 import org.springframework.social.facebook.api.*
 
+import static com.jtbdevelopment.games.GameCoreTestCase.*
+
 /**
  * Date: 12/24/14
  * Time: 2:51 PM
  */
-class FacebookFriendFinderTest extends GameCoreTestCase {
+class FacebookFriendFinderTest extends GroovyTestCase {
     FacebookFriendFinder friendFinder = new FacebookFriendFinder()
 
     void testHandlesSourceWhenFacebookAvailableAndIsSourceFacebook() {

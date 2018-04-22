@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.rest.services
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.PlayerRoles
 import com.jtbdevelopment.games.security.SessionUserInfo
@@ -16,11 +15,13 @@ import javax.ws.rs.Path
 import javax.ws.rs.Produces
 import javax.ws.rs.core.MediaType
 
+import static com.jtbdevelopment.games.GameCoreTestCase.PONE
+
 /**
  * Date: 11/15/2014
  * Time: 11:28 AM
  */
-class AbstractPlayerGatewayServiceTest extends GameCoreTestCase {
+class AbstractPlayerGatewayServiceTest extends GroovyTestCase {
     AbstractPlayerGatewayService playerGatewayService = new AbstractPlayerGatewayService() {}
 
     void testClassAnnotations() {

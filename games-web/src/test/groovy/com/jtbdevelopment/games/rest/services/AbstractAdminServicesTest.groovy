@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.rest.services
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.Player
@@ -22,11 +21,13 @@ import javax.ws.rs.core.Response
 import java.lang.reflect.Method
 import java.time.Instant
 
+import static com.jtbdevelopment.games.GameCoreTestCase.*
+
 /**
  * Date: 12/24/14
  * Time: 2:23 PM
  */
-class AbstractAdminServicesTest extends GameCoreTestCase {
+class AbstractAdminServicesTest extends GroovyTestCase {
     AbstractAdminServices adminServices = new AbstractAdminServices() {}
 
     void testClassAnnotations() {

@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.security.spring
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.stringimpl.StringPlayer
 
@@ -10,7 +9,7 @@ import java.time.Instant
  * Date: 8/16/2015
  * Time: 8:12 PM
  */
-class LastLoginUpdaterTest extends GameCoreTestCase {
+class LastLoginUpdaterTest extends GroovyTestCase {
     LastLoginUpdater updater = new LastLoginUpdater()
     Instant now = Instant.now()
 

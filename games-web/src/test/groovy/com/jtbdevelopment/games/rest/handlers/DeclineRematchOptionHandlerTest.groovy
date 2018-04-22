@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.rest.handlers
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.rest.exceptions.GameIsNotAvailableToRematchException
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.stringimpl.StringMPGame
@@ -9,7 +8,7 @@ import com.jtbdevelopment.games.stringimpl.StringMPGame
  * Date: 8/23/15
  * Time: 5:17 PM
  */
-class DeclineRematchOptionHandlerTest extends GameCoreTestCase {
+class DeclineRematchOptionHandlerTest extends GroovyTestCase {
     DeclineRematchOptionHandler handler = new DeclineRematchOptionHandler()
 
     void testThrowsExceptionIfGameNotInRoundOverPhase() {

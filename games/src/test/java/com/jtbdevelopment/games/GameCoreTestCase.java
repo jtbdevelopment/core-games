@@ -9,12 +9,11 @@ import com.jtbdevelopment.games.stringimpl.StringManualPlayer;
 import com.jtbdevelopment.games.stringimpl.StringPlayer;
 import com.jtbdevelopment.games.stringimpl.StringSPGame;
 import com.jtbdevelopment.games.stringimpl.StringSystemPlayer;
-import groovy.util.GroovyTestCase;
 
 /**
  * Date: 11/8/14 Time: 9:09 AM
  */
-public abstract class GameCoreTestCase extends GroovyTestCase {
+public abstract class GameCoreTestCase {
 
   public static final Player<String> PONE = makeSimplePlayer("1");
   public static final Player<String> PTWO = makeSimplePlayer("2");

@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.websocket
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.dao.StringToIDConverter
 import com.jtbdevelopment.games.players.Player
@@ -14,11 +13,13 @@ import org.atmosphere.cpr.BroadcasterFactory
 import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.TimeUnit
 
+import static com.jtbdevelopment.games.GameCoreTestCase.*
+
 /**
  * Date: 12/22/14
  * Time: 7:18 PM
  */
-class AtmosphereListenerTest extends GameCoreTestCase {
+class AtmosphereListenerTest extends GroovyTestCase {
     AtmosphereListener listener
 
     //  Initiating Server Flag irrelevant here

@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.push.rest
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.PlayerRoles
@@ -19,11 +18,13 @@ import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import java.lang.reflect.Method
 
+import static com.jtbdevelopment.games.GameCoreTestCase.PONE
+
 /**
  * Date: 10/16/15
  * Time: 7:05 PM
  */
-class PushServicesTest extends GameCoreTestCase {
+class PushServicesTest extends GroovyTestCase {
     PushServices services = new PushServices()
 
     void testClassAnnotations() {

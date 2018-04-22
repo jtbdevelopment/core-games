@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.rest.handlers
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.state.Game
@@ -11,11 +10,14 @@ import com.jtbdevelopment.games.stringimpl.StringGame
 import com.jtbdevelopment.games.stringimpl.StringMPGame
 import com.jtbdevelopment.games.stringimpl.StringPlayer
 
+import static com.jtbdevelopment.games.GameCoreTestCase.PONE
+import static com.jtbdevelopment.games.GameCoreTestCase.PTWO
+
 /**
  * Date: 11/17/14
  * Time: 6:41 AM
  */
-class GameGetterHandlerTest extends GameCoreTestCase {
+class GameGetterHandlerTest extends GroovyTestCase {
     GameGetterHandler handler = new GameGetterHandler()
 
     private final StringMPGame game = new StringMPGame()

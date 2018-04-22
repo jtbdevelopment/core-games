@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.rest.handlers
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.dao.AbstractSinglePlayerGameRepository
 import com.jtbdevelopment.games.events.GamePublisher
@@ -17,6 +16,7 @@ import com.jtbdevelopment.games.tracking.GameEligibilityTracker
 import com.jtbdevelopment.games.tracking.PlayerGameEligibility
 import com.jtbdevelopment.games.tracking.PlayerGameEligibilityResult
 
+import static com.jtbdevelopment.games.GameCoreTestCase.PONE
 import static org.mockito.Mockito.mock
 import static org.mockito.Mockito.when
 
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when
  * Date: 11/7/14
  * Time: 9:26 PM
  */
-class NewGameHandlerTest extends GameCoreTestCase {
+class NewGameHandlerTest extends GroovyTestCase {
     NewGameHandler handler = new NewGameHandler()
 
     void testCreateGameAllOptionalPlugins() {

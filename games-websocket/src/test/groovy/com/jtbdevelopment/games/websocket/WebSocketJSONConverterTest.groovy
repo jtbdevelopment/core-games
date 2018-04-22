@@ -1,13 +1,12 @@
 package com.jtbdevelopment.games.websocket
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.jtbdevelopment.games.GameCoreTestCase
 
 /**
  * Date: 12/9/14
  * Time: 11:47 AM
  */
-class WebSocketJSONConverterTest extends GameCoreTestCase {
+class WebSocketJSONConverterTest extends GroovyTestCase {
     WebSocketJSONConverter webSocketJsonConverter = new WebSocketJSONConverter()
 
     void testEncodeCallsStaticMapper() {

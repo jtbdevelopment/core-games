@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.rest.services
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.rest.handlers.ChallengeToRematchHandler
 import com.jtbdevelopment.games.rest.handlers.DeclineRematchOptionHandler
 import com.jtbdevelopment.games.rest.handlers.GameGetterHandler
@@ -15,7 +14,7 @@ import javax.ws.rs.core.MediaType
  * Date: 3/27/15
  * Time: 6:54 PM
  */
-class AbstractGameServicesTest extends GameCoreTestCase {
+class AbstractGameServicesTest extends GroovyTestCase {
     private static final String PID = "4r3e"
     private static final String GID = "123d"
     private final AbstractMaskedMultiPlayerGame result = new AbstractMaskedMultiPlayerGame() {}

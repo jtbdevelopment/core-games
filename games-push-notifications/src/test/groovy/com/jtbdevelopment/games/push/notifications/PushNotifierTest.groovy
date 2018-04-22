@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.push.notifications
 
-import com.jtbdevelopment.games.GameCoreTestCase
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.notifications.RegisteredDevice
@@ -14,7 +13,7 @@ import javax.ws.rs.core.GenericType
  * Date: 10/18/2015
  * Time: 9:05 PM
  */
-class PushNotifierTest extends GameCoreTestCase {
+class PushNotifierTest extends GroovyTestCase {
     PushNotifier notifier = new PushNotifier()
 
     void testSimpleCase() {
