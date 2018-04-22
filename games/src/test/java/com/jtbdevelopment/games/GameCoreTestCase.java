@@ -105,7 +105,7 @@ public abstract class GameCoreTestCase {
     return game;
   }
 
-  protected static StringMPGame makeSimpleMPGame(final String id) {
+  public static StringMPGame makeSimpleMPGame(final String id) {
     StringMPGame game = new StringMPGame();
     game.setId(id);
     return game;

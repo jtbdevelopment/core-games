@@ -10,6 +10,7 @@ import com.jtbdevelopment.games.state.MultiPlayerGame
 class AbstractUpdatesToClusterPublisherTest extends GroovyTestCase {
     private static class ClusterPublisher extends AbstractUpdatesToClusterPublisher {
         ClusterMessage clusterMessage = null
+
         @Override
         protected void internalPublish(final ClusterMessage clusterMessage) {
             this.clusterMessage = clusterMessage

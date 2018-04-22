@@ -6,10 +6,8 @@ import com.jtbdevelopment.games.state.Game;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -22,15 +20,14 @@ import org.springframework.stereotype.Component;
 public class GamePublisherImpl implements GamePublisher<Game> {
 
   private static final Logger logger = LoggerFactory.getLogger(GamePublisherImpl.class);
-  @Autowired(required = false)
-  protected List<GameListener> subscribers;
-  @Value("${publishing.threads:10}")
-  protected int threads;
-  private ExecutorService service;
+  protected final List<GameListener> subscribers;
+  protected final ExecutorService service;
 
-  @PostConstruct
-  public void setUp() {
+  public GamePublisherImpl(
+      @Value("${publishing.threads:10}") final int threads,
+      final List<GameListener> subscribers) {
     service = Executors.newFixedThreadPool(threads);
+    this.subscribers = subscribers;
   }
 
   public Game publish(final Game game, final Player initiatingPlayer) {

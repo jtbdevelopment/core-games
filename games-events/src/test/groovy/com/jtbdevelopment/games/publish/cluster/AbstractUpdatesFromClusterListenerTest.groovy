@@ -16,7 +16,8 @@ import static com.jtbdevelopment.games.GameCoreTestCase.*
  * Time: 6:24 PM
  */
 class AbstractUpdatesFromClusterListenerTest extends GroovyTestCase {
-    private AbstractUpdatesFromClusterListener listener = new AbstractUpdatesFromClusterListener() {}
+    private AbstractUpdatesFromClusterListener listener = new AbstractUpdatesFromClusterListener() {
+    }
 
     @Override
     protected void setUp() throws Exception {
