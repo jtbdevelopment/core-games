@@ -6,10 +6,10 @@ import static com.jtbdevelopment.games.GameCoreTestCase.PTWO;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
-import com.jtbdevelopment.games.StringMPGame;
 import com.jtbdevelopment.games.state.GamePhase;
 import com.jtbdevelopment.games.state.PlayerState;
 import com.jtbdevelopment.games.state.scoring.GameScorer;
+import com.jtbdevelopment.games.stringimpl.StringMPGame;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import org.junit.Test;

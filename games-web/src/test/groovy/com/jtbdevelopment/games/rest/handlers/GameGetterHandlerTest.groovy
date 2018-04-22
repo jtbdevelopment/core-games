@@ -1,15 +1,15 @@
 package com.jtbdevelopment.games.rest.handlers
 
 import com.jtbdevelopment.games.GameCoreTestCase
-import com.jtbdevelopment.games.StringGame
-import com.jtbdevelopment.games.StringMPGame
-import com.jtbdevelopment.games.StringPlayer
 import com.jtbdevelopment.games.dao.AbstractGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.state.Game
 import com.jtbdevelopment.games.state.masking.AbstractMaskedMultiPlayerGame
 import com.jtbdevelopment.games.state.masking.AbstractMaskedSinglePlayerGame
 import com.jtbdevelopment.games.state.masking.GameMasker
+import com.jtbdevelopment.games.stringimpl.StringGame
+import com.jtbdevelopment.games.stringimpl.StringMPGame
+import com.jtbdevelopment.games.stringimpl.StringPlayer
 
 /**
  * Date: 11/17/14

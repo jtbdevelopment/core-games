@@ -4,14 +4,14 @@ import com.hazelcast.core.HazelcastInstance
 import com.hazelcast.core.IMap
 import com.hazelcast.map.listener.MapListener
 import com.jtbdevelopment.games.GameCoreTestCase
-import com.jtbdevelopment.games.StringMPGame
-import com.jtbdevelopment.games.StringPlayer
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.notifications.RegisteredDevice
 import com.jtbdevelopment.games.push.PushProperties
 import com.jtbdevelopment.games.push.notifications.GamePublicationTracker
 import com.jtbdevelopment.games.push.notifications.PushNotifierFilter
 import com.jtbdevelopment.games.state.MultiPlayerGame
+import com.jtbdevelopment.games.stringimpl.StringMPGame
+import com.jtbdevelopment.games.stringimpl.StringPlayer
 
 import java.time.ZoneId
 import java.time.ZonedDateTime

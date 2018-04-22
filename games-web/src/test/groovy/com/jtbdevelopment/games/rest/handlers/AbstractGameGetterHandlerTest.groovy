@@ -1,11 +1,11 @@
 package com.jtbdevelopment.games.rest.handlers
 
 import com.jtbdevelopment.games.GameCoreTestCase
-import com.jtbdevelopment.games.StringMPGame
-import com.jtbdevelopment.games.StringSPGame
 import com.jtbdevelopment.games.dao.AbstractGameRepository
 import com.jtbdevelopment.games.exceptions.input.PlayerNotPartOfGameException
 import com.jtbdevelopment.games.exceptions.system.FailedToFindGameException
+import com.jtbdevelopment.games.stringimpl.StringMPGame
+import com.jtbdevelopment.games.stringimpl.StringSPGame
 
 /**
  * Date: 3/27/15

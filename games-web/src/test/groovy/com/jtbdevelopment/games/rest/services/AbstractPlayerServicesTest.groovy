@@ -6,6 +6,7 @@ import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.PlayerRoles
 import com.jtbdevelopment.games.players.friendfinder.FriendFinder
 import com.jtbdevelopment.games.security.SessionUserInfo
+import com.jtbdevelopment.games.stringimpl.StringToStringConverter
 import groovy.transform.TypeChecked
 import org.glassfish.jersey.message.internal.OutboundJaxrsResponse
 import org.springframework.context.ApplicationContext
@@ -35,7 +36,7 @@ class AbstractPlayerServicesTest extends GameCoreTestCase {
         def APLAYER = "PLAYER"
         def AGAME = "GAME"
         playerServices.playerID.set(APLAYER)
-        playerServices.stringToIDConverter = new GameCoreTestCase.StringToStringConverter()
+        playerServices.stringToIDConverter = new StringToStringConverter()
         assert services.is(playerServices.gamePlay(AGAME))
         assert services.playerID.get() == APLAYER
         assert services.gameID.get() == AGAME.reverse()

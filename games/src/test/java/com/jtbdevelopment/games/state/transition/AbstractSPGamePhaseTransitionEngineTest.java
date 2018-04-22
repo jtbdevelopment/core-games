@@ -1,8 +1,8 @@
 package com.jtbdevelopment.games.state.transition;
 
-import com.jtbdevelopment.games.StringSPGame;
 import com.jtbdevelopment.games.state.GamePhase;
 import com.jtbdevelopment.games.state.scoring.GameScorer;
+import com.jtbdevelopment.games.stringimpl.StringSPGame;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;

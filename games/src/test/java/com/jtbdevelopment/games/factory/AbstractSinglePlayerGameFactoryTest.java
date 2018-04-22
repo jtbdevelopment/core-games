@@ -6,11 +6,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.verify;
 
-import com.jtbdevelopment.games.StringSPGame;
 import com.jtbdevelopment.games.exceptions.input.FailedToCreateValidGameException;
 import com.jtbdevelopment.games.state.Game;
 import com.jtbdevelopment.games.state.GamePhase;
 import com.jtbdevelopment.games.state.SinglePlayerGame;
+import com.jtbdevelopment.games.stringimpl.StringSPGame;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;

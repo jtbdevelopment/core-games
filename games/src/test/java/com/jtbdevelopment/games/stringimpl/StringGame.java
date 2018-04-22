@@ -1,11 +1,13 @@
-package com.jtbdevelopment.games;
+package com.jtbdevelopment.games.stringimpl;
 
-import com.jtbdevelopment.games.state.AbstractSinglePlayerGame;
+import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.state.AbstractGame;
+import java.util.List;
 
 /**
  * Date: 11/8/14 Time: 9:09 AM
  */
-public class StringSPGame extends AbstractSinglePlayerGame<String, Object> {
+public class StringGame extends AbstractGame<String, Object> {
 
   private String id;
   private String previousId;
@@ -18,6 +20,11 @@ public class StringSPGame extends AbstractSinglePlayerGame<String, Object> {
   @Override
   public String getPreviousIdAsString() {
     return previousId;
+  }
+
+  @Override
+  public List<Player<String>> getAllPlayers() {
+    return null;
   }
 
   public String getId() {

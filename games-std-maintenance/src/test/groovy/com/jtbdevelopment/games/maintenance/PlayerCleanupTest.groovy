@@ -2,9 +2,9 @@ package com.jtbdevelopment.games.maintenance
 
 import com.jtbdevelopment.core.spring.social.dao.AbstractUsersConnectionRepository
 import com.jtbdevelopment.games.GameCoreTestCase
-import com.jtbdevelopment.games.StringManualPlayer
-import com.jtbdevelopment.games.StringSystemPlayer
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
+import com.jtbdevelopment.games.stringimpl.StringManualPlayer
+import com.jtbdevelopment.games.stringimpl.StringSystemPlayer
 import org.springframework.social.connect.*
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap

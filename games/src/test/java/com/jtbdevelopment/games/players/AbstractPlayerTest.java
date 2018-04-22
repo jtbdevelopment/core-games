@@ -9,8 +9,8 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import com.jtbdevelopment.games.GameCoreTestCase;
-import com.jtbdevelopment.games.StringPlayer;
 import com.jtbdevelopment.games.players.notifications.RegisteredDevice;
+import com.jtbdevelopment.games.stringimpl.StringPlayer;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashSet;

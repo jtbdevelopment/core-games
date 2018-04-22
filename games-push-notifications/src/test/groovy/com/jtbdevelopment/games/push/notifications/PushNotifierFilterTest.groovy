@@ -4,13 +4,13 @@ import com.hazelcast.core.EntryEvent
 import com.hazelcast.core.HazelcastInstance
 import com.hazelcast.core.IMap
 import com.jtbdevelopment.games.GameCoreTestCase
-import com.jtbdevelopment.games.StringMPGame
-import com.jtbdevelopment.games.StringPlayer
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.push.PushWorthyFilter
 import com.jtbdevelopment.games.state.MultiPlayerGame
+import com.jtbdevelopment.games.stringimpl.StringMPGame
+import com.jtbdevelopment.games.stringimpl.StringPlayer
 
 import java.util.concurrent.ConcurrentHashMap
 

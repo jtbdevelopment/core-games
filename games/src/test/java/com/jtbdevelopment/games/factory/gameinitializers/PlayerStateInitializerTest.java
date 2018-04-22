@@ -5,10 +5,10 @@ import static com.jtbdevelopment.games.GameCoreTestCase.PONE;
 import static com.jtbdevelopment.games.GameCoreTestCase.PTHREE;
 import static com.jtbdevelopment.games.GameCoreTestCase.PTWO;
 
-import com.jtbdevelopment.games.StringMPGame;
-import com.jtbdevelopment.games.StringSPGame;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.state.PlayerState;
+import com.jtbdevelopment.games.stringimpl.StringMPGame;
+import com.jtbdevelopment.games.stringimpl.StringSPGame;
 import java.util.Arrays;
 import java.util.List;
 import junit.framework.TestCase;

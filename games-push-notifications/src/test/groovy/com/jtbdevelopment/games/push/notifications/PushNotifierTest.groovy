@@ -1,10 +1,10 @@
 package com.jtbdevelopment.games.push.notifications
 
 import com.jtbdevelopment.games.GameCoreTestCase
-import com.jtbdevelopment.games.StringPlayer
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.notifications.RegisteredDevice
+import com.jtbdevelopment.games.stringimpl.StringPlayer
 
 import javax.ws.rs.client.Entity
 import javax.ws.rs.client.Invocation

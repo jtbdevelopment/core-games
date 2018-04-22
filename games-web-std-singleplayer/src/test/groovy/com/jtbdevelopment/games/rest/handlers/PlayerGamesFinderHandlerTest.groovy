@@ -1,13 +1,13 @@
 package com.jtbdevelopment.games.rest.handlers
 
 import com.jtbdevelopment.games.GameCoreTestCase
-import com.jtbdevelopment.games.StringMaskedSPGame
-import com.jtbdevelopment.games.StringPlayer
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.dao.AbstractSinglePlayerGameRepository
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.SinglePlayerGame
 import com.jtbdevelopment.games.state.masking.GameMasker
+import com.jtbdevelopment.games.stringimpl.StringMaskedSPGame
+import com.jtbdevelopment.games.stringimpl.StringPlayer
 import org.springframework.data.domain.PageRequest
 
 import java.time.Instant

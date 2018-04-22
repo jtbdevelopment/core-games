@@ -1,9 +1,14 @@
 package com.jtbdevelopment.games;
 
-import com.jtbdevelopment.games.dao.StringToIDConverter;
 import com.jtbdevelopment.games.players.ManualPlayer;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.players.SystemPlayer;
+import com.jtbdevelopment.games.stringimpl.StringGame;
+import com.jtbdevelopment.games.stringimpl.StringMPGame;
+import com.jtbdevelopment.games.stringimpl.StringManualPlayer;
+import com.jtbdevelopment.games.stringimpl.StringPlayer;
+import com.jtbdevelopment.games.stringimpl.StringSPGame;
+import com.jtbdevelopment.games.stringimpl.StringSystemPlayer;
 import groovy.util.GroovyTestCase;
 
 /**
@@ -113,15 +118,4 @@ public abstract class GameCoreTestCase extends GroovyTestCase {
     return game;
   }
 
-  public static class StringToStringConverter implements StringToIDConverter<String> {
-
-    @Override
-    public String convert(final String source) {
-      if (source == null) {
-        return source;
-      }
-      return new StringBuilder(source).reverse().toString();
-    }
-
-  }
 }

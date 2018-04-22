@@ -1,4 +1,4 @@
-package com.jtbdevelopment.games;
+package com.jtbdevelopment.games.stringimpl;
 
 import com.jtbdevelopment.games.state.AbstractMultiPlayerGame;
 

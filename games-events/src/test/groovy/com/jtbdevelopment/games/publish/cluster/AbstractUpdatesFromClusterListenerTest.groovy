@@ -8,6 +8,7 @@ import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.publish.PlayerPublisher
 import com.jtbdevelopment.games.state.Game
 import com.jtbdevelopment.games.state.MultiPlayerGame
+import com.jtbdevelopment.games.stringimpl.StringToStringConverter
 
 /**
  * Date: 2/21/15
@@ -18,7 +19,7 @@ class AbstractUpdatesFromClusterListenerTest extends GameCoreTestCase {
 
     @Override
     protected void setUp() throws Exception {
-        listener.stringToIDConverter = new GameCoreTestCase.StringToStringConverter()
+        listener.stringToIDConverter = new StringToStringConverter()
     }
 
     void testReceivePublishAllPlayers() {

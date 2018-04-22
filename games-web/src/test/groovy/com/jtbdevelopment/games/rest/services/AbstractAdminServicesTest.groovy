@@ -6,6 +6,7 @@ import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.PlayerRoles
 import com.jtbdevelopment.games.security.SessionUserInfo
+import com.jtbdevelopment.games.stringimpl.StringToStringConverter
 import groovy.transform.TypeChecked
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
@@ -219,7 +220,7 @@ class AbstractAdminServicesTest extends GameCoreTestCase {
     }
 
     void testSwitchEffectiveUser() {
-        adminServices.stringToIDConverter = new GameCoreTestCase.StringToStringConverter()
+        adminServices.stringToIDConverter = new StringToStringConverter()
         SecurityContextHolder.context = new SecurityContextImpl()
         def session = new SessionUserInfo<String>() {
             Player<String> sessionUser = PONE
@@ -259,7 +260,7 @@ class AbstractAdminServicesTest extends GameCoreTestCase {
     }
 
     void testSwitchEffectiveUserBadID() {
-        adminServices.stringToIDConverter = new GameCoreTestCase.StringToStringConverter()
+        adminServices.stringToIDConverter = new StringToStringConverter()
         SecurityContextHolder.context = new SecurityContextImpl()
         def session = new SessionUserInfo<String>() {
             Player<String> sessionUser = PONE

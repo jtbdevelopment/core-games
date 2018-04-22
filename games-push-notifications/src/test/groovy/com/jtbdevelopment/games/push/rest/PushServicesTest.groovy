@@ -1,7 +1,6 @@
 package com.jtbdevelopment.games.push.rest
 
 import com.jtbdevelopment.games.GameCoreTestCase
-import com.jtbdevelopment.games.StringPlayer
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
 import com.jtbdevelopment.games.players.Player
 import com.jtbdevelopment.games.players.PlayerRoles
@@ -9,6 +8,7 @@ import com.jtbdevelopment.games.players.notifications.RegisteredDevice
 import com.jtbdevelopment.games.push.PushProperties
 import com.jtbdevelopment.games.rest.services.SecurityService
 import com.jtbdevelopment.games.security.SessionUserInfo
+import com.jtbdevelopment.games.stringimpl.StringPlayer
 import groovy.transform.TypeChecked
 import org.springframework.security.authentication.TestingAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder

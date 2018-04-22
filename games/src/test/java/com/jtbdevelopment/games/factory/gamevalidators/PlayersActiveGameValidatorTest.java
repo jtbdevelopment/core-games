@@ -8,9 +8,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.jtbdevelopment.games.StringMPGame;
-import com.jtbdevelopment.games.StringSPGame;
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
+import com.jtbdevelopment.games.stringimpl.StringMPGame;
+import com.jtbdevelopment.games.stringimpl.StringSPGame;
 import java.util.Arrays;
 import java.util.Optional;
 import org.junit.Test;

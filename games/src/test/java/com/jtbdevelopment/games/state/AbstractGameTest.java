@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import com.jtbdevelopment.games.StringGame;
+import com.jtbdevelopment.games.stringimpl.StringGame;
 import java.lang.reflect.Field;
 import org.junit.Assert;
 import org.junit.Test;

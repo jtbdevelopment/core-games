@@ -1,10 +1,10 @@
 package com.jtbdevelopment.games.rest.handlers
 
 import com.jtbdevelopment.games.GameCoreTestCase
-import com.jtbdevelopment.games.StringMPGame
 import com.jtbdevelopment.games.rest.exceptions.GameIsNotPossibleToQuitNowException
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.PlayerState
+import com.jtbdevelopment.games.stringimpl.StringMPGame
 
 /**
  * Date: 4/8/2015

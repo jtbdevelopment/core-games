@@ -1,8 +1,8 @@
 package com.jtbdevelopment.games.security.spring
 
 import com.jtbdevelopment.games.GameCoreTestCase
-import com.jtbdevelopment.games.StringPlayer
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository
+import com.jtbdevelopment.games.stringimpl.StringPlayer
 
 import java.time.Instant
 

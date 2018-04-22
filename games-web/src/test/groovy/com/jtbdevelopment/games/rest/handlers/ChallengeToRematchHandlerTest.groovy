@@ -1,7 +1,6 @@
 package com.jtbdevelopment.games.rest.handlers
 
 import com.jtbdevelopment.games.GameCoreTestCase
-import com.jtbdevelopment.games.StringMPGame
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository
 import com.jtbdevelopment.games.events.GamePublisher
 import com.jtbdevelopment.games.factory.AbstractMultiPlayerGameFactory
@@ -10,6 +9,7 @@ import com.jtbdevelopment.games.rest.exceptions.GameIsNotAvailableToRematchExcep
 import com.jtbdevelopment.games.state.GamePhase
 import com.jtbdevelopment.games.state.MultiPlayerGame
 import com.jtbdevelopment.games.state.transition.AbstractMPGamePhaseTransitionEngine
+import com.jtbdevelopment.games.stringimpl.StringMPGame
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer
 
