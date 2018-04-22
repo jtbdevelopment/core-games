@@ -1,7 +1,9 @@
 package com.jtbdevelopment.games.mongo.state;
 
-import groovy.util.GroovyTestCase;
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+
 import org.bson.types.ObjectId;
 import org.junit.Test;
 import org.springframework.data.annotation.Id;
@@ -9,7 +11,7 @@ import org.springframework.data.annotation.Id;
 /**
  * Date: 1/9/15 Time: 10:41 PM
  */
-public class AbstractMongoMultiPlayerGameTest extends GroovyTestCase {
+public class AbstractMongoMultiPlayerGameTest {
 
   @Test
   public void testIdAnnotation() throws NoSuchFieldException {
@@ -23,19 +25,19 @@ public class AbstractMongoMultiPlayerGameTest extends GroovyTestCase {
     AGame game = new AGame();
     game.setId(id);
     game.setPreviousId(previous);
-    TestCase.assertSame(id, game.getId());
-    GroovyTestCase.assertEquals(id.toHexString(), game.getIdAsString());
-    TestCase.assertSame(previous, game.getPreviousId());
-    GroovyTestCase.assertEquals(previous.toHexString(), game.getPreviousIdAsString());
+    assertSame(id, game.getId());
+    assertEquals(id.toHexString(), game.getIdAsString());
+    assertSame(previous, game.getPreviousId());
+    assertEquals(previous.toHexString(), game.getPreviousIdAsString());
   }
 
   @Test
   public void testIdAsStringNullId() {
     AGame game = new AGame();
-    TestCase.assertNull(game.getId());
-    TestCase.assertNull(game.getIdAsString());
-    TestCase.assertNull(game.getPreviousId());
-    TestCase.assertNull(game.getPreviousIdAsString());
+    assertNull(game.getId());
+    assertNull(game.getIdAsString());
+    assertNull(game.getPreviousId());
+    assertNull(game.getPreviousIdAsString());
   }
 
   private static class AGame extends AbstractMongoMultiPlayerGame {

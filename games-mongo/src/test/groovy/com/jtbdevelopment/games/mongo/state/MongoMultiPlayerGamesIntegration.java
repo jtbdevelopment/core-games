@@ -70,7 +70,6 @@ public class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringConte
   private Cache cache;
   private Instant start;
 
-  @SuppressWarnings("GroovyUnusedDeclaration")
   @BeforeClass
   public static void setupAll() throws Exception {
     AbstractMongoNoSpringContextIntegration.setupMongo();
@@ -78,7 +77,6 @@ public class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringConte
         MongoMultiPlayerGameIntegrationConfiguration.class);
   }
 
-  @SuppressWarnings("GroovyUnusedDeclaration")
   @AfterClass
   public static void tearDownAll() throws Exception {
     AbstractMongoNoSpringContextIntegration.tearDownMongo();

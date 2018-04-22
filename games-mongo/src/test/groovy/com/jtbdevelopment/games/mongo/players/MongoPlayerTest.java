@@ -10,7 +10,6 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
-import org.codehaus.groovy.runtime.StringGroovyMethods;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.data.annotation.Id;
@@ -69,7 +68,7 @@ public class MongoPlayerTest extends MongoGameCoreTestCase {
 
   @Test
   public void testHashCode() {
-    ObjectId SOMEID = new ObjectId(StringGroovyMethods.padRight("1234", 24, "0"));
+    ObjectId SOMEID = new ObjectId(StringUtils.rightPad("1234", 24, "0"));
     MongoPlayer player = new MongoPlayer();
     player.setId(SOMEID);
     assertEquals(SOMEID.toHexString().hashCode(), player.hashCode());

@@ -15,7 +15,6 @@ import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.players.PlayerPayLevel;
 import com.jtbdevelopment.games.players.notifications.RegisteredDevice;
 import com.mongodb.client.MongoCollection;
-import groovy.transform.CompileStatic;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -52,7 +51,6 @@ import org.springframework.social.connect.support.ConnectionFactoryRegistry;
  * Date: 1/11/15 Time: 3:09 PM
  */
 @SuppressWarnings("ConstantConditions")
-@CompileStatic
 public class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
 
   private static final String PLAYER_COLLECTION_NAME = "player";
@@ -68,14 +66,12 @@ public class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegrat
   private MongoSystemPlayer systemPlayer;
   private CacheManager cacheManager;
 
-  @SuppressWarnings("GroovyUnusedDeclaration")
   @BeforeClass
   public static void setupAll() throws Exception {
     AbstractMongoNoSpringContextIntegration.setupMongo();
     context = new AnnotationConfigApplicationContext(MongoPlayerIntegrationConfiguration.class);
   }
 
-  @SuppressWarnings("GroovyUnusedDeclaration")
   @AfterClass
   public static void tearDownAll() throws Exception {
     AbstractMongoNoSpringContextIntegration.tearDownMongo();
