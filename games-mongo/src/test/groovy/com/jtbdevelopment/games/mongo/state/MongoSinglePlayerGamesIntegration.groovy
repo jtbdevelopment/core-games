@@ -32,6 +32,8 @@ import org.springframework.social.connect.support.ConnectionFactoryRegistry
 
 import java.time.Instant
 
+import static org.junit.Assert.*
+
 /**
  * Date: 1/10/15
  * Time: 2:35 PM
@@ -84,13 +86,13 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringContextInte
     private static final String GAMES_COLLECTION_NAME = 'single'
     private MongoCollection collection
 
-    MongoPlayerRepository playerRepository
-    AbstractSinglePlayerGameRepository gameRepository
-    MongoPlayer player1, player2
-    CacheManager cacheManager
-    Cache cache
-    Instant start
-    static ApplicationContext context
+    private MongoPlayerRepository playerRepository
+    private AbstractSinglePlayerGameRepository gameRepository
+    private MongoPlayer player1, player2
+    private CacheManager cacheManager
+    private Cache cache
+    private Instant start
+    private static ApplicationContext context
 
     @SuppressWarnings("GroovyUnusedDeclaration")
     @BeforeClass
@@ -257,14 +259,14 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringContextInte
         SimpleSinglePlayerGame p1g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 5, stringValue: 'X', player: player1))
         SimpleSinglePlayerGame p2g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 20, stringValue: '2', player: player2))
         gameRepository.saveAll([p1g1, p2g1])
-        assert cache.get(p1g1.id).get() == p1g1
-        assert cache.get(p2g1.id).get() == p2g1
+        assertEquals p1g1, cache.get(p1g1.id).get()
+        assertEquals p2g1, cache.get(p2g1.id).get()
 
         gameRepository.delete((Game) p1g1)
         gameRepository.deleteById(p2g1.id)
 
-        assert cache.get(p1g1.id) == null
-        assert cache.get(p2g1.id) == null
+        assertNull cache.get(p1g1.id)
+        assertNull cache.get(p2g1.id)
     }
 
     @Test
@@ -274,12 +276,12 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringContextInte
 
         List<SimpleSinglePlayerGame> games
         games = (List<SimpleSinglePlayerGame>) gameRepository.findByCreatedLessThan(p1g1.created)
-        assert !games.contains(p1g1)
-        assert !games.contains(p2g1)
+        assertFalse games.contains(p1g1)
+        assertFalse games.contains(p2g1)
 
         games = (List<SimpleSinglePlayerGame>) gameRepository.findByCreatedLessThan(Instant.now())
-        assert games.contains(p1g1)
-        assert games.contains(p2g1)
+        assertTrue games.contains(p1g1)
+        assertTrue games.contains(p2g1)
     }
 
     @Test
@@ -288,13 +290,13 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringContextInte
         Thread.sleep(100)
         SimpleSinglePlayerGame p2g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 20, stringValue: '2', player: player2, created: Instant.now()))
 
-        assert gameRepository.findById(p1g1.id).present
-        assert gameRepository.findById(p2g1.id).present
+        assertTrue gameRepository.findById(p1g1.id).present
+        assertTrue gameRepository.findById(p2g1.id).present
 
-        assert 1 <= gameRepository.deleteByCreatedLessThan(p2g1.created)
+        assertTrue 1 <= gameRepository.deleteByCreatedLessThan(p2g1.created)
 
-        assert gameRepository.findById(p2g1.id).present
-        assert !gameRepository.findById(p1g1.id).present
+        assertTrue gameRepository.findById(p2g1.id).present
+        assertFalse gameRepository.findById(p1g1.id).present
     }
 
     @Test
@@ -302,33 +304,33 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringContextInte
         SimpleSinglePlayerGame p1g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 5, stringValue: 'X', player: player1))
         SimpleSinglePlayerGame p2g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 20, stringValue: '2', player: player2))
         gameRepository.saveAll([p1g1, p2g1])
-        assert cache.get(p1g1.id).get() == p1g1
-        assert cache.get(p2g1.id).get() == p2g1
+        assertEquals p1g1, cache.get(p1g1.id).get()
+        assertEquals p2g1, cache.get(p2g1.id).get()
 
         gameRepository.deleteAll([p1g1, p2g1] as List<Game>)
 
-        assert cache.get(p1g1.id) == null
-        assert cache.get(p2g1.id) == null
+        assertNull cache.get(p1g1.id)
+        assertNull cache.get(p2g1.id)
     }
 
     @Test
     void testCacheReallyHit() {
         SimpleSinglePlayerGame p1g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 5, stringValue: 'X', player: player1))
         gameRepository.save(p1g1)
-        assert cache.get(p1g1.id).get() == p1g1
+        assertEquals(p1g1, cache.get(p1g1.id).get())
 
         MongoOperations operations = context.getBean(MongoOperations.class)
         operations.remove(Query.query(Criteria.where("_id").is(p1g1.id)), GAMES_COLLECTION_NAME)
 
-        assert gameRepository.findById(p1g1.id).get() == p1g1
+        assertEquals(p1g1, gameRepository.findById(p1g1.id).get())
 
         cache.clear()
-        assert cache.get(p1g1.id) == null
-        assert !gameRepository.findById(p1g1.id).present
+        assertNull cache.get(p1g1.id)
+        assertFalse gameRepository.findById(p1g1.id).present
     }
 
     @Test
     void testPlayerCount() {
-        assert 2L == playerRepository.count()
+        assertEquals 2L, playerRepository.count()
     }
 }
