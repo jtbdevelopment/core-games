@@ -31,6 +31,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.social.connect.support.ConnectionFactoryRegistry
 
 import java.time.Instant
+import java.util.stream.StreamSupport
 
 import static org.junit.Assert.*
 
@@ -94,14 +95,12 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringContextInte
     private Instant start
     private static ApplicationContext context
 
-    @SuppressWarnings("GroovyUnusedDeclaration")
     @BeforeClass
     static void setupAll() {
         setupMongo()
         context = new AnnotationConfigApplicationContext(MongoSinglePlayerGameIntegrationConfiguration.class)
     }
 
-    @SuppressWarnings("GroovyUnusedDeclaration")
     @AfterClass
     static void tearDownAll() {
         tearDownMongo()
@@ -129,38 +128,37 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringContextInte
     void testCanCreateGameAndReloadIt() {
         SimpleSinglePlayerGame save, saved, loaded
         save = new SimpleSinglePlayerGame(intValue: 5, stringValue: 'X', player: player1, featureData: ['H': 'LON'] as Map<String, Object>, features: ['GG', 'A'] as Set)
-        assert save.id == null
-        assert save.created == null
-        assert save.lastUpdate == null
-        assert save.completedTimestamp == null
+        assertNull save.id
+        assertNull save.created
+        assertNull save.lastUpdate
+        assertNull save.completedTimestamp
         saved = (SimpleSinglePlayerGame) gameRepository.save(save)
-        assert saved
-        assert saved.id != null
-        assert saved.lastUpdate != null
-        assert saved.created != null
-        assert saved.intValue == save.intValue
-        assert saved.stringValue == save.stringValue
-        assert saved.player == save.player
-        assert saved.completedTimestamp == null
-        assert saved.featureData == save.featureData
-        assert saved.features == save.features
-
+        assertNotNull saved
+        assertNotNull saved.id
+        assertNotNull saved.lastUpdate
+        assertNotNull saved.created
+        assertEquals save.intValue, saved.intValue
+        assertEquals save.stringValue, saved.stringValue
+        assertEquals save.player, saved.player
+        assertNull saved.completedTimestamp
+        assertEquals save.featureData, saved.featureData
+        assertEquals save.features, saved.features
 
         loaded = (SimpleSinglePlayerGame) gameRepository.findById(saved.id).get()
-        assert loaded
-        assert loaded.id == saved.id
-        assert loaded.lastUpdate == saved.lastUpdate
-        assert loaded.created == save.created
-        assert loaded.intValue == save.intValue
-        assert loaded.stringValue == save.stringValue
-        assert loaded.player == save.player
-        assert loaded.completedTimestamp == null
-        assert loaded.featureData == save.featureData
-        assert loaded.features == save.features
+        assertNotNull loaded
+        assertEquals saved.id, loaded.id
+        assertEquals saved.lastUpdate, loaded.lastUpdate
+        assertEquals save.created, loaded.created
+        assertEquals save.intValue, loaded.intValue
+        assertEquals save.stringValue, loaded.stringValue
+        assertEquals save.player, loaded.player
+        assertNull loaded.completedTimestamp
+        assertEquals save.featureData, loaded.featureData
+        assertEquals save.features, loaded.features
 
-        assert gameRepository.count() == 1
-        assert gameRepository.countByCreatedGreaterThan(start.minusSeconds(1)) == 1
-        assert gameRepository.countByCreatedGreaterThan(loaded.created) == 0
+        assertEquals 1, gameRepository.count()
+        assertEquals 1, gameRepository.countByCreatedGreaterThan(start.minusSeconds(1))
+        assertEquals 0, gameRepository.countByCreatedGreaterThan(loaded.created)
     }
 
     @Test
@@ -176,30 +174,30 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringContextInte
         update.features.addAll(['HG', '34'])
         update.featureData.put('rr', new Long(3))
         updated = (SimpleSinglePlayerGame) gameRepository.save(update)
-        assert updated
-        assert updated.id == initial.id
-        assert updated.lastUpdate > initial.lastUpdate
-        assert updated.created == initial.created
-        assert updated.intValue == update.intValue
-        assert updated.stringValue == update.stringValue
-        assert updated.player == update.player
-        assert updated.completedTimestamp == update.completedTimestamp
-        assert updated.featureData == update.featureData
-        assert updated.features == update.features
+        assertNotNull updated
+        assertEquals initial.id, updated.id
+        assertTrue updated.lastUpdate > initial.lastUpdate
+        assertEquals initial.created, updated.created
+        assertEquals update.intValue, updated.intValue
+        assertEquals update.stringValue, updated.stringValue
+        assertEquals update.player, updated.player
+        assertEquals update.completedTimestamp, updated.completedTimestamp
+        assertEquals update.featureData, updated.featureData
+        assertEquals update.features, updated.features
 
         loaded = (SimpleSinglePlayerGame) gameRepository.findById(update.id).get()
-        assert loaded
-        assert loaded.id == updated.id
-        assert loaded.lastUpdate == updated.lastUpdate
-        assert loaded.created == updated.created
-        assert loaded.intValue == updated.intValue
-        assert loaded.stringValue == updated.stringValue
-        assert loaded.player == updated.player
-        assert loaded.completedTimestamp == updated.completedTimestamp
-        assert updated.featureData == update.featureData
-        assert updated.features == update.features
+        assertNotNull loaded
+        assertEquals updated.id, loaded.id
+        assertEquals updated.lastUpdate, loaded.lastUpdate
+        assertEquals updated.created, loaded.created
+        assertEquals updated.intValue, loaded.intValue
+        assertEquals updated.stringValue, loaded.stringValue
+        assertEquals updated.player, loaded.player
+        assertEquals updated.completedTimestamp, loaded.completedTimestamp
+        assertEquals update.featureData, updated.featureData
+        assertEquals update.features, updated.features
 
-        assert gameRepository.count() == 1
+        assertEquals 1, gameRepository.count()
     }
 
     @Test
@@ -210,22 +208,22 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringContextInte
         SimpleSinglePlayerGame p2g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 20, stringValue: '2', player: player2, gamePhase: GamePhase.Challenged))
 
         List<SimpleSinglePlayerGame> p1g = (List<SimpleSinglePlayerGame>) gameRepository.findByPlayerId(player1.id)
-        assert p1g.size() == 3
-        assert p1g.contains(p1g1)
-        assert p1g.contains(p1g2)
-        assert p1g.contains(p1g3)
+        assertEquals 3, p1g.size()
+        assertTrue p1g.contains(p1g1)
+        assertTrue p1g.contains(p1g2)
+        assertTrue p1g.contains(p1g3)
         List<SimpleSinglePlayerGame> p2g = (List<SimpleSinglePlayerGame>) gameRepository.findByPlayerId(player2.id)
-        assert p2g.size() == 1
-        assert p2g.contains(p2g1)
+        assertEquals 1, p2g.size()
+        assertTrue p2g.contains(p2g1)
 
-        assert gameRepository.findAll().collect { it }.size() == 4
+        assertEquals 4, StreamSupport.stream(gameRepository.findAll().spliterator(), false).count()
 
         Sort sort = new Sort(Sort.Direction.DESC, ["lastUpdate", "created"])
         PageRequest page = new PageRequest(0, 20, sort)
         List<SimpleSinglePlayerGame> by = (List<SimpleSinglePlayerGame>) gameRepository.findByPlayerIdAndGamePhaseAndLastUpdateGreaterThan(player1.id, GamePhase.Playing, ((Instant) p1g1.created).minusSeconds(24 * 60 * 60), page)
-        assert 2 == by.size()
-        assert by.contains(p1g1)
-        assert by.contains(p1g2)
+        assertEquals 2, by.size()
+        assertTrue by.contains(p1g1)
+        assertTrue by.contains(p1g2)
     }
 
     @Test
@@ -233,11 +231,11 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringContextInte
         SimpleSinglePlayerGame p1g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 5, stringValue: 'X', player: player1))
         SimpleSinglePlayerGame p2g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 20, stringValue: '2', player: player2))
         gameRepository.save(p1g1)
-        assert cache.get(p1g1.id).get() == p1g1
+        assertEquals p1g1, cache.get(p1g1.id).get()
         p1g1.intValue = 150
         gameRepository.saveAll([p1g1, p2g1])
-        assert ((SimpleSinglePlayerGame) cache.get(p1g1.id).get()).intValue == 150
-        assert cache.get(p2g1.id).get() == p2g1
+        assertEquals 150, ((SimpleSinglePlayerGame) cache.get(p1g1.id).get()).intValue
+        assertEquals p2g1, cache.get(p2g1.id).get()
     }
 
     @Test
@@ -245,13 +243,13 @@ class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringContextInte
         SimpleSinglePlayerGame p1g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 5, stringValue: 'X', player: player1))
         SimpleSinglePlayerGame p2g1 = (SimpleSinglePlayerGame) gameRepository.save(new SimpleSinglePlayerGame(intValue: 20, stringValue: '2', player: player2))
         gameRepository.saveAll([p1g1, p2g1])
-        assert cache.get(p1g1.id).get() == p1g1
-        assert cache.get(p2g1.id).get() == p2g1
+        assertEquals p1g1, cache.get(p1g1.id).get()
+        assertEquals p2g1, cache.get(p2g1.id).get()
 
         gameRepository.deleteAll()
 
-        assert cache.get(p1g1.id) == null
-        assert cache.get(p2g1.id) == null
+        assertNull cache.get(p1g1.id)
+        assertNull cache.get(p2g1.id)
     }
 
     @Test
