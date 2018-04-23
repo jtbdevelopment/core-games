@@ -64,7 +64,7 @@ public class PlayerGameTracker implements GameEligibilityTracker<PlayerGameEligi
     MongoPlayer updated = (MongoPlayer) mongoOperations.findAndModify(Query.query(
         Criteria.where("_id").is(player.getId())
             .and(AbstractPlayerGameTrackingAttributes.FREE_GAMES_FIELD).lt(freeGames)),
-        UPDATE_FREE_GAMES, RETURN_NEW_OPTION, (Class<SystemPlayer>) player.getClass());
+        UPDATE_FREE_GAMES, RETURN_NEW_OPTION, player.getClass());
     if (updated != null) {
       playerPublisher.publish(updated);
       PlayerGameEligibilityResult result = new PlayerGameEligibilityResult();
@@ -76,7 +76,7 @@ public class PlayerGameTracker implements GameEligibilityTracker<PlayerGameEligi
     updated = (MongoPlayer) mongoOperations.findAndModify(Query.query(
         Criteria.where("_id").is(player.getId())
             .and(AbstractPlayerGameTrackingAttributes.PAID_GAMES_FIELD).gt(0)), UPDATE_PAID_GAMES,
-        RETURN_NEW_OPTION, (Class<SystemPlayer>) player.getClass());
+        RETURN_NEW_OPTION, player.getClass());
 
     if (updated != null) {
       playerPublisher.publish(updated);
@@ -117,7 +117,7 @@ public class PlayerGameTracker implements GameEligibilityTracker<PlayerGameEligi
       MongoPlayer updated = (MongoPlayer) mongoOperations.findAndModify(
           Query.query(Criteria.where("_id").is(gameEligibilityResult.getPlayer().getId())),
           revertToUse, RETURN_NEW_OPTION,
-          (Class<Player>) gameEligibilityResult.getPlayer().getClass());
+          gameEligibilityResult.getPlayer().getClass());
       if (updated != null) {
         playerPublisher.publish(updated);
       }
