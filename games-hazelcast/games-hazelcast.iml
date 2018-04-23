@@ -16,6 +16,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.codehaus.groovy:groovy-all:2.4.15" level="project" />
     <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-hazelcast:1.10-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring:1.10-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.hazelcast:hazelcast:3.9.3" level="project" />
@@ -40,7 +41,6 @@
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:2.0.5.RELEASE" level="project" />
     <orderEntry type="module" module-name="games-events" />
     <orderEntry type="module" module-name="games" scope="TEST" production-on-test="" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.codehaus.groovy:groovy-all:2.4.15" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-core:5.0.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.0.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context:5.0.5.RELEASE" level="project" />

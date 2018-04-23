@@ -35,7 +35,8 @@ public class PlayerFreeGameReset {
     //  Error check?
     mongoOperations.updateMulti(
         Query.query(Criteria.where(AbstractPlayerGameTrackingAttributes.FREE_GAMES_FIELD).gt(0)),
-        Update.update(AbstractPlayerGameTrackingAttributes.FREE_GAMES_FIELD, 0), MongoPlayer.class);
+        Update.update(AbstractPlayerGameTrackingAttributes.FREE_GAMES_FIELD, 0),
+        MongoPlayer.class);
     playerPublisher.publishAll();
     return true;
   }

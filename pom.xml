@@ -10,6 +10,7 @@
   <version>1.8-SNAPSHOT</version>
   <modules>
     <module>games</module>
+    <module>games-mongo</module>
     <module>games-dictionaries</module>
     <module>games-events</module>
     <module>games-websocket</module>
@@ -17,14 +18,16 @@
     <module>games-web</module>
     <module>games-web-std-singleplayer</module>
     <module>games-web-std-multiplayer</module>
-    <module>games-mongo</module>
     <module>games-std-tracker</module>
-    <module>games-dev-utilities</module>
     <module>games-push-notifications</module>
     <module>games-std-maintenance</module>
+    <module>games-dev-utilities</module>
   </modules>
 
   <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+
     <core.common.version>1.10-SNAPSHOT</core.common.version>
     <spring.data.mongodb.version>2.0.5.RELEASE</spring.data.mongodb.version>
     <spring.data.common.version>2.0.5.RELEASE</spring.data.common.version>
@@ -156,32 +159,6 @@
         <version>2.16</version>
       </plugin>
       <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <!-- 2.8.0-01 and later require maven-compiler-plugin 3.1 or higher -->
-        <version>3.7.0</version>
-        <configuration>
-          <compilerId>groovy-eclipse-compiler</compilerId>
-          <!-- set verbose to be true if you want lots of uninteresting messages -->
-          <!-- <verbose>true</verbose> -->
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-        <extensions>true</extensions>
-        <dependencies>
-          <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-eclipse-compiler</artifactId>
-            <version>2.9.2-04</version>
-          </dependency>
-          <!-- for 2.8.0-01 and later you must have an explicit dependency on groovy-eclipse-batch -->
-          <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-eclipse-batch</artifactId>
-            <version>2.4.14-01</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <version>2.5.1</version>
@@ -221,13 +198,6 @@
   </build>
 
   <dependencies>
-    <dependency>
-      <groupId>org.codehaus.groovy</groupId>
-      <artifactId>groovy-all</artifactId>
-      <version>${groovy.version}</version>
-      <scope>test</scope>
-    </dependency>
-
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
