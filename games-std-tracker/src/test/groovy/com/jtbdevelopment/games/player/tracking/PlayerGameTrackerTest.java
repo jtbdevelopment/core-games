@@ -14,7 +14,6 @@ import com.jtbdevelopment.games.players.PlayerPayLevel;
 import com.jtbdevelopment.games.publish.PlayerPublisher;
 import com.jtbdevelopment.games.tracking.PlayerGameEligibility;
 import com.jtbdevelopment.games.tracking.PlayerGameEligibilityResult;
-import groovy.transform.CompileStatic;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -28,7 +27,6 @@ import org.springframework.data.mongodb.core.query.Update;
 /**
  * Date: 4/9/15 Time: 9:29 AM
  */
-@CompileStatic
 public class PlayerGameTrackerTest extends MongoGameCoreTestCase {
 
   private static int DEFAULT_FREE = 22;
