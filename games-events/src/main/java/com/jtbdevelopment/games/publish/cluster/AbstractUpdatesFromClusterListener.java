@@ -24,7 +24,7 @@ public abstract class AbstractUpdatesFromClusterListener {
   protected AbstractPlayerRepository playerRepository;
   @Autowired
   protected StringToIDConverter<? extends Serializable> stringToIDConverter;
-  @Autowired(required = false)
+  @Autowired
   protected AbstractGameRepository gameRepository;
 
   protected void receiveClusterMessage(final ClusterMessage clusterMessage) {

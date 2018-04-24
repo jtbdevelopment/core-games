@@ -117,4 +117,7 @@ public abstract class GameCoreTestCase {
     return game;
   }
 
+  public static String reverse(final String input) {
+    return new StringBuilder(input).reverse().toString();
+  }
 }
