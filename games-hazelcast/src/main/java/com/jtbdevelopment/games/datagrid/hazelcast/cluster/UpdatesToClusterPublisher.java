@@ -4,8 +4,6 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ITopic;
 import com.jtbdevelopment.games.publish.cluster.AbstractUpdatesToClusterPublisher;
 import com.jtbdevelopment.games.publish.cluster.ClusterMessage;
-import javax.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,12 +13,9 @@ import org.springframework.stereotype.Component;
 public class UpdatesToClusterPublisher extends AbstractUpdatesToClusterPublisher {
 
   public static final String PUB_SUB_TOPIC = "GAME_TOPIC";
-  @Autowired
-  protected HazelcastInstance hazelcastInstance;
-  private ITopic topic;
+  protected final ITopic topic;
 
-  @PostConstruct
-  public void setup() {
+  public UpdatesToClusterPublisher(HazelcastInstance hazelcastInstance) {
     topic = hazelcastInstance.getTopic(PUB_SUB_TOPIC);
   }
 
