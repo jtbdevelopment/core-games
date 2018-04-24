@@ -4,10 +4,13 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ITopic;
 import com.hazelcast.core.Message;
 import com.hazelcast.core.MessageListener;
+import com.jtbdevelopment.games.dao.AbstractGameRepository;
+import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
+import com.jtbdevelopment.games.dao.StringToIDConverter;
+import com.jtbdevelopment.games.events.GamePublisher;
+import com.jtbdevelopment.games.publish.PlayerPublisher;
 import com.jtbdevelopment.games.publish.cluster.AbstractUpdatesFromClusterListener;
 import com.jtbdevelopment.games.publish.cluster.ClusterMessage;
-import javax.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,12 +20,17 @@ import org.springframework.stereotype.Component;
 public class UpdatesFromClusterListener extends AbstractUpdatesFromClusterListener implements
     MessageListener<ClusterMessage> {
 
-  @Autowired
-  protected HazelcastInstance hazelcastInstance;
-  private ITopic topic;
+  @SuppressWarnings("FieldCanBeLocal")
+  protected final ITopic<ClusterMessage> topic;
 
-  @PostConstruct
-  public void setup() {
+  public UpdatesFromClusterListener(
+      final HazelcastInstance hazelcastInstance,
+      final GamePublisher gamePublisher,
+      final PlayerPublisher playerPublisher,
+      final StringToIDConverter stringToIDConverter,
+      final AbstractGameRepository gameRepository,
+      final AbstractPlayerRepository playerRepository) {
+    super(gamePublisher, playerPublisher, stringToIDConverter, playerRepository, gameRepository);
     topic = hazelcastInstance.getTopic(UpdatesToClusterPublisher.PUB_SUB_TOPIC);
     topic.addMessageListener(this);
   }

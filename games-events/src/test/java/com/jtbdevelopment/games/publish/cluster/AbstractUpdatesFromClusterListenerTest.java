@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import com.jtbdevelopment.games.GameCoreTestCase;
 import com.jtbdevelopment.games.dao.AbstractGameRepository;
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
+import com.jtbdevelopment.games.dao.StringToIDConverter;
 import com.jtbdevelopment.games.events.GamePublisher;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.publish.PlayerPublisher;
@@ -17,8 +18,8 @@ import com.jtbdevelopment.games.publish.cluster.ClusterMessage.ClusterMessageTyp
 import com.jtbdevelopment.games.state.Game;
 import com.jtbdevelopment.games.state.MultiPlayerGame;
 import com.jtbdevelopment.games.stringimpl.StringToStringConverter;
+import java.io.Serializable;
 import java.util.Optional;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
@@ -28,21 +29,26 @@ import org.mockito.Mockito;
  */
 public class AbstractUpdatesFromClusterListenerTest {
 
-  private AbstractUpdatesFromClusterListener listener = new AbstractUpdatesFromClusterListener() {
-  };
+  private TestListener listener = new TestListener(gamePublisher, playerPublisher,
+      new StringToStringConverter(), playerRepository, gameRepository);
+
   private PlayerPublisher playerPublisher = mock(PlayerPublisher.class);
   private AbstractGameRepository gameRepository = mock(AbstractGameRepository.class);
   private GamePublisher gamePublisher = mock(GamePublisher.class);
   private AbstractPlayerRepository playerRepository = mock(AbstractPlayerRepository.class);
 
-  @Before
-  public void setup() {
-    listener.stringToIDConverter = new StringToStringConverter();
-    listener.playerPublisher = playerPublisher;
-    listener.playerRepository = playerRepository;
-    listener.gameRepository = gameRepository;
-    listener.gamePublisher = gamePublisher;
+  private static class TestListener extends AbstractUpdatesFromClusterListener {
+
+    public TestListener(GamePublisher gamePublisher,
+        PlayerPublisher playerPublisher,
+        StringToIDConverter<? extends Serializable> stringToIDConverter,
+        AbstractPlayerRepository playerRepository,
+        AbstractGameRepository gameRepository) {
+      super(gamePublisher, playerPublisher, stringToIDConverter, playerRepository, gameRepository);
+    }
   }
+
+  ;
 
   @Test
   public void testReceivePublishAllPlayers() {

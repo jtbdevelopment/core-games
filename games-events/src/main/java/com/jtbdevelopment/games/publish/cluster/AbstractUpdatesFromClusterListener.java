@@ -9,23 +9,30 @@ import com.jtbdevelopment.games.publish.PlayerPublisher;
 import com.jtbdevelopment.games.state.Game;
 import java.io.Serializable;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Date: 2/17/15 Time: 6:56 AM
  */
 public abstract class AbstractUpdatesFromClusterListener {
 
-  @Autowired
-  protected GamePublisher gamePublisher;
-  @Autowired
-  protected PlayerPublisher playerPublisher;
-  @Autowired
-  protected AbstractPlayerRepository playerRepository;
-  @Autowired
-  protected StringToIDConverter<? extends Serializable> stringToIDConverter;
-  @Autowired
-  protected AbstractGameRepository gameRepository;
+  protected final GamePublisher gamePublisher;
+  protected final PlayerPublisher playerPublisher;
+  protected final AbstractPlayerRepository playerRepository;
+  protected final StringToIDConverter<? extends Serializable> stringToIDConverter;
+  protected final AbstractGameRepository gameRepository;
+
+  protected AbstractUpdatesFromClusterListener(
+      final GamePublisher gamePublisher,
+      final PlayerPublisher playerPublisher,
+      final StringToIDConverter stringToIDConverter,
+      final AbstractPlayerRepository playerRepository,
+      final AbstractGameRepository gameRepository) {
+    this.gamePublisher = gamePublisher;
+    this.playerPublisher = playerPublisher;
+    this.playerRepository = playerRepository;
+    this.stringToIDConverter = stringToIDConverter;
+    this.gameRepository = gameRepository;
+  }
 
   protected void receiveClusterMessage(final ClusterMessage clusterMessage) {
     switch (clusterMessage.getClusterMessageType()) {
