@@ -20,10 +20,10 @@ import org.springframework.stereotype.Component;
 public class GamePublisherImpl implements GamePublisher<Game> {
 
   private static final Logger logger = LoggerFactory.getLogger(GamePublisherImpl.class);
-  protected final List<GameListener> subscribers;
-  protected final ExecutorService service;
+  final ExecutorService service;
+  private final List<GameListener> subscribers;
 
-  public GamePublisherImpl(
+  GamePublisherImpl(
       @Value("${publishing.threads:10}") final int threads,
       final List<GameListener> subscribers) {
     service = Executors.newFixedThreadPool(threads);
