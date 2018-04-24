@@ -26,7 +26,7 @@ public class PushWebSocketPublicationListener implements WebSocketPublicationLis
 
   private static final Logger logger = LoggerFactory
       .getLogger(PushWebSocketPublicationListener.class);
-  private static final String WEB_SOCKET_TRACKING_MAP = "PUSH_TRACKING_MAP";
+  public static final String WEB_SOCKET_TRACKING_MAP = "PUSH_TRACKING_MAP";
   private static final ZoneId GMT = ZoneId.of("GMT");
   private static final int CUTOFF_DAYS = 30;
   private static Instant registeredCutoff;

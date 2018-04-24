@@ -16,6 +16,7 @@ class PushPropertiesTest extends GroovyTestCase {
         Method m = properties.class.getMethod('testSetup')
         assert m.getAnnotation(PostConstruct.class)
     }
+
     void testValueAnnotations() {
         assert PushProperties.class.
                 getDeclaredField('senderID')?.

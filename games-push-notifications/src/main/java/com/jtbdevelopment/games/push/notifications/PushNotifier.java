@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.annotation.PostConstruct;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -44,24 +43,42 @@ public class PushNotifier {
   private static final String GCM_URL = "https://gcm-http.googleapis.com/gcm/send";
   private static final URI GCM_URI = UriBuilder.fromUri(GCM_URL).build();
   private static int DEFAULT_TTL = 60 * 60 * 4;
-  protected Builder builder;
-  protected Map<String, Object> baseMessage;
-  @Autowired
-  protected ObjectMapper objectMapper;
-  @Autowired
-  protected PushProperties pushProperties;
-  @Autowired
-  protected AbstractPlayerRepository playerRepository;
-  private Client client = ClientBuilder.newClient();
+  protected final Builder builder;
+  protected final Map<String, Object> baseMessage;
+  protected final AbstractPlayerRepository playerRepository;
+  private final ObjectMapper objectMapper;
+  private final Client client;
 
-  @PostConstruct
-  public void setup() {
+  @Autowired
+  public PushNotifier(
+      final ObjectMapper objectMapper,
+      final PushProperties pushProperties,
+      final AbstractPlayerRepository playerRepository) {
+    this.playerRepository = playerRepository;
+    this.objectMapper = objectMapper;
+    client = ClientBuilder.newClient();
     client.register(
         new JacksonJaxbJsonProvider(objectMapper, JacksonJaxbJsonProvider.DEFAULT_ANNOTATIONS));
     builder = client.target(GCM_URI).request(MediaType.APPLICATION_JSON_TYPE)
         .header("Content-Type", MediaType.APPLICATION_JSON)
         .header("Authorization", "key=" + pushProperties.getApiKey());
+    baseMessage = createBaseMessage();
+  }
 
+  //  for testing
+  protected PushNotifier(
+      final ObjectMapper objectMapper,
+      final AbstractPlayerRepository playerRepository,
+      final Client client,
+      final Builder builder) {
+    this.builder = builder;
+    this.playerRepository = playerRepository;
+    this.objectMapper = objectMapper;
+    this.client = client;
+    baseMessage = createBaseMessage();
+  }
+
+  protected Map<String, Object> createBaseMessage() {
     Map<String, Object> message = new HashMap<>();
     message.put("collapse_key", "YourTurn");
     message.put("time_to_live", DEFAULT_TTL);
@@ -74,7 +91,7 @@ public class PushNotifier {
     notification.put("message", "Your turn to play.");
     notification.put("badge", "1");
     message.put("notification", notification);
-    baseMessage = new HashMap<>(message);
+    return message;
   }
 
   public boolean notifyPlayer(final Player<?> player, final MultiPlayerGame game) {
@@ -89,7 +106,7 @@ public class PushNotifier {
           .collect(Collectors.toList());
       message.put("registration_ids", deviceIDs);
 
-      Entity entity = Entity.entity((HashMap<String, Object>) message, MediaType.APPLICATION_JSON);
+      Entity entity = Entity.entity(message, MediaType.APPLICATION_JSON);
       if (objectMapper != null) {
         logger.trace("Posting to GCM message " + objectMapper.writeValueAsString(message));
       }

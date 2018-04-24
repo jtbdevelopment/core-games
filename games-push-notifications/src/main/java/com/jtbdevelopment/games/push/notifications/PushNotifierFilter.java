@@ -23,8 +23,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class PushNotifierFilter implements EntryEvictedListener<GamePublicationTracker, Boolean> {
 
+  public static final String PLAYER_PUSH_TRACKING_MAP = "PUSH_PLAYER_TRACKING_SET";
   private static final Logger logger = LoggerFactory.getLogger(PushNotifierFilter.class);
-  private static final String PLAYER_PUSH_TRACKING_MAP = "PUSH_PLAYER_TRACKING_SET";
   protected ConcurrentMap<Serializable, Serializable> recentlyPushedPlayers;
   @Autowired
   protected HazelcastInstance hazelcastInstance;

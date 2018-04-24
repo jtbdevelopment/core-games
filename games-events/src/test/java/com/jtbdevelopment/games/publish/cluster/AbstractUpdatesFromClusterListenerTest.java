@@ -29,17 +29,17 @@ import org.mockito.Mockito;
  */
 public class AbstractUpdatesFromClusterListenerTest {
 
-  private TestListener listener = new TestListener(gamePublisher, playerPublisher,
-      new StringToStringConverter(), playerRepository, gameRepository);
-
   private PlayerPublisher playerPublisher = mock(PlayerPublisher.class);
   private AbstractGameRepository gameRepository = mock(AbstractGameRepository.class);
   private GamePublisher gamePublisher = mock(GamePublisher.class);
   private AbstractPlayerRepository playerRepository = mock(AbstractPlayerRepository.class);
+  private TestListener listener = new TestListener(gamePublisher, playerPublisher,
+      new StringToStringConverter(), playerRepository, gameRepository);
+
 
   private static class TestListener extends AbstractUpdatesFromClusterListener {
 
-    public TestListener(GamePublisher gamePublisher,
+    TestListener(GamePublisher gamePublisher,
         PlayerPublisher playerPublisher,
         StringToIDConverter<? extends Serializable> stringToIDConverter,
         AbstractPlayerRepository playerRepository,
