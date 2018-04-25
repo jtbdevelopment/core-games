@@ -1,7 +1,5 @@
 package com.jtbdevelopment.games.maintenance;
 
-import javax.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean;
 import org.springframework.stereotype.Component;
 
@@ -11,11 +9,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlayerCleanupJobDetailFactoryBean extends MethodInvokingJobDetailFactoryBean {
 
-  @Autowired
-  protected PlayerCleanup playerCleanup;
-
-  @PostConstruct
-  public void setup() {
+  public PlayerCleanupJobDetailFactoryBean(
+      final PlayerCleanup playerCleanup) {
     setTargetObject(playerCleanup);
     setTargetMethod("deleteInactivePlayers");
   }

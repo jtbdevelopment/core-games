@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.maintenance;
 
-import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.stereotype.Component;
@@ -12,10 +11,8 @@ import org.springframework.stereotype.Component;
 public class GameCleanupScheduleFactoryBean extends CronTriggerFactoryBean {
 
   @Autowired
-  protected GameCleanupJobDetailFactoryBean jobDetail;
-
-  @PostConstruct
-  public void setup() {
+  public GameCleanupScheduleFactoryBean(
+      final GameCleanupJobDetailFactoryBean jobDetail) {
     setJobDetail(jobDetail.getObject());
     setCronExpression("0 0 0 * * ?");
     setName("Delete Old Games");

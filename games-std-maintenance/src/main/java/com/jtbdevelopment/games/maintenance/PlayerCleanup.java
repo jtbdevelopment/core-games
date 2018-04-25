@@ -28,10 +28,15 @@ public class PlayerCleanup {
   private static final Logger logger = LoggerFactory.getLogger(PlayerCleanup.class);
   private static final ZoneId GMT = ZoneId.of("GMT");
   private static final int DAYS_BACK = 90;
-  @Autowired
-  protected AbstractPlayerRepository playerRepository;
-  @Autowired(required = false)
-  protected AbstractUsersConnectionRepository usersConnectionRepository;
+  private final AbstractPlayerRepository playerRepository;
+  private final AbstractUsersConnectionRepository usersConnectionRepository;
+
+  public PlayerCleanup(
+      final AbstractPlayerRepository playerRepository,
+      @Autowired(required = false) final AbstractUsersConnectionRepository usersConnectionRepository) {
+    this.playerRepository = playerRepository;
+    this.usersConnectionRepository = usersConnectionRepository;
+  }
 
   public void deleteInactivePlayers() {
     ZonedDateTime cutoff = ZonedDateTime.now(GMT).minusDays(DAYS_BACK);
@@ -41,6 +46,7 @@ public class PlayerCleanup {
     List<Player<?>> playersToDelete = byLastLoginLessThan
         .stream()
         .filter(x -> !(x instanceof ManualPlayer || x instanceof SystemPlayer))
+        .map(x -> (Player) x)
         .collect(Collectors.toList());
     logger.info("Found " + playersToDelete.size() + " to cleanup.");
     playersToDelete.forEach(p -> {

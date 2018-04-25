@@ -1,7 +1,5 @@
 package com.jtbdevelopment.games.maintenance;
 
-import javax.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean;
 import org.springframework.stereotype.Component;
 
@@ -11,11 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class GameCleanupJobDetailFactoryBean extends MethodInvokingJobDetailFactoryBean {
 
-  @Autowired
-  protected GameCleanup gameCleanup;
-
-  @PostConstruct
-  public void setup() {
+  public GameCleanupJobDetailFactoryBean(final GameCleanup gameCleanup) {
     setTargetObject(gameCleanup);
     setTargetMethod("deleteOlderGames");
   }

@@ -39,7 +39,7 @@ public abstract class GameCoreTestCase {
     return GameCoreTestCase.makeSimplePlayer(id, false);
   }
 
-  public static ManualPlayer<String> makeSimpleManualPlayer(final String id, final String password,
+  public static StringManualPlayer makeSimpleManualPlayer(final String id, final String password,
       final boolean verified, final boolean disabled, final boolean admin) {
     StringManualPlayer player = new StringManualPlayer();
 
@@ -71,11 +71,11 @@ public abstract class GameCoreTestCase {
     return GameCoreTestCase.makeSimpleManualPlayer(id, password, true, false, false);
   }
 
-  public static ManualPlayer<String> makeSimpleManualPlayer(final String id) {
+  public static StringManualPlayer makeSimpleManualPlayer(final String id) {
     return GameCoreTestCase.makeSimpleManualPlayer(id, "", true, false, false);
   }
 
-  protected static SystemPlayer<String> makeSimpleSystemPlayer(final String id,
+  private static StringSystemPlayer makeSimpleSystemPlayer(final String id,
       final boolean disabled, final Object admin) {
     StringSystemPlayer player = new StringSystemPlayer();
 
@@ -95,7 +95,7 @@ public abstract class GameCoreTestCase {
     return GameCoreTestCase.makeSimpleSystemPlayer(id, disabled, false);
   }
 
-  protected static SystemPlayer<String> makeSimpleSystemPlayer(final String id) {
+  public static StringSystemPlayer makeSimpleSystemPlayer(final String id) {
     return GameCoreTestCase.makeSimpleSystemPlayer(id, false, false);
   }
 
