@@ -13,18 +13,18 @@ import org.springframework.stereotype.Component;
  * TODO - perhaps we should archive them in the future and/or move them to a compressed collection
  */
 @Component
-public class GameCleanup {
+class GameCleanup {
 
   private static final Logger logger = LoggerFactory.getLogger(GameCleanup.class);
   private static final ZoneId GMT = ZoneId.of("GMT");
   private static final int DAYS_BACK = 60;
-  protected final AbstractGameRepository gameRepository;
+  private final AbstractGameRepository gameRepository;
 
-  public GameCleanup(final AbstractGameRepository gameRepository) {
+  GameCleanup(final AbstractGameRepository gameRepository) {
     this.gameRepository = gameRepository;
   }
 
-  public void deleteOlderGames() {
+  void deleteOlderGames() {
     ZonedDateTime cutoff = ZonedDateTime.now(GMT).minusDays(DAYS_BACK);
     logger.info("Deleting games created before " + cutoff);
     logger.info(

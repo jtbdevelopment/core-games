@@ -31,22 +31,22 @@ public class PlayerCleanup {
   private final AbstractPlayerRepository playerRepository;
   private final AbstractUsersConnectionRepository usersConnectionRepository;
 
-  public PlayerCleanup(
+  PlayerCleanup(
       final AbstractPlayerRepository playerRepository,
       @Autowired(required = false) final AbstractUsersConnectionRepository usersConnectionRepository) {
     this.playerRepository = playerRepository;
     this.usersConnectionRepository = usersConnectionRepository;
   }
 
-  public void deleteInactivePlayers() {
+  void deleteInactivePlayers() {
     ZonedDateTime cutoff = ZonedDateTime.now(GMT).minusDays(DAYS_BACK);
     logger.info("Deleting players not logged in since " + cutoff);
 
-    List<Player> byLastLoginLessThan = playerRepository.findByLastLoginLessThan(cutoff.toInstant());
+    List<Player<?>> byLastLoginLessThan = playerRepository
+        .findByLastLoginLessThan(cutoff.toInstant());
     List<Player<?>> playersToDelete = byLastLoginLessThan
         .stream()
         .filter(x -> !(x instanceof ManualPlayer || x instanceof SystemPlayer))
-        .map(x -> (Player) x)
         .collect(Collectors.toList());
     logger.info("Found " + playersToDelete.size() + " to cleanup.");
     playersToDelete.forEach(p -> {
