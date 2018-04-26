@@ -7,8 +7,8 @@ import com.jtbdevelopment.games.state.AbstractSinglePlayerGame;
  */
 public class StringSPGame extends AbstractSinglePlayerGame<String, Object> {
 
-  private String id;
-  private String previousId;
+  private String id = "";
+  private String previousId = "";
 
   @Override
   public String getIdAsString() {

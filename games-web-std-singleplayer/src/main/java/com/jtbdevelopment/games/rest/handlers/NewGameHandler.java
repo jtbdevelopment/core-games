@@ -8,6 +8,7 @@ import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.state.Game;
 import com.jtbdevelopment.games.state.SinglePlayerGame;
 import com.jtbdevelopment.games.state.masking.GameMasker;
+import com.jtbdevelopment.games.state.masking.MaskedSinglePlayerGame;
 import com.jtbdevelopment.games.state.transition.GameTransitionEngine;
 import com.jtbdevelopment.games.tracking.GameEligibilityTracker;
 import com.jtbdevelopment.games.tracking.PlayerGameEligibility;
@@ -16,7 +17,6 @@ import java.io.Serializable;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -26,36 +26,37 @@ import org.springframework.stereotype.Component;
 public class NewGameHandler extends AbstractHandler {
 
   private static final Logger logger = LoggerFactory.getLogger(NewGameHandler.class);
-  @Autowired
-  protected AbstractSinglePlayerGameFactory gameFactory;
-  @Autowired
-  protected AbstractSinglePlayerGameRepository gameRepository;
-  @Autowired(required = false)
-  protected GameTransitionEngine transitionEngine;
-  @Autowired(required = false)
-  protected GameMasker gameMasker;
-  @Autowired(required = false)
-  protected GamePublisher gamePublisher;
-  @Autowired(required = false)
-  protected GameEligibilityTracker gameTracker;
+  private final AbstractSinglePlayerGameFactory<SinglePlayerGame, Object> gameFactory;
+  private final AbstractSinglePlayerGameRepository<?, ?, ?, SinglePlayerGame<?, ?, ?>> gameRepository;
+  private final GameTransitionEngine<SinglePlayerGame> transitionEngine;
+  private final GameMasker<?, SinglePlayerGame, MaskedSinglePlayerGame> gameMasker;
+  private final GamePublisher<SinglePlayerGame> gamePublisher;
+  private final GameEligibilityTracker<PlayerGameEligibilityResult> gameTracker;
+
+  public NewGameHandler(
+      final AbstractSinglePlayerGameFactory<SinglePlayerGame, Object> gameFactory,
+      final AbstractSinglePlayerGameRepository<?, ?, ?, SinglePlayerGame<?, ?, ?>> gameRepository,
+      final GameTransitionEngine<SinglePlayerGame> transitionEngine,
+      final GameMasker<?, SinglePlayerGame, MaskedSinglePlayerGame> gameMasker,
+      final GamePublisher<SinglePlayerGame> gamePublisher,
+      final GameEligibilityTracker<PlayerGameEligibilityResult> gameTracker) {
+    this.gameFactory = gameFactory;
+    this.gameRepository = gameRepository;
+    this.transitionEngine = transitionEngine;
+    this.gameMasker = gameMasker;
+    this.gamePublisher = gamePublisher;
+    this.gameTracker = gameTracker;
+  }
 
   public Game handleCreateNewGame(final Serializable playerID, final Set<?> features) {
     Player player = loadPlayer(playerID);//  Load as set to prevent dupes in initial setup
-    Game game = setupGameWithEligibilityWrapper(features, player);
+    SinglePlayerGame game = setupGameWithEligibilityWrapper(features, player);
 
-    if (gamePublisher != null) {
-      gamePublisher.publish(game, player);
-    }
-
-    if (gameMasker != null) {
-      return gameMasker.maskGameForPlayer(game, player);
-    } else {
-      return game;
-    }
-
+    gamePublisher.publish(game, player);
+    return gameMasker.maskGameForPlayer(game, player);
   }
 
-  protected Game setupGameWithEligibilityWrapper(final Set<?> features, Player player) {
+  private SinglePlayerGame setupGameWithEligibilityWrapper(final Set<?> features, Player player) {
     PlayerGameEligibilityResult eligibilityResult = null;
     if (gameTracker != null) {
       eligibilityResult = gameTracker.getGameEligibility(player);
@@ -65,9 +66,8 @@ public class NewGameHandler extends AbstractHandler {
       throw new OutOfGamesForTodayException();
     }
 
-    Game game;
     try {
-      game = setupGame(features, player);
+      return setupGame(features, player);
     } catch (Exception e) {
       try {
         if (eligibilityResult != null) {
@@ -81,16 +81,13 @@ public class NewGameHandler extends AbstractHandler {
 
       throw e;
     }
-
-    return game;
   }
 
-  protected Game setupGame(final Set<?> features, final Player player) {
-    SinglePlayerGame game = gameFactory.createGame(features, player);
-    if (transitionEngine != null) {
-      game = ((SinglePlayerGame) (transitionEngine.evaluateGame(game)));
-    }
+  private SinglePlayerGame setupGame(final Set<?> features, final Player player) {
+    SinglePlayerGame game = gameFactory.createGame((Set<Object>) features, player);
+    game = transitionEngine.evaluateGame(game);
 
-    return gameRepository.save(game);
+    SinglePlayerGame<?, ?, ?> saved = gameRepository.save(game);
+    return saved;
   }
 }
