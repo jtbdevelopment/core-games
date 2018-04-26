@@ -26,7 +26,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -85,7 +84,7 @@ public class PushServicesTest {
   @Test
   public void testAddingDeviceAnnotations() throws NoSuchMethodException {
     Method m = PushServices.class.getMethod("registerDevice", new Class[]{String.class});
-    assertEquals(3, DefaultGroovyMethods.size(m.getAnnotations()));
+    assertEquals(3, m.getAnnotations().length);
     assertTrue(m.isAnnotationPresent(PUT.class));
     assertTrue(m.isAnnotationPresent(Produces.class));
     assertArrayEquals(Collections.singletonList(MediaType.APPLICATION_JSON).toArray(),
@@ -116,7 +115,7 @@ public class PushServicesTest {
   @Test
   public void testRemoveDeviceAnnotations() throws NoSuchMethodException {
     Method m = PushServices.class.getMethod("unregisteredDevice", new Class[]{String.class});
-    assertEquals(3, DefaultGroovyMethods.size(m.getAnnotations()));
+    assertEquals(3, m.getAnnotations().length);
     assertTrue(m.isAnnotationPresent(PUT.class));
     assertTrue(m.isAnnotationPresent(Produces.class));
     assertArrayEquals(
