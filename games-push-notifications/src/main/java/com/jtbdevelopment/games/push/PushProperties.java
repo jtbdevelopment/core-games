@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.push;
 
-import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,14 +13,15 @@ import org.springframework.util.StringUtils;
 public class PushProperties {
 
   private static final Logger logger = LoggerFactory.getLogger(PushProperties.class);
-  @Value("${push.senderID:}")
-  private String senderID;
-  @Value("${push.apiKey:}")
-  private String apiKey;
-  private boolean enabled;
+  private final String senderID;
+  private final String apiKey;
+  private final boolean enabled;
 
-  @PostConstruct
-  public void testSetup() {
+  public PushProperties(
+      @Value("${push.senderID:}") final String senderID,
+      @Value("${push.apiKey:}") String apiKey) {
+    this.senderID = senderID;
+    this.apiKey = apiKey;
     if (StringUtils.isEmpty(senderID) || StringUtils.isEmpty(apiKey)) {
       enabled = false;
       logger.warn(
@@ -44,23 +44,11 @@ public class PushProperties {
     return senderID;
   }
 
-  public void setSenderID(String senderID) {
-    this.senderID = senderID;
-  }
-
   public String getApiKey() {
     return apiKey;
   }
 
-  public void setApiKey(String apiKey) {
-    this.apiKey = apiKey;
-  }
-
   public boolean isEnabled() {
     return enabled;
-  }
-
-  public void setEnabled(boolean enabled) {
-    this.enabled = enabled;
   }
 }

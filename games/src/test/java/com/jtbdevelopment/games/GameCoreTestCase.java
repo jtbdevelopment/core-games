@@ -23,7 +23,7 @@ public abstract class GameCoreTestCase {
   public static final Player<String> PINACTIVE1 = makeSimplePlayer("A1", true);
   public static final Player<String> PINACTIVE2 = makeSimplePlayer("A2", true);
 
-  public static Player<String> makeSimplePlayer(final String id, final boolean disabled) {
+  public static StringPlayer makeSimplePlayer(final String id, final boolean disabled) {
     StringPlayer player = new StringPlayer();
     player.setId(id);
     player.setSource("MADEUP");
@@ -35,7 +35,7 @@ public abstract class GameCoreTestCase {
     return player;
   }
 
-  public static Player<String> makeSimplePlayer(final String id) {
+  public static StringPlayer makeSimplePlayer(final String id) {
     return GameCoreTestCase.makeSimplePlayer(id, false);
   }
 
