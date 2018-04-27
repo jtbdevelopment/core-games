@@ -13,7 +13,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,7 +50,7 @@ public class AbstractSinglePlayerServicesTest {
   public void testGamesAnnotations() throws NoSuchMethodException {
     Method gameServices = AbstractSinglePlayerServices.class
         .getMethod("gamesForPlayer", new Class[0]);
-    Assert.assertEquals(3, DefaultGroovyMethods.size(gameServices.getAnnotations()));
+    Assert.assertEquals(3, gameServices.getAnnotations().length);
     Assert.assertTrue(gameServices.isAnnotationPresent(Path.class));
     Assert.assertEquals("games", gameServices.getAnnotation(Path.class).value());
     Assert.assertTrue(gameServices.isAnnotationPresent(Produces.class));
