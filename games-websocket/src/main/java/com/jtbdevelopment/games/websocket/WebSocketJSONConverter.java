@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import org.atmosphere.config.managed.Decoder;
 import org.atmosphere.config.managed.Encoder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,11 +14,10 @@ import org.springframework.stereotype.Component;
 public class WebSocketJSONConverter implements Encoder<WebSocketMessage, String>,
     Decoder<String, WebSocketMessage> {
 
-  private static ObjectMapper mapper;
+  private final ObjectMapper mapper;
 
-  @Autowired
-  public void setObjectMapper(final ObjectMapper objectMapper) {
-    mapper = objectMapper;
+  public WebSocketJSONConverter(final ObjectMapper mapper) {
+    this.mapper = mapper;
   }
 
   @Override
