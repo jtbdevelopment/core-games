@@ -111,7 +111,7 @@ public abstract class GameCoreTestCase {
     return game;
   }
 
-  protected static StringSPGame makeSimpleSPGame(final String id) {
+  public static StringSPGame makeSimpleSPGame(final String id) {
     StringSPGame game = new StringSPGame();
     game.setId(id);
     return game;

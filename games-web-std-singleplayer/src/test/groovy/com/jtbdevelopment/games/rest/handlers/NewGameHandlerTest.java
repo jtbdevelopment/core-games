@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.rest.handlers;
 
 import static com.jtbdevelopment.games.GameCoreTestCase.PONE;
+import static com.jtbdevelopment.games.GameCoreTestCase.makeSimpleSPGame;
 
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.dao.AbstractSinglePlayerGameRepository;
@@ -50,12 +51,12 @@ public class NewGameHandlerTest {
   public void testCreateGame() {
     Set<Object> features = new HashSet<>(
         Arrays.asList("GameFeature.SystemPuzzles", "GameFeature.Thieving"));
-    StringSPGame game = new StringSPGame();
+    StringSPGame game = makeSimpleSPGame("1");
     game.getFeatures().addAll(features);
-    StringSPGame savedGame = new StringSPGame();
+    StringSPGame savedGame = makeSimpleSPGame("2");
     savedGame.setFeatures(features);
-    StringSPGame transitionedGame = new StringSPGame();
-    StringSPGame publishedGame = new StringSPGame();
+    StringSPGame transitionedGame = makeSimpleSPGame("3");
+    StringSPGame publishedGame = makeSimpleSPGame("4");
     Mockito.when(gameFactory.createGame(features, PONE)).thenReturn(game);
     Mockito.when(gameRepository.save(transitionedGame)).thenReturn(savedGame);
     Mockito.when(playerRepository.findById(PONE.getId())).thenReturn(Optional.of(PONE));
@@ -75,7 +76,7 @@ public class NewGameHandlerTest {
   public void testCreateGameAndTransitionExceptionsRevertsEligibility() {
     Set<Object> features = new HashSet<>(
         Arrays.asList("GameFeature.SystemPuzzles", "GameFeature.Thieving"));
-    StringSPGame game = new StringSPGame();
+    StringSPGame game = makeSimpleSPGame("");
     game.getFeatures().addAll(features);
     Mockito.when(gameFactory.createGame(features, PONE)).thenReturn(game);
     Mockito.when(playerRepository.findById(PONE.getId())).thenReturn(Optional.of(PONE));
@@ -97,7 +98,7 @@ public class NewGameHandlerTest {
   public void testCreateGameRevertedAndRevertFails() {
     Set<Object> features = new HashSet<>(
         Arrays.asList("GameFeature.SystemPuzzles", "GameFeature.Thieving"));
-    StringSPGame game = new StringSPGame();
+    StringSPGame game = makeSimpleSPGame("");
     game.getFeatures().addAll(features);
     Mockito.when(gameFactory.createGame(features, PONE)).thenReturn(game);
     Mockito.when(playerRepository.findById(PONE.getId())).thenReturn(Optional.of(PONE));
