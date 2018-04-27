@@ -192,10 +192,10 @@ class AtmosphereListenerTest extends GroovyTestCase {
 
     void testPublishGameToConnectedNonInitiatingPlayers() {
         MultiPlayerGame game = [
-                getId     : {
+                getId        : {
                     return 'An ID!'
                 },
-                getPlayers: {
+                getPlayers   : {
                     [PONE, PTWO, PTHREE, PFOUR]
                 },
                 getAllPlayers: {
