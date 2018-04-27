@@ -44,14 +44,16 @@ public class LiveFeedService {
     if (event.isCancelled()) {
       // We didn't get notified, so we remove the user.
       logger.info("Browser {} unexpectedly disconnected for pathParam {}.",
-          event.getResource().uuid(), id);
+          event.getResource().uuid(),
+          id);
     } else if (event.isClosedByClient()) {
-      logger.info("Browser {} closed the connection for pathParam {}.", event.getResource().uuid(),
+      logger.info("Browser {} closed the connection for pathParam {}.",
+          event.getResource().uuid(),
           id);
     } else {
-      logger
-          .info("Browser {} closed for other reason for pathParam {}.", event.getResource().uuid(),
-              id);
+      logger.info("Browser {} closed for other reason for pathParam {}.",
+          event.getResource().uuid(),
+          id);
     }
 
   }
