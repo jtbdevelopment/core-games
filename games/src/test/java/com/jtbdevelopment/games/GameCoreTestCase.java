@@ -6,6 +6,8 @@ import com.jtbdevelopment.games.players.SystemPlayer;
 import com.jtbdevelopment.games.stringimpl.StringGame;
 import com.jtbdevelopment.games.stringimpl.StringMPGame;
 import com.jtbdevelopment.games.stringimpl.StringManualPlayer;
+import com.jtbdevelopment.games.stringimpl.StringMaskedMPGame;
+import com.jtbdevelopment.games.stringimpl.StringMaskedSPGame;
 import com.jtbdevelopment.games.stringimpl.StringPlayer;
 import com.jtbdevelopment.games.stringimpl.StringSPGame;
 import com.jtbdevelopment.games.stringimpl.StringSystemPlayer;
@@ -111,8 +113,20 @@ public abstract class GameCoreTestCase {
     return game;
   }
 
+  public static StringMaskedMPGame makeSimpleMaskedMPGame(final String id) {
+    StringMaskedMPGame game = new StringMaskedMPGame();
+    game.setId(id);
+    return game;
+  }
+
   public static StringSPGame makeSimpleSPGame(final String id) {
     StringSPGame game = new StringSPGame();
+    game.setId(id);
+    return game;
+  }
+
+  public static StringMaskedSPGame makeSimpleMaskedSPGame(final String id) {
+    StringMaskedSPGame game = new StringMaskedSPGame();
     game.setId(id);
     return game;
   }

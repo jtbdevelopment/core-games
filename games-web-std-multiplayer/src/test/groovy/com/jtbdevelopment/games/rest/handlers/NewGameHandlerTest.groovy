@@ -88,7 +88,9 @@ class NewGameHandlerTest extends GroovyTestCase {
                 }
         ] as GameMasker
 
-        assert maskedGame.is(handler.handleCreateNewGame(initiatingPlayer.id, players.collect { it.md5 }, features))
+        assert maskedGame.is(handler.handleCreateNewGame(initiatingPlayer.id, players.collect {
+            it.md5
+        }, features))
     }
 
     void testCreateGameNoOptionalPlugins() {
@@ -120,7 +122,9 @@ class NewGameHandlerTest extends GroovyTestCase {
                 }
         ] as AbstractPlayerRepository
 
-        assert savedGame.is(handler.handleCreateNewGame(initiatingPlayer.id, players.collect { it.md5 }, features))
+        assert savedGame.is(handler.handleCreateNewGame(initiatingPlayer.id, players.collect {
+            it.md5
+        }, features))
     }
 
     void testCreateGameAndTransitionExceptions() {

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -25,14 +24,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlayerGamesFinderHandler extends AbstractGameGetterHandler {
 
-  public static final ZoneId GMT = ZoneId.of("GMT");
-  public static final Sort SORT = new Sort(Direction.DESC,
-      new ArrayList<>(Arrays.asList("lastUpdate", "created")));
+  private static final ZoneId GMT = ZoneId.of("GMT");
+  private static final Sort SORT = new Sort(Direction.DESC, Arrays.asList("lastUpdate", "created"));
   private static int DEFAULT_PAGE_SIZE = 20;
   private static int DEFAULT_PAGE = 0;
-  public static final PageRequest PAGE = PageRequest.of(DEFAULT_PAGE, DEFAULT_PAGE_SIZE, SORT);
-  @Autowired
-  protected GameMasker gameMasker;
+  private static final PageRequest PAGE = PageRequest.of(DEFAULT_PAGE, DEFAULT_PAGE_SIZE, SORT);
+  private final GameMasker gameMasker;
+
+  public PlayerGamesFinderHandler(GameMasker gameMasker) {
+    this.gameMasker = gameMasker;
+  }
 
   public List<MaskedGame> findGames(final Serializable playerID) {
     final Player player = loadPlayer(playerID);
