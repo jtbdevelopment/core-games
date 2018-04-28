@@ -39,7 +39,9 @@ class OptimisticLockingExecutorTest extends GroovyTestCase {
         int count = 0
         Object retVal = new Object();
 
-        assert retVal.is(retry.doConcurrentOperation([proceed: { ++count; retVal }] as ProceedingJoinPoint))
+        assert retVal.is(retry.doConcurrentOperation([proceed: {
+            ++count; retVal
+        }] as ProceedingJoinPoint))
         assert count == 1
     }
 

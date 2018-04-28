@@ -45,7 +45,8 @@ class SecurityConfigTest extends GroovyTestCase {
         securityConfig.playerUserDetailsService = [] as PlayerUserDetailsService
         securityConfig.authenticationManagerBuilder = new AuthenticationManagerBuilder([] as ObjectPostProcessor) {
             @Override
-            AuthenticationManagerBuilder authenticationProvider(final AuthenticationProvider authenticationProvider) {
+            AuthenticationManagerBuilder authenticationProvider(
+                    final AuthenticationProvider authenticationProvider) {
                 provider = authenticationProvider
                 return super.authenticationProvider(authenticationProvider)
             }

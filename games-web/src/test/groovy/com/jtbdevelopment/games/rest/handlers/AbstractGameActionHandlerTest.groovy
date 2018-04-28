@@ -39,7 +39,8 @@ class AbstractGameActionHandlerTest extends GroovyTestCase {
         }
 
         @Override
-        protected Game handleActionInternal(final Player player, final Game game, final String param) {
+        protected Game handleActionInternal(
+                final Player player, final Game game, final String param) {
             assert param == testParam
             assert gameParam.is(game)
             if (internalException) {
@@ -53,7 +54,8 @@ class AbstractGameActionHandlerTest extends GroovyTestCase {
 
     void testDefaultRequiresEligibility() {
         assertFalse new AbstractGameActionHandler<String, Game>() {
-            protected Game handleActionInternal(final Player player, final Game game, final String param) {
+            protected Game handleActionInternal(
+                    final Player player, final Game game, final String param) {
             }
         }.requiresEligibilityCheck(null)
     }
