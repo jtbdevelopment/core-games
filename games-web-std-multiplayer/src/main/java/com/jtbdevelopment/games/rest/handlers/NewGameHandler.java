@@ -19,29 +19,36 @@ import java.util.Optional;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * Date: 11/4/2014
- * Time: 9:10 PM
+ * Date: 11/4/2014 Time: 9:10 PM
  */
 @Component
 public class NewGameHandler extends AbstractHandler {
 
   private static final Logger logger = LoggerFactory.getLogger(NewGameHandler.class);
-  @Autowired
-  protected AbstractMultiPlayerGameFactory gameFactory;
-  @Autowired
-  protected AbstractMultiPlayerGameRepository gameRepository;
-  @Autowired(required = false)
-  protected GameTransitionEngine transitionEngine;
-  @Autowired(required = false)
-  protected GameMasker gameMasker;
-  @Autowired(required = false)
-  protected GamePublisher gamePublisher;
-  @Autowired(required = false)
-  protected GameEligibilityTracker gameTracker;
+  protected final AbstractMultiPlayerGameFactory gameFactory;
+  protected final AbstractMultiPlayerGameRepository gameRepository;
+  protected final GameTransitionEngine transitionEngine;
+  protected final GameMasker gameMasker;
+  protected final GamePublisher gamePublisher;
+  protected final GameEligibilityTracker gameTracker;
+
+  public NewGameHandler(
+      final AbstractMultiPlayerGameFactory gameFactory,
+      final AbstractMultiPlayerGameRepository gameRepository,
+      final GameTransitionEngine transitionEngine,
+      final GameMasker gameMasker,
+      final GamePublisher gamePublisher,
+      final GameEligibilityTracker gameTracker) {
+    this.gameFactory = gameFactory;
+    this.gameRepository = gameRepository;
+    this.transitionEngine = transitionEngine;
+    this.gameMasker = gameMasker;
+    this.gamePublisher = gamePublisher;
+    this.gameTracker = gameTracker;
+  }
 
   public Game handleCreateNewGame(final Serializable initiatingPlayerID,
       final List<String> playersIDs, final Set<?> features) {
@@ -54,23 +61,16 @@ public class NewGameHandler extends AbstractHandler {
 
     Game game = setupGameWithEligibilityWrapper(initiatingPlayer, features, players);
 
-    if (gamePublisher != null) {
-      gamePublisher.publish(game, initiatingPlayer);
-    }
+    gamePublisher.publish(game, initiatingPlayer);
 
-    if (gameMasker != null) {
-      return gameMasker.maskGameForPlayer(game, initiatingPlayer);
-    } else {
-      return game;
-    }
+    return gameMasker.maskGameForPlayer(game, initiatingPlayer);
   }
 
   private Game setupGameWithEligibilityWrapper(final Player initiatingPlayer,
       final Set<?> features, Set<Player> players) {
-    PlayerGameEligibilityResult eligibilityResult = null;
-    if (gameTracker != null) {
-      eligibilityResult = gameTracker.getGameEligibility(initiatingPlayer);
-    }
+    PlayerGameEligibilityResult eligibilityResult = gameTracker
+        .getGameEligibility(initiatingPlayer);
+    ;
 
     if (eligibilityResult != null &&
         PlayerGameEligibility.NoGamesAvailable == eligibilityResult.getEligibility()) {
@@ -103,10 +103,7 @@ public class NewGameHandler extends AbstractHandler {
         features,
         new LinkedList<>(players),
         initiatingPlayer);
-    if (transitionEngine != null) {
-      game = ((MultiPlayerGame) (transitionEngine.evaluateGame(game)));
-    }
-
+    game = ((MultiPlayerGame) (transitionEngine.evaluateGame(game)));
     return gameRepository.save(game);
   }
 }

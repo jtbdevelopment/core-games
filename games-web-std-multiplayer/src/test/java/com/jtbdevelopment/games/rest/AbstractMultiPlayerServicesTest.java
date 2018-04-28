@@ -3,6 +3,7 @@ package com.jtbdevelopment.games.rest;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 import com.jtbdevelopment.games.GameCoreTestCase;
 import com.jtbdevelopment.games.rest.handlers.PlayerGamesFinderHandler;
@@ -16,7 +17,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -44,7 +44,7 @@ public class AbstractMultiPlayerServicesTest {
         .asList(GameCoreTestCase.makeSimpleMaskedMPGame("1"),
             GameCoreTestCase.makeSimpleMaskedMPGame("2"),
             GameCoreTestCase.makeSimpleMaskedMPGame("3"));
-    Mockito.when(finderHandler.findGames(APLAYER)).thenReturn(results);
+    when(finderHandler.findGames(APLAYER)).thenReturn(results);
     services.getPlayerID().set(APLAYER);
     assertEquals(results, services.gamesForPlayer());
   }
@@ -53,7 +53,7 @@ public class AbstractMultiPlayerServicesTest {
   public void testGamesAnnotations() throws NoSuchMethodException {
     Method gameServices = AbstractMultiPlayerServices.class
         .getMethod("gamesForPlayer", new Class[0]);
-    assertEquals(3, DefaultGroovyMethods.size(gameServices.getAnnotations()));
+    assertEquals(3, gameServices.getAnnotations().length);
     assertTrue(gameServices.isAnnotationPresent(Path.class));
     assertEquals("games", gameServices.getAnnotation(Path.class).value());
     assertTrue(gameServices.isAnnotationPresent(Produces.class));

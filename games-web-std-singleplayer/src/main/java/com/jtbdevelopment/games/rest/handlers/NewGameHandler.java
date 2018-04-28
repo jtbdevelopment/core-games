@@ -57,10 +57,7 @@ public class NewGameHandler extends AbstractHandler {
   }
 
   private SinglePlayerGame setupGameWithEligibilityWrapper(final Set<?> features, Player player) {
-    PlayerGameEligibilityResult eligibilityResult = null;
-    if (gameTracker != null) {
-      eligibilityResult = gameTracker.getGameEligibility(player);
-    }
+    PlayerGameEligibilityResult eligibilityResult = gameTracker.getGameEligibility(player);
     if (eligibilityResult != null && eligibilityResult.getEligibility()
         .equals(PlayerGameEligibility.NoGamesAvailable)) {
       throw new OutOfGamesForTodayException();
