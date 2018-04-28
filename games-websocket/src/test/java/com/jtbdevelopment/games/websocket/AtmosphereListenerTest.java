@@ -4,6 +4,8 @@ import static com.jtbdevelopment.games.GameCoreTestCase.PFOUR;
 import static com.jtbdevelopment.games.GameCoreTestCase.PONE;
 import static com.jtbdevelopment.games.GameCoreTestCase.PTHREE;
 import static com.jtbdevelopment.games.GameCoreTestCase.PTWO;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.jtbdevelopment.games.GameCoreTestCase;
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
@@ -45,18 +47,18 @@ public class AtmosphereListenerTest {
     listener = new AtmosphereListener();
     listener.stringToIDConverter = new StringToStringConverter();
     listener.setThreads(10);
-    listener.setRetries(1);
+    listener.setRetries(2);
     listener.setRetryPause(1);
     listener.setUp();
     listener.publicationListeners = new ArrayList<>();
-    Mockito.when(b2.getID()).thenReturn(LiveFeedService.PATH_ROOT + PTWO.getIdAsString());
-    Mockito.when(b4.getID()).thenReturn(LiveFeedService.PATH_ROOT + PFOUR.getIdAsString());
-    Mockito.when(factory.lookup(LiveFeedService.PATH_ROOT + PTWO.getIdAsString())).thenReturn(b2);
-    Mockito.when(factory.lookup(LiveFeedService.PATH_ROOT + PFOUR.getIdAsString())).thenReturn(b4);
-    Mockito.when(factory.lookup(LiveFeedService.PATH_ROOT + PONE.getIdAsString())).thenReturn(null);
-    Mockito.when(factory.lookup(LiveFeedService.PATH_ROOT + PTHREE.getIdAsString()))
+    when(b2.getID()).thenReturn(LiveFeedService.PATH_ROOT + PTWO.getIdAsString());
+    when(b4.getID()).thenReturn(LiveFeedService.PATH_ROOT + PFOUR.getIdAsString());
+    when(factory.lookup(LiveFeedService.PATH_ROOT + PTWO.getIdAsString())).thenReturn(b2);
+    when(factory.lookup(LiveFeedService.PATH_ROOT + PFOUR.getIdAsString())).thenReturn(b4);
+    when(factory.lookup(LiveFeedService.PATH_ROOT + PONE.getIdAsString())).thenReturn(null);
+    when(factory.lookup(LiveFeedService.PATH_ROOT + PTHREE.getIdAsString()))
         .thenReturn(null);
-    Mockito.when(factoryFactory.getBroadcasterFactory()).thenReturn(factory);
+    when(factoryFactory.getBroadcasterFactory()).thenReturn(factory);
     listener.broadcasterFactory = factoryFactory;
     listener.publicationListeners.add(publicationListener);
     listener.playerRepository = playerRepository;
@@ -69,69 +71,69 @@ public class AtmosphereListenerTest {
     Thread.sleep(2000);
     listener.service.shutdown();
     listener.service.awaitTermination(100, TimeUnit.SECONDS);
-    Mockito.verify(publicationListener).publishedPlayerUpdate(PTWO, true);
-    Mockito.verify(publicationListener).publishedPlayerUpdate(PFOUR, true);
-    Mockito.verify(publicationListener).publishedPlayerUpdate(PONE, false);
-    Mockito.verify(publicationListener).publishedPlayerUpdate(PTHREE, false);
-    Mockito.verify(b2).broadcast(new WebSocketMessage(MessageType.Player, null, PTWO, null));
-    Mockito.verify(b4).broadcast(new WebSocketMessage(MessageType.Player, null, PFOUR, null));
+    verify(publicationListener).publishedPlayerUpdate(PTWO, true);
+    verify(publicationListener).publishedPlayerUpdate(PFOUR, true);
+    verify(publicationListener).publishedPlayerUpdate(PONE, false);
+    verify(publicationListener).publishedPlayerUpdate(PTHREE, false);
+    verify(b2).broadcast(new WebSocketMessage(MessageType.Player, null, PTWO, null));
+    verify(b4).broadcast(new WebSocketMessage(MessageType.Player, null, PFOUR, null));
   }
 
   @Test
   public void testPublishRefreshPlayerToAllValidConnectedPlayers() throws InterruptedException {
     Broadcaster junk = Mockito.mock(Broadcaster.class);
-    Mockito.when(junk.getID()).thenReturn(LiveFeedService.PATH_ROOT + "junk");
-    Mockito.when(factory.lookupAll())
+    when(junk.getID()).thenReturn(LiveFeedService.PATH_ROOT + "junk");
+    when(factory.lookupAll())
         .thenReturn(new ArrayList<>(Arrays.asList(b2, b4, junk)));
 
-    Mockito.when(playerRepository.findById(GameCoreTestCase.reverse(PTWO.getIdAsString())))
+    when(playerRepository.findById(GameCoreTestCase.reverse(PTWO.getIdAsString())))
         .thenReturn(Optional.of(PTWO));
-    Mockito.when(playerRepository.findById(GameCoreTestCase.reverse(PFOUR.getIdAsString())))
+    when(playerRepository.findById(GameCoreTestCase.reverse(PFOUR.getIdAsString())))
         .thenReturn(Optional.of(PFOUR));
-    Mockito.when(playerRepository.findById(GameCoreTestCase.reverse("JUNK")))
+    when(playerRepository.findById(GameCoreTestCase.reverse("JUNK")))
         .thenReturn(Optional.empty());
 
     listener.allPlayersChanged(initiatingServer);
     Thread.sleep(1);
     listener.service.shutdown();
     listener.service.awaitTermination(100, TimeUnit.SECONDS);
-    Mockito.verify(b2).broadcast(new WebSocketMessage(MessageType.Player, null, PTWO, null));
-    Mockito.verify(b4).broadcast(new WebSocketMessage(MessageType.Player, null, PFOUR, null));
-    Mockito.verify(junk, Mockito.never()).broadcast(Matchers.any());
-    Mockito.verify(publicationListener, Mockito.never()).publishedPlayerUpdate(PTWO, true);
-    Mockito.verify(publicationListener, Mockito.never()).publishedPlayerUpdate(PFOUR, true);
+    verify(b2).broadcast(new WebSocketMessage(MessageType.Player, null, PTWO, null));
+    verify(b4).broadcast(new WebSocketMessage(MessageType.Player, null, PFOUR, null));
+    verify(junk, Mockito.never()).broadcast(Matchers.any());
+    verify(publicationListener, Mockito.never()).publishedPlayerUpdate(PTWO, true);
+    verify(publicationListener, Mockito.never()).publishedPlayerUpdate(PFOUR, true);
   }
 
   @Test
   public void testPublishGameToConnectedNonInitiatingPlayers() throws InterruptedException {
     MultiPlayerGame game = Mockito.mock(MultiPlayerGame.class);
-    Mockito.when(game.getId()).thenReturn("An ID!");
-    Mockito.when(game.getAllPlayers())
+    when(game.getId()).thenReturn("An ID!");
+    when(game.getAllPlayers())
         .thenReturn(new ArrayList<>(Arrays.asList(PONE, PTWO, PTHREE, PFOUR)));
-    Mockito.when(game.getPlayers())
+    when(game.getPlayers())
         .thenReturn(new ArrayList<>(Arrays.asList(PONE, PTWO, PTHREE, PFOUR)));
     MaskedMultiPlayerGame mg2 = Mockito.mock(MaskedMultiPlayerGame.class);
-    Mockito.when(mg2.getId()).thenReturn("mg2");
+    when(mg2.getId()).thenReturn("mg2");
     MaskedMultiPlayerGame mg4 = Mockito.mock(MaskedMultiPlayerGame.class);
-    Mockito.when(mg4.getId()).thenReturn("mg4");
+    when(mg4.getId()).thenReturn("mg4");
     GameMasker gameMasker = Mockito.mock(GameMasker.class);
-    Mockito.when(gameMasker.maskGameForPlayer(game, PTWO)).thenReturn(mg2);
-    Mockito.when(gameMasker.maskGameForPlayer(game, PFOUR)).thenReturn(mg4);
+    when(gameMasker.maskGameForPlayer(game, PTWO)).thenReturn(mg2);
+    when(gameMasker.maskGameForPlayer(game, PFOUR)).thenReturn(mg4);
     listener.gameMasker = gameMasker;
 
     listener.gameChanged(game, PONE, initiatingServer);
     listener.service.shutdown();
     listener.service.awaitTermination(100, TimeUnit.SECONDS);
-    Mockito.verify(factory, Mockito.never())
+    verify(factory, Mockito.never())
         .lookup(LiveFeedService.PATH_ROOT + PONE.getIdAsString());
-    Mockito.verify(publicationListener).publishedGameUpdateToPlayer(PTWO, game, true);
-    Mockito.verify(publicationListener).publishedGameUpdateToPlayer(PFOUR, game, true);
-    Mockito.verify(publicationListener, Mockito.never())
+    verify(publicationListener).publishedGameUpdateToPlayer(PTWO, game, true);
+    verify(publicationListener).publishedGameUpdateToPlayer(PFOUR, game, true);
+    verify(publicationListener, Mockito.never())
         .publishedGameUpdateToPlayer(PONE, game, false);
-    Mockito.verify(publicationListener, Mockito.never())
+    verify(publicationListener, Mockito.never())
         .publishedGameUpdateToPlayer(PONE, game, true);
-    Mockito.verify(publicationListener).publishedGameUpdateToPlayer(PTHREE, game, false);
-    Mockito.verify(b2).broadcast(new WebSocketMessage(MessageType.Game, mg2, null, null));
-    Mockito.verify(b4).broadcast(new WebSocketMessage(MessageType.Game, mg4, null, null));
+    verify(publicationListener).publishedGameUpdateToPlayer(PTHREE, game, false);
+    verify(b2).broadcast(new WebSocketMessage(MessageType.Game, mg2, null, null));
+    verify(b4).broadcast(new WebSocketMessage(MessageType.Game, mg4, null, null));
   }
 }

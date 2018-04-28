@@ -147,6 +147,7 @@ public class AtmosphereListener implements GameListener<Game>, PlayerListener {
 
     publicationListeners.forEach(listner -> {
       try {
+        logger.info("trace {} {}", player.getIdAsString(), status[0]);
         listner.publishedPlayerUpdate(player, status[0]);
       } catch (Exception e) {
         logger.error("Error publishing to publication listener", e);
@@ -166,7 +167,9 @@ public class AtmosphereListener implements GameListener<Game>, PlayerListener {
                 Collectors.toList());
 
         logger.trace(
-            "Publishing " + game.getId() + " to " + players.size() + " players.");
+            "Publishing {} to {} players.",
+            game.getIdAsString(),
+            players.size());
         players.forEach(player -> publishWithRetry(new PlayerCallable() {
           @Override
           public Boolean call() throws Exception {
@@ -198,8 +201,9 @@ public class AtmosphereListener implements GameListener<Game>, PlayerListener {
         status[0] = true;
       } else {
         logger.trace(
-            "Player " + player.getId() + " is not connected to this server for " + game.getId()
-                + ".");
+            "Player {}  is not connected to this server for {}.",
+            player.getIdAsString(),
+            game.getIdAsString());
       }
 
     } catch (Exception e) {
@@ -223,34 +227,37 @@ public class AtmosphereListener implements GameListener<Game>, PlayerListener {
       public void run() {
         try {
           if (playerCallable.getAttempts() > 0) {
+            logger.trace("enter sleep for {}", playerCallable.getPlayer().getIdAsString());
             Thread.sleep(getRetryPause());
+            logger.trace("exit sleep for {}", playerCallable.getPlayer().getIdAsString());
           }
 
-          playerCallable.setAttempts(playerCallable.attempts++);
+          playerCallable.attempts += 1;
           if (playerCallable.call()) {
             recentPublishes.put(playerCallable.getPlayer(), Instant.now());
             if (playerCallable.getAttempts() > 1) {
               logger.trace(
-                  "Published to " + playerCallable.getPlayer().getId() + " in "
-                      + playerCallable
-                      .getAttempts() + " attempts.");
+                  "Published to {} in {} attempts.",
+                  playerCallable.getPlayer().getId(),
+                  playerCallable.attempts);
             }
 
           } else {
             if (recentPublishes.containsKey(playerCallable.getPlayer())) {
               if (playerCallable.getAttempts() < getRetries()) {
+                logger.trace("submit retry for {}", playerCallable.getPlayer().getIdAsString());
                 service.submit(this);
               } else {
                 logger.trace(
-                    "Failed to publish to " + playerCallable.getPlayer().getId()
-                        + " in "
-                        + playerCallable.getAttempts() + " attempts.");
+                    "Failed to publish to {} in {} attempts.",
+                    playerCallable.getPlayer().getId(),
+                    playerCallable.getAttempts());
               }
 
             }
 
-            logger.trace("Not publishing to " + playerCallable.getPlayer().getId()
-                + ", not in recent publishes");
+            logger.trace("Not publishing to {}, not in recent publishes.",
+                playerCallable.getPlayer().getId());
           }
 
         } catch (Exception e) {
