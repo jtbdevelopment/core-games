@@ -82,7 +82,7 @@ public class AtmosphereListener implements GameListener<Game>, PlayerListener {
             logger.trace("Looking up player for feed " + broadcaster.getID());
             Optional<? extends Player> optional = playerRepository.findById(
                 (Serializable) stringToIDConverter
-                    .convert(broadcaster.getID().replace("/livefeed/", "")));
+                    .convert(broadcaster.getID().replace(LiveFeedService.PATH_ROOT, "")));
             if (optional.isPresent()) {
               logger
                   .trace("Publishing all player changed to " + optional.get().getId());

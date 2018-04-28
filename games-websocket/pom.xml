@@ -44,13 +44,6 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.codehaus.groovy</groupId>
-      <artifactId>groovy-all</artifactId>
-      <version>${groovy.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
       <groupId>com.jtbdevelopment.core-games</groupId>
       <artifactId>games-web</artifactId>
       <version>1.8-SNAPSHOT</version>

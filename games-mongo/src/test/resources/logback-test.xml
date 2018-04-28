@@ -9,6 +9,7 @@
   <logger level="TRACE"
     name="org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver"/>
   <logger level="TRACE" name="com.jtbdevelopment.games.push"/>
+  <logger level="TRACE" name="com.jtbdevelopment.games.websocket.AtmosphereListener"/>
 
   <root level="INFO">
     <appender-ref ref="STDOUT"/>

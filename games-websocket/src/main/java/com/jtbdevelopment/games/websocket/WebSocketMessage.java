@@ -13,6 +13,21 @@ public class WebSocketMessage {
   private Player player;
   private String message;
 
+  public WebSocketMessage() {
+
+  }
+
+  public WebSocketMessage(
+      final MessageType messageType,
+      final MaskedGame game,
+      final Player player,
+      final String message) {
+    this.message = message;
+    this.messageType = messageType;
+    this.player = player;
+    this.game = game;
+  }
+
   public MessageType getMessageType() {
     return messageType;
   }
@@ -47,5 +62,37 @@ public class WebSocketMessage {
 
   public enum MessageType {
     Heartbeat, Game, Player, Alert;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof WebSocketMessage)) {
+      return false;
+    }
+
+    WebSocketMessage that = (WebSocketMessage) o;
+
+    if (messageType != that.messageType) {
+      return false;
+    }
+    if (game != null ? !game.equals(that.game) : that.game != null) {
+      return false;
+    }
+    if (player != null ? !player.equals(that.player) : that.player != null) {
+      return false;
+    }
+    return message != null ? message.equals(that.message) : that.message == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = messageType.hashCode();
+    result = 31 * result + (game != null ? game.hashCode() : 0);
+    result = 31 * result + (player != null ? player.hashCode() : 0);
+    result = 31 * result + (message != null ? message.hashCode() : 0);
+    return result;
   }
 }
