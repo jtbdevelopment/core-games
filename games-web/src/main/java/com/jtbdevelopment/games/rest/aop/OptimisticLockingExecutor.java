@@ -18,10 +18,15 @@ import org.springframework.stereotype.Component;
 public class OptimisticLockingExecutor implements Ordered {
 
   private static final Logger logger = LoggerFactory.getLogger(OptimisticLockingExecutor.class);
-  @Value("${optimisticlocking.retries:5}")
-  protected int maxRetries;
-  @Value("${optimisticlocking.order:1}")
-  protected int order;
+  private final int maxRetries;
+  private final int order;
+
+  public OptimisticLockingExecutor(
+      @Value("${optimisticlocking.retries:5}") final int maxRetries,
+      @Value("${optimisticlocking.order:1}") final int order) {
+    this.maxRetries = maxRetries;
+    this.order = order;
+  }
 
   public int getOrder() {
     return this.order;
