@@ -2,7 +2,20 @@
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="Spring" name="Spring">
-      <configuration />
+      <configuration>
+        <fileset id="fileset" name="Spring Application Context" removed="false">
+          <file>file://$MODULE_DIR$/../games-web/src/main/java/com/jtbdevelopment/games/rest/aop/AspectConfiguration.java</file>
+          <file>file://$MODULE_DIR$/../games-web/src/main/java/com/jtbdevelopment/games/security/spring/social/facebook/FacebookConfig.java</file>
+          <file>file://$MODULE_DIR$/../games-web/src/main/java/com/jtbdevelopment/games/security/spring/security/SecurityConfig.java</file>
+          <file>file://$MODULE_DIR$/../games-web/src/main/java/com/jtbdevelopment/games/security/spring/social/SpringSocialConfig.java</file>
+          <file>jar://$MAVEN_REPOSITORY$/com/jtbdevelopment/core-common/core-spring/1.10-SNAPSHOT/core-spring-1.10-SNAPSHOT.jar!/com/jtbdevelopment/core/spring/CoreSpringConfiguration.class</file>
+          <file>file://$MAVEN_REPOSITORY$/com/jtbdevelopment/core-common/core-spring/1.10-SNAPSHOT/core-spring-1.10-SNAPSHOT.jar</file>
+          <file>jar://$MAVEN_REPOSITORY$/com/jtbdevelopment/core-common/core-spring-hazelcast/1.10-SNAPSHOT/core-spring-hazelcast-1.10-SNAPSHOT.jar!/com/jtbdevelopment/core/hazelcast/caching/CacheConfig.class</file>
+          <file>file://$MAVEN_REPOSITORY$/com/jtbdevelopment/core-common/core-spring-hazelcast/1.10-SNAPSHOT/core-spring-hazelcast-1.10-SNAPSHOT.jar</file>
+          <file>jar://$MAVEN_REPOSITORY$/com/jtbdevelopment/core-common/core-spring-web-hazelcast/1.10-SNAPSHOT/core-spring-web-hazelcast-1.10-SNAPSHOT.jar!/com/jtbdevelopment/core/hazelcast/sessions/SessionConfig.class</file>
+          <file>file://$MAVEN_REPOSITORY$/com/jtbdevelopment/core-common/core-spring-web-hazelcast/1.10-SNAPSHOT/core-spring-web-hazelcast-1.10-SNAPSHOT.jar</file>
+        </fileset>
+      </configuration>
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">

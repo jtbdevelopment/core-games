@@ -4,7 +4,15 @@
     <facet type="Spring" name="Spring">
       <configuration>
         <fileset id="fileset" name="Spring Application Context" removed="false">
-          <file>file://$MODULE_DIR$/src/main/groovy/com/jtbdevelopment/games/dev/utilities/jetty/AppConfig.groovy</file>
+          <file>file://$MODULE_DIR$/src/main/java/com/jtbdevelopment/games/dev/utilities/jetty/AppConfig.java</file>
+          <file>file://$MODULE_DIR$/../games-web/src/main/java/com/jtbdevelopment/games/rest/aop/AspectConfiguration.java</file>
+          <file>file://$MODULE_DIR$/../games-web/src/main/java/com/jtbdevelopment/games/security/spring/social/facebook/FacebookConfig.java</file>
+          <file>file://$MODULE_DIR$/../games-web/src/main/java/com/jtbdevelopment/games/security/spring/security/SecurityConfig.java</file>
+          <file>file://$MODULE_DIR$/../games-web/src/main/java/com/jtbdevelopment/games/security/spring/social/SpringSocialConfig.java</file>
+          <file>jar://$MAVEN_REPOSITORY$/com/jtbdevelopment/core-common/core-spring/1.10-SNAPSHOT/core-spring-1.10-SNAPSHOT.jar!/com/jtbdevelopment/core/spring/CoreSpringConfiguration.class</file>
+          <file>file://$MAVEN_REPOSITORY$/com/jtbdevelopment/core-common/core-spring/1.10-SNAPSHOT/core-spring-1.10-SNAPSHOT.jar</file>
+          <file>jar://$MAVEN_REPOSITORY$/com/jtbdevelopment/core-common/core-spring-mongo/1.10-SNAPSHOT/core-spring-mongo-1.10-SNAPSHOT.jar!/com/jtbdevelopment/core/mongo/spring/MongoConfiguration.class</file>
+          <file>file://$MAVEN_REPOSITORY$/com/jtbdevelopment/core-common/core-spring-mongo/1.10-SNAPSHOT/core-spring-mongo-1.10-SNAPSHOT.jar</file>
         </fileset>
       </configuration>
     </facet>

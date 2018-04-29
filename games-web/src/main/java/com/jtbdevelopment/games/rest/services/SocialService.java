@@ -17,8 +17,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class SocialService {
 
-  @Autowired(required = false)
-  protected FacebookProperties facebookProperties;
+
+  private final FacebookProperties facebookProperties;
+
+  public SocialService(@Autowired(required = false) final FacebookProperties facebookProperties) {
+    this.facebookProperties = facebookProperties;
+  }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)

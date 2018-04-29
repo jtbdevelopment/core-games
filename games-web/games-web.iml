@@ -4,11 +4,12 @@
     <facet type="Spring" name="Spring">
       <configuration>
         <fileset id="fileset" name="Spring Application Context" removed="false">
-          <file>file://$MODULE_DIR$/src/main/groovy/com/jtbdevelopment/games/security/spring/social/facebook/FacebookConfig.groovy</file>
-          <file>file://$MODULE_DIR$/src/main/groovy/com/jtbdevelopment/games/security/spring/social/SpringSocialConfig.groovy</file>
-          <file>file://$MODULE_DIR$/src/main/groovy/com/jtbdevelopment/games/rest/aop/AspectConfiguration.groovy</file>
-          <file>file://$MODULE_DIR$/src/main/groovy/com/jtbdevelopment/games/webapp/SpringWebConfig.groovy</file>
-          <file>file://$MODULE_DIR$/src/main/groovy/com/jtbdevelopment/games/security/spring/security/SecurityConfig.groovy</file>
+          <file>file://$MODULE_DIR$/src/main/java/com/jtbdevelopment/games/rest/aop/AspectConfiguration.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/com/jtbdevelopment/games/security/spring/social/facebook/FacebookConfig.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/com/jtbdevelopment/games/security/spring/security/SecurityConfig.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/com/jtbdevelopment/games/security/spring/social/SpringSocialConfig.java</file>
+          <file>jar://$MAVEN_REPOSITORY$/com/jtbdevelopment/core-common/core-spring/1.10-SNAPSHOT/core-spring-1.10-SNAPSHOT.jar!/com/jtbdevelopment/core/spring/CoreSpringConfiguration.class</file>
+          <file>file://$MAVEN_REPOSITORY$/com/jtbdevelopment/core-common/core-spring/1.10-SNAPSHOT/core-spring-1.10-SNAPSHOT.jar</file>
         </fileset>
       </configuration>
     </facet>

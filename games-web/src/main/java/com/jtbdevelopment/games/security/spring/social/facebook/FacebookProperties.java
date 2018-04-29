@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.security.spring.social.facebook;
 
-import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,18 +13,19 @@ import org.springframework.util.StringUtils;
 public class FacebookProperties {
 
   private static final Logger logger = LoggerFactory.getLogger(FacebookProperties.class);
-  @Value("${facebook.clientID:NOTSET}")
-  protected String clientID;
-  @Value("${facebook.clientSecret:NOTSET}")
-  protected String clientSecret;
-  @Value("${facebook.permissions:public_profile,email,user_friends}")
-  protected String permissions;
+  private final String clientID;
+  private final String clientSecret;
+  private final String permissions;
   private boolean warnings = true;
 
-  @PostConstruct
-  public void testDefaults() {
-    if (StringUtils.isEmpty(clientID) || clientID.equals("NOTSET") || StringUtils
-        .isEmpty(clientSecret) || clientSecret.equals("NOTSET")) {
+  public FacebookProperties(
+      @Value("${facebook.clientID:}") final String clientID,
+      @Value("${facebook.clientSecret:}") final String clientSecret,
+      @Value("${facebook.permissions:public_profile,email,user_friends}") final String permissions) {
+    this.clientID = clientID;
+    this.clientSecret = clientSecret;
+    this.permissions = permissions;
+    if (StringUtils.isEmpty(clientID) || StringUtils.isEmpty(clientSecret)) {
       warnings = true;
       logger.warn(
           "----------------------------------------------------------------------------------------------");
@@ -44,7 +44,6 @@ public class FacebookProperties {
     } else {
       warnings = false;
     }
-
   }
 
   public boolean isWarnings() {

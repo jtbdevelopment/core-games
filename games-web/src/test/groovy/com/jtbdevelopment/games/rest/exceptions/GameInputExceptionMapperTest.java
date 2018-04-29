@@ -12,15 +12,15 @@ import org.junit.Test;
  */
 public class GameInputExceptionMapperTest {
 
-    private GameInputExceptionMapper mapper = new GameInputExceptionMapper();
+  private GameInputExceptionMapper mapper = new GameInputExceptionMapper();
 
-    @Test
-    public void testToResponse() {
-        final String s = "A MESSAGE";
-        Response response = mapper.toResponse(new GameInputException(s) {
-        });
-        Assert.assertEquals(s, response.getEntity());
-        Assert.assertEquals(Status.CONFLICT.getStatusCode(), response.getStatus());
-        Assert.assertEquals(MediaType.TEXT_PLAIN_TYPE, response.getMediaType());
-    }
+  @Test
+  public void testToResponse() {
+    final String s = "A MESSAGE";
+    Response response = mapper.toResponse(new GameInputException(s) {
+    });
+    Assert.assertEquals(s, response.getEntity());
+    Assert.assertEquals(Status.CONFLICT.getStatusCode(), response.getStatus());
+    Assert.assertEquals(MediaType.TEXT_PLAIN_TYPE, response.getMediaType());
+  }
 }

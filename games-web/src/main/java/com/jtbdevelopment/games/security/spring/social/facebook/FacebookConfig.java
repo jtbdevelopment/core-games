@@ -25,13 +25,13 @@ public class FacebookConfig {
     CustomFacebookAuthenticationService service = new CustomFacebookAuthenticationService(
         facebookProperties.getClientID(), facebookProperties.getClientSecret());
     service.setDefaultScope(facebookProperties.getPermissions());
-    return ((CustomFacebookAuthenticationService) (service));
+    return service;
   }
 
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.INTERFACES)
   @Autowired
-  public Facebook facebook(ConnectionRepository connectionRepository) {
+  public Facebook facebook(final ConnectionRepository connectionRepository) {
     Connection<Facebook> connection = connectionRepository.findPrimaryConnection(Facebook.class);
     return (connection == null ? null : connection.getApi());
   }

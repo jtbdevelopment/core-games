@@ -11,17 +11,17 @@ import org.junit.Test;
  */
 public class RestSystemArchitectureTest {
 
-    @Test
-    public void testClassAnnotationIsPresent() {
-        Assert.assertTrue(RestSystemArchitecture.class.isAnnotationPresent(Aspect.class));
-    }
+  @Test
+  public void testClassAnnotationIsPresent() {
+    Assert.assertTrue(RestSystemArchitecture.class.isAnnotationPresent(Aspect.class));
+  }
 
-    @Test
-    public void testRestServicesPointCutAnnotation() throws NoSuchMethodException {
-        Method m = RestSystemArchitecture.class.getMethod("inRestServices", new Class<?>[0]);
-        Pointcut p = m.getAnnotation(Pointcut.class);
-        Assert.assertNotNull(p);
-        Assert.assertEquals("within(com.jtbdevelopment..*.rest.services..*)", p.value());
-    }
+  @Test
+  public void testRestServicesPointCutAnnotation() throws NoSuchMethodException {
+    Method m = RestSystemArchitecture.class.getMethod("inRestServices", new Class<?>[0]);
+    Pointcut p = m.getAnnotation(Pointcut.class);
+    Assert.assertNotNull(p);
+    Assert.assertEquals("within(com.jtbdevelopment..*.rest.services..*)", p.value());
+  }
 
 }

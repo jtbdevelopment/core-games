@@ -13,14 +13,14 @@ import org.springframework.dao.OptimisticLockingFailureException;
  */
 public class OptimisticLockingFailureExceptionMapperTest {
 
-    private OptimisticLockingFailureExceptionMapper mapper = new OptimisticLockingFailureExceptionMapper();
+  private OptimisticLockingFailureExceptionMapper mapper = new OptimisticLockingFailureExceptionMapper();
 
-    @Test
-    public void testToResponse() {
-        String s = "A MESSAGE";
-        Response response = mapper.toResponse(new OptimisticLockingFailureException(s));
-        Assert.assertEquals(s, response.getEntity());
-        Assert.assertEquals(Status.CONFLICT.getStatusCode(), response.getStatus());
-        Assert.assertEquals(MediaType.TEXT_PLAIN_TYPE, response.getMediaType());
-    }
+  @Test
+  public void testToResponse() {
+    String s = "A MESSAGE";
+    Response response = mapper.toResponse(new OptimisticLockingFailureException(s));
+    Assert.assertEquals(s, response.getEntity());
+    Assert.assertEquals(Status.CONFLICT.getStatusCode(), response.getStatus());
+    Assert.assertEquals(MediaType.TEXT_PLAIN_TYPE, response.getMediaType());
+  }
 }
