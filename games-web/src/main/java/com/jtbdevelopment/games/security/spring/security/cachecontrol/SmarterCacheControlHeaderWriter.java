@@ -16,8 +16,11 @@ public class SmarterCacheControlHeaderWriter implements HeaderWriter {
 
   private static boolean allowCaching(final HttpServletRequest request) {
     String path = request.getServletPath();
-    return path.startsWith("/images") || path.startsWith("/scripts") || path.startsWith("/styles")
-        || path.startsWith("/views") || path.startsWith("/bower_components");
+    return path.startsWith("/images") ||
+        path.startsWith("/scripts") ||
+        path.startsWith("/styles") ||
+        path.startsWith("/views") ||
+        path.startsWith("/bower_components");
   }
 
   @Override
