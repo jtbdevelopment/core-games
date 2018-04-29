@@ -7,7 +7,6 @@ import com.jtbdevelopment.games.security.spring.LastLoginUpdater;
 import com.jtbdevelopment.games.security.spring.PlayerUserDetails;
 import java.io.Serializable;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.social.security.SocialUserDetails;
@@ -20,18 +19,25 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlayerSocialUserDetailsService implements SocialUserDetailsService {
 
-  @Autowired
-  protected AbstractPlayerRepository playerRepository;
-  @Autowired
-  protected StringToIDConverter<? extends Serializable> stringToIDConverter;
-  @Autowired
-  protected LastLoginUpdater lastLoginUpdater;
+  private final AbstractPlayerRepository playerRepository;
+  private final StringToIDConverter<? extends Serializable> stringToIDConverter;
+  private final LastLoginUpdater lastLoginUpdater;
+
+  public PlayerSocialUserDetailsService(
+      final AbstractPlayerRepository playerRepository,
+      final StringToIDConverter<? extends Serializable> stringToIDConverter,
+      final LastLoginUpdater lastLoginUpdater) {
+    this.playerRepository = playerRepository;
+    this.stringToIDConverter = stringToIDConverter;
+    this.lastLoginUpdater = lastLoginUpdater;
+  }
 
   @Override
   public SocialUserDetails loadUserByUserId(final String userId)
       throws UsernameNotFoundException, DataAccessException {
-    Optional<? extends Player> optional = playerRepository
-        .findById(stringToIDConverter.convert(userId));
+    Optional<? extends Player> optional = playerRepository.findById(
+        stringToIDConverter.convert(userId)
+    );
     if (optional.isPresent()) {
       return new PlayerUserDetails(lastLoginUpdater.updatePlayerLastLogin(optional.get()));
     }
