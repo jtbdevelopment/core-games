@@ -9,24 +9,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class MobileAppProperties {
 
-    @Value("${mobile.success.url:/api/security}")
-    private String mobileSuccessUrl;
-    @Value("${mobile.failure.url:#/app/signin}")
-    private String mobileFailureUrl;
+  private final String mobileSuccessUrl;
+  private final String mobileFailureUrl;
 
-    public String getMobileSuccessUrl() {
-        return mobileSuccessUrl;
-    }
+  public MobileAppProperties(
+      @Value("${mobile.success.url:/api/security}") final String mobileSuccessUrl,
+      @Value("${mobile.failure.url:#/app/signin}") final String mobileFailureUrl) {
+    this.mobileSuccessUrl = mobileSuccessUrl;
+    this.mobileFailureUrl = mobileFailureUrl;
+  }
 
-    public void setMobileSuccessUrl(String mobileSuccessUrl) {
-        this.mobileSuccessUrl = mobileSuccessUrl;
-    }
 
-    public String getMobileFailureUrl() {
-        return mobileFailureUrl;
-    }
+  public String getMobileSuccessUrl() {
+    return mobileSuccessUrl;
+  }
 
-    public void setMobileFailureUrl(String mobileFailureUrl) {
-        this.mobileFailureUrl = mobileFailureUrl;
-    }
+  public String getMobileFailureUrl() {
+    return mobileFailureUrl;
+  }
 }
