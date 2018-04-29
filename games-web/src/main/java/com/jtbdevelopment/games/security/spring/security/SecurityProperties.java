@@ -9,14 +9,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class SecurityProperties {
 
-  @Value("${http.allowBasicAuth:false}")
-  private String allowBasicAuth;
+  private final String allowBasicAuth;
+
+  public SecurityProperties(
+      @Value("${http.allowBasicAuth:false}") final String allowBasicAuth
+  ) {
+    this.allowBasicAuth = allowBasicAuth;
+  }
 
   public String getAllowBasicAuth() {
     return allowBasicAuth;
   }
 
-  public void setAllowBasicAuth(String allowBasicAuth) {
-    this.allowBasicAuth = allowBasicAuth;
-  }
 }
