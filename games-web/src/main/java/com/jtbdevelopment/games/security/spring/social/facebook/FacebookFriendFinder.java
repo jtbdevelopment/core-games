@@ -25,10 +25,15 @@ import org.springframework.stereotype.Component;
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.INTERFACES)
 public class FacebookFriendFinder implements SourceBasedFriendFinder {
 
-  @Autowired
-  protected AbstractPlayerRepository playerRepository;
-  @Autowired(required = false)
-  protected Facebook facebook;
+  private final AbstractPlayerRepository playerRepository;
+  private final Facebook facebook;
+
+  public FacebookFriendFinder(
+      final AbstractPlayerRepository playerRepository,
+      @Autowired(required = false) final Facebook facebook) {
+    this.playerRepository = playerRepository;
+    this.facebook = facebook;
+  }
 
   @Override
   public boolean handlesSource(final String source) {
@@ -43,10 +48,13 @@ public class FacebookFriendFinder implements SourceBasedFriendFinder {
     results.put(INVITABLE_FRIENDS_KEY, new LinkedHashSet<>());
 
     PagedList<Reference> friends = facebook.friendOperations().getFriends();
-    List<String> friendSourceIds = friends.stream().map(f -> f.getId())
+    List<String> friendSourceIds = friends.stream()
+        .map(Reference::getId)
         .collect(Collectors.toList());
-    List<Player<?>> players = playerRepository
-        .findBySourceAndSourceIdIn("facebook", friendSourceIds);
+
+    List<Player<?>> players = playerRepository.findBySourceAndSourceIdIn(
+        "facebook",
+        friendSourceIds);
     Map<String, Player<?>> sourceIdMap = players.stream()
         .collect(Collectors.toMap(p -> p.getSourceId(), p -> p));
     friends.forEach(friendReference -> {
