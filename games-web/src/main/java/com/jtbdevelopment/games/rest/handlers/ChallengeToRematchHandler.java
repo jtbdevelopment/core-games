@@ -6,7 +6,6 @@ import com.jtbdevelopment.games.rest.exceptions.GameIsNotAvailableToRematchExcep
 import com.jtbdevelopment.games.state.GamePhase;
 import com.jtbdevelopment.games.state.MultiPlayerGame;
 import java.time.Instant;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,8 +14,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class ChallengeToRematchHandler extends AbstractGameActionHandler<Object, MultiPlayerGame> {
 
-  @Autowired
-  protected AbstractMultiPlayerGameFactory gameFactory;
+  private final AbstractMultiPlayerGameFactory gameFactory;
+
+  public ChallengeToRematchHandler(
+      final AbstractMultiPlayerGameFactory gameFactory) {
+    this.gameFactory = gameFactory;
+  }
 
   @Override
   protected boolean requiresEligibilityCheck(final Object param) {

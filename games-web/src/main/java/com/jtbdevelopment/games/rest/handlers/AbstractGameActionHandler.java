@@ -38,8 +38,8 @@ public abstract class AbstractGameActionHandler<T, IMPL extends Game> extends
     validatePlayerForGame(game, player);
     Game updatedGame = updateGameWithEligibilityWrapper(player, game, param);
 
-      updatedGame = gamePublisher.publish(updatedGame, player);
-      return gameMasker.maskGameForPlayer(updatedGame, player);
+    updatedGame = gamePublisher.publish(updatedGame, player);
+    return gameMasker.maskGameForPlayer(updatedGame, player);
 
   }
 
