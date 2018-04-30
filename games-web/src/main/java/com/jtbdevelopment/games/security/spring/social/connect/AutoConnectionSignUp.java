@@ -5,7 +5,6 @@ import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.players.PlayerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.stereotype.Component;
@@ -17,10 +16,15 @@ import org.springframework.stereotype.Component;
 public class AutoConnectionSignUp implements ConnectionSignUp {
 
   private static final Logger logger = LoggerFactory.getLogger(AutoConnectionSignUp.class);
-  @Autowired
-  protected AbstractPlayerRepository playerRepository;
-  @Autowired
-  protected PlayerFactory playerFactory;
+  private final AbstractPlayerRepository playerRepository;
+  private final PlayerFactory playerFactory;
+
+  public AutoConnectionSignUp(
+      final AbstractPlayerRepository playerRepository,
+      final PlayerFactory playerFactory) {
+    this.playerRepository = playerRepository;
+    this.playerFactory = playerFactory;
+  }
 
   @Override
   public String execute(final Connection<?> connection) {
