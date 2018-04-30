@@ -5,7 +5,6 @@ import com.jtbdevelopment.games.players.ManualPlayer;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.security.spring.LastLoginUpdater;
 import com.jtbdevelopment.games.security.spring.PlayerUserDetails;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,10 +18,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlayerUserDetailsService implements UserDetailsService {
 
-  @Autowired
-  protected AbstractPlayerRepository playerRepository;
-  @Autowired
-  protected LastLoginUpdater lastLoginUpdater;
+  private final AbstractPlayerRepository playerRepository;
+  private final LastLoginUpdater lastLoginUpdater;
+
+  public PlayerUserDetailsService(
+      final AbstractPlayerRepository playerRepository,
+      final LastLoginUpdater lastLoginUpdater) {
+    this.playerRepository = playerRepository;
+    this.lastLoginUpdater = lastLoginUpdater;
+  }
 
   @Override
   public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
