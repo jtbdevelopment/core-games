@@ -36,7 +36,7 @@ public class SpringSocialConfig {
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.INTERFACES)
   @Bean
   public ConnectionRepository connectionRepository(
-      @SuppressWarnings("SpringJavaAutowiringInspection") final UsersConnectionRepository userConnectionRepository) {
+      final UsersConnectionRepository userConnectionRepository) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication == null) {
       return null;
