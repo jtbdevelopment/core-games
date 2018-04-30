@@ -23,11 +23,11 @@ public abstract class AbstractGameActionHandler<T, IMPL extends Game> extends
   private static final Logger logger = LoggerFactory.getLogger(AbstractGameActionHandler.class);
   @Autowired
   protected GameTransitionEngine transitionEngine;
-  @Autowired(required = false)
+  @Autowired
   protected GamePublisher gamePublisher;
-  @Autowired(required = false)
+  @Autowired
   protected GameEligibilityTracker gameTracker;
-  @Autowired(required = false)
+  @Autowired
   protected GameMasker gameMasker;
 
   protected abstract IMPL handleActionInternal(final Player player, final IMPL game, final T param);
@@ -38,15 +38,8 @@ public abstract class AbstractGameActionHandler<T, IMPL extends Game> extends
     validatePlayerForGame(game, player);
     Game updatedGame = updateGameWithEligibilityWrapper(player, game, param);
 
-    if (gamePublisher != null) {
       updatedGame = gamePublisher.publish(updatedGame, player);
-    }
-
-    if (gameMasker != null) {
       return gameMasker.maskGameForPlayer(updatedGame, player);
-    } else {
-      return updatedGame;
-    }
 
   }
 
@@ -58,7 +51,7 @@ public abstract class AbstractGameActionHandler<T, IMPL extends Game> extends
       final T param) {
     Game updatedGame;
     PlayerGameEligibilityResult eligibilityResult = null;
-    if (gameTracker != null && requiresEligibilityCheck(param)) {
+    if (requiresEligibilityCheck(param)) {
       eligibilityResult = gameTracker.getGameEligibility(player);
       if (eligibilityResult.getEligibility().equals(PlayerGameEligibility.NoGamesAvailable)) {
         throw new OutOfGamesForTodayException();
