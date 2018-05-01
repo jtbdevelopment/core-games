@@ -1,11 +1,9 @@
 package com.jtbdevelopment.games.rest.handlers;
 
-import com.jtbdevelopment.games.factory.AbstractMultiPlayerGameFactory;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.rest.exceptions.GameIsNotAvailableToRematchException;
 import com.jtbdevelopment.games.state.GamePhase;
 import com.jtbdevelopment.games.state.MultiPlayerGame;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,9 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class DeclineRematchOptionHandler extends
     AbstractGameActionHandler<Object, MultiPlayerGame> {
-
-  @Autowired
-  protected AbstractMultiPlayerGameFactory gameFactory;
 
   @Override
   protected MultiPlayerGame handleActionInternal(final Player player, final MultiPlayerGame game,

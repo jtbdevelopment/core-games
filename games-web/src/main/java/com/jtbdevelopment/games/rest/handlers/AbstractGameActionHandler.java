@@ -67,7 +67,7 @@ public abstract class AbstractGameActionHandler<T, IMPL extends Game> extends
           gameTracker.revertGameEligibility(eligibilityResult);
         }
 
-      } catch (Exception e2) {
+      } catch (Throwable e2) {
         //  TODO - notify
         logger.warn("Failed to revert players game eligibility " + eligibilityResult, e2);
       }
@@ -80,10 +80,7 @@ public abstract class AbstractGameActionHandler<T, IMPL extends Game> extends
 
   protected Game updateGame(final Player player, final IMPL game, final T param) {
     IMPL updated = rotateTurnBasedGame(handleActionInternal(player, game, param));
-    if (transitionEngine != null) {
-      updated = ((IMPL) (transitionEngine.evaluateGame(updated)));
-    }
-
+    updated = ((IMPL) (transitionEngine.evaluateGame(updated)));
     return gameRepository.save(updated);
   }
 
