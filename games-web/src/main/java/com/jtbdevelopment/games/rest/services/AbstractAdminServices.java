@@ -19,7 +19,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,12 +33,18 @@ public abstract class AbstractAdminServices {
 
   private static final int DEFAULT_PAGE = 0;
   private static final int DEFAULT_PAGE_SIZE = 500;
-  @Autowired
-  protected AbstractPlayerRepository playerRepository;
-  @Autowired
-  protected AbstractGameRepository gameRepository;
-  @Autowired
-  protected StringToIDConverter stringToIDConverter;
+  private final AbstractPlayerRepository playerRepository;
+  private final AbstractGameRepository gameRepository;
+  private final StringToIDConverter stringToIDConverter;
+
+  public AbstractAdminServices(
+      final AbstractPlayerRepository playerRepository,
+      final AbstractGameRepository gameRepository,
+      final StringToIDConverter stringToIDConverter) {
+    this.playerRepository = playerRepository;
+    this.gameRepository = gameRepository;
+    this.stringToIDConverter = stringToIDConverter;
+  }
 
   @GET
   @Path("gamesSince/{since}")
@@ -82,9 +87,9 @@ public abstract class AbstractAdminServices {
   public Object playersToSimulateLike(@QueryParam("like") String like,
       @QueryParam("page") Integer page, @QueryParam("pageSize") Integer pageSize) {
     return playerRepository.findByDisplayNameContains(like,
-        new PageRequest(page != null ? page : DEFAULT_PAGE,
-            pageSize != null ? pageSize
-                : DEFAULT_PAGE_SIZE,
+        PageRequest.of(
+            page != null ? page : DEFAULT_PAGE,
+            pageSize != null ? pageSize : DEFAULT_PAGE_SIZE,
             Direction.ASC, "displayName"));
   }
 
@@ -95,9 +100,10 @@ public abstract class AbstractAdminServices {
     Optional<? extends Player> optional = playerRepository
         .findById((Serializable) stringToIDConverter.convert(effectivePlayerID));
     if (optional.isPresent()) {
+      Player player = optional.get();
       ((SessionUserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-          .setEffectiveUser(optional.get());
-      return optional.get();
+          .setEffectiveUser(player);
+      return player;
     }
 
     return Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN_TYPE).build();
