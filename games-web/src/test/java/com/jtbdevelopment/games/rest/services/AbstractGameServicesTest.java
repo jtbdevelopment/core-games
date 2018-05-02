@@ -14,7 +14,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,7 +54,7 @@ public class AbstractGameServicesTest {
   @Test
   public void testGetAnnotations() throws NoSuchMethodException {
     Method m = AbstractGameServices.class.getMethod("getGame", new Class[0]);
-    Assert.assertEquals(2, DefaultGroovyMethods.size(m.getAnnotations()));
+    Assert.assertEquals(2, m.getAnnotations().length);
     Assert.assertTrue(m.isAnnotationPresent(GET.class));
     Assert.assertTrue(m.isAnnotationPresent(Produces.class));
     Assert.assertArrayEquals(
@@ -77,7 +76,7 @@ public class AbstractGameServicesTest {
       } catch (NoSuchMethodException e) {
         throw new RuntimeException(e);
       }
-      Assert.assertEquals(3, DefaultGroovyMethods.size(m.getAnnotations()));
+      Assert.assertEquals(3, m.getAnnotations().length);
       Assert.assertTrue(m.isAnnotationPresent(PUT.class));
       Assert.assertTrue(m.isAnnotationPresent(Produces.class));
       Assert.assertArrayEquals(

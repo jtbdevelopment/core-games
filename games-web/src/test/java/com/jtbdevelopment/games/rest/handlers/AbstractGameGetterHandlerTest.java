@@ -3,6 +3,7 @@ package com.jtbdevelopment.games.rest.handlers;
 import static com.jtbdevelopment.games.GameCoreTestCase.PONE;
 import static com.jtbdevelopment.games.GameCoreTestCase.PTHREE;
 import static com.jtbdevelopment.games.GameCoreTestCase.PTWO;
+import static org.junit.Assert.assertSame;
 
 import com.jtbdevelopment.games.GameCoreTestCase;
 import com.jtbdevelopment.games.dao.AbstractGameRepository;
@@ -12,7 +13,6 @@ import com.jtbdevelopment.games.stringimpl.StringMPGame;
 import com.jtbdevelopment.games.stringimpl.StringSPGame;
 import java.util.Arrays;
 import java.util.Optional;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -65,7 +65,7 @@ public class AbstractGameGetterHandlerTest {
     String id = "X";
     StringMPGame mpGame = GameCoreTestCase.makeSimpleMPGame(id);
     Mockito.when(gameRepository.findById(id)).thenReturn(Optional.of(mpGame));
-    assert DefaultGroovyMethods.is(mpGame, handler.loadGame(id));
+    assertSame(mpGame, handler.loadGame(id));
   }
 
   @Test(expected = FailedToFindGameException.class)

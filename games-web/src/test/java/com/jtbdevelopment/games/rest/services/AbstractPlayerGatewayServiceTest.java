@@ -20,7 +20,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,7 +56,7 @@ public class AbstractPlayerGatewayServiceTest {
   @Test
   public void testPingAnnotations() throws NoSuchMethodException {
     Method ping = AbstractPlayerGatewayService.class.getMethod("ping", new Class[0]);
-    assertEquals(3, DefaultGroovyMethods.size(ping.getAnnotations()));
+    assertEquals(3, ping.getAnnotations().length);
     assertTrue(ping.isAnnotationPresent(GET.class));
     assertTrue(ping.isAnnotationPresent(Produces.class));
     assertArrayEquals(
@@ -85,7 +84,7 @@ public class AbstractPlayerGatewayServiceTest {
   public void testGameServicesAnnotations() throws NoSuchMethodException {
     Method gameServices = AbstractPlayerGatewayService.class
         .getMethod("gameServices", new Class[0]);
-    assertEquals(1, DefaultGroovyMethods.size(gameServices.getAnnotations()));
+    assertEquals(1, gameServices.getAnnotations().length);
     assertTrue(gameServices.isAnnotationPresent(Path.class));
     assertEquals("player", gameServices.getAnnotation(Path.class).value());
     Annotation[][] params = gameServices.getParameterAnnotations();
@@ -117,7 +116,7 @@ public class AbstractPlayerGatewayServiceTest {
   public void testGetPhasesAnnotations() throws NoSuchMethodException {
     Method gameServices = AbstractPlayerGatewayService.class
         .getMethod("phasesAndDescriptions", new Class[0]);
-    assertEquals(3, DefaultGroovyMethods.size(gameServices.getAnnotations()));
+    assertEquals(3, gameServices.getAnnotations().length);
     assertTrue(gameServices.isAnnotationPresent(Path.class));
     assertEquals("phases", gameServices.getAnnotation(Path.class).value());
     assertTrue(gameServices.isAnnotationPresent(GET.class));

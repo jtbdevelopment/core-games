@@ -30,7 +30,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -70,7 +69,7 @@ public class AbstractAdminServicesTest {
   @Test
   public void testGetPlayersAnnotations() throws NoSuchMethodException {
     Method m = AbstractAdminServices.class.getMethod("players", new Class<?>[0]);
-    assertEquals(3, DefaultGroovyMethods.size(m.getAnnotations()));
+    assertEquals(3, m.getAnnotations().length);
     assertTrue(m.isAnnotationPresent(GET.class));
     assertTrue(m.isAnnotationPresent(Produces.class));
     assertArrayEquals(Collections.singletonList(MediaType.TEXT_PLAIN).toArray(),
@@ -89,7 +88,7 @@ public class AbstractAdminServicesTest {
   @Test
   public void testGetGamesAnnotations() throws NoSuchMethodException {
     Method m = AbstractAdminServices.class.getMethod("games", new Class<?>[0]);
-    assertEquals(3, DefaultGroovyMethods.size(m.getAnnotations()));
+    assertEquals(3, m.getAnnotations().length);
     assertTrue(m.isAnnotationPresent(GET.class));
     assertTrue(m.isAnnotationPresent(Produces.class));
     assertArrayEquals(Collections.singletonList(MediaType.TEXT_PLAIN).toArray(),
@@ -110,7 +109,7 @@ public class AbstractAdminServicesTest {
   public void testGetPlayersCreatedSinceAnnotations() throws NoSuchMethodException {
     Method m = AbstractAdminServices.class
         .getMethod("playersCreatedSince", new Class[]{long.class});
-    assertEquals(3, DefaultGroovyMethods.size(m.getAnnotations()));
+    assertEquals(3, m.getAnnotations().length);
     assertTrue(m.isAnnotationPresent(GET.class));
     assertTrue(m.isAnnotationPresent(Produces.class));
     assertArrayEquals(Collections.singletonList(MediaType.TEXT_PLAIN).toArray(),
@@ -136,7 +135,7 @@ public class AbstractAdminServicesTest {
   public void testGetPlayersLastLoginSinceAnnotations() throws NoSuchMethodException {
     Method m = AbstractAdminServices.class
         .getMethod("playersLoggedInSince", new Class[]{long.class});
-    assertEquals(3, DefaultGroovyMethods.size(m.getAnnotations()));
+    assertEquals(3, m.getAnnotations().length);
     assertTrue(m.isAnnotationPresent(GET.class));
     assertTrue(m.isAnnotationPresent(Produces.class));
     assertArrayEquals(Collections.singletonList(MediaType.TEXT_PLAIN).toArray(),
@@ -162,7 +161,7 @@ public class AbstractAdminServicesTest {
   @Test
   public void testGamesSinceAnnotations() throws NoSuchMethodException {
     Method m = AbstractAdminServices.class.getMethod("gamesSince", new Class[]{long.class});
-    assertEquals(3, DefaultGroovyMethods.size(m.getAnnotations()));
+    assertEquals(3, m.getAnnotations().length);
     assertTrue(m.isAnnotationPresent(GET.class));
     assertTrue(m.isAnnotationPresent(Produces.class));
     assertArrayEquals(Collections.singletonList(MediaType.TEXT_PLAIN).toArray(),
@@ -191,7 +190,7 @@ public class AbstractAdminServicesTest {
   public void testPlayersToSimulateLikeAnnotations() throws NoSuchMethodException {
     Method m = AbstractAdminServices.class.getMethod("playersToSimulateLike",
         new Class[]{String.class, Integer.class, Integer.class});
-    assertEquals(3, DefaultGroovyMethods.size(m.getAnnotations()));
+    assertEquals(3, m.getAnnotations().length);
     assertTrue(m.isAnnotationPresent(GET.class));
     assertTrue(m.isAnnotationPresent(Produces.class));
     assertArrayEquals(Collections.singletonList(MediaType.APPLICATION_JSON).toArray(),
@@ -249,7 +248,7 @@ public class AbstractAdminServicesTest {
   public void testSwitchAnnotations() throws NoSuchMethodException {
     Method m = AbstractAdminServices.class
         .getMethod("switchEffectiveUser", new Class[]{String.class});
-    assertEquals(3, DefaultGroovyMethods.size(m.getAnnotations()));
+    assertEquals(3, m.getAnnotations().length);
     assertTrue(m.isAnnotationPresent(PUT.class));
     assertTrue(m.isAnnotationPresent(Produces.class));
     assertArrayEquals(Collections.singletonList(MediaType.APPLICATION_JSON).toArray(),

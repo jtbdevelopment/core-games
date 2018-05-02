@@ -27,7 +27,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.glassfish.jersey.message.internal.OutboundJaxrsResponse;
 import org.junit.Assert;
 import org.junit.Before;
@@ -96,7 +95,7 @@ public class AbstractPlayerServicesTest {
   @Test
   public void testGamePlayAnnotations() throws NoSuchMethodException {
     Method gamePlay = AbstractPlayerServices.class.getMethod("gamePlay", new Class[]{String.class});
-    Assert.assertEquals(1, DefaultGroovyMethods.size(gamePlay.getAnnotations()));
+    Assert.assertEquals(1, gamePlay.getAnnotations().length);
     Assert.assertTrue(gamePlay.isAnnotationPresent(Path.class));
     Assert.assertEquals("game/{gameID}", gamePlay.getAnnotation(Path.class).value());
     Annotation[][] params = gamePlay.getParameterAnnotations();

@@ -1,7 +1,8 @@
 package com.jtbdevelopment.games.jackson;
 
+import static org.junit.Assert.assertTrue;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import groovy.util.GroovyTestCase;
 import javax.ws.rs.ext.Provider;
 import junit.framework.TestCase;
 import org.junit.Test;
@@ -10,7 +11,7 @@ import org.mockito.Mockito;
 /**
  * Date: 1/14/15 Time: 6:55 AM
  */
-public class ObjectMapperContextResolverTest extends GroovyTestCase {
+public class ObjectMapperContextResolverTest {
 
   private ObjectMapper mapper = Mockito.mock(ObjectMapper.class);
   private ObjectMapperContextResolver resolver = new ObjectMapperContextResolver(mapper);
@@ -22,6 +23,6 @@ public class ObjectMapperContextResolverTest extends GroovyTestCase {
 
   @Test
   public void testClassAnnotations() {
-    TestCase.assertTrue(ObjectMapperContextResolver.class.isAnnotationPresent(Provider.class));
+    assertTrue(ObjectMapperContextResolver.class.isAnnotationPresent(Provider.class));
   }
 }

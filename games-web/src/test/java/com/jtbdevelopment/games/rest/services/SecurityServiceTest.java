@@ -13,7 +13,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -51,7 +50,7 @@ public class SecurityServiceTest {
   @Test
   public void testSessionPlayerAnnotations() throws NoSuchMethodException {
     Method m = SecurityService.class.getMethod("getSessionPlayer", new Class<?>[0]);
-    Assert.assertEquals(2, DefaultGroovyMethods.size(m.getAnnotations()));
+    Assert.assertEquals(2, m.getAnnotations().length);
 
     Assert.assertTrue(m.isAnnotationPresent(GET.class));
     Assert.assertTrue(m.isAnnotationPresent(Produces.class));
