@@ -46,7 +46,6 @@
     <logback.version>1.2.3</logback.version>
     <slf4j.version>1.7.25</slf4j.version>
     <junit.version>4.12</junit.version>
-    <groovy.version>2.4.15</groovy.version>
     <flapdoodle.mongo.version>2.0.3</flapdoodle.mongo.version>
     <mockito.version>1.9.5</mockito.version>
   </properties>
@@ -96,20 +95,6 @@
     </repository>
   </repositories>
 
-  <pluginRepositories>
-    <pluginRepository>
-      <id>bintray</id>
-      <name>Groovy Bintray</name>
-      <url>https://dl.bintray.com/groovy/maven</url>
-      <releases>
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
-
   <build>
     <pluginManagement>
       <plugins>
@@ -128,7 +113,6 @@
         <configuration>
           <includes>
             <include>**/*Integration.java</include>
-            <include>**/*Integration.groovy</include>
           </includes>
         </configuration>
 
