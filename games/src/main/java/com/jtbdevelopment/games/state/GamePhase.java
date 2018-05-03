@@ -12,9 +12,9 @@ public enum GamePhase {
   Declined("Challenge declined.", "Declined", 7),
   Quit("Game quit.", "Quit", 7);
 
-  private String description;
-  private String groupLabel;
-  private int historyCutoffDays;
+  private final String description;
+  private final String groupLabel;
+  private final int historyCutoffDays;
 
   GamePhase(final String description, final String groupLabel, int historyCutoffDays) {
     this.description = description;

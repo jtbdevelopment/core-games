@@ -1,5 +1,6 @@
 package com.jtbdevelopment.games.maintenance;
 
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.stereotype.Component;
@@ -11,8 +12,10 @@ import org.springframework.stereotype.Component;
 public class PlayerCleanupScheduleFactoryBean extends CronTriggerFactoryBean {
 
   @Autowired
-  public PlayerCleanupScheduleFactoryBean(
-      final PlayerCleanupJobDetailFactoryBean jobDetail) {
+  private PlayerCleanupJobDetailFactoryBean jobDetail;
+
+  @PostConstruct
+  public void setup() {
     setJobDetail(jobDetail.getObject());
     setCronExpression("0 0 0 * * ?");
     setName("Delete Inactive Players");
