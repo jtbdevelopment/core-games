@@ -43,8 +43,35 @@ public class AspellUSEnglishCaseInsensitiveDictionary implements Dictionary {
       .getLogger(AspellUSEnglishCaseInsensitiveDictionary.class);
   private final Set<String> words = new HashSet<>(700000);
 
-  public AspellUSEnglishCaseInsensitiveDictionary(final String dictionaryFile) {
+  AspellUSEnglishCaseInsensitiveDictionary(final String dictionaryFile) {
     log.info("Loading dictionary..");
+    readInWords(dictionaryFile);
+
+    log.info("Loading taboo and offensive words");
+    for (String file : Arrays.asList("offensive.1", "offensive.2", "profane.1", "profane.3")) {
+      removeOffensiveWords(file);
+    }
+
+    log.info("Dictionaries loaded.");
+  }
+
+  private void removeOffensiveWords(final String file) {
+    log.info("Removing offensive/profane from " + file);
+    try (BufferedReader reader = Files.newBufferedReader(
+        new ClassPathResource("/aspell/" + file).getFile().toPath())
+    ) {
+      final AtomicInteger counter = new AtomicInteger();
+      reader.lines().forEach(line -> {
+        words.remove(line.toUpperCase());
+        counter.set(counter.get() + 1);
+      });
+      log.info("Processed = " + counter.get());
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private void readInWords(final String dictionaryFile) {
     try (BufferedReader reader = Files.newBufferedReader(
         new ClassPathResource(dictionaryFile).getFile().toPath())
     ) {
@@ -66,24 +93,6 @@ public class AspellUSEnglishCaseInsensitiveDictionary implements Dictionary {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    log.info("Loading taboo and offensive words");
-    for (String file : Arrays.asList("offensive.1", "offensive.2", "profane.1", "profane.3")) {
-      log.info("Removing offensive/profane from " + file);
-      try (BufferedReader reader = Files.newBufferedReader(
-          new ClassPathResource("/aspell/" + file).getFile().toPath())
-      ) {
-        final AtomicInteger counter = new AtomicInteger();
-        reader.lines().forEach(line -> {
-          words.remove(line.toUpperCase());
-          counter.set(counter.get() + 1);
-        });
-        log.info("Processed = " + counter.get());
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-    }
-
-    log.info("Dictionaries loaded.");
   }
 
   public Set<String> words() {

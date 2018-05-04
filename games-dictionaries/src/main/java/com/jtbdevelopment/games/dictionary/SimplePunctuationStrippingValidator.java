@@ -1,12 +1,11 @@
 package com.jtbdevelopment.games.dictionary;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,8 +15,12 @@ import org.springframework.stereotype.Component;
 public class SimplePunctuationStrippingValidator implements Validator {
 
   private static Logger log = LoggerFactory.getLogger(SimplePunctuationStrippingValidator.class);
-  @Autowired
-  protected DictionaryManager dictionaryManager;
+  private final DictionaryManager dictionaryManager;
+
+  SimplePunctuationStrippingValidator(
+      final DictionaryManager dictionaryManager) {
+    this.dictionaryManager = dictionaryManager;
+  }
 
   private static String fixUpInputString(final String wordPhrase) {
     final StringBuilder builder = new StringBuilder();
@@ -43,14 +46,14 @@ public class SimplePunctuationStrippingValidator implements Validator {
   public List<String> validateWordPhrase(final String wordPhrase, DictionaryType dictionaryType) {
     final Dictionary dictionary = dictionaryManager.getDictionary(dictionaryType);
     if (wordPhrase == null) {
-      log.info("Invalidating null word phrase " + wordPhrase);
-      return Arrays.asList("");
+      log.info("Invalidating null word phrase");
+      return Collections.singletonList("");
     }
 
     String working = fixUpInputString(wordPhrase);
     if (working.isEmpty()) {
-      log.info("Invalidating word phrase as empty " + wordPhrase);
-      return Arrays.asList(wordPhrase);
+      log.info("Invalidating word phrase as empty '{}'", wordPhrase);
+      return Collections.singletonList(wordPhrase);
     }
 
     StringTokenizer tokenizer = new StringTokenizer(working);

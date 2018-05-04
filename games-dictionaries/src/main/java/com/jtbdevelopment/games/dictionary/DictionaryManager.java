@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 /**
  * Date: 10/1/2016 Time: 12:36 PM
  */
+@SuppressWarnings("WeakerAccess")
 @Component
 public class DictionaryManager {
 

@@ -3,7 +3,6 @@ package com.jtbdevelopment.games.dictionary;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Collections;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -11,13 +10,9 @@ import org.junit.Test;
  */
 public class SimplePunctuationStrippingValidatorTest {
 
-  private static SimplePunctuationStrippingValidator validator;
-
-  @BeforeClass
-  public static void setUp() {
-    validator = new SimplePunctuationStrippingValidator();
-    validator.dictionaryManager = new DictionaryManager();
-  }
+  private DictionaryManager dictionaryManager = new DictionaryManager();
+  private SimplePunctuationStrippingValidator validator = new SimplePunctuationStrippingValidator(
+      dictionaryManager);
 
   @Test
   public void testValidPhrase() {
