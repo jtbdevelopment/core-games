@@ -17,30 +17,34 @@ import org.springframework.stereotype.Component;
  * Date: 11/8/14 Time: 8:55 AM
  */
 @Component
-public class PlayersActiveGameValidator implements GameValidator<Game> {
+public class PlayersActiveGameValidator<ID extends Serializable> implements
+    GameValidator<Game<ID, ?, ?>> {
 
   private static final String ERROR_MESSAGE = "Game contains inactive players.";
-  private final AbstractPlayerRepository playerRepository;
+  private final AbstractPlayerRepository<ID, ? extends Player<ID>> playerRepository;
 
   public PlayersActiveGameValidator(
-      final AbstractPlayerRepository playerRepository
+      @SuppressWarnings("SpringJavaAutowiringInspection") final AbstractPlayerRepository<ID, ? extends Player<ID>> playerRepository
   ) {
     this.playerRepository = playerRepository;
   }
 
   @Override
-  public boolean validateGame(final Game game) {
+  public boolean validateGame(final Game<ID, ?, ?> game) {
     if (game instanceof MultiPlayerGame) {
-      MultiPlayerGame multiPlayerGame = (MultiPlayerGame) game;
-      List<Player> players = (List<Player>) multiPlayerGame.getPlayers();
-      List<Serializable> ids = players.stream().map(Player::getId).collect(Collectors.toList());
-      Iterable<? extends Player> loaded = playerRepository.findAllById(ids);
-      long active = StreamSupport.stream(loaded.spliterator(), false).filter(x -> !x.getDisabled())
+      //noinspection unchecked
+      MultiPlayerGame<ID, ?, ?> multiPlayerGame = (MultiPlayerGame<ID, ?, ?>) game;
+      List<Player<ID>> players = multiPlayerGame.getPlayers();
+      List<ID> ids = players.stream().map(Player::getId).collect(Collectors.toList());
+      Iterable<? extends Player<ID>> loaded = playerRepository.findAllById(ids);
+      long active = StreamSupport.stream(loaded.spliterator(), false)
+          .filter(x -> !x.getDisabled())
           .count();
       return active == players.size();
     } else if (game instanceof SinglePlayerGame) {
-      Optional<? extends Player> loaded = playerRepository
-          .findById(((SinglePlayerGame) game).getPlayer().getId());
+      //noinspection unchecked
+      Optional<? extends Player<ID>> loaded = playerRepository
+          .findById(((SinglePlayerGame<ID, ?, ?>) game).getPlayer().getId());
       return loaded.isPresent() && !loaded.get().getDisabled();
     }
 

@@ -3,22 +3,27 @@ package com.jtbdevelopment.games.factory;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.state.GamePhase;
 import com.jtbdevelopment.games.state.SinglePlayerGame;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
 /**
  * Date: 4/4/2015 Time: 8:43 PM
  */
-public abstract class AbstractSinglePlayerGameFactory<IMPL extends SinglePlayerGame, FEATURES> extends
-    AbstractGameFactory<IMPL> implements SinglePlayerGameFactory<IMPL, FEATURES> {
+public abstract class AbstractSinglePlayerGameFactory<
+    ID extends Serializable,
+    FEATURES,
+    IMPL extends SinglePlayerGame<ID, ?, FEATURES>> extends
+    AbstractGameFactory<ID, IMPL> implements SinglePlayerGameFactory<ID, FEATURES, IMPL> {
 
-  public AbstractSinglePlayerGameFactory(
+  @SuppressWarnings("WeakerAccess")
+  protected AbstractSinglePlayerGameFactory(
       final List<GameInitializer> gameInitializers,
       final List<GameValidator> gameValidators) {
     super(gameInitializers, gameValidators);
   }
 
-  public IMPL createGame(final Set<FEATURES> features, final Player player) {
+  public IMPL createGame(final Set<FEATURES> features, final Player<ID> player) {
     IMPL game = createFreshGame(features, player);
 
     prepareGame(game);
@@ -26,13 +31,13 @@ public abstract class AbstractSinglePlayerGameFactory<IMPL extends SinglePlayerG
   }
 
   public IMPL createGame(final IMPL previousGame) {
-    IMPL game = (IMPL) createFreshGame(previousGame.getFeatures(), previousGame.getPlayer());
+    IMPL game = createFreshGame(previousGame.getFeatures(), previousGame.getPlayer());
     copyFromPreviousGame(previousGame, game);
     prepareGame(game);
     return game;
   }
 
-  protected IMPL createFreshGame(final Set<FEATURES> features, final Player player) {
+  private IMPL createFreshGame(final Set<FEATURES> features, final Player<ID> player) {
     IMPL game = newGame();
     game.setPlayer(player);
     game.setVersion(null);

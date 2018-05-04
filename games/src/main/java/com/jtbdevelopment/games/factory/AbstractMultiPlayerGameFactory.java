@@ -3,6 +3,7 @@ package com.jtbdevelopment.games.factory;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.state.GamePhase;
 import com.jtbdevelopment.games.state.MultiPlayerGame;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -10,17 +11,23 @@ import java.util.Set;
 /**
  * Date: 4/4/2015 Time: 8:43 PM
  */
-public abstract class AbstractMultiPlayerGameFactory<IMPL extends MultiPlayerGame, FEATURES> extends
-    AbstractGameFactory<IMPL> implements MultiPlayerGameFactory<IMPL, FEATURES> {
+public abstract class AbstractMultiPlayerGameFactory<
+    ID extends Serializable,
+    FEATURES,
+    IMPL extends MultiPlayerGame<ID, ?, FEATURES>> extends
+    AbstractGameFactory<ID, IMPL> implements MultiPlayerGameFactory<ID, FEATURES, IMPL> {
 
-  public AbstractMultiPlayerGameFactory(
+  protected AbstractMultiPlayerGameFactory(
       final List<GameInitializer> gameInitializers,
       final List<GameValidator> gameValidators) {
     super(gameInitializers, gameValidators);
   }
 
-  public IMPL createGame(final Set<FEATURES> features, final List<Player> players,
-      final Player initiatingPlayer) {
+  @Override
+  public IMPL createGame(
+      final Set<FEATURES> features,
+      final List<Player<ID>> players,
+      final Player<ID> initiatingPlayer) {
     IMPL game = createFreshGame(features, players, initiatingPlayer);
 
     prepareGame(game);
@@ -28,27 +35,25 @@ public abstract class AbstractMultiPlayerGameFactory<IMPL extends MultiPlayerGam
   }
 
   @Override
-  protected void copyFromPreviousGame(final IMPL previousGame, final IMPL newGame) {
-    super.copyFromPreviousGame(previousGame, newGame);
-  }
-
-  public IMPL createGame(final IMPL previousGame, final Player initiatingPlayer) {
-    List<Player> players = rotatePlayers(previousGame);
-    IMPL game = (IMPL) createFreshGame(previousGame.getFeatures(), players, initiatingPlayer);
+  public IMPL createGame(final IMPL previousGame, final Player<ID> initiatingPlayer) {
+    List<Player<ID>> players = rotatePlayers(previousGame);
+    IMPL game = createFreshGame(previousGame.getFeatures(), players, initiatingPlayer);
     copyFromPreviousGame(previousGame, game);
     prepareGame(game);
     return game;
   }
 
-  protected List<Player> rotatePlayers(final IMPL previousGame) {
-    List<Player> players = new ArrayList<Player>();
+  private List<Player<ID>> rotatePlayers(final IMPL previousGame) {
+    List<Player<ID>> players = new ArrayList<>();
     players.addAll(previousGame.getPlayers());
     players.add(players.remove(0));
     return players;
   }
 
-  protected IMPL createFreshGame(final Set<FEATURES> features, final List<Player> players,
-      final Player initiatingPlayer) {
+  private IMPL createFreshGame(
+      final Set<FEATURES> features,
+      final List<Player<ID>> players,
+      final Player<ID> initiatingPlayer) {
     IMPL game = newGame();
     game.setRound(1);
     game.setGamePhase(GamePhase.Challenged);

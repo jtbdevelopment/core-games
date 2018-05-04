@@ -15,12 +15,13 @@ import org.springframework.stereotype.Component;
  * Date: 2/27/15 Time: 9:46 PM
  */
 @Component
-public class PlayerKeyUtility<ID extends Serializable, P extends Player<ID>> {
+public class PlayerKeyUtility {
 
-  private static AbstractPlayerRepository playerRepository;
+  private static AbstractPlayerRepository<? super Serializable, ? super Player<? super Serializable>> playerRepository;
 
   public PlayerKeyUtility(
-      @SuppressWarnings("SpringJavaAutowiringInspection") final AbstractPlayerRepository<ID, P> playerRepository) {
+      @SuppressWarnings("SpringJavaAutowiringInspection") final AbstractPlayerRepository playerRepository) {
+    //noinspection unchecked
     PlayerKeyUtility.playerRepository = playerRepository;
   }
 
