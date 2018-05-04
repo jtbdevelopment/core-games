@@ -22,14 +22,14 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.INTERFACES)
-public class FriendFinder {
+public class FriendFinder<ID extends Serializable> {
 
   private final List<SourceBasedFriendFinder> friendFinders;
-  private final AbstractPlayerRepository playerRepository;
+  private final AbstractPlayerRepository<ID, ? extends Player<ID>> playerRepository;
   private final PlayerMasker friendMasker;
 
   public FriendFinder(
-      final AbstractPlayerRepository playerRepository,
+      @SuppressWarnings("SpringJavaAutowiringInspection") final AbstractPlayerRepository<ID, ? extends Player<ID>> playerRepository,
       final List<SourceBasedFriendFinder> friendFinders,
       final PlayerMasker friendMasker) {
     this.friendFinders = friendFinders;
@@ -37,33 +37,49 @@ public class FriendFinder {
     this.friendMasker = friendMasker;
   }
 
-  public Map<String, Set<? super Object>> findFriendsV2(final Serializable playerId) {
-    Optional<? extends Player> optionalPlayer = playerRepository.findById(playerId);
-    if (!optionalPlayer.isPresent() || optionalPlayer.get().getDisabled()) {
-      throw new FailedToFindPlayersException();
+  public Map<String, Set<? super Object>> findFriendsV2(final ID playerId) {
+    Player<ID> player = getPlayer(playerId);
+
+    Map<String, Set<? super Object>> combinedFriends = combine(getFriendsFromEachFinder(player));
+
+    combinedFriends.putIfAbsent(SourceBasedFriendFinder.MASKED_FRIENDS_KEY, new HashSet<>());
+    if (combinedFriends.containsKey(SourceBasedFriendFinder.FRIENDS_KEY)) {
+      //noinspection unchecked
+      Set<Player<ID>> players = combinedFriends.remove(SourceBasedFriendFinder.FRIENDS_KEY)
+          .stream()
+          .filter(o -> o instanceof Player)
+          .map(o -> (Player<ID>) o)
+          .collect(Collectors.toSet());
+      List<Map<String, String>> masked = friendMasker.maskFriendsV2(players);
+      combinedFriends.get(SourceBasedFriendFinder.MASKED_FRIENDS_KEY).addAll(masked);
     }
 
-    Player player = optionalPlayer.get();
+    return combinedFriends;
+  }
 
-    List<Map<String, Set<?>>> finderFriends = friendFinders.stream()
-        .filter(finder -> finder.handlesSource(player.getSource()))
-        .map(finder -> finder.findFriends(player))
-        .collect(Collectors.toList());
+  private Map<String, Set<? super Object>> combine(List<Map<String, Set<?>>> finderFriends) {
     Map<String, Set<? super Object>> combinedFriends = new HashMap<>();
     finderFriends.forEach(subSet ->
         subSet.forEach((key, value) -> {
           combinedFriends.putIfAbsent(key, new HashSet<>());
           combinedFriends.get(key).addAll(value);
         }));
+    return combinedFriends;
+  }
 
-    combinedFriends.putIfAbsent(SourceBasedFriendFinder.MASKED_FRIENDS_KEY, new HashSet<>());
-    Set removed = combinedFriends.remove(SourceBasedFriendFinder.FRIENDS_KEY);
-    Set<Player> players = (Set<Player>) removed;
-    if (players != null) {
-      List<Map<String, String>> masked = friendMasker.maskFriendsV2(players);
-      combinedFriends.get(SourceBasedFriendFinder.MASKED_FRIENDS_KEY).addAll(masked);
+  private List<Map<String, Set<?>>> getFriendsFromEachFinder(Player<ID> player) {
+    return friendFinders.stream()
+        .filter(finder -> finder.handlesSource(player.getSource()))
+        .map(finder -> finder.findFriends(player))
+        .collect(Collectors.toList());
+  }
+
+  private Player<ID> getPlayer(ID playerId) {
+    Optional<? extends Player<ID>> optionalPlayer = playerRepository.findById(playerId);
+    if (!optionalPlayer.isPresent() || optionalPlayer.get().getDisabled()) {
+      throw new FailedToFindPlayersException();
     }
 
-    return combinedFriends;
+    return optionalPlayer.get();
   }
 }
