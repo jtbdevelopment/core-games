@@ -109,7 +109,6 @@ public abstract class AbstractAuthenticationFilterConfigurer extends AbstractHtt
     registerDefaultAuthenticationEntryPoint(http);
   }
 
-  @SuppressWarnings("unchecked")
   private void registerDefaultAuthenticationEntryPoint(HttpSecurity http) {
     ExceptionHandlingConfigurer<HttpSecurity> exceptionHandling = http
         .getConfigurer(ExceptionHandlingConfigurer.class);
@@ -212,7 +211,6 @@ public abstract class AbstractAuthenticationFilterConfigurer extends AbstractHtt
 //        }
   }
 
-  @SuppressWarnings("unchecked")
   private MobileAwareFormLoginConfigurer getSelf() {
     return (MobileAwareFormLoginConfigurer) this;
   }

@@ -25,7 +25,7 @@ public class PushNotifierFilter implements EntryEvictedListener<GamePublicationT
 
   public static final String PLAYER_PUSH_TRACKING_MAP = "PUSH_PLAYER_TRACKING_SET";
   private static final Logger logger = LoggerFactory.getLogger(PushNotifierFilter.class);
-  protected ConcurrentMap<Serializable, Serializable> recentlyPushedPlayers;
+  ConcurrentMap<Serializable, Serializable> recentlyPushedPlayers;
   @Autowired
   protected HazelcastInstance hazelcastInstance;
   @Autowired
@@ -49,7 +49,7 @@ public class PushNotifierFilter implements EntryEvictedListener<GamePublicationT
   @Override
   public void entryEvicted(final EntryEvent<GamePublicationTracker, Boolean> event) {
     logger.trace("Evicting push check " + event);
-    if (event.getOldValue().booleanValue()) {
+    if (event.getOldValue()) {
       return;
 
     }

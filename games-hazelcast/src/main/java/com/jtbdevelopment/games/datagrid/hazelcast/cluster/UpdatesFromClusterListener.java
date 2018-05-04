@@ -20,8 +20,7 @@ import org.springframework.stereotype.Component;
 public class UpdatesFromClusterListener extends AbstractUpdatesFromClusterListener implements
     MessageListener<ClusterMessage> {
 
-  @SuppressWarnings("FieldCanBeLocal")
-  protected final ITopic<ClusterMessage> topic;
+  final ITopic<ClusterMessage> topic;
 
   public UpdatesFromClusterListener(
       final HazelcastInstance hazelcastInstance,

@@ -58,7 +58,6 @@ public class FriendFinder {
 
     combinedFriends.putIfAbsent(SourceBasedFriendFinder.MASKED_FRIENDS_KEY, new HashSet<>());
     Set removed = combinedFriends.remove(SourceBasedFriendFinder.FRIENDS_KEY);
-    //noinspection unchecked
     Set<Player> players = (Set<Player>) removed;
     if (players != null) {
       List<Map<String, String>> masked = friendMasker.maskFriendsV2(players);

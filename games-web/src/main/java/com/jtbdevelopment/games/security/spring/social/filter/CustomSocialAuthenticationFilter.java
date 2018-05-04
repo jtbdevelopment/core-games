@@ -207,14 +207,12 @@ public class CustomSocialAuthenticationFilter extends AbstractAuthenticationProc
         return connection;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void setFilterProcessesUrl(String filterProcessesUrl) {
         super.setFilterProcessesUrl(filterProcessesUrl);
         this.filterProcessesUrl = filterProcessesUrl;
     }
 
-    // private helpers
     private Authentication getAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication();
     }

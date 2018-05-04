@@ -42,10 +42,11 @@ public class PushNotifier {
   private static final Logger logger = LoggerFactory.getLogger(PushNotifier.class);
   private static final String GCM_URL = "https://gcm-http.googleapis.com/gcm/send";
   private static final URI GCM_URI = UriBuilder.fromUri(GCM_URL).build();
+  @SuppressWarnings("FieldCanBeLocal")
   private static int DEFAULT_TTL = 60 * 60 * 4;
-  protected final Builder builder;
-  protected final Map<String, Object> baseMessage;
-  protected final AbstractPlayerRepository playerRepository;
+  private final Builder builder;
+  private final Map<String, Object> baseMessage;
+  private final AbstractPlayerRepository playerRepository;
   private final ObjectMapper objectMapper;
   private final Client client;
 
@@ -66,7 +67,8 @@ public class PushNotifier {
   }
 
   //  for testing
-  protected PushNotifier(
+  @SuppressWarnings("WeakerAccess")
+  PushNotifier(
       final ObjectMapper objectMapper,
       final AbstractPlayerRepository playerRepository,
       final Client client,
@@ -78,7 +80,7 @@ public class PushNotifier {
     baseMessage = createBaseMessage();
   }
 
-  protected Map<String, Object> createBaseMessage() {
+  Map<String, Object> createBaseMessage() {
     Map<String, Object> message = new HashMap<>();
     message.put("collapse_key", "YourTurn");
     message.put("time_to_live", DEFAULT_TTL);
@@ -94,6 +96,7 @@ public class PushNotifier {
     return message;
   }
 
+  @SuppressWarnings("WeakerAccess")
   public boolean notifyPlayer(final Player<?> player, final MultiPlayerGame game) {
     try {
       Map<String, Object> message = new HashMap<>(baseMessage);

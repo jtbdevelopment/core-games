@@ -18,7 +18,8 @@ import org.springframework.data.annotation.Transient;
  */
 public class MongoPlayerFactoryTest {
 
-  private MongoPlayerFactory factory = new MongoPlayerFactory();
+  private GameAttributesFactory gameAttributesFactory = new GameAttributesFactory();
+  private MongoPlayerFactory factory = new MongoPlayerFactory(null);
 
   @Test
   public void testNewPlayer() {
@@ -43,7 +44,7 @@ public class MongoPlayerFactoryTest {
 
   @Test
   public void testNewPlayerWithGameAttributes() {
-    factory.gameSpecificPlayerAttributesFactory = new GameAttributesFactory();
+    factory = new MongoPlayerFactory(gameAttributesFactory);
     Player<ObjectId> player = factory.newPlayer();
     assertTrue(player instanceof MongoPlayer);
     assertNotNull(player.getGameSpecificPlayerAttributes());
@@ -54,7 +55,7 @@ public class MongoPlayerFactoryTest {
 
   @Test
   public void testNewManualPlayerWithGameAttributes() {
-    factory.gameSpecificPlayerAttributesFactory = new GameAttributesFactory();
+    factory = new MongoPlayerFactory(gameAttributesFactory);
     Player<ObjectId> player = factory.newManualPlayer();
     assertTrue(player instanceof MongoManualPlayer);
     assertNotNull(player.getGameSpecificPlayerAttributes());
@@ -65,7 +66,7 @@ public class MongoPlayerFactoryTest {
 
   @Test
   public void testNewSystemPlayerWithGameAttributes() {
-    factory.gameSpecificPlayerAttributesFactory = new GameAttributesFactory();
+    factory = new MongoPlayerFactory(gameAttributesFactory);
     Player<ObjectId> player = factory.newSystemPlayer();
     assertTrue(player instanceof MongoSystemPlayer);
     assertNotNull(player.getGameSpecificPlayerAttributes());
@@ -80,11 +81,11 @@ public class MongoPlayerFactoryTest {
     @Transient
     private Player player;
 
-    public int getMagicValue() {
+    int getMagicValue() {
       return magicValue;
     }
 
-    public void setMagicValue(int magicValue) {
+    void setMagicValue(int magicValue) {
       this.magicValue = magicValue;
     }
 

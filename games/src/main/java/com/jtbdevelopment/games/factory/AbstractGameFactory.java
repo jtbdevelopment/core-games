@@ -24,7 +24,6 @@ public abstract class AbstractGameFactory<IMPL extends Game> {
 
   protected void copyFromPreviousGame(final IMPL previousGame, final IMPL newGame) {
     newGame.setRound(previousGame.getRound() + 1);
-    //noinspection unchecked
     newGame.setPreviousId(previousGame.getId());
   }
 
@@ -34,12 +33,10 @@ public abstract class AbstractGameFactory<IMPL extends Game> {
     return game;
   }
 
-  @SuppressWarnings("WeakerAccess")
   protected void initializeGame(final IMPL game) {
     gameInitializers.forEach(i -> i.initializeGame(game));
   }
 
-  @SuppressWarnings("WeakerAccess")
   protected void validateGame(final IMPL game) {
     List<GameValidator> failedChecks = gameValidators
         .stream()

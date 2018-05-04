@@ -12,10 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class ContextListener implements ApplicationContextAware {
 
-  @SuppressWarnings("unused")
-  public void ContainerListener() {
-  }
-
   @Override
   public void setApplicationContext(final ApplicationContext applicationContext)
       throws BeansException {

@@ -27,7 +27,6 @@ public class PlayerPublisherTest {
   private PlayerPublisher publisher = new PlayerPublisher(10, Arrays.asList(listener1, listener2));
 
   @Test
-  @SuppressWarnings("unchecked")
   public void testCreatesExecutorService() throws ExecutionException, InterruptedException {
     final String expectedResult = "RESULT";
     assertEquals(10, ((ThreadPoolExecutor) publisher.service).getCorePoolSize());

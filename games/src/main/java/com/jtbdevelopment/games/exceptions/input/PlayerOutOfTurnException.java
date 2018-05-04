@@ -5,6 +5,7 @@ import com.jtbdevelopment.games.exceptions.GameInputException;
 /**
  * Date: 1/13/15 Time: 7:06 PM
  */
+@SuppressWarnings("WeakerAccess")
 public class PlayerOutOfTurnException extends GameInputException {
 
   private static final String ERROR = "Player is playing out of turn.";

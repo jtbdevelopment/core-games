@@ -34,6 +34,7 @@ public abstract class AbstractMaskedGame<FEATURES> implements MaskedGame<FEATURE
     return id;
   }
 
+  @SuppressWarnings("unused")
   public void setIdAsString(@SuppressWarnings("unused") final String id) {
   }
 

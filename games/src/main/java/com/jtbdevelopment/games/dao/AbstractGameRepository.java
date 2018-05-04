@@ -15,9 +15,14 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 /**
  * Date: 12/31/2014 Time: 5:32 PM
  */
+@SuppressWarnings("SpringCacheAnnotationsOnInterfaceInspection")
 @NoRepositoryBean
-public interface AbstractGameRepository<ID extends Serializable, TIMESTAMP, FEATURES, IMPL extends Game<ID, TIMESTAMP, FEATURES>> extends
-    PagingAndSortingRepository<IMPL, ID> {
+public interface AbstractGameRepository<
+    ID extends Serializable,
+    TIMESTAMP,
+    FEATURES,
+    IMPL extends Game<ID, TIMESTAMP, FEATURES>>
+    extends PagingAndSortingRepository<IMPL, ID> {
 
   @Override
   @CachePut(value = GAME_ID_CACHE, key = "#result.id")

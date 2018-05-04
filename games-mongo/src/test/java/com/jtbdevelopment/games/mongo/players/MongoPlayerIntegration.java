@@ -50,7 +50,6 @@ import org.springframework.social.connect.support.ConnectionFactoryRegistry;
 /**
  * Date: 1/11/15 Time: 3:09 PM
  */
-@SuppressWarnings("ConstantConditions")
 public class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegration {
 
   private static final String PLAYER_COLLECTION_NAME = "player";

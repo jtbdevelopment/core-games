@@ -49,7 +49,6 @@ import org.springframework.social.connect.support.ConnectionFactoryRegistry;
 /**
  * Date: 1/10/15 Time: 2:35 PM
  */
-@SuppressWarnings({"ConstantConditions", "unchecked"})
 public class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringContextIntegration {
 
   private static final String GAMES_COLLECTION_NAME = "single";

@@ -5,10 +5,10 @@ import java.io.Serializable;
 /**
  * Date: 10/10/2015 Time: 4:24 PM
  */
-public class GamePublicationTracker implements Serializable {
+public class GamePublicationTracker<T extends Serializable> implements Serializable {
 
-  private Serializable pid;
-  private Serializable gid;
+  private T pid;
+  private T gid;
 
   @Override
   public boolean equals(final Object o) {
@@ -36,19 +36,19 @@ public class GamePublicationTracker implements Serializable {
     return "GamePublicationTracker{" + "pid=" + pid + ", gid=" + gid + "}";
   }
 
-  public Serializable getPid() {
+  public T getPid() {
     return pid;
   }
 
-  public void setPid(Serializable pid) {
+  public void setPid(final T pid) {
     this.pid = pid;
   }
 
-  public Serializable getGid() {
+  public T getGid() {
     return gid;
   }
 
-  public void setGid(Serializable gid) {
+  public void setGid(final T gid) {
     this.gid = gid;
   }
 }

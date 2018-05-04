@@ -22,6 +22,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 /**
  * Date: 12/30/2014 Time: 11:07 AM
  */
+@SuppressWarnings("SpringCacheAnnotationsOnInterfaceInspection")
 @NoRepositoryBean
 public interface AbstractPlayerRepository<ID extends Serializable, P extends Player<ID>> extends
     PagingAndSortingRepository<P, ID> {

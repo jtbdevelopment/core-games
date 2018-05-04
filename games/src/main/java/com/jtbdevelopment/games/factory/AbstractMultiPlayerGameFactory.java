@@ -40,7 +40,6 @@ public abstract class AbstractMultiPlayerGameFactory<IMPL extends MultiPlayerGam
     return game;
   }
 
-  @SuppressWarnings("WeakerAccess")
   protected List<Player> rotatePlayers(final IMPL previousGame) {
     List<Player> players = new ArrayList<Player>();
     players.addAll(previousGame.getPlayers());
@@ -48,7 +47,6 @@ public abstract class AbstractMultiPlayerGameFactory<IMPL extends MultiPlayerGam
     return players;
   }
 
-  @SuppressWarnings("WeakerAccess")
   protected IMPL createFreshGame(final Set<FEATURES> features, final List<Player> players,
       final Player initiatingPlayer) {
     IMPL game = newGame();
