@@ -14,7 +14,6 @@ import com.jtbdevelopment.games.players.PlayerPayLevel;
 import com.jtbdevelopment.games.publish.PlayerPublisher;
 import com.jtbdevelopment.games.tracking.PlayerGameEligibility;
 import com.jtbdevelopment.games.tracking.PlayerGameEligibilityResult;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
@@ -50,13 +49,7 @@ public class PlayerGameTrackerTest extends MongoGameCoreTestCase {
       .inc(AbstractPlayerGameTrackingAttributes.PAID_GAMES_FIELD, 1);
   private MongoOperations mongoOperations = Mockito.mock(MongoOperations.class);
   private PlayerPublisher playerPublisher = Mockito.mock(PlayerPublisher.class);
-  private PlayerGameTracker tracker = new PlayerGameTracker();
-
-  @Before
-  public void setup() {
-    tracker.playerPublisher = playerPublisher;
-    tracker.mongoOperations = mongoOperations;
-  }
+  private PlayerGameTracker tracker = new PlayerGameTracker(mongoOperations, playerPublisher);
 
   @Test
   public void testSystemPlayer() {

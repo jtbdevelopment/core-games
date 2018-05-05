@@ -27,7 +27,8 @@ class GameCleanup<ID extends Serializable, IMPL extends Game<ID, Instant, ?>> {
     this.gameRepository = gameRepository;
   }
 
-  void deleteOlderGames() {
+  @SuppressWarnings("WeakerAccess")
+  public void deleteOlderGames() {
     ZonedDateTime cutoff = ZonedDateTime.now(GMT).minusDays(DAYS_BACK);
     logger.info("Deleting games created before " + cutoff);
     logger.info("Deleted games count = {}",

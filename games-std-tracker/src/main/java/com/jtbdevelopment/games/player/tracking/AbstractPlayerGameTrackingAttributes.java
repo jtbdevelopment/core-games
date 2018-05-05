@@ -11,7 +11,7 @@ import org.springframework.data.annotation.Transient;
 public abstract class AbstractPlayerGameTrackingAttributes implements GameSpecificPlayerAttributes {
 
   public static final String FREE_GAMES_FIELD = "gameSpecificPlayerAttributes.freeGamesUsedToday";
-  public static final String PAID_GAMES_FIELD = "gameSpecificPlayerAttributes.availablePurchasedGames";
+  static final String PAID_GAMES_FIELD = "gameSpecificPlayerAttributes.availablePurchasedGames";
   private int freeGamesUsedToday = 0;
   private int availablePurchasedGames = 0;
   private Player player;
@@ -21,18 +21,22 @@ public abstract class AbstractPlayerGameTrackingAttributes implements GameSpecif
   @SuppressWarnings("unused")
   public abstract void setMaxDailyFreeGames(int maxDailyFreeGames);
 
+  @SuppressWarnings("WeakerAccess")
   public int getFreeGamesUsedToday() {
     return freeGamesUsedToday;
   }
 
+  @SuppressWarnings("WeakerAccess")
   public void setFreeGamesUsedToday(int freeGamesUsedToday) {
     this.freeGamesUsedToday = freeGamesUsedToday;
   }
 
+  @SuppressWarnings("WeakerAccess")
   public int getAvailablePurchasedGames() {
     return availablePurchasedGames;
   }
 
+  @SuppressWarnings("WeakerAccess")
   public void setAvailablePurchasedGames(int availablePurchasedGames) {
     this.availablePurchasedGames = availablePurchasedGames;
   }

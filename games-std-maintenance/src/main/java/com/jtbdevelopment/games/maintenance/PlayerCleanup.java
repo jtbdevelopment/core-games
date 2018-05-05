@@ -39,7 +39,8 @@ class PlayerCleanup<ID extends Serializable, P extends Player<ID>> {
     this.usersConnectionRepository = usersConnectionRepository;
   }
 
-  void deleteInactivePlayers() {
+  @SuppressWarnings("WeakerAccess")
+  public void deleteInactivePlayers() {
     ZonedDateTime cutoff = ZonedDateTime.now(GMT).minusDays(DAYS_BACK);
     logger.info("Deleting players not logged in since " + cutoff);
 

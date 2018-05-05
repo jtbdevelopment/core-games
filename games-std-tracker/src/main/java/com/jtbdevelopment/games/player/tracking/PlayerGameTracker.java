@@ -8,7 +8,6 @@ import com.jtbdevelopment.games.publish.PlayerPublisher;
 import com.jtbdevelopment.games.tracking.GameEligibilityTracker;
 import com.jtbdevelopment.games.tracking.PlayerGameEligibility;
 import com.jtbdevelopment.games.tracking.PlayerGameEligibilityResult;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
@@ -34,10 +33,15 @@ public class PlayerGameTracker implements GameEligibilityTracker<PlayerGameEligi
       .inc(AbstractPlayerGameTrackingAttributes.PAID_GAMES_FIELD, 1);
   private static final FindAndModifyOptions RETURN_NEW_OPTION = new FindAndModifyOptions()
       .returnNew(true);
-  @Autowired
-  protected MongoOperations mongoOperations;
-  @Autowired
-  protected PlayerPublisher playerPublisher;
+  private final MongoOperations mongoOperations;
+  private final PlayerPublisher playerPublisher;
+
+  PlayerGameTracker(
+      final MongoOperations mongoOperations,
+      final PlayerPublisher playerPublisher) {
+    this.mongoOperations = mongoOperations;
+    this.playerPublisher = playerPublisher;
+  }
 
   /**
    * Checks eligibility for player and decrements appropriate value Caller should retain value until
@@ -87,7 +91,6 @@ public class PlayerGameTracker implements GameEligibilityTracker<PlayerGameEligi
     }
 
     PlayerGameEligibilityResult result = new PlayerGameEligibilityResult();
-
     result.setEligibility(PlayerGameEligibility.NoGamesAvailable);
     result.setPlayer(player);
     return result;

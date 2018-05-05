@@ -18,7 +18,7 @@ public class PlayerFreeGameResetTest {
 
   private MongoOperations operations = Mockito.mock(MongoOperations.class);
   private PlayerPublisher playerPublisher = Mockito.mock(PlayerPublisher.class);
-  private PlayerFreeGameReset freeGameReset = new PlayerFreeGameReset();
+  private PlayerFreeGameReset freeGameReset = new PlayerFreeGameReset(operations, playerPublisher);
 
   @Test
   public void testResetsAndPublishes() {
@@ -28,8 +28,6 @@ public class PlayerFreeGameResetTest {
     Mockito.when(
         operations.updateMulti(Matchers.eq(q), Matchers.eq(u), Matchers.eq(MongoPlayer.class)))
         .thenReturn(null);
-    freeGameReset.mongoOperations = operations;
-    freeGameReset.playerPublisher = playerPublisher;
     freeGameReset.resetFreeGames();
     Mockito.verify(operations)
         .updateMulti(Matchers.eq(q), Matchers.eq(u), Matchers.eq(MongoPlayer.class));

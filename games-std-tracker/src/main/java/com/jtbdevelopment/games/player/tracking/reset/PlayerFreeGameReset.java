@@ -6,7 +6,6 @@ import com.jtbdevelopment.games.player.tracking.AbstractPlayerGameTrackingAttrib
 import com.jtbdevelopment.games.publish.PlayerPublisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -22,14 +21,20 @@ import org.springframework.stereotype.Component;
 public class PlayerFreeGameReset {
 
   private static final Logger logger = LoggerFactory.getLogger(PlayerFreeGameReset.class);
-  @Autowired
-  protected MongoOperations mongoOperations;
-  @Autowired
-  protected PlayerPublisher playerPublisher;
+  private final MongoOperations mongoOperations;
+  private final PlayerPublisher playerPublisher;
+
+  public PlayerFreeGameReset(
+      final MongoOperations mongoOperations,
+      final PlayerPublisher playerPublisher) {
+    this.mongoOperations = mongoOperations;
+    this.playerPublisher = playerPublisher;
+  }
 
   @Caching(evict = {@CacheEvict(value = CacheConstants.PLAYER_ID_CACHE, allEntries = true),
       @CacheEvict(value = CacheConstants.PLAYER_MD5_CACHE, allEntries = true),
       @CacheEvict(value = CacheConstants.PLAYER_S_AND_SID_CACHE, allEntries = true)})
+  @SuppressWarnings("WeakerAccess")
   public boolean resetFreeGames() {
     logger.info("Resetting all player free games.");
     //  Error check?
