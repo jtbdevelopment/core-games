@@ -12,6 +12,7 @@ public class StringToObjectIdConverter implements StringToIDConverter<ObjectId> 
 
   @Override
   public ObjectId convert(final String source) {
+    //noinspection ConstantConditions
     return source != null ? new ObjectId(source) : null;
   }
 

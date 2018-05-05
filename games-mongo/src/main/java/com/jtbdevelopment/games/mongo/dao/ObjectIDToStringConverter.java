@@ -12,7 +12,8 @@ public class ObjectIDToStringConverter implements IDToStringConverter<ObjectId> 
 
   @Override
   public String convert(final ObjectId source) {
-    return source == null ? null : source.toHexString();
+    //noinspection ConstantConditions
+    return source != null ? source.toHexString() : null;
   }
 
 }

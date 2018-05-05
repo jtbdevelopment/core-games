@@ -21,10 +21,12 @@ public class MongoManualPlayer extends MongoPlayer implements ManualPlayer<Objec
   private boolean verified = false;
   private String verificationToken = "";
 
+  @SuppressWarnings("WeakerAccess")
   public MongoManualPlayer() {
     super.setSource(MANUAL_SOURCE);
   }
 
+  @SuppressWarnings("unused")
   @PersistenceConstructor
   public MongoManualPlayer(final GameSpecificPlayerAttributes gameSpecificPlayerAttributes) {
     super(gameSpecificPlayerAttributes);

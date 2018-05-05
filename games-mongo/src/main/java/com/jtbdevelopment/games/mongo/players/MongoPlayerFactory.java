@@ -8,8 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * Date: 12/30/2014
- * Time: 7:15 PM
+ * Date: 12/30/2014 Time: 7:15 PM
  */
 @Component
 public class MongoPlayerFactory implements PlayerFactory<ObjectId> {
@@ -17,6 +16,7 @@ public class MongoPlayerFactory implements PlayerFactory<ObjectId> {
   private final GameSpecificPlayerAttributesFactory gameSpecificPlayerAttributesFactory;
 
   public MongoPlayerFactory(
+      @SuppressWarnings("SpringJavaAutowiringInspection")
       @Autowired(required = false) final GameSpecificPlayerAttributesFactory gameSpecificPlayerAttributesFactory) {
     this.gameSpecificPlayerAttributesFactory = gameSpecificPlayerAttributesFactory;
   }
