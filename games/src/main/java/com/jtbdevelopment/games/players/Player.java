@@ -43,8 +43,6 @@ public interface Player<ID extends Serializable> {
 
   void setProfileUrl(String profileUrl);
 
-  boolean getDisabled();
-
   boolean isDisabled();
 
   void setDisabled(boolean disabled);
@@ -52,8 +50,6 @@ public interface Player<ID extends Serializable> {
   PlayerPayLevel getPayLevel();
 
   void setPayLevel(final PlayerPayLevel payLevel);
-
-  boolean getAdminUser();
 
   boolean isAdminUser();
 

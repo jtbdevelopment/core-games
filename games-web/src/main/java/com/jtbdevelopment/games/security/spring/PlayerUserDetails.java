@@ -18,7 +18,7 @@ import org.springframework.social.security.SocialUserDetails;
  * Date: 12/14/14 Time: 5:27 PM
  */
 public class PlayerUserDetails<ID extends Serializable> implements SocialUserDetails, UserDetails,
-    SessionUserInfo {
+    SessionUserInfo<ID> {
 
   private final Player<ID> player;
   private final List<SimpleGrantedAuthority> grantedAuthorities = new LinkedList<>(
@@ -29,7 +29,7 @@ public class PlayerUserDetails<ID extends Serializable> implements SocialUserDet
   public PlayerUserDetails(final Player<ID> player) {
     this.player = player;
     this.effectivePlayer = player;
-    if (player != null && player.getAdminUser()) {
+    if (player != null && player.isAdminUser()) {
       grantedAuthorities.add(new SimpleGrantedAuthority(PlayerRoles.ADMIN));
     }
 
@@ -46,7 +46,7 @@ public class PlayerUserDetails<ID extends Serializable> implements SocialUserDet
   }
 
   @Override
-  public void setEffectiveUser(final Player player) {
+  public void setEffectiveUser(final Player<ID> player) {
     this.effectivePlayer = player;
   }
 
@@ -85,11 +85,8 @@ public class PlayerUserDetails<ID extends Serializable> implements SocialUserDet
 
   @Override
   public boolean isAccountNonLocked() {
-    if (player instanceof ManualPlayer) {
-      return ((ManualPlayer) player).getVerified();
-    }
+    return !(player instanceof ManualPlayer) || ((ManualPlayer) player).isVerified();
 
-    return true;
   }
 
   @Override
@@ -99,7 +96,7 @@ public class PlayerUserDetails<ID extends Serializable> implements SocialUserDet
 
   @Override
   public boolean isEnabled() {
-    return !player.getDisabled();
+    return !player.isDisabled();
   }
 
 }

@@ -98,10 +98,12 @@ public abstract class AbstractPlayer<ID extends Serializable>
     registeredDevices.remove(device);
   }
 
+  @Override
   public String getSource() {
     return source;
   }
 
+  @Override
   public void setSource(final String source) {
     if (StringUtils.isEmpty(this.source)) {
       this.source = source;
@@ -110,48 +112,59 @@ public abstract class AbstractPlayer<ID extends Serializable>
 
   }
 
+  @Override
   public String getSourceId() {
     return sourceId;
   }
 
+  @Override
   public void setSourceId(final String sourceId) {
     this.sourceId = sourceId;
     computeMD5Hex();
   }
 
+  @Override
   public String getDisplayName() {
     return displayName;
   }
 
+  @Override
   public void setDisplayName(final String displayName) {
     this.displayName = displayName;
     computeMD5Hex();
   }
 
+  @Override
   public String getImageUrl() {
     return imageUrl;
   }
 
+  @Override
   public void setImageUrl(String imageUrl) {
     this.imageUrl = imageUrl;
   }
 
+  @Override
   public String getProfileUrl() {
     return profileUrl;
   }
 
+  @Override
   public void setProfileUrl(String profileUrl) {
     this.profileUrl = profileUrl;
   }
 
+  @Override
   public Set<RegisteredDevice> getRegisteredDevices() {
     return registeredDevices;
   }
 
+  @Override
   public void setRegisteredDevices(Set<RegisteredDevice> registeredDevices) {
     this.registeredDevices = registeredDevices;
   }
 
+  @Override
   public Instant getCreated() {
     return created;
   }
@@ -160,58 +173,63 @@ public abstract class AbstractPlayer<ID extends Serializable>
     this.created = created;
   }
 
+  @Override
   public Instant getLastLogin() {
     return lastLogin;
   }
 
+  @Override
   public void setLastLogin(Instant lastLogin) {
     this.lastLogin = lastLogin;
   }
 
+  @Override
   public String getLastVersionNotes() {
     return lastVersionNotes;
   }
 
+  @Override
   public void setLastVersionNotes(String lastVersionNotes) {
     this.lastVersionNotes = lastVersionNotes;
   }
 
-  public boolean getDisabled() {
-    return disabled;
-  }
-
+  @Override
   public boolean isDisabled() {
     return disabled;
   }
 
+  @Override
   public void setDisabled(boolean disabled) {
     this.disabled = disabled;
   }
 
-  public boolean getAdminUser() {
-    return adminUser;
-  }
-
+  @Override
   public boolean isAdminUser() {
     return adminUser;
   }
 
+  @Override
   public void setAdminUser(boolean adminUser) {
     this.adminUser = adminUser;
   }
 
+  @Override
   public PlayerPayLevel getPayLevel() {
     return payLevel;
   }
 
+  @Override
   public void setPayLevel(PlayerPayLevel payLevel) {
     this.payLevel = payLevel;
   }
 
+  @Override
   public <T extends GameSpecificPlayerAttributes> T getGameSpecificPlayerAttributes() {
+    //noinspection unchecked
     return (T) gameSpecificPlayerAttributes;
   }
 
+  @Override
   public void setGameSpecificPlayerAttributes(
       final GameSpecificPlayerAttributes gameSpecificPlayerAttributes) {
     this.gameSpecificPlayerAttributes = gameSpecificPlayerAttributes;

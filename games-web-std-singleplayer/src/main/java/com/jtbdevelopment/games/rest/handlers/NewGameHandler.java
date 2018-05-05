@@ -23,21 +23,21 @@ import org.springframework.stereotype.Component;
  * Date: 11/4/2014 Time: 9:10 PM
  */
 @Component
-public class NewGameHandler extends AbstractHandler {
+public class NewGameHandler<ID extends Serializable, FEATURES> extends AbstractHandler {
 
   private static final Logger logger = LoggerFactory.getLogger(NewGameHandler.class);
-  private final AbstractSinglePlayerGameFactory<SinglePlayerGame, Object> gameFactory;
-  private final AbstractSinglePlayerGameRepository<?, ?, ?, SinglePlayerGame<?, ?, ?>> gameRepository;
+  private final AbstractSinglePlayerGameFactory<ID, FEATURES, SinglePlayerGame<ID, ?, FEATURES>> gameFactory;
+  private final AbstractSinglePlayerGameRepository<ID, ?, FEATURES, SinglePlayerGame<ID, ?, FEATURES>> gameRepository;
   private final GameTransitionEngine<SinglePlayerGame> transitionEngine;
-  private final GameMasker<?, SinglePlayerGame, MaskedSinglePlayerGame> gameMasker;
+  private final GameMasker<ID, SinglePlayerGame<ID, ?, FEATURES>, MaskedSinglePlayerGame<FEATURES>> gameMasker;
   private final GamePublisher<SinglePlayerGame> gamePublisher;
   private final GameEligibilityTracker<PlayerGameEligibilityResult> gameTracker;
 
-  public NewGameHandler(
-      final AbstractSinglePlayerGameFactory<SinglePlayerGame, Object> gameFactory,
-      final AbstractSinglePlayerGameRepository<?, ?, ?, SinglePlayerGame<?, ?, ?>> gameRepository,
+  NewGameHandler(
+      final AbstractSinglePlayerGameFactory<ID, FEATURES, SinglePlayerGame<ID, ?, FEATURES>> gameFactory,
+      final AbstractSinglePlayerGameRepository<ID, ?, FEATURES, SinglePlayerGame<ID, ?, FEATURES>> gameRepository,
       final GameTransitionEngine<SinglePlayerGame> transitionEngine,
-      final GameMasker<?, SinglePlayerGame, MaskedSinglePlayerGame> gameMasker,
+      final GameMasker<ID, SinglePlayerGame<ID, ?, FEATURES>, MaskedSinglePlayerGame<FEATURES>> gameMasker,
       final GamePublisher<SinglePlayerGame> gamePublisher,
       final GameEligibilityTracker<PlayerGameEligibilityResult> gameTracker) {
     this.gameFactory = gameFactory;
@@ -48,15 +48,16 @@ public class NewGameHandler extends AbstractHandler {
     this.gameTracker = gameTracker;
   }
 
-  public Game handleCreateNewGame(final Serializable playerID, final Set<?> features) {
-    Player player = loadPlayer(playerID);//  Load as set to prevent dupes in initial setup
+  public Game handleCreateNewGame(final ID playerID, final Set<FEATURES> features) {
+    Player<ID> player = loadPlayer(playerID);//  Load as set to prevent dupes in initial setup
     SinglePlayerGame game = setupGameWithEligibilityWrapper(features, player);
 
     gamePublisher.publish(game, player);
     return gameMasker.maskGameForPlayer(game, player);
   }
 
-  private SinglePlayerGame setupGameWithEligibilityWrapper(final Set<?> features, Player player) {
+  private SinglePlayerGame setupGameWithEligibilityWrapper(final Set<FEATURES> features,
+      Player<ID> player) {
     PlayerGameEligibilityResult eligibilityResult = gameTracker.getGameEligibility(player);
     if (eligibilityResult != null && eligibilityResult.getEligibility()
         .equals(PlayerGameEligibility.NoGamesAvailable)) {
@@ -80,11 +81,11 @@ public class NewGameHandler extends AbstractHandler {
     }
   }
 
-  private SinglePlayerGame setupGame(final Set<?> features, final Player player) {
-    SinglePlayerGame game = gameFactory.createGame((Set<Object>) features, player);
+  private SinglePlayerGame<ID, ?, FEATURES> setupGame(final Set<FEATURES> features,
+      final Player<ID> player) {
+    SinglePlayerGame<ID, ?, FEATURES> game = gameFactory.createGame(features, player);
     game = transitionEngine.evaluateGame(game);
 
-    SinglePlayerGame<?, ?, ?> saved = gameRepository.save(game);
-    return saved;
+    return gameRepository.save(game);
   }
 }

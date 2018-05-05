@@ -1,5 +1,7 @@
 package com.jtbdevelopment.games.state;
 
+import java.beans.Transient;
+
 /**
  * Date: 11/14/14 Time: 12:34 PM
  */
@@ -26,14 +28,17 @@ public enum GamePhase {
     this(description, groupLabel, 30);
   }
 
+  @Transient
   public String getDescription() {
     return description;
   }
 
+  @Transient
   public String getGroupLabel() {
     return groupLabel;
   }
 
+  @Transient
   public int getHistoryCutoffDays() {
     return historyCutoffDays;
   }

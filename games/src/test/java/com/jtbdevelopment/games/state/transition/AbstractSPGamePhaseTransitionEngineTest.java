@@ -81,7 +81,8 @@ public class AbstractSPGamePhaseTransitionEngineTest {
     Assert.assertEquals(GamePhase.Quit, game.getGamePhase());
   }
 
-  private static class TestSPGamePhaseTransitionEngine extends AbstractSPGamePhaseTransitionEngine {
+  private static class TestSPGamePhaseTransitionEngine extends
+      AbstractSPGamePhaseTransitionEngine<String, StringSPGame> {
 
     public TestSPGamePhaseTransitionEngine(GameScorer gameScorer) {
       super(gameScorer);

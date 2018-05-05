@@ -38,14 +38,14 @@ public class PlayersActiveGameValidator<ID extends Serializable> implements
       List<ID> ids = players.stream().map(Player::getId).collect(Collectors.toList());
       Iterable<? extends Player<ID>> loaded = playerRepository.findAllById(ids);
       long active = StreamSupport.stream(loaded.spliterator(), false)
-          .filter(x -> !x.getDisabled())
+          .filter(x -> !x.isDisabled())
           .count();
       return active == players.size();
     } else if (game instanceof SinglePlayerGame) {
       //noinspection unchecked
       Optional<? extends Player<ID>> loaded = playerRepository
           .findById(((SinglePlayerGame<ID, ?, ?>) game).getPlayer().getId());
-      return loaded.isPresent() && !loaded.get().getDisabled();
+      return loaded.isPresent() && !loaded.get().isDisabled();
     }
 
     throw new IllegalArgumentException("unsupported type");

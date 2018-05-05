@@ -35,22 +35,27 @@ public class MongoPlayer extends AbstractPlayer<ObjectId> implements Cloneable {
     setGameSpecificPlayerAttributes(gameSpecificPlayerAttributes);
   }
 
+  @Override
   public String getIdAsString() {
     return id != null ? id.toHexString() : null;
   }
 
+  @Override
   protected String getMd5Internal() {
     return this.md5;
   }
 
+  @Override
   protected void setMd5(final String md5) {
     this.md5 = md5;
   }
 
+  @Override
   public ObjectId getId() {
     return id;
   }
 
+  @Override
   public void setId(final ObjectId id) {
     this.id = id;
     computeMD5Hex();

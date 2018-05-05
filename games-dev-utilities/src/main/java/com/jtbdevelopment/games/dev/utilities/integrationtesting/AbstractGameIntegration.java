@@ -155,7 +155,7 @@ public abstract class AbstractGameIntegration<G extends Game, R extends Game> ex
     MongoManualPlayer p = client.target(PLAYER_API).request(MediaType.APPLICATION_JSON)
         .get(MongoManualPlayer.class);
     assertEquals(TEST_PLAYER1.getId(), p.getId());
-    assertEquals(TEST_PLAYER1.getDisabled(), p.getDisabled());
+    assertEquals(TEST_PLAYER1.isDisabled(), p.isDisabled());
     assertEquals(TEST_PLAYER1.getDisplayName(), p.getDisplayName());
     assertEquals(TEST_PLAYER1.getMd5(), p.getMd5());
   }

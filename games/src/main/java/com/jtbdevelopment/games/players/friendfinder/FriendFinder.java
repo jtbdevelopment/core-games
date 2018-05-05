@@ -76,7 +76,7 @@ public class FriendFinder<ID extends Serializable> {
 
   private Player<ID> getPlayer(ID playerId) {
     Optional<? extends Player<ID>> optionalPlayer = playerRepository.findById(playerId);
-    if (!optionalPlayer.isPresent() || optionalPlayer.get().getDisabled()) {
+    if (!optionalPlayer.isPresent() || optionalPlayer.get().isDisabled()) {
       throw new FailedToFindPlayersException();
     }
 

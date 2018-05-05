@@ -31,30 +31,32 @@ public class MongoManualPlayer extends MongoPlayer implements ManualPlayer<Objec
     super.setSource(MANUAL_SOURCE);
   }
 
+  @Override
   public String getPassword() {
     return password;
   }
 
+  @Override
   public void setPassword(String password) {
     this.password = password;
   }
 
-  public boolean getVerified() {
-    return verified;
-  }
-
+  @Override
   public boolean isVerified() {
     return verified;
   }
 
+  @Override
   public void setVerified(boolean verified) {
     this.verified = verified;
   }
 
+  @Override
   public String getVerificationToken() {
     return verificationToken;
   }
 
+  @Override
   public void setVerificationToken(String verificationToken) {
     this.verificationToken = verificationToken;
   }

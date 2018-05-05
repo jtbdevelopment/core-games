@@ -75,7 +75,7 @@ public class AbstractSinglePlayerGameFactoryTest {
   }
 
   private static class TestAbstractSinglePlayerGameFactory extends
-      AbstractSinglePlayerGameFactory<StringSPGame, Object> {
+      AbstractSinglePlayerGameFactory<String, Object, StringSPGame> {
 
     public TestAbstractSinglePlayerGameFactory(
         final List<GameInitializer> gameInitializers,

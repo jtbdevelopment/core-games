@@ -4,6 +4,7 @@ import com.jtbdevelopment.games.state.GamePhase;
 import com.jtbdevelopment.games.state.MultiPlayerGame;
 import com.jtbdevelopment.games.state.PlayerState;
 import com.jtbdevelopment.games.state.scoring.GameScorer;
+import java.io.Serializable;
 import java.util.Optional;
 
 /**
@@ -11,56 +12,23 @@ import java.util.Optional;
  *
  * You will most likely need to override the evaluate setup and playing functions
  */
-public abstract class AbstractMPGamePhaseTransitionEngine<IMPL extends MultiPlayerGame>
-    implements GameTransitionEngine<IMPL> {
+public abstract class AbstractMPGamePhaseTransitionEngine<ID extends Serializable, IMPL extends MultiPlayerGame<ID, ?, ?>>
+    extends AbstractGamePhaseTransitionEngine<ID, IMPL> {
 
-  private final GameScorer<IMPL> gameScorer;
-
-  public AbstractMPGamePhaseTransitionEngine(final GameScorer<IMPL> gameScorer) {
-    this.gameScorer = gameScorer;
+  @SuppressWarnings("WeakerAccess")
+  protected AbstractMPGamePhaseTransitionEngine(final GameScorer<IMPL> gameScorer) {
+    super(gameScorer);
   }
 
   @Override
-  public IMPL evaluateGame(final IMPL game) {
-    switch (game.getGamePhase()) {
-      case Challenged:
-        return evaluateChallengedPhase(game);
-      case Setup:
-        return evaluateSetupPhase(game);
-      case Playing:
-        return evaluatePlayingPhase(game);
-      case RoundOver:
-        return evaluateRoundOverPhase(game);
-      case Declined:
-        return evaluateDeclinedPhase(game);
-      case NextRoundStarted:
-        return evaluateNextRoundStartedPhase(game);
-      case Quit:
-        return evaluateQuitPhase(game);
-    }
-    return null;
-  }
-
-  @SuppressWarnings("WeakerAccess")
-  protected IMPL evaluateSetupPhase(final IMPL game) {
-    return game;
-  }
-
-  @SuppressWarnings("WeakerAccess")
-  protected IMPL evaluatePlayingPhase(final IMPL game) {
-    return game;
-  }
-
-  @SuppressWarnings("WeakerAccess")
   protected IMPL evaluateRoundOverPhase(final IMPL game) {
     if (game.getRematchTimestamp() != null) {
       return changeStateAndReevaluate(GamePhase.NextRoundStarted, game);
     }
-
-    return gameScorer.scoreGame(game);
+    return super.evaluateRoundOverPhase(game);
   }
 
-  @SuppressWarnings("WeakerAccess")
+  @Override
   protected IMPL evaluateChallengedPhase(final IMPL game) {
     Optional rejected = game.getPlayerStates().values()
         .stream()
@@ -79,21 +47,6 @@ public abstract class AbstractMPGamePhaseTransitionEngine<IMPL extends MultiPlay
       }
     }
 
-    return game;
-  }
-
-  @SuppressWarnings("WeakerAccess")
-  protected IMPL evaluateQuitPhase(final IMPL game) {
-    return game;
-  }
-
-  @SuppressWarnings("WeakerAccess")
-  protected IMPL evaluateNextRoundStartedPhase(final IMPL game) {
-    return game;
-  }
-
-  @SuppressWarnings("WeakerAccess")
-  protected IMPL evaluateDeclinedPhase(final IMPL game) {
     return game;
   }
 

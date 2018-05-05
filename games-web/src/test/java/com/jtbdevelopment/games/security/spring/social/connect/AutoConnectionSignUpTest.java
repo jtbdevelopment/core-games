@@ -66,7 +66,7 @@ public class AutoConnectionSignUpTest {
     assertEquals(imageUrl, player.getImageUrl());
     assertEquals(sourceId, player.getSourceId());
     assertEquals(source, player.getSource());
-    Assert.assertFalse(player.getDisabled());
+    Assert.assertFalse(player.isDisabled());
   }
 
   @Test

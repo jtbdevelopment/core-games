@@ -147,7 +147,8 @@ public class AbstractMPGamePhaseTransitionEngineTest {
     assertEquals(GamePhase.Quit, game.getGamePhase());
   }
 
-  private static class TestMPGamePhaseTransitionEngine extends AbstractMPGamePhaseTransitionEngine {
+  private static class TestMPGamePhaseTransitionEngine extends
+      AbstractMPGamePhaseTransitionEngine<String, StringMPGame> {
 
     public TestMPGamePhaseTransitionEngine(GameScorer gameScorer) {
       super(gameScorer);

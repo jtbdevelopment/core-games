@@ -29,8 +29,8 @@ public class AbstractPlayerTest {
     Instant start = Instant.now();
     Thread.sleep(100);
     Player p = new StringPlayer();
-    assertFalse(p.getDisabled());
-    assertFalse(p.getAdminUser());
+    assertFalse(p.isDisabled());
+    assertFalse(p.isAdminUser());
     assertTrue(start.compareTo(p.getCreated()) < 0);
     assertTrue(
         start.minusSeconds(365 * 24 * 60 * 60).compareTo(p.getLastLogin()) < 0);

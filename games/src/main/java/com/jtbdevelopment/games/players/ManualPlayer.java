@@ -15,11 +15,9 @@ public interface ManualPlayer<ID extends Serializable> extends Player<ID> {
 
   String getVerificationToken();
 
-  void setVerificationToken(final String password);
+  void setVerificationToken(final String verificationToken);
 
   boolean isVerified();
-
-  boolean getVerified();
 
   void setVerified(boolean verified);
 }

@@ -231,7 +231,7 @@ public class MongoPlayerIntegration extends AbstractMongoNoSpringContextIntegrat
     assertEquals("54b656dba826d455d3eaa8a4", player.getIdAsString());
     assertEquals("94026ad238c04d23e4fd1fe7efeebabf", player.getMd5());
     assertEquals(PlayerPayLevel.PremiumPlayer, player.getPayLevel());
-    assertTrue(player.getAdminUser());
+    assertTrue(player.isAdminUser());
     assertEquals("http://somewhere.com/profile/1", player.getProfileUrl());
     assertEquals("http://somewhere.com/image/1", player.getImageUrl());
     Assert.assertFalse(player.getRegisteredDevices().isEmpty());

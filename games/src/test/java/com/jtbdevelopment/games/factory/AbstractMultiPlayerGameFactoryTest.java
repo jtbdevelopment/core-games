@@ -44,7 +44,7 @@ public class AbstractMultiPlayerGameFactoryTest {
 
     Set<Object> expectedFeatures = new HashSet<>(Arrays.asList("1", 2));
     Player initiatingPlayer = PONE;
-    List<Player> players = Arrays.asList(PTWO, PTHREE, PFOUR);
+    List<Player<String>> players = Arrays.asList(PTWO, PTHREE, PFOUR);
     MultiPlayerGame game = gameFactory.createGame(expectedFeatures, players, initiatingPlayer);
 
     assertNotNull(game);
@@ -126,7 +126,7 @@ public class AbstractMultiPlayerGameFactoryTest {
   }
 
   private static class TestAbstractMultiPlayerGameFactory extends
-      AbstractMultiPlayerGameFactory<StringMPGame, Object> {
+      AbstractMultiPlayerGameFactory<String, Object, StringMPGame> {
 
     public TestAbstractMultiPlayerGameFactory(
         final List<GameInitializer> gameInitializers,
