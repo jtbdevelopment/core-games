@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class UpdatesToClusterPublisher extends AbstractUpdatesToClusterPublisher {
 
-  public static final String PUB_SUB_TOPIC = "GAME_TOPIC";
-  protected final ITopic topic;
+  static final String PUB_SUB_TOPIC = "GAME_TOPIC";
+  final ITopic<ClusterMessage> topic;
 
   public UpdatesToClusterPublisher(HazelcastInstance hazelcastInstance) {
     topic = hazelcastInstance.getTopic(PUB_SUB_TOPIC);
