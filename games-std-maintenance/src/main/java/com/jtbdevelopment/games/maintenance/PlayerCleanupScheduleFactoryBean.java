@@ -8,9 +8,11 @@ import org.springframework.stereotype.Component;
 /**
  * Date: 2/12/15 Time: 7:02 PM
  */
+@SuppressWarnings("unused")
 @Component
 public class PlayerCleanupScheduleFactoryBean extends CronTriggerFactoryBean {
 
+  @SuppressWarnings("SpringAutowiredFieldsWarningInspection")
   @Autowired
   private PlayerCleanupJobDetailFactoryBean jobDetail;
 

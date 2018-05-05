@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlayerFreeGameResetScheduleFactoryBean extends CronTriggerFactoryBean {
 
+  @SuppressWarnings("SpringAutowiredFieldsWarningInspection")
   @Autowired
   protected PlayerFreeGameResetJobDetailFactoryBean resetJobDetailFactoryBean;
 

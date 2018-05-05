@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlayerFreeGameResetJobDetailFactoryBean extends MethodInvokingJobDetailFactoryBean {
 
+  @SuppressWarnings("SpringAutowiredFieldsWarningInspection")
   @Autowired
   protected PlayerFreeGameReset reset;
 

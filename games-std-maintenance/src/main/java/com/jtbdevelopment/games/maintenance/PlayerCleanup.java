@@ -5,6 +5,7 @@ import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.players.ManualPlayer;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.players.SystemPlayer;
+import java.io.Serializable;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -23,16 +24,16 @@ import org.springframework.util.MultiValueMap;
  * TODO - perhaps we should archive them in the future and/or move them to a compressed collection
  */
 @Component
-public class PlayerCleanup {
+class PlayerCleanup<ID extends Serializable, P extends Player<ID>> {
 
   private static final Logger logger = LoggerFactory.getLogger(PlayerCleanup.class);
   private static final ZoneId GMT = ZoneId.of("GMT");
   private static final int DAYS_BACK = 90;
-  private final AbstractPlayerRepository playerRepository;
+  private final AbstractPlayerRepository<ID, P> playerRepository;
   private final AbstractUsersConnectionRepository usersConnectionRepository;
 
   PlayerCleanup(
-      final AbstractPlayerRepository playerRepository,
+      final AbstractPlayerRepository<ID, P> playerRepository,
       @Autowired(required = false) final AbstractUsersConnectionRepository usersConnectionRepository) {
     this.playerRepository = playerRepository;
     this.usersConnectionRepository = usersConnectionRepository;
@@ -42,9 +43,9 @@ public class PlayerCleanup {
     ZonedDateTime cutoff = ZonedDateTime.now(GMT).minusDays(DAYS_BACK);
     logger.info("Deleting players not logged in since " + cutoff);
 
-    List<Player<?>> byLastLoginLessThan = playerRepository
+    List<P> byLastLoginLessThan = playerRepository
         .findByLastLoginLessThan(cutoff.toInstant());
-    List<Player<?>> playersToDelete = byLastLoginLessThan
+    List<P> playersToDelete = byLastLoginLessThan
         .stream()
         .filter(x -> !(x instanceof ManualPlayer || x instanceof SystemPlayer))
         .collect(Collectors.toList());
@@ -56,11 +57,10 @@ public class PlayerCleanup {
         if (userSpecificRepository != null) {
           final MultiValueMap<String, Connection<?>> connections = userSpecificRepository
               .findAllConnections();
-          connections.keySet().stream().forEach(provider -> {
+          connections.keySet().forEach(provider -> {
             List<Connection<?>> listOfConnections = connections.get(provider);
-            listOfConnections.forEach(connection -> {
-              userSpecificRepository.removeConnection(connection.getKey());
-            });
+            listOfConnections.forEach(
+                connection -> userSpecificRepository.removeConnection(connection.getKey()));
           });
         }
       }

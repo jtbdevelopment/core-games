@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class GameCleanupScheduleFactoryBean extends CronTriggerFactoryBean {
 
+  @SuppressWarnings("SpringAutowiredFieldsWarningInspection")
   @Autowired
   private GameCleanupJobDetailFactoryBean jobDetail;
 

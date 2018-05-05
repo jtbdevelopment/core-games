@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlayerCleanupJobDetailFactoryBean extends MethodInvokingJobDetailFactoryBean {
 
+  @SuppressWarnings("SpringAutowiredFieldsWarningInspection")
   @Autowired
   private PlayerCleanup playerCleanup;
 
