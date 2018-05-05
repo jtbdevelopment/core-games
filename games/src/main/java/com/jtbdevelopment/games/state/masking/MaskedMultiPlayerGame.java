@@ -30,5 +30,6 @@ public interface MaskedMultiPlayerGame<FEATURES> extends MaskedGame<FEATURES> {
 
   Map<String, PlayerState> getPlayerStates();
 
+  @SuppressWarnings("unused")
   void setPlayerStates(final Map<String, PlayerState> playerStates);
 }

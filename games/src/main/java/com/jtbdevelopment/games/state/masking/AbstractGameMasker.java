@@ -30,13 +30,14 @@ public abstract class AbstractGameMasker<ID extends Serializable, FEATURES, U ex
     return playerMaskedGame;
   }
 
-  protected Map<ID, Player<ID>> createIDMap(final U game) {
+  private Map<ID, Player<ID>> createIDMap(final U game) {
     return game.getAllPlayers().stream().collect(Collectors.toMap(Player::getId, p -> p));
   }
 
   protected void copyMaskedData(final U game, final Player<ID> player, final M playerMaskedGame,
       final Map<ID, Player<ID>> idMap) {
     final Class<ID> idClass = getIDClass();
+    //noinspection SuspiciousMethodCalls
     playerMaskedGame
         .setFeatureData(game.getFeatureData().entrySet().stream().collect(Collectors.toMap(
             Entry::getKey,

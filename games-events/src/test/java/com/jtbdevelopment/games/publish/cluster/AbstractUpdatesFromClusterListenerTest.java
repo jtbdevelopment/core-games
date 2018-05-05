@@ -1,6 +1,5 @@
 package com.jtbdevelopment.games.publish.cluster;
 
-import static com.jtbdevelopment.games.GameCoreTestCase.PINACTIVE1;
 import static com.jtbdevelopment.games.GameCoreTestCase.PTHREE;
 import static com.jtbdevelopment.games.GameCoreTestCase.PTWO;
 import static org.mockito.Mockito.mock;
@@ -12,17 +11,13 @@ import com.jtbdevelopment.games.dao.AbstractGameRepository;
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.dao.StringToIDConverter;
 import com.jtbdevelopment.games.events.GamePublisher;
-import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.publish.PlayerPublisher;
 import com.jtbdevelopment.games.publish.cluster.ClusterMessage.ClusterMessageType;
-import com.jtbdevelopment.games.state.Game;
 import com.jtbdevelopment.games.state.MultiPlayerGame;
 import com.jtbdevelopment.games.stringimpl.StringToStringConverter;
 import java.io.Serializable;
 import java.util.Optional;
 import org.junit.Test;
-import org.mockito.Matchers;
-import org.mockito.Mockito;
 
 /**
  * Date: 2/21/15 Time: 6:24 PM
@@ -100,23 +95,4 @@ public class AbstractUpdatesFromClusterListenerTest {
     verify(gamePublisher).publish(game, null, false);
   }
 
-  @Test
-  public void testReceivePublishGameInvalidPlayer() {
-    String gameId = "GID";
-    MultiPlayerGame game = mock(MultiPlayerGame.class);
-    when(playerRepository.findById(GameCoreTestCase.reverse(PINACTIVE1.getIdAsString())))
-        .thenReturn(Optional.empty());
-    when(gameRepository.findById(GameCoreTestCase.reverse(gameId)))
-        .thenReturn(Optional.of(game));
-    ClusterMessage message = new ClusterMessage();
-    message.setClusterMessageType(ClusterMessageType.GameUpdate);
-    message.setPlayerId(PINACTIVE1.getIdAsString());
-    message.setGameId(gameId);
-    listener.receiveClusterMessage(message);
-    verify(gamePublisher, Mockito.never())
-        .publish(Matchers.any(Game.class), Matchers.any(Player.class), Matchers.any(Boolean.class));
-    verify(gamePublisher, Mockito.never())
-        .publish(Matchers.any(Game.class), Matchers.isNull(Player.class),
-            Matchers.any(Boolean.class));
-  }
 }

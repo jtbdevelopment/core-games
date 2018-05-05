@@ -18,9 +18,11 @@ public interface MaskedGame<FEATURES> extends Game<String, Long, FEATURES> {
 
   Map<String, String> getPlayerImages();
 
+  @SuppressWarnings("unused")
   void setPlayerImages(final Map<String, String> playerImages);
 
   Map<String, String> getPlayerProfiles();
 
+  @SuppressWarnings("unused")
   void setPlayerProfiles(final Map<String, String> players);
 }

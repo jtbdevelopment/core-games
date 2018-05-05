@@ -13,20 +13,20 @@ import java.util.Optional;
 /**
  * Date: 2/17/15 Time: 6:56 AM
  */
-public abstract class AbstractUpdatesFromClusterListener {
+public abstract class AbstractUpdatesFromClusterListener<ID extends Serializable, IMPL extends Game<ID, ?, ?>> {
 
-  protected final GamePublisher gamePublisher;
-  protected final PlayerPublisher playerPublisher;
-  protected final AbstractPlayerRepository playerRepository;
-  protected final StringToIDConverter<? extends Serializable> stringToIDConverter;
-  protected final AbstractGameRepository gameRepository;
+  private final GamePublisher<IMPL> gamePublisher;
+  private final PlayerPublisher playerPublisher;
+  private final AbstractPlayerRepository<ID, ? extends Player<ID>> playerRepository;
+  private final StringToIDConverter<ID> stringToIDConverter;
+  private final AbstractGameRepository<ID, ?, ?, IMPL> gameRepository;
 
   protected AbstractUpdatesFromClusterListener(
-      final GamePublisher gamePublisher,
+      final GamePublisher<IMPL> gamePublisher,
       final PlayerPublisher playerPublisher,
-      final StringToIDConverter stringToIDConverter,
-      final AbstractPlayerRepository playerRepository,
-      final AbstractGameRepository gameRepository) {
+      final StringToIDConverter<ID> stringToIDConverter,
+      final AbstractPlayerRepository<ID, ? extends Player<ID>> playerRepository,
+      final AbstractGameRepository<ID, ?, ?, IMPL> gameRepository) {
     this.gamePublisher = gamePublisher;
     this.playerPublisher = playerPublisher;
     this.playerRepository = playerRepository;
@@ -48,36 +48,36 @@ public abstract class AbstractUpdatesFromClusterListener {
     }
   }
 
-  protected void receivePublishAllPlayers() {
+  private void receivePublishAllPlayers() {
     playerPublisher.publishAll(false);
   }
 
-  protected void receivePublishPlayer(final String id) {
-    Optional<? extends Player> optional = playerRepository
-        .findById(stringToIDConverter.convert(id));
-    if (optional.isPresent()) {
-      playerPublisher.publish(optional.get(), false);
+  private void receivePublishPlayer(final String id) {
+    ID converted = stringToIDConverter.convert(id);
+    if (converted != null) {
+      Optional<? extends Player<ID>> optional = playerRepository
+          .findById(converted);
+      optional.ifPresent(player -> playerPublisher.publish(player, false));
     }
-
   }
 
-  protected void receivePublishGame(final String gameId, final String playerId) {
-    if (gameRepository != null) {
-      Optional<? extends Player> optionalPlayer = playerRepository
-          .findById(stringToIDConverter.convert(playerId));
-      if (optionalPlayer.isPresent() || playerId == null) {
-        Optional<? extends Game> optionalGame = gameRepository
-            .findById(stringToIDConverter.convert(gameId));
-        if (optionalGame.isPresent()) {
-          gamePublisher.publish(
-              optionalGame.get(),
-              optionalPlayer.isPresent() ? optionalPlayer.get() : null,
-              false);
-        }
-
-      }
-
+  private void receivePublishGame(final String gameId, final String playerId) {
+    ID convertedPlayerId = stringToIDConverter.convert(playerId);
+    Optional<? extends Player> optionalPlayer = Optional.empty();
+    if (convertedPlayerId != null) {
+      optionalPlayer = playerRepository.findById(convertedPlayerId);
     }
-
+    ID convertedGameId = stringToIDConverter.convert(gameId);
+    Optional<IMPL> optionalGame = Optional.empty();
+    if (convertedGameId != null) {
+      //noinspection unchecked
+      optionalGame = gameRepository.findById(convertedGameId);
+    }
+    if (optionalGame.isPresent()) {
+      gamePublisher.publish(
+          optionalGame.get(),
+          optionalPlayer.orElse(null),
+          false);
+    }
   }
 }

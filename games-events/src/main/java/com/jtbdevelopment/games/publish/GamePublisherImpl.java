@@ -6,6 +6,7 @@ import com.jtbdevelopment.games.state.Game;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,24 +18,27 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Lazy
-public class GamePublisherImpl implements GamePublisher<Game> {
+public class GamePublisherImpl<IMPL extends Game<?, ?, ?>> implements GamePublisher<IMPL> {
 
   private static final Logger logger = LoggerFactory.getLogger(GamePublisherImpl.class);
   final ExecutorService service;
-  private final List<GameListener> subscribers;
+  private final List<GameListener<IMPL>> subscribers;
 
+  //  Keep generic
   GamePublisherImpl(
       @Value("${publishing.threads:10}") final int threads,
       final List<GameListener> subscribers) {
     service = Executors.newFixedThreadPool(threads);
-    this.subscribers = subscribers;
+    //noinspection unchecked
+    this.subscribers = subscribers.stream().map(s -> (GameListener<IMPL>) s)
+        .collect(Collectors.toList());
   }
 
-  public Game publish(final Game game, final Player initiatingPlayer) {
+  public IMPL publish(final IMPL game, final Player initiatingPlayer) {
     return publish(game, initiatingPlayer, true);
   }
 
-  public Game publish(final Game game, final Player initiatingPlayer,
+  public IMPL publish(final IMPL game, final Player initiatingPlayer,
       final boolean initiatingServer) {
     service.execute(() -> {
       if (subscribers != null) {

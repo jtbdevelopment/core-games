@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class PlayerPublisher {
 
   private static final Logger logger = LoggerFactory.getLogger(PlayerPublisher.class);
-  final List<PlayerListener> subscribers;
+  private List<PlayerListener> subscribers;
   final ExecutorService service;
 
   public PlayerPublisher(
