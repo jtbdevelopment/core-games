@@ -14,8 +14,11 @@ public enum GamePhase {
   Declined("Challenge declined.", "Declined", 7),
   Quit("Game quit.", "Quit", 7);
 
+  @org.springframework.data.annotation.Transient
   private final String description;
+  @org.springframework.data.annotation.Transient
   private final String groupLabel;
+  @org.springframework.data.annotation.Transient
   private final int historyCutoffDays;
 
   GamePhase(final String description, final String groupLabel, int historyCutoffDays) {
@@ -29,16 +32,19 @@ public enum GamePhase {
   }
 
   @Transient
+  @org.springframework.data.annotation.Transient
   public String getDescription() {
     return description;
   }
 
   @Transient
+  @org.springframework.data.annotation.Transient
   public String getGroupLabel() {
     return groupLabel;
   }
 
   @Transient
+  @org.springframework.data.annotation.Transient
   public int getHistoryCutoffDays() {
     return historyCutoffDays;
   }

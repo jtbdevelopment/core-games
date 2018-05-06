@@ -2,9 +2,9 @@ package com.jtbdevelopment.games.publish;
 
 import static com.jtbdevelopment.games.GameCoreTestCase.PONE;
 import static com.jtbdevelopment.games.GameCoreTestCase.PTWO;
+import static com.jtbdevelopment.games.GameCoreTestCase.makeSimpleMPGame;
 import static org.junit.Assert.assertEquals;
 
-import com.jtbdevelopment.games.GameCoreTestCase;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.state.Game;
 import com.jtbdevelopment.games.state.MultiPlayerGame;
@@ -48,8 +48,8 @@ public class GamePublisherImplTest {
 
   @Test
   public void testPublishWithNoListeners() {
-    MultiPlayerGame g1 = GameCoreTestCase.makeSimpleMPGame("1");
-    MultiPlayerGame g2 = GameCoreTestCase.makeSimpleMPGame("2");
+    StringMPGame g1 = makeSimpleMPGame("1");
+    StringMPGame g2 = makeSimpleMPGame("2");
 
     publisher = new GamePublisherImpl(10, new ArrayList<>());
     publisher.publish(g1, PTWO);
@@ -62,8 +62,8 @@ public class GamePublisherImplTest {
   @Test
   public void testPublishWithDefaultInitiatingServer() throws InterruptedException {
     LatchListener.setLatch(new CountDownLatch(4));
-    MultiPlayerGame g1 = GameCoreTestCase.makeSimpleMPGame("1");
-    MultiPlayerGame g2 = GameCoreTestCase.makeSimpleMPGame("2");
+    StringMPGame g1 = makeSimpleMPGame("1");
+    StringMPGame g2 = makeSimpleMPGame("2");
     Player p1 = PONE;
     Player p2 = PTWO;
 
@@ -86,8 +86,8 @@ public class GamePublisherImplTest {
   @Test
   public void testPublishWithTrueInitiatingServer() throws InterruptedException {
     LatchListener.setLatch(new CountDownLatch(4));
-    MultiPlayerGame g1 = GameCoreTestCase.makeSimpleMPGame("1");
-    MultiPlayerGame g2 = GameCoreTestCase.makeSimpleMPGame("2");
+    StringMPGame g1 = makeSimpleMPGame("1");
+    StringMPGame g2 = makeSimpleMPGame("2");
     Player p1 = PONE;
     Player p2 = PTWO;
 
@@ -110,8 +110,8 @@ public class GamePublisherImplTest {
   @Test
   public void testPublishWithFalseInitiatingServer() throws InterruptedException {
     LatchListener.setLatch(new CountDownLatch(4));
-    MultiPlayerGame g1 = GameCoreTestCase.makeSimpleMPGame("1");
-    MultiPlayerGame g2 = GameCoreTestCase.makeSimpleMPGame("2");
+    StringMPGame g1 = makeSimpleMPGame("1");
+    StringMPGame g2 = makeSimpleMPGame("2");
     Player p1 = PONE;
     Player p2 = PTWO;
 
@@ -141,8 +141,8 @@ public class GamePublisherImplTest {
     LatchListener.setLatch(new CountDownLatch(4));
     publisher = new GamePublisherImpl(10,
         new ArrayList<>(Arrays.asList(listener1, mockListener, listener2)));
-    MultiPlayerGame g1 = GameCoreTestCase.makeSimpleMPGame("1");
-    MultiPlayerGame g2 = GameCoreTestCase.makeSimpleMPGame("2");
+    StringMPGame g1 = makeSimpleMPGame("1");
+    StringMPGame g2 = makeSimpleMPGame("2");
     Player p1 = PONE;
     Player p2 = PTWO;
 

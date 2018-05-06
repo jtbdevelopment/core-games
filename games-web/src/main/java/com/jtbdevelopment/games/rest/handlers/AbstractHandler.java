@@ -11,19 +11,22 @@ import java.util.Optional;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Date: 11/4/2014 Time: 9:54 PM
  */
-public abstract class AbstractHandler {
+public abstract class AbstractHandler<ID extends Serializable, P extends Player<ID>> {
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractHandler.class);
-  @Autowired
-  protected AbstractPlayerRepository playerRepository;
+  private final AbstractPlayerRepository<ID, P> playerRepository;
 
-  protected Player loadPlayerMD5(final String md5) {
-    Player p = playerRepository.findByMd5(md5);
+  protected AbstractHandler(final AbstractPlayerRepository<ID, P> playerRepository) {
+    this.playerRepository = playerRepository;
+  }
+
+  @SuppressWarnings("WeakerAccess")
+  protected P loadPlayerMD5(final String md5) {
+    P p = playerRepository.findByMd5(md5);
     if (p == null) {
       throw new FailedToFindPlayersException();
     }
@@ -31,10 +34,10 @@ public abstract class AbstractHandler {
     return p;
   }
 
-  protected Set<Player> loadPlayerMD5s(final Collection<String> playerMD5s) {
-    List<? extends Player<? extends Serializable>> loadedPlayers = playerRepository
-        .findByMd5In(playerMD5s);
-    HashSet<Player> players = new HashSet<>(loadedPlayers);
+  @SuppressWarnings("WeakerAccess")
+  protected Set<P> loadPlayerMD5s(final Collection<String> playerMD5s) {
+    List<P> loadedPlayers = playerRepository.findByMd5In(playerMD5s);
+    Set<P> players = new HashSet<>(loadedPlayers);
     if (players.size() != playerMD5s.size()) {
       logger.info("Not all players were loaded " + playerMD5s + " vs. " + players);
       throw new FailedToFindPlayersException();
@@ -43,9 +46,9 @@ public abstract class AbstractHandler {
     return players;
   }
 
-  protected Player loadPlayer(final Serializable playerID) {
-    Optional<? extends Player<? extends Serializable>> optional = playerRepository
-        .findById(playerID);
+  @SuppressWarnings("WeakerAccess")
+  protected P loadPlayer(final ID playerID) {
+    Optional<P> optional = playerRepository.findById(playerID);
     if (optional.isPresent()) {
       return optional.get();
     }

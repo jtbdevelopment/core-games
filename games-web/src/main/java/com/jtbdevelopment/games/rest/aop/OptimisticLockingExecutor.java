@@ -48,6 +48,7 @@ public class OptimisticLockingExecutor implements Ordered {
     }
 
     logger.warn("Optimistic Lock Exception Retries Exhausted");
+    //noinspection ConstantConditions
     throw lockFailureException;
   }
 }

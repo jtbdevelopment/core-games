@@ -1,7 +1,10 @@
 package com.jtbdevelopment.games.rest.handlers;
 
+import com.jtbdevelopment.games.dao.AbstractGameRepository;
+import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.dao.AbstractSinglePlayerGameRepository;
 import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.state.AbstractSinglePlayerGame;
 import com.jtbdevelopment.games.state.GamePhase;
 import com.jtbdevelopment.games.state.SinglePlayerGame;
 import com.jtbdevelopment.games.state.masking.GameMasker;
@@ -22,7 +25,12 @@ import org.springframework.stereotype.Component;
  * Date: 11/19/14 Time: 7:08 AM
  */
 @Component
-public class PlayerGamesFinderHandler extends AbstractGameGetterHandler {
+public class PlayerGamesFinderHandler<
+    ID extends Serializable,
+    FEATURES,
+    IMPL extends AbstractSinglePlayerGame<ID, FEATURES>,
+    P extends Player<ID>>
+    extends AbstractGameGetterHandler<ID, FEATURES, IMPL, P> {
 
   private static final ZoneId GMT = ZoneId.of("GMT");
   private static final Sort SORT = new Sort(Direction.DESC,
@@ -32,11 +40,15 @@ public class PlayerGamesFinderHandler extends AbstractGameGetterHandler {
   private static final PageRequest PAGE = PageRequest.of(DEFAULT_PAGE, DEFAULT_PAGE_SIZE, SORT);
   private final GameMasker gameMasker;
 
-  public PlayerGamesFinderHandler(final GameMasker gameMasker) {
+  public PlayerGamesFinderHandler(
+      final AbstractPlayerRepository<ID, P> playerRepository,
+      final AbstractGameRepository<ID, FEATURES, IMPL> gameRepository,
+      GameMasker gameMasker) {
+    super(playerRepository, gameRepository);
     this.gameMasker = gameMasker;
   }
 
-  public List<MaskedGame> findGames(final Serializable playerID) {
+  public List<MaskedGame> findGames(final ID playerID) {
     final Player player = loadPlayer(playerID);
     final ZonedDateTime now = ZonedDateTime.now(GMT);
 

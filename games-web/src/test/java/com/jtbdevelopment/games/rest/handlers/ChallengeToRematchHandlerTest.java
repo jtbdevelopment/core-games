@@ -32,12 +32,12 @@ public class ChallengeToRematchHandlerTest {
       AbstractMultiPlayerGameRepository.class);
   private AbstractMultiPlayerGameFactory gameFactory = mock(AbstractMultiPlayerGameFactory.class);
   private GamePublisher gamePublisher = mock(GamePublisher.class);
-  private ChallengeToRematchHandler handler = new ChallengeToRematchHandler(gameFactory);
+  private ChallengeToRematchHandler handler = new ChallengeToRematchHandler(null, gameRepository,
+      gameFactory);
 
   @Before
   public void setup() {
     handler.transitionEngine = transitionEngine;
-    handler.gameRepository = gameRepository;
     handler.gamePublisher = gamePublisher;
   }
 

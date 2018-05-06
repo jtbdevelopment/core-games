@@ -34,12 +34,11 @@ public class GameGetterHandlerTest {
   private GameMasker gameMasker = Mockito.mock(GameMasker.class);
   private AbstractPlayerRepository playerRepository = Mockito.mock(AbstractPlayerRepository.class);
   private AbstractGameRepository gameRepository = Mockito.mock(AbstractGameRepository.class);
-  private GameGetterHandler handler = new GameGetterHandler(gameMasker);
+  private GameGetterHandler handler = new GameGetterHandler(playerRepository, gameRepository,
+      gameMasker);
 
   @Before
   public void setup() {
-    handler.playerRepository = playerRepository;
-    handler.gameRepository = gameRepository;
     when(playerRepository.findById(PONE.getId())).thenReturn(Optional.of(PONE));
     when(gameMasker.maskGameForPlayer(mpGame, PONE)).thenReturn(maskedMPGame);
     when(gameMasker.maskGameForPlayer(spGame, PONE)).thenReturn(maskedSPGame);

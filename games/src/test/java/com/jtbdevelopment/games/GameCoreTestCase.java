@@ -1,7 +1,6 @@
 package com.jtbdevelopment.games;
 
 import com.jtbdevelopment.games.players.ManualPlayer;
-import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.players.SystemPlayer;
 import com.jtbdevelopment.games.stringimpl.StringGame;
 import com.jtbdevelopment.games.stringimpl.StringMPGame;
@@ -17,13 +16,13 @@ import com.jtbdevelopment.games.stringimpl.StringSystemPlayer;
  */
 public abstract class GameCoreTestCase {
 
-  public static final Player<String> PONE = makeSimplePlayer("1");
-  public static final Player<String> PTWO = makeSimplePlayer("2");
-  public static final Player<String> PTHREE = makeSimplePlayer("3");
-  public static final Player<String> PFOUR = makeSimplePlayer("4");
-  public static final Player<String> PFIVE = makeSimplePlayer("5");
-  public static final Player<String> PINACTIVE1 = makeSimplePlayer("A1", true);
-  public static final Player<String> PINACTIVE2 = makeSimplePlayer("A2", true);
+  public static final StringPlayer PONE = makeSimplePlayer("1");
+  public static final StringPlayer PTWO = makeSimplePlayer("2");
+  public static final StringPlayer PTHREE = makeSimplePlayer("3");
+  public static final StringPlayer PFOUR = makeSimplePlayer("4");
+  public static final StringPlayer PFIVE = makeSimplePlayer("5");
+  public static final StringPlayer PINACTIVE1 = makeSimplePlayer("A1", true);
+  public static final StringPlayer PINACTIVE2 = makeSimplePlayer("A2", true);
 
   public static StringPlayer makeSimplePlayer(final String id, final boolean disabled) {
     StringPlayer player = new StringPlayer();

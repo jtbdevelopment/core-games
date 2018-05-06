@@ -1,7 +1,7 @@
 package com.jtbdevelopment.games.factory;
 
 import com.jtbdevelopment.games.exceptions.input.FailedToCreateValidGameException;
-import com.jtbdevelopment.games.state.Game;
+import com.jtbdevelopment.games.state.AbstractGame;
 import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 /**
  * Date: 4/4/2015 Time: 8:43 PM
  */
-public abstract class AbstractGameFactory<ID extends Serializable, IMPL extends Game<ID, ?, ?>> {
+public abstract class AbstractGameFactory<ID extends Serializable, FEATURES, IMPL extends AbstractGame<ID, FEATURES>> {
 
   private final List<GameInitializer<IMPL>> gameInitializers;
   private final List<GameValidator<IMPL>> gameValidators;

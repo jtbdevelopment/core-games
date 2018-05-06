@@ -148,7 +148,7 @@ public class AbstractMPGamePhaseTransitionEngineTest {
   }
 
   private static class TestMPGamePhaseTransitionEngine extends
-      AbstractMPGamePhaseTransitionEngine<String, StringMPGame> {
+      AbstractMPGamePhaseTransitionEngine<String, Object, StringMPGame> {
 
     public TestMPGamePhaseTransitionEngine(GameScorer gameScorer) {
       super(gameScorer);

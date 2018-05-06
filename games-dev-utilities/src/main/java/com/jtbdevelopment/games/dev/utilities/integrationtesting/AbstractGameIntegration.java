@@ -13,9 +13,11 @@ import com.jtbdevelopment.games.mongo.players.MongoManualPlayer;
 import com.jtbdevelopment.games.mongo.players.MongoPlayerFactory;
 import com.jtbdevelopment.games.players.friendfinder.SourceBasedFriendFinder;
 import com.jtbdevelopment.games.rest.services.AbstractPlayerGatewayService;
+import com.jtbdevelopment.games.state.AbstractGame;
 import com.jtbdevelopment.games.state.Game;
 import com.jtbdevelopment.games.state.GamePhase;
 import com.jtbdevelopment.games.state.MultiPlayerGame;
+import com.jtbdevelopment.games.state.masking.AbstractMaskedGame;
 import com.jtbdevelopment.games.state.masking.MaskedMultiPlayerGame;
 import java.net.URI;
 import java.util.Arrays;
@@ -40,14 +42,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * Date: 11/15/2014
- * Time: 3:29 PM
+ * Date: 11/15/2014 Time: 3:29 PM
  *
- * G - internal Game
- * R - returned Game via web calls
+ * G - internal Game R - returned Game via web calls
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public abstract class AbstractGameIntegration<G extends Game, R extends Game> extends
+public abstract class AbstractGameIntegration<IMPL extends AbstractGame, RECEIVE extends AbstractMaskedGame> extends
     AbstractMongoDefaultSpringContextIntegration {
 
   protected static final Entity EMPTY_PUT_POST = Entity.entity("", MediaType.TEXT_PLAIN);
@@ -133,11 +133,11 @@ public abstract class AbstractGameIntegration<G extends Game, R extends Game> ex
     AbstractGameIntegration.applicationContext = applicationContext;
   }
 
-  protected abstract Class<R> returnedGameClass();
+  protected abstract Class<RECEIVE> returnedGameClass();
 
-  protected abstract Class<G> internalGameClass();
+  protected abstract Class<IMPL> internalGameClass();
 
-  protected abstract G newGame();
+  protected abstract IMPL newGame();
 
   protected abstract AbstractGameRepository gameRepository();
 
@@ -245,27 +245,27 @@ public abstract class AbstractGameIntegration<G extends Game, R extends Game> ex
 
   }
 
-  protected G getGame(WebTarget target) {
-    return (G) target.request(MediaType.APPLICATION_JSON).get(returnedGameClass());
+  protected RECEIVE getGame(WebTarget target) {
+    return target.request(MediaType.APPLICATION_JSON).get(returnedGameClass());
   }
 
-  protected G acceptGame(WebTarget target) {
-    return (G) target.path("accept").request(MediaType.APPLICATION_JSON)
+  protected RECEIVE acceptGame(WebTarget target) {
+    return target.path("accept").request(MediaType.APPLICATION_JSON)
         .put(EMPTY_PUT_POST, returnedGameClass());
   }
 
-  protected G rejectGame(WebTarget target) {
-    return (G) target.path("reject").request(MediaType.APPLICATION_JSON)
+  protected RECEIVE rejectGame(WebTarget target) {
+    return target.path("reject").request(MediaType.APPLICATION_JSON)
         .put(EMPTY_PUT_POST, returnedGameClass());
   }
 
-  protected G quitGame(WebTarget target) {
-    return (G) target.path("quit").request(MediaType.APPLICATION_JSON)
+  protected RECEIVE quitGame(WebTarget target) {
+    return target.path("quit").request(MediaType.APPLICATION_JSON)
         .put(EMPTY_PUT_POST, returnedGameClass());
   }
 
-  protected G rematchGame(WebTarget target) {
-    return (G) target.path("rematch").request(MediaType.APPLICATION_JSON)
+  protected RECEIVE rematchGame(WebTarget target) {
+    return target.path("rematch").request(MediaType.APPLICATION_JSON)
         .put(EMPTY_PUT_POST, returnedGameClass());
   }
 }

@@ -16,7 +16,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
@@ -38,13 +37,8 @@ public class PlayerGamesFinderHandlerTest {
   private Integer expectedPageSize = 20;
   private Integer expectedPage = 0;
   private PageRequest pageRequest = PageRequest.of(expectedPage, expectedPageSize, expectedSort);
-  private PlayerGamesFinderHandler handler = new PlayerGamesFinderHandler(gameMasker);
-
-  @Before
-  public void setup() {
-    handler.playerRepository = playerRepository;
-    handler.gameRepository = gameRepository;
-  }
+  private PlayerGamesFinderHandler handler = new PlayerGamesFinderHandler(playerRepository,
+      gameRepository, gameMasker);
 
   @Test
   public void testTest() {

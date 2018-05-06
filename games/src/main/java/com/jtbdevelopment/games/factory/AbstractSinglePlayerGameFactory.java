@@ -1,9 +1,10 @@
 package com.jtbdevelopment.games.factory;
 
 import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.state.AbstractSinglePlayerGame;
 import com.jtbdevelopment.games.state.GamePhase;
-import com.jtbdevelopment.games.state.SinglePlayerGame;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 
@@ -13,8 +14,9 @@ import java.util.Set;
 public abstract class AbstractSinglePlayerGameFactory<
     ID extends Serializable,
     FEATURES,
-    IMPL extends SinglePlayerGame<ID, ?, FEATURES>> extends
-    AbstractGameFactory<ID, IMPL> implements SinglePlayerGameFactory<ID, FEATURES, IMPL> {
+    IMPL extends AbstractSinglePlayerGame<ID, FEATURES>>
+    extends AbstractGameFactory<ID, FEATURES, IMPL>
+    implements SinglePlayerGameFactory<ID, Instant, FEATURES, IMPL> {
 
   @SuppressWarnings("WeakerAccess")
   protected AbstractSinglePlayerGameFactory(

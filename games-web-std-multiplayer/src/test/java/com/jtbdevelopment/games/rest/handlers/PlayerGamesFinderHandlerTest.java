@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -37,13 +36,8 @@ public class PlayerGamesFinderHandlerTest {
   private AbstractPlayerRepository playerRepository = mock(AbstractPlayerRepository.class);
   private AbstractMultiPlayerGameRepository gameRepository = mock(
       AbstractMultiPlayerGameRepository.class);
-  private PlayerGamesFinderHandler handler = new PlayerGamesFinderHandler(masker);
-
-  @Before
-  public void setup() {
-    handler.gameRepository = gameRepository;
-    handler.playerRepository = playerRepository;
-  }
+  private PlayerGamesFinderHandler handler = new PlayerGamesFinderHandler(playerRepository,
+      gameRepository, masker);
 
   @Test
   public void testTest() {

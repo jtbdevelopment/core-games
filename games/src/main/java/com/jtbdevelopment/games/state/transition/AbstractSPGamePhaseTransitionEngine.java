@@ -1,6 +1,6 @@
 package com.jtbdevelopment.games.state.transition;
 
-import com.jtbdevelopment.games.state.SinglePlayerGame;
+import com.jtbdevelopment.games.state.AbstractSinglePlayerGame;
 import com.jtbdevelopment.games.state.scoring.GameScorer;
 import java.io.Serializable;
 
@@ -11,8 +11,9 @@ import java.io.Serializable;
  */
 public abstract class AbstractSPGamePhaseTransitionEngine<
     ID extends Serializable,
-    IMPL extends SinglePlayerGame<ID, ?, ?>>
-    extends AbstractGamePhaseTransitionEngine<ID, IMPL> {
+    FEATURES,
+    IMPL extends AbstractSinglePlayerGame<ID, FEATURES>>
+    extends AbstractGamePhaseTransitionEngine<ID, FEATURES, IMPL> {
 
   @SuppressWarnings("WeakerAccess")
   protected AbstractSPGamePhaseTransitionEngine(

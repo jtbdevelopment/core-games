@@ -7,7 +7,7 @@ import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository;
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.push.PushWorthyFilter;
-import com.jtbdevelopment.games.state.MultiPlayerGame;
+import com.jtbdevelopment.games.state.AbstractMultiPlayerGame;
 import java.io.Serializable;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentMap;
@@ -59,7 +59,8 @@ public class PushNotifierFilter implements EntryEvictedListener<GamePublicationT
         == null) {
       logger.trace("Not pushed recently " + event.getKey());
       Optional<? extends Player> player = playerRepository.findById(event.getKey().getPid());
-      Optional<? extends MultiPlayerGame> game = gameRepository.findById((event.getKey().getGid()));
+      Optional<? extends AbstractMultiPlayerGame> game = gameRepository
+          .findById((event.getKey().getGid()));
       if (player.isPresent() && game.isPresent() && filter.shouldPush(player.get(), game.get())) {
         logger.trace("Deemed push worthy " + event.getKey());
         pushNotifier.notifyPlayer(player.get(), game.get());

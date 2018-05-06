@@ -82,7 +82,7 @@ public class AbstractSPGamePhaseTransitionEngineTest {
   }
 
   private static class TestSPGamePhaseTransitionEngine extends
-      AbstractSPGamePhaseTransitionEngine<String, StringSPGame> {
+      AbstractSPGamePhaseTransitionEngine<String, Object, StringSPGame> {
 
     public TestSPGamePhaseTransitionEngine(GameScorer gameScorer) {
       super(gameScorer);

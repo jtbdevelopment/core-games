@@ -2,7 +2,8 @@ package com.jtbdevelopment.games.publish;
 
 import com.jtbdevelopment.games.events.GamePublisher;
 import com.jtbdevelopment.games.players.Player;
-import com.jtbdevelopment.games.state.Game;
+import com.jtbdevelopment.games.state.AbstractGame;
+import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,7 +19,12 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Lazy
-public class GamePublisherImpl<IMPL extends Game<?, ?, ?>> implements GamePublisher<IMPL> {
+public class GamePublisherImpl<
+    ID extends Serializable,
+    FEATURES,
+    IMPL extends AbstractGame<ID, FEATURES>,
+    P extends Player<ID>>
+    implements GamePublisher<IMPL, P> {
 
   private static final Logger logger = LoggerFactory.getLogger(GamePublisherImpl.class);
   final ExecutorService service;
@@ -34,11 +40,11 @@ public class GamePublisherImpl<IMPL extends Game<?, ?, ?>> implements GamePublis
         .collect(Collectors.toList());
   }
 
-  public IMPL publish(final IMPL game, final Player initiatingPlayer) {
+  public IMPL publish(final IMPL game, final P initiatingPlayer) {
     return publish(game, initiatingPlayer, true);
   }
 
-  public IMPL publish(final IMPL game, final Player initiatingPlayer,
+  public IMPL publish(final IMPL game, final P initiatingPlayer,
       final boolean initiatingServer) {
     service.execute(() -> {
       if (subscribers != null) {

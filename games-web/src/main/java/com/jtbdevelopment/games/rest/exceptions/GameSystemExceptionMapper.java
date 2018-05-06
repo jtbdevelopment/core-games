@@ -20,7 +20,9 @@ public class GameSystemExceptionMapper implements ExceptionMapper<GameSystemExce
   @Override
   public Response toResponse(final GameSystemException e) {
     logger.info("Mapping error " + e.getMessage());
-    return Response.status(Status.NOT_FOUND).entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE)
+    return Response.status(Status.NOT_FOUND)
+        .entity(e.getMessage())
+        .type(MediaType.TEXT_PLAIN_TYPE)
         .build();
   }
 }

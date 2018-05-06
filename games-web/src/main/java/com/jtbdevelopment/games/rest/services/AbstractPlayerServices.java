@@ -5,6 +5,8 @@ import com.jtbdevelopment.games.dao.StringToIDConverter;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.players.PlayerRoles;
 import com.jtbdevelopment.games.players.friendfinder.FriendFinder;
+import com.jtbdevelopment.games.state.AbstractGame;
+import com.jtbdevelopment.games.state.masking.AbstractMaskedGame;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
@@ -28,14 +30,19 @@ import org.springframework.util.StringUtils;
 /**
  * Date: 11/14/14 Time: 6:40 AM
  */
-public abstract class AbstractPlayerServices<ID extends Serializable>
+public abstract class AbstractPlayerServices<
+    ID extends Serializable,
+    FEATURES,
+    IMPL extends AbstractGame<ID, FEATURES>,
+    M extends AbstractMaskedGame<FEATURES>,
+    P extends Player<ID>>
     implements ApplicationContextAware {
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractPlayerServices.class);
   @Autowired
-  protected AbstractGameServices gamePlayServices;
+  protected AbstractGameServices<ID, FEATURES, IMPL, M, P> gamePlayServices;
   @Autowired
-  protected AbstractPlayerRepository playerRepository;
+  protected AbstractPlayerRepository<ID, P> playerRepository;
   @Autowired
   protected AbstractAdminServices adminServices;
   @Autowired
@@ -86,7 +93,7 @@ public abstract class AbstractPlayerServices<ID extends Serializable>
   @POST
   @Produces(MediaType.APPLICATION_JSON)
   public Object updateLastVersionNotes(@PathParam("versionNotes") final String lastVersionNotes) {
-    Player player = (Player) playerRepository.findById((playerID.get())).get();
+    P player = playerRepository.findById((playerID.get())).get();
     player.setLastVersionNotes(lastVersionNotes);
     return playerRepository.save(player);
   }

@@ -1,9 +1,12 @@
 package com.jtbdevelopment.games.rest.services;
 
+import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.rest.handlers.ChallengeToRematchHandler;
 import com.jtbdevelopment.games.rest.handlers.DeclineRematchOptionHandler;
 import com.jtbdevelopment.games.rest.handlers.GameGetterHandler;
 import com.jtbdevelopment.games.rest.handlers.QuitHandler;
+import com.jtbdevelopment.games.state.AbstractGame;
+import com.jtbdevelopment.games.state.masking.AbstractMaskedGame;
 import java.io.Serializable;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -15,10 +18,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * Date: 11/11/14 Time: 9:42 PM
  */
-public abstract class AbstractGameServices<ID extends Serializable> {
+public abstract class AbstractGameServices<
+    ID extends Serializable,
+    FEATURES,
+    IMPL extends AbstractGame<ID, FEATURES>,
+    M extends AbstractMaskedGame<FEATURES>,
+    P extends Player<ID>> {
 
   @Autowired
-  protected GameGetterHandler gameGetterHandler;
+  protected GameGetterHandler<ID, FEATURES, IMPL, M, P> gameGetterHandler;
   @Autowired
   protected QuitHandler quitHandler;
   @Autowired

@@ -6,27 +6,31 @@ import com.jtbdevelopment.games.dao.StringToIDConverter;
 import com.jtbdevelopment.games.events.GamePublisher;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.publish.PlayerPublisher;
-import com.jtbdevelopment.games.state.Game;
+import com.jtbdevelopment.games.state.AbstractGame;
 import java.io.Serializable;
 import java.util.Optional;
 
 /**
  * Date: 2/17/15 Time: 6:56 AM
  */
-public abstract class AbstractUpdatesFromClusterListener<ID extends Serializable, IMPL extends Game<ID, ?, ?>> {
+public abstract class AbstractUpdatesFromClusterListener<
+    ID extends Serializable,
+    FEATURES,
+    IMPL extends AbstractGame<ID, FEATURES>,
+    P extends Player<ID>> {
 
-  private final GamePublisher<IMPL> gamePublisher;
+  private final GamePublisher<IMPL, P> gamePublisher;
   private final PlayerPublisher playerPublisher;
-  private final AbstractPlayerRepository<ID, ? extends Player<ID>> playerRepository;
+  private final AbstractPlayerRepository<ID, P> playerRepository;
   private final StringToIDConverter<ID> stringToIDConverter;
-  private final AbstractGameRepository<ID, ?, ?, IMPL> gameRepository;
+  private final AbstractGameRepository<ID, FEATURES, IMPL> gameRepository;
 
   protected AbstractUpdatesFromClusterListener(
-      final GamePublisher<IMPL> gamePublisher,
+      final GamePublisher<IMPL, P> gamePublisher,
       final PlayerPublisher playerPublisher,
       final StringToIDConverter<ID> stringToIDConverter,
-      final AbstractPlayerRepository<ID, ? extends Player<ID>> playerRepository,
-      final AbstractGameRepository<ID, ?, ?, IMPL> gameRepository) {
+      final AbstractPlayerRepository<ID, P> playerRepository,
+      final AbstractGameRepository<ID, FEATURES, IMPL> gameRepository) {
     this.gamePublisher = gamePublisher;
     this.playerPublisher = playerPublisher;
     this.playerRepository = playerRepository;
@@ -63,14 +67,13 @@ public abstract class AbstractUpdatesFromClusterListener<ID extends Serializable
 
   private void receivePublishGame(final String gameId, final String playerId) {
     ID convertedPlayerId = stringToIDConverter.convert(playerId);
-    Optional<? extends Player> optionalPlayer = Optional.empty();
+    Optional<P> optionalPlayer = Optional.empty();
     if (convertedPlayerId != null) {
       optionalPlayer = playerRepository.findById(convertedPlayerId);
     }
     ID convertedGameId = stringToIDConverter.convert(gameId);
     Optional<IMPL> optionalGame = Optional.empty();
     if (convertedGameId != null) {
-      //noinspection unchecked
       optionalGame = gameRepository.findById(convertedGameId);
     }
     if (optionalGame.isPresent()) {

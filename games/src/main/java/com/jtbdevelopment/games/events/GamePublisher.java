@@ -6,9 +6,9 @@ import com.jtbdevelopment.games.state.Game;
 /**
  * Date: 12/8/14 Time: 6:40 PM
  */
-public interface GamePublisher<IMPL extends Game> {
+public interface GamePublisher<IMPL extends Game, P extends Player> {
 
-  IMPL publish(final IMPL game, final Player initiatingPlayer);
+  IMPL publish(final IMPL game, final P initiatingPlayer);
 
-  IMPL publish(final IMPL game, final Player initiatingPlayer, boolean initiatingServer);
+  IMPL publish(final IMPL game, final P initiatingPlayer, boolean initiatingServer);
 }

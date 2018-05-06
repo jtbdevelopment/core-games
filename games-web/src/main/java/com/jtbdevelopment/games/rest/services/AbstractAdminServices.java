@@ -6,6 +6,7 @@ import com.jtbdevelopment.games.dao.StringToIDConverter;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.players.PlayerRoles;
 import com.jtbdevelopment.games.security.SessionUserInfo;
+import com.jtbdevelopment.games.state.AbstractGame;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Optional;
@@ -29,18 +30,22 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * Abstract to allow additional changes
  */
 @RolesAllowed({PlayerRoles.ADMIN})
-public abstract class AbstractAdminServices {
+public abstract class AbstractAdminServices<
+    ID extends Serializable,
+    FEATURES,
+    IMPL extends AbstractGame<ID, FEATURES>,
+    P extends Player<ID>> {
 
   private static final int DEFAULT_PAGE = 0;
   private static final int DEFAULT_PAGE_SIZE = 500;
-  private final AbstractPlayerRepository playerRepository;
-  private final AbstractGameRepository gameRepository;
-  private final StringToIDConverter stringToIDConverter;
+  private final AbstractPlayerRepository<ID, P> playerRepository;
+  private final AbstractGameRepository<ID, FEATURES, IMPL> gameRepository;
+  private final StringToIDConverter<ID> stringToIDConverter;
 
   public AbstractAdminServices(
-      final AbstractPlayerRepository playerRepository,
-      final AbstractGameRepository gameRepository,
-      final StringToIDConverter stringToIDConverter) {
+      final AbstractPlayerRepository<ID, P> playerRepository,
+      final AbstractGameRepository<ID, FEATURES, IMPL> gameRepository,
+      final StringToIDConverter<ID> stringToIDConverter) {
     this.playerRepository = playerRepository;
     this.gameRepository = gameRepository;
     this.stringToIDConverter = stringToIDConverter;
@@ -97,10 +102,10 @@ public abstract class AbstractAdminServices {
   @Path("{playerID}")
   @Produces(MediaType.APPLICATION_JSON)
   public Object switchEffectiveUser(@PathParam("playerID") final String effectivePlayerID) {
-    Optional<? extends Player> optional = playerRepository
-        .findById((Serializable) stringToIDConverter.convert(effectivePlayerID));
+    Optional<P> optional = playerRepository
+        .findById(stringToIDConverter.convert(effectivePlayerID));
     if (optional.isPresent()) {
-      Player player = optional.get();
+      P player = optional.get();
       ((SessionUserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
           .setEffectiveUser(player);
       return player;

@@ -1,8 +1,11 @@
 package com.jtbdevelopment.games.rest.handlers;
 
+import com.jtbdevelopment.games.dao.AbstractGameRepository;
+import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.events.GamePublisher;
 import com.jtbdevelopment.games.exceptions.input.OutOfGamesForTodayException;
 import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.state.AbstractGame;
 import com.jtbdevelopment.games.state.Game;
 import com.jtbdevelopment.games.state.masking.GameMasker;
 import com.jtbdevelopment.games.state.transition.GameTransitionEngine;
@@ -17,8 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * Date: 11/9/2014 Time: 8:36 PM
  */
-public abstract class AbstractGameActionHandler<T, IMPL extends Game> extends
-    AbstractGameGetterHandler {
+public abstract class AbstractGameActionHandler<
+    T,
+    ID extends Serializable,
+    FEATURES,
+    IMPL extends AbstractGame<ID, FEATURES>,
+    P extends Player<ID>> extends
+    AbstractGameGetterHandler<ID, FEATURES, IMPL, P> {
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractGameActionHandler.class);
   @Autowired
@@ -30,11 +38,17 @@ public abstract class AbstractGameActionHandler<T, IMPL extends Game> extends
   @Autowired
   protected GameMasker gameMasker;
 
-  protected abstract IMPL handleActionInternal(final Player player, final IMPL game, final T param);
+  public AbstractGameActionHandler(
+      final AbstractPlayerRepository<ID, P> playerRepository,
+      final AbstractGameRepository<ID, FEATURES, IMPL> gameRepository) {
+    super(playerRepository, gameRepository);
+  }
 
-  public Game handleAction(final Serializable playerID, final Serializable gameID, final T param) {
-    Player player = loadPlayer(playerID);
-    IMPL game = (IMPL) loadGame(gameID);
+  protected abstract IMPL handleActionInternal(final P player, final IMPL game, final T param);
+
+  public Game handleAction(final ID playerID, final ID gameID, final T param) {
+    P player = loadPlayer(playerID);
+    IMPL game = loadGame(gameID);
     validatePlayerForGame(game, player);
     Game updatedGame = updateGameWithEligibilityWrapper(player, game, param);
 
@@ -43,11 +57,12 @@ public abstract class AbstractGameActionHandler<T, IMPL extends Game> extends
 
   }
 
-  public Game handleAction(final Serializable playerID, final Serializable gameID) {
+  public Game handleAction(final ID playerID, final ID gameID) {
     return handleAction(playerID, gameID, null);
   }
 
-  protected Game updateGameWithEligibilityWrapper(final Player player, final IMPL game,
+  @SuppressWarnings("WeakerAccess")
+  protected Game updateGameWithEligibilityWrapper(final P player, final IMPL game,
       final T param) {
     Game updatedGame;
     PlayerGameEligibilityResult eligibilityResult = null;
@@ -78,12 +93,13 @@ public abstract class AbstractGameActionHandler<T, IMPL extends Game> extends
     return updatedGame;
   }
 
-  protected Game updateGame(final Player player, final IMPL game, final T param) {
+  protected Game updateGame(final P player, final IMPL game, final T param) {
     IMPL updated = rotateTurnBasedGame(handleActionInternal(player, game, param));
     updated = ((IMPL) (transitionEngine.evaluateGame(updated)));
     return gameRepository.save(updated);
   }
 
+  @SuppressWarnings("WeakerAccess")
   protected IMPL rotateTurnBasedGame(final IMPL game) {
     return game;
   }

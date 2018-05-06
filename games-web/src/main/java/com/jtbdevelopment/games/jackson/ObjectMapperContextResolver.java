@@ -13,6 +13,7 @@ public class ObjectMapperContextResolver implements ContextResolver<ObjectMapper
 
   private final ObjectMapper objectMapper;
 
+  @SuppressWarnings("WeakerAccess")
   @Autowired
   public ObjectMapperContextResolver(ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;

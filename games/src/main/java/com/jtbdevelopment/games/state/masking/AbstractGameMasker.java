@@ -1,7 +1,7 @@
 package com.jtbdevelopment.games.state.masking;
 
 import com.jtbdevelopment.games.players.Player;
-import com.jtbdevelopment.games.state.Game;
+import com.jtbdevelopment.games.state.AbstractGame;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Map;
@@ -11,8 +11,12 @@ import java.util.stream.Collectors;
 /**
  * Date: 2/19/15 Time: 7:20 AM
  */
-public abstract class AbstractGameMasker<ID extends Serializable, FEATURES, U extends Game<ID, Instant, FEATURES>, M extends MaskedGame<FEATURES>> implements
-    GameMasker<ID, U, M> {
+public abstract class AbstractGameMasker<
+    ID extends Serializable,
+    FEATURES,
+    U extends AbstractGame<ID, FEATURES>,
+    M extends AbstractMaskedGame<FEATURES>>
+    implements GameMasker<ID, U, M> {
 
   protected abstract M newMaskedGame();
 

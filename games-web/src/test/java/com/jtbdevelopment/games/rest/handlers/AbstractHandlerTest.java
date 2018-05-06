@@ -67,7 +67,7 @@ public class AbstractHandlerTest {
   private class TestHandler extends AbstractHandler {
 
     public TestHandler(AbstractPlayerRepository playerRepository) {
-      this.playerRepository = playerRepository;
+      super(playerRepository);
     }
   }
 }

@@ -21,7 +21,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -39,13 +38,9 @@ public class NewGameHandlerTest {
   private GameMasker gameMasker = Mockito.mock(GameMasker.class);
   private AbstractSinglePlayerGameFactory gameFactory = Mockito
       .mock(AbstractSinglePlayerGameFactory.class);
-  private NewGameHandler handler = new NewGameHandler(gameFactory, gameRepository, transitionEngine,
+  private NewGameHandler handler = new NewGameHandler(playerRepository, gameFactory, gameRepository,
+      transitionEngine,
       gameMasker, gamePublisher, eligibilityTracker);
-
-  @Before
-  public void setup() {
-    handler.playerRepository = playerRepository;
-  }
 
   @Test
   public void testCreateGame() {

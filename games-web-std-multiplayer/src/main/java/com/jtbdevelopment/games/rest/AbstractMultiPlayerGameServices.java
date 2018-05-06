@@ -1,8 +1,11 @@
 package com.jtbdevelopment.games.rest;
 
+import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.rest.handlers.ChallengeResponseHandler;
 import com.jtbdevelopment.games.rest.services.AbstractGameServices;
+import com.jtbdevelopment.games.state.AbstractMultiPlayerGame;
 import com.jtbdevelopment.games.state.PlayerState;
+import com.jtbdevelopment.games.state.masking.AbstractMaskedMultiPlayerGame;
 import java.io.Serializable;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -11,14 +14,18 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Date: 4/8/2015
- * Time: 10:26 PM
+ * Date: 4/8/2015 Time: 10:26 PM
  */
-public abstract class AbstractMultiPlayerGameServices<ID extends Serializable>
-    extends AbstractGameServices<ID> {
+public abstract class AbstractMultiPlayerGameServices<
+    ID extends Serializable,
+    FEATURES,
+    IMPL extends AbstractMultiPlayerGame<ID, FEATURES>,
+    M extends AbstractMaskedMultiPlayerGame<FEATURES>,
+    P extends Player<ID>>
+    extends AbstractGameServices<ID, FEATURES, IMPL, M, P> {
 
   @Autowired
-  protected ChallengeResponseHandler responseHandler;
+  protected ChallengeResponseHandler<ID, FEATURES, IMPL, P> responseHandler;
 
   @PUT
   @Path("reject")

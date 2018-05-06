@@ -1,6 +1,6 @@
 package com.jtbdevelopment.games.state.transition;
 
-import com.jtbdevelopment.games.state.Game;
+import com.jtbdevelopment.games.state.AbstractGame;
 import com.jtbdevelopment.games.state.GamePhase;
 import com.jtbdevelopment.games.state.scoring.GameScorer;
 import java.io.Serializable;
@@ -8,12 +8,15 @@ import java.io.Serializable;
 /**
  * Date: 5/4/18 Time: 8:29 PM
  */
-public class AbstractGamePhaseTransitionEngine<ID
-    extends Serializable, IMPL extends Game<ID, ?, ?>>
+public class AbstractGamePhaseTransitionEngine<
+    ID extends Serializable,
+    FEATURES,
+    IMPL extends AbstractGame<ID, FEATURES>>
     implements GameTransitionEngine<IMPL> {
 
   private final GameScorer<IMPL> gameScorer;
 
+  @SuppressWarnings("WeakerAccess")
   protected AbstractGamePhaseTransitionEngine(
       final GameScorer<IMPL> gameScorer) {
     this.gameScorer = gameScorer;

@@ -1,8 +1,8 @@
 package com.jtbdevelopment.games.factory;
 
 import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.state.AbstractMultiPlayerGame;
 import com.jtbdevelopment.games.state.GamePhase;
-import com.jtbdevelopment.games.state.MultiPlayerGame;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +14,8 @@ import java.util.Set;
 public abstract class AbstractMultiPlayerGameFactory<
     ID extends Serializable,
     FEATURES,
-    IMPL extends MultiPlayerGame<ID, ?, FEATURES>> extends
-    AbstractGameFactory<ID, IMPL> implements MultiPlayerGameFactory<ID, FEATURES, IMPL> {
+    IMPL extends AbstractMultiPlayerGame<ID, FEATURES>> extends
+    AbstractGameFactory<ID, FEATURES, IMPL> implements MultiPlayerGameFactory<ID, FEATURES, IMPL> {
 
   protected AbstractMultiPlayerGameFactory(
       final List<GameInitializer> gameInitializers,

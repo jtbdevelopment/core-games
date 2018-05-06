@@ -1,7 +1,7 @@
 package com.jtbdevelopment.games.state.transition;
 
+import com.jtbdevelopment.games.state.AbstractMultiPlayerGame;
 import com.jtbdevelopment.games.state.GamePhase;
-import com.jtbdevelopment.games.state.MultiPlayerGame;
 import com.jtbdevelopment.games.state.PlayerState;
 import com.jtbdevelopment.games.state.scoring.GameScorer;
 import java.io.Serializable;
@@ -12,8 +12,11 @@ import java.util.Optional;
  *
  * You will most likely need to override the evaluate setup and playing functions
  */
-public abstract class AbstractMPGamePhaseTransitionEngine<ID extends Serializable, IMPL extends MultiPlayerGame<ID, ?, ?>>
-    extends AbstractGamePhaseTransitionEngine<ID, IMPL> {
+public abstract class AbstractMPGamePhaseTransitionEngine<
+    ID extends Serializable,
+    FEATURURES,
+    IMPL extends AbstractMultiPlayerGame<ID, FEATURURES>>
+    extends AbstractGamePhaseTransitionEngine<ID, FEATURURES, IMPL> {
 
   @SuppressWarnings("WeakerAccess")
   protected AbstractMPGamePhaseTransitionEngine(final GameScorer<IMPL> gameScorer) {

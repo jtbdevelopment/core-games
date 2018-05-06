@@ -1,7 +1,7 @@
 package com.jtbdevelopment.games.mongo.state.masking;
 
+import com.jtbdevelopment.games.state.masking.AbstractMaskedSinglePlayerGame;
 import com.jtbdevelopment.games.state.masking.AbstractSinglePlayerGameMasker;
-import com.jtbdevelopment.games.state.masking.MaskedSinglePlayerGame;
 import org.bson.types.ObjectId;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,7 +14,7 @@ public class AbstractMongoSinglePlayerGameMaskerTest {
 
     private AbstractSinglePlayerGameMasker masker = new AbstractMongoSinglePlayerGameMasker() {
         @Override
-        protected MaskedSinglePlayerGame newMaskedGame() {
+        protected AbstractMaskedSinglePlayerGame newMaskedGame() {
             return null;
         }
 

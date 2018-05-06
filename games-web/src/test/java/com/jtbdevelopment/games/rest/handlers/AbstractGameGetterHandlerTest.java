@@ -13,7 +13,6 @@ import com.jtbdevelopment.games.stringimpl.StringMPGame;
 import com.jtbdevelopment.games.stringimpl.StringSPGame;
 import java.util.Arrays;
 import java.util.Optional;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -23,13 +22,8 @@ import org.mockito.Mockito;
 public class AbstractGameGetterHandlerTest {
 
   private AbstractGameRepository gameRepository = Mockito.mock(AbstractGameRepository.class);
-  private AbstractGameGetterHandler handler = new AbstractGameGetterHandler() {
+  private AbstractGameGetterHandler handler = new AbstractGameGetterHandler(null, gameRepository) {
   };
-
-  @Before
-  public void setup() {
-    handler.gameRepository = gameRepository;
-  }
 
   @Test
   public void testValidatePlayerForMultiPlayerGame() {

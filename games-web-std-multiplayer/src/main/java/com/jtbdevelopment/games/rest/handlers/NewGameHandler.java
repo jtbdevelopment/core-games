@@ -1,12 +1,14 @@
 package com.jtbdevelopment.games.rest.handlers;
 
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository;
+import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.events.GamePublisher;
 import com.jtbdevelopment.games.exceptions.input.OutOfGamesForTodayException;
 import com.jtbdevelopment.games.factory.AbstractMultiPlayerGameFactory;
 import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.state.AbstractMultiPlayerGame;
 import com.jtbdevelopment.games.state.Game;
-import com.jtbdevelopment.games.state.MultiPlayerGame;
+import com.jtbdevelopment.games.state.masking.AbstractMaskedMultiPlayerGame;
 import com.jtbdevelopment.games.state.masking.GameMasker;
 import com.jtbdevelopment.games.state.transition.GameTransitionEngine;
 import com.jtbdevelopment.games.tracking.GameEligibilityTracker;
@@ -25,23 +27,31 @@ import org.springframework.stereotype.Component;
  * Date: 11/4/2014 Time: 9:10 PM
  */
 @Component
-public class NewGameHandler extends AbstractHandler {
+public class NewGameHandler<
+    ID extends Serializable,
+    FEATURES,
+    IMPL extends AbstractMultiPlayerGame<ID, FEATURES>,
+    M extends AbstractMaskedMultiPlayerGame<FEATURES>,
+    P extends Player<ID>>
+    extends AbstractHandler<ID, P> {
 
   private static final Logger logger = LoggerFactory.getLogger(NewGameHandler.class);
-  protected final AbstractMultiPlayerGameFactory gameFactory;
-  protected final AbstractMultiPlayerGameRepository gameRepository;
-  protected final GameTransitionEngine transitionEngine;
-  protected final GameMasker gameMasker;
-  protected final GamePublisher gamePublisher;
-  protected final GameEligibilityTracker gameTracker;
+  private final AbstractMultiPlayerGameFactory gameFactory;
+  private final AbstractMultiPlayerGameRepository gameRepository;
+  private final GameTransitionEngine transitionEngine;
+  private final GameMasker gameMasker;
+  private final GamePublisher gamePublisher;
+  private final GameEligibilityTracker gameTracker;
 
   public NewGameHandler(
+      final AbstractPlayerRepository<ID, P> playerRepository,
       final AbstractMultiPlayerGameFactory gameFactory,
       final AbstractMultiPlayerGameRepository gameRepository,
       final GameTransitionEngine transitionEngine,
       final GameMasker gameMasker,
       final GamePublisher gamePublisher,
       final GameEligibilityTracker gameTracker) {
+    super(playerRepository);
     this.gameFactory = gameFactory;
     this.gameRepository = gameRepository;
     this.transitionEngine = transitionEngine;
@@ -50,24 +60,27 @@ public class NewGameHandler extends AbstractHandler {
     this.gameTracker = gameTracker;
   }
 
-  public Game handleCreateNewGame(final Serializable initiatingPlayerID,
-      final List<String> playersIDs, final Set<?> features) {
+  public M handleCreateNewGame(
+      final ID initiatingPlayerID,
+      final List<String> playersIDs,
+      final Set<FEATURES> features) {
     //  Load as set to prevent dupes in initial setup
-    Set<Player> players = loadPlayerMD5s(playersIDs);
+    Set<P> players = loadPlayerMD5s(playersIDs);
 
-    Optional<Player> foundIP = players.stream().filter(x -> x.getId().equals(initiatingPlayerID))
+    Optional<P> foundIP = players.stream()
+        .filter(x -> x.getId().equals(initiatingPlayerID))
         .findFirst();
-    Player initiatingPlayer = foundIP.orElseGet(() -> loadPlayer(initiatingPlayerID));
+    P initiatingPlayer = foundIP.orElseGet(() -> loadPlayer(initiatingPlayerID));
 
     Game game = setupGameWithEligibilityWrapper(initiatingPlayer, features, players);
 
     gamePublisher.publish(game, initiatingPlayer);
 
-    return gameMasker.maskGameForPlayer(game, initiatingPlayer);
+    return (M) gameMasker.maskGameForPlayer(game, initiatingPlayer);
   }
 
-  private Game setupGameWithEligibilityWrapper(final Player initiatingPlayer,
-      final Set<?> features, Set<Player> players) {
+  private Game setupGameWithEligibilityWrapper(final P initiatingPlayer,
+      final Set<FEATURES> features, Set<P> players) {
     PlayerGameEligibilityResult eligibilityResult = gameTracker
         .getGameEligibility(initiatingPlayer);
     ;
@@ -97,13 +110,13 @@ public class NewGameHandler extends AbstractHandler {
     return game;
   }
 
-  private Game setupGame(final Set<?> features, final Set<Player> players,
-      final Player initiatingPlayer) {
-    MultiPlayerGame game = gameFactory.createGame(
+  private IMPL setupGame(final Set<FEATURES> features, final Set<P> players,
+      final P initiatingPlayer) {
+    IMPL game = (IMPL) gameFactory.createGame(
         features,
         new LinkedList<>(players),
         initiatingPlayer);
-    game = ((MultiPlayerGame) (transitionEngine.evaluateGame(game)));
-    return gameRepository.save(game);
+    game = ((IMPL) (transitionEngine.evaluateGame(game)));
+    return (IMPL) gameRepository.save(game);
   }
 }

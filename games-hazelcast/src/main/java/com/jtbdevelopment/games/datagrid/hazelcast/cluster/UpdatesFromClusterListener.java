@@ -12,7 +12,7 @@ import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.publish.PlayerPublisher;
 import com.jtbdevelopment.games.publish.cluster.AbstractUpdatesFromClusterListener;
 import com.jtbdevelopment.games.publish.cluster.ClusterMessage;
-import com.jtbdevelopment.games.state.Game;
+import com.jtbdevelopment.games.state.AbstractGame;
 import java.io.Serializable;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +20,12 @@ import org.springframework.stereotype.Component;
  * Date: 3/3/15 Time: 7:51 PM
  */
 @Component
-public class UpdatesFromClusterListener<ID extends Serializable, IMPL extends Game<ID, ?, ?>>
-    extends AbstractUpdatesFromClusterListener<ID, IMPL>
+public class UpdatesFromClusterListener<
+    ID extends Serializable,
+    FEATURES,
+    IMPL extends AbstractGame<ID, FEATURES>,
+    P extends Player<ID>>
+    extends AbstractUpdatesFromClusterListener<ID, FEATURES, IMPL, P>
     implements MessageListener<ClusterMessage> {
 
   final ITopic<ClusterMessage> topic;
@@ -29,11 +33,11 @@ public class UpdatesFromClusterListener<ID extends Serializable, IMPL extends Ga
   @SuppressWarnings("SpringJavaAutowiringInspection")
   public UpdatesFromClusterListener(
       final HazelcastInstance hazelcastInstance,
-      final GamePublisher<IMPL> gamePublisher,
+      final GamePublisher<IMPL, P> gamePublisher,
       final PlayerPublisher playerPublisher,
       final StringToIDConverter<ID> stringToIDConverter,
-      final AbstractGameRepository<ID, ?, ?, IMPL> gameRepository,
-      final AbstractPlayerRepository<ID, ? extends Player<ID>> playerRepository) {
+      final AbstractGameRepository<ID, FEATURES, IMPL> gameRepository,
+      final AbstractPlayerRepository<ID, P> playerRepository) {
     super(gamePublisher, playerPublisher, stringToIDConverter, playerRepository, gameRepository);
     topic = hazelcastInstance.getTopic(UpdatesToClusterPublisher.PUB_SUB_TOPIC);
     topic.addMessageListener(this);

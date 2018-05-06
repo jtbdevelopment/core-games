@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
@@ -51,13 +50,9 @@ public class NewGameHandlerTest {
   private AbstractGameMasker gameMasker = Mockito.mock(AbstractGameMasker.class);
   private GamePublisher gamePublisher = Mockito.mock(GamePublisher.class);
   private GameEligibilityTracker eligibilityTracker = Mockito.mock(GameEligibilityTracker.class);
-  private NewGameHandler handler = new NewGameHandler(gameFactory, gameRepository, transitionEngine,
+  private NewGameHandler handler = new NewGameHandler(playerRepository, gameFactory, gameRepository,
+      transitionEngine,
       gameMasker, gamePublisher, eligibilityTracker);
-
-  @Before
-  public void setup() {
-    handler.playerRepository = playerRepository;
-  }
 
   @Test
   public void testCreateGame() {

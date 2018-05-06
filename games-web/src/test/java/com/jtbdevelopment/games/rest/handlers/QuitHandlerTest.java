@@ -19,7 +19,7 @@ import org.junit.Test;
  */
 public class QuitHandlerTest {
 
-  private QuitHandler handler = new QuitHandler();
+  private QuitHandler handler = new QuitHandler<>(null, null);
 
   @Test
   public void testExceptionsOnQuitRematchRematchedPhases() {
@@ -42,7 +42,7 @@ public class QuitHandlerTest {
   public void testQuitsGamesInOtherStates() {
     Arrays.asList(GamePhase.Challenged, GamePhase.Setup, GamePhase.Playing).forEach(it -> {
       StringMPGame game = GameCoreTestCase.makeSimpleMPGame(it.toString());
-      LinkedHashMap<String, PlayerState> map = new LinkedHashMap<String, PlayerState>(2);
+      LinkedHashMap<String, PlayerState> map = new LinkedHashMap<>(2);
       map.put(PONE.getId(), PlayerState.Pending);
       map.put(PTWO.getId(), PlayerState.Rejected);
       game.setPlayerStates(map);
@@ -52,7 +52,7 @@ public class QuitHandlerTest {
 
       TestCase.assertSame(game, ret);
       assertEquals(GamePhase.Quit, game.getGamePhase());
-      LinkedHashMap<String, PlayerState> map1 = new LinkedHashMap<String, PlayerState>(2);
+      LinkedHashMap<String, PlayerState> map1 = new LinkedHashMap<>(2);
       map1.put(PONE.getId(), PlayerState.Pending);
       map1.put(PTWO.getId(), PlayerState.Quit);
       assertEquals(map1, game.getPlayerStates());

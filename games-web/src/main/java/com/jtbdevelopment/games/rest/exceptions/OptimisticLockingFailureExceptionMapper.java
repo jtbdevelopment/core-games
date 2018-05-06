@@ -22,7 +22,9 @@ public class OptimisticLockingFailureExceptionMapper implements
   @Override
   public Response toResponse(final OptimisticLockingFailureException e) {
     logger.info("Mapping error " + e.getMessage());
-    return Response.status(Status.CONFLICT).entity(e.getMessage()).type(MediaType.TEXT_PLAIN_TYPE)
+    return Response.status(Status.CONFLICT)
+        .entity(e.getMessage())
+        .type(MediaType.TEXT_PLAIN_TYPE)
         .build();
   }
 }

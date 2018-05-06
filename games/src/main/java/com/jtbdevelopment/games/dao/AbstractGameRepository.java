@@ -2,8 +2,9 @@ package com.jtbdevelopment.games.dao;
 
 import static com.jtbdevelopment.games.dao.caching.CacheConstants.GAME_ID_CACHE;
 
-import com.jtbdevelopment.games.state.Game;
+import com.jtbdevelopment.games.state.AbstractGame;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.cache.annotation.CacheEvict;
@@ -19,9 +20,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 @NoRepositoryBean
 public interface AbstractGameRepository<
     ID extends Serializable,
-    TIMESTAMP,
     FEATURES,
-    IMPL extends Game<ID, TIMESTAMP, FEATURES>>
+    IMPL extends AbstractGame<ID, FEATURES>>
     extends PagingAndSortingRepository<IMPL, ID> {
 
   @Override
@@ -52,10 +52,10 @@ public interface AbstractGameRepository<
   @CacheEvict(value = GAME_ID_CACHE, allEntries = true)
   void deleteAll();
 
-  long countByCreatedGreaterThan(final TIMESTAMP cutoff);
+  long countByCreatedGreaterThan(final Instant cutoff);
 
-  List<IMPL> findByCreatedLessThan(final TIMESTAMP cutoff);
+  List<IMPL> findByCreatedLessThan(final Instant cutoff);
 
   @CacheEvict(value = GAME_ID_CACHE, allEntries = true)
-  long deleteByCreatedLessThan(final TIMESTAMP cutoff);
+  long deleteByCreatedLessThan(final Instant cutoff);
 }
