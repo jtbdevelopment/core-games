@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.security.spring.social.connect;
 
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.players.PlayerFactory;
 import org.slf4j.Logger;
@@ -34,7 +35,7 @@ public class AutoConnectionSignUp implements ConnectionSignUp {
       if (player != null) {
         return player.getIdAsString();
       } else {
-        Player p = playerFactory.newPlayer();
+        AbstractPlayer p = playerFactory.newPlayer();
         p.setDisabled(false);
         p.setDisplayName(connection.fetchUserProfile().getName());
         p.setSource(connection.getKey().getProviderId());

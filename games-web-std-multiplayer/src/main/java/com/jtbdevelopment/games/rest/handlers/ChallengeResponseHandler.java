@@ -3,7 +3,7 @@ package com.jtbdevelopment.games.rest.handlers;
 import com.jtbdevelopment.games.dao.AbstractGameRepository;
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.exceptions.input.TooLateToRespondToChallengeException;
-import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.state.AbstractMultiPlayerGame;
 import com.jtbdevelopment.games.state.GamePhase;
 import com.jtbdevelopment.games.state.PlayerState;
@@ -18,7 +18,7 @@ public class ChallengeResponseHandler<
     ID extends Serializable,
     FEATURES,
     IMPL extends AbstractMultiPlayerGame<ID, FEATURES>,
-    P extends Player<ID>>
+    P extends AbstractPlayer<ID>>
     extends AbstractGameActionHandler<PlayerState, ID, FEATURES, IMPL, P> {
 
   ChallengeResponseHandler(

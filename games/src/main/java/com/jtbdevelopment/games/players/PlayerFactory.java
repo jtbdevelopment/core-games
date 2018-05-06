@@ -7,9 +7,9 @@ import java.io.Serializable;
  */
 public interface PlayerFactory<ID extends Serializable> {
 
-  Player<ID> newPlayer();
+  AbstractPlayer<ID> newPlayer();
 
-  Player<ID> newManualPlayer();
+  AbstractPlayer<ID> newManualPlayer();
 
-  Player<ID> newSystemPlayer();
+  AbstractPlayer<ID> newSystemPlayer();
 }

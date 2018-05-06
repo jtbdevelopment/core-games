@@ -1,7 +1,7 @@
 package com.jtbdevelopment.games.publish;
 
 import com.jtbdevelopment.games.events.GamePublisher;
-import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.state.AbstractGame;
 import java.io.Serializable;
 import java.util.List;
@@ -23,7 +23,7 @@ public class GamePublisherImpl<
     ID extends Serializable,
     FEATURES,
     IMPL extends AbstractGame<ID, FEATURES>,
-    P extends Player<ID>>
+    P extends AbstractPlayer<ID>>
     implements GamePublisher<IMPL, P> {
 
   private static final Logger logger = LoggerFactory.getLogger(GamePublisherImpl.class);

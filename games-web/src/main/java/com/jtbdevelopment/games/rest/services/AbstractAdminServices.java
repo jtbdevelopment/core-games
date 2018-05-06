@@ -3,7 +3,7 @@ package com.jtbdevelopment.games.rest.services;
 import com.jtbdevelopment.games.dao.AbstractGameRepository;
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.dao.StringToIDConverter;
-import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.players.PlayerRoles;
 import com.jtbdevelopment.games.security.SessionUserInfo;
 import com.jtbdevelopment.games.state.AbstractGame;
@@ -34,7 +34,7 @@ public abstract class AbstractAdminServices<
     ID extends Serializable,
     FEATURES,
     IMPL extends AbstractGame<ID, FEATURES>,
-    P extends Player<ID>> {
+    P extends AbstractPlayer<ID>> {
 
   private static final int DEFAULT_PAGE = 0;
   private static final int DEFAULT_PAGE_SIZE = 500;

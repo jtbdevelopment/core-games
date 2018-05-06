@@ -4,6 +4,7 @@ import com.jtbdevelopment.games.dao.AbstractGameRepository;
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.exceptions.input.PlayerNotPartOfGameException;
 import com.jtbdevelopment.games.exceptions.system.FailedToFindGameException;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.state.AbstractGame;
 import com.jtbdevelopment.games.state.Game;
@@ -21,7 +22,7 @@ public class AbstractGameGetterHandler<
     ID extends Serializable,
     FEATURES,
     IMPL extends AbstractGame<ID, FEATURES>,
-    P extends Player<ID>>
+    P extends AbstractPlayer<ID>>
     extends AbstractHandler<ID, P> {
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractGameGetterHandler.class);

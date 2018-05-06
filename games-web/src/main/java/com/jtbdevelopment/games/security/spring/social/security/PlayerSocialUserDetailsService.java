@@ -2,7 +2,7 @@ package com.jtbdevelopment.games.security.spring.social.security;
 
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.dao.StringToIDConverter;
-import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.security.spring.LastLoginUpdater;
 import com.jtbdevelopment.games.security.spring.PlayerUserDetails;
 import java.io.Serializable;
@@ -35,7 +35,7 @@ public class PlayerSocialUserDetailsService implements SocialUserDetailsService 
   @Override
   public SocialUserDetails loadUserByUserId(final String userId)
       throws UsernameNotFoundException, DataAccessException {
-    Optional<? extends Player> optional = playerRepository.findById(
+    Optional<? extends AbstractPlayer> optional = playerRepository.findById(
         stringToIDConverter.convert(userId)
     );
     if (optional.isPresent()) {

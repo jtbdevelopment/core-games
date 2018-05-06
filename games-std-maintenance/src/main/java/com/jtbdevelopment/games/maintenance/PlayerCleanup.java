@@ -2,8 +2,8 @@ package com.jtbdevelopment.games.maintenance;
 
 import com.jtbdevelopment.core.spring.social.dao.AbstractUsersConnectionRepository;
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.players.ManualPlayer;
-import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.players.SystemPlayer;
 import java.io.Serializable;
 import java.time.ZoneId;
@@ -24,7 +24,7 @@ import org.springframework.util.MultiValueMap;
  * TODO - perhaps we should archive them in the future and/or move them to a compressed collection
  */
 @Component
-class PlayerCleanup<ID extends Serializable, P extends Player<ID>> {
+class PlayerCleanup<ID extends Serializable, P extends AbstractPlayer<ID>> {
 
   private static final Logger logger = LoggerFactory.getLogger(PlayerCleanup.class);
   private static final ZoneId GMT = ZoneId.of("GMT");

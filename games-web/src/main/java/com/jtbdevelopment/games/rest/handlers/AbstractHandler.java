@@ -2,7 +2,7 @@ package com.jtbdevelopment.games.rest.handlers;
 
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.exceptions.system.FailedToFindPlayersException;
-import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Date: 11/4/2014 Time: 9:54 PM
  */
-public abstract class AbstractHandler<ID extends Serializable, P extends Player<ID>> {
+public abstract class AbstractHandler<ID extends Serializable, P extends AbstractPlayer<ID>> {
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractHandler.class);
   private final AbstractPlayerRepository<ID, P> playerRepository;

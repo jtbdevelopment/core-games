@@ -3,8 +3,8 @@ package com.jtbdevelopment.games.security.spring.userdetails;
 import static com.jtbdevelopment.games.GameCoreTestCase.PTWO;
 
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.players.ManualPlayer;
-import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.security.spring.LastLoginUpdater;
 import com.jtbdevelopment.games.security.spring.PlayerUserDetails;
 import org.junit.Assert;
@@ -26,7 +26,7 @@ public class PlayerUserDetailsServiceTest {
     Mockito.when(
         playerRepository.findBySourceAndSourceId(ManualPlayer.MANUAL_SOURCE, PTWO.getSourceId()))
         .thenReturn(PTWO);
-    Player updated = Mockito.mock(Player.class);
+    AbstractPlayer updated = Mockito.mock(AbstractPlayer.class);
     Mockito.when(lastLoginUpdater.updatePlayerLastLogin(PTWO)).thenReturn(updated);
 
     PlayerUserDetails d = (PlayerUserDetails) userDetailsService

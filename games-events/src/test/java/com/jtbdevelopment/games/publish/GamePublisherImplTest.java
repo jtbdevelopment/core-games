@@ -9,6 +9,7 @@ import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.state.Game;
 import com.jtbdevelopment.games.state.MultiPlayerGame;
 import com.jtbdevelopment.games.stringimpl.StringMPGame;
+import com.jtbdevelopment.games.stringimpl.StringPlayer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -64,8 +65,8 @@ public class GamePublisherImplTest {
     LatchListener.setLatch(new CountDownLatch(4));
     StringMPGame g1 = makeSimpleMPGame("1");
     StringMPGame g2 = makeSimpleMPGame("2");
-    Player p1 = PONE;
-    Player p2 = PTWO;
+    StringPlayer p1 = PONE;
+    StringPlayer p2 = PTWO;
 
     publisher.publish(g1, p2);
     publisher.publish(g2, p1);
@@ -88,8 +89,8 @@ public class GamePublisherImplTest {
     LatchListener.setLatch(new CountDownLatch(4));
     StringMPGame g1 = makeSimpleMPGame("1");
     StringMPGame g2 = makeSimpleMPGame("2");
-    Player p1 = PONE;
-    Player p2 = PTWO;
+    StringPlayer p1 = PONE;
+    StringPlayer p2 = PTWO;
 
     publisher.publish(g1, p2, true);
     publisher.publish(g2, p1, true);
@@ -112,8 +113,8 @@ public class GamePublisherImplTest {
     LatchListener.setLatch(new CountDownLatch(4));
     StringMPGame g1 = makeSimpleMPGame("1");
     StringMPGame g2 = makeSimpleMPGame("2");
-    Player p1 = PONE;
-    Player p2 = PTWO;
+    StringPlayer p1 = PONE;
+    StringPlayer p2 = PTWO;
 
     publisher.publish(g1, p2, false);
     publisher.publish(g2, p1, false);
@@ -143,8 +144,8 @@ public class GamePublisherImplTest {
         new ArrayList<>(Arrays.asList(listener1, mockListener, listener2)));
     StringMPGame g1 = makeSimpleMPGame("1");
     StringMPGame g2 = makeSimpleMPGame("2");
-    Player p1 = PONE;
-    Player p2 = PTWO;
+    StringPlayer p1 = PONE;
+    StringPlayer p2 = PTWO;
 
     publisher.publish(g1, p2, false);
     publisher.publish(g2, p1, false);

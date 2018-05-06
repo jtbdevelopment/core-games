@@ -1,6 +1,6 @@
 package com.jtbdevelopment.games.rest;
 
-import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.rest.handlers.ChallengeResponseHandler;
 import com.jtbdevelopment.games.rest.services.AbstractGameServices;
 import com.jtbdevelopment.games.state.AbstractMultiPlayerGame;
@@ -21,7 +21,7 @@ public abstract class AbstractMultiPlayerGameServices<
     FEATURES,
     IMPL extends AbstractMultiPlayerGame<ID, FEATURES>,
     M extends AbstractMaskedMultiPlayerGame<FEATURES>,
-    P extends Player<ID>>
+    P extends AbstractPlayer<ID>>
     extends AbstractGameServices<ID, FEATURES, IMPL, M, P> {
 
   @Autowired

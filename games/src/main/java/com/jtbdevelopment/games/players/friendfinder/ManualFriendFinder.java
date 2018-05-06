@@ -1,6 +1,7 @@
 package com.jtbdevelopment.games.players.friendfinder;
 
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.players.ManualPlayer;
 import com.jtbdevelopment.games.players.Player;
 import java.io.Serializable;
@@ -14,12 +15,13 @@ import org.springframework.stereotype.Component;
  * Date: 11/26/14 Time: 1:09 PM
  */
 @Component
-public class ManualFriendFinder implements SourceBasedFriendFinder {
+public class ManualFriendFinder<ID extends Serializable, P extends AbstractPlayer<ID>>
+    implements SourceBasedFriendFinder {
 
-  private final AbstractPlayerRepository<? extends Serializable, ? extends Player> playerRepository;
+  private final AbstractPlayerRepository<ID, P> playerRepository;
 
   public ManualFriendFinder(
-      final AbstractPlayerRepository<? extends Serializable, ? extends Player> playerRepository) {
+      final AbstractPlayerRepository<ID, P> playerRepository) {
     this.playerRepository = playerRepository;
   }
 

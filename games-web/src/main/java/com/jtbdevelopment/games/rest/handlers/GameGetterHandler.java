@@ -2,6 +2,7 @@ package com.jtbdevelopment.games.rest.handlers;
 
 import com.jtbdevelopment.games.dao.AbstractGameRepository;
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.state.AbstractGame;
 import com.jtbdevelopment.games.state.Game;
@@ -19,7 +20,7 @@ public class GameGetterHandler<
     FEATURES,
     IMPL extends AbstractGame<ID, FEATURES>,
     M extends AbstractMaskedGame<FEATURES>,
-    P extends Player<ID>>
+    P extends AbstractPlayer<ID>>
     extends AbstractGameGetterHandler<ID, FEATURES, IMPL, P> {
 
   private final GameMasker<ID, IMPL, M> gameMasker;

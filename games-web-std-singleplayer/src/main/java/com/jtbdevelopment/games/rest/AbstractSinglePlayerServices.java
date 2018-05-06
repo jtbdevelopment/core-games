@@ -1,6 +1,6 @@
 package com.jtbdevelopment.games.rest;
 
-import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.rest.handlers.PlayerGamesFinderHandler;
 import com.jtbdevelopment.games.rest.services.AbstractPlayerServices;
 import com.jtbdevelopment.games.state.AbstractSinglePlayerGame;
@@ -21,7 +21,7 @@ public abstract class AbstractSinglePlayerServices<
     FEATURES,
     IMPL extends AbstractSinglePlayerGame<ID, FEATURES>,
     M extends AbstractMaskedSinglePlayerGame<FEATURES>,
-    P extends Player<ID>>
+    P extends AbstractPlayer<ID>>
     extends AbstractPlayerServices<ID, FEATURES, IMPL, M, P> {
 
   @Autowired

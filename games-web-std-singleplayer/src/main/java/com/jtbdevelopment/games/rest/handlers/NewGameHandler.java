@@ -5,6 +5,7 @@ import com.jtbdevelopment.games.dao.AbstractSinglePlayerGameRepository;
 import com.jtbdevelopment.games.events.GamePublisher;
 import com.jtbdevelopment.games.exceptions.input.OutOfGamesForTodayException;
 import com.jtbdevelopment.games.factory.AbstractSinglePlayerGameFactory;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.state.AbstractSinglePlayerGame;
 import com.jtbdevelopment.games.state.masking.AbstractMaskedSinglePlayerGame;
@@ -28,7 +29,7 @@ public class NewGameHandler<
     FEATURES,
     IMPL extends AbstractSinglePlayerGame<ID, FEATURES>,
     M extends AbstractMaskedSinglePlayerGame<FEATURES>,
-    P extends Player<ID>>
+    P extends AbstractPlayer<ID>>
     extends AbstractHandler<ID, P> {
 
   private static final Logger logger = LoggerFactory.getLogger(NewGameHandler.class);

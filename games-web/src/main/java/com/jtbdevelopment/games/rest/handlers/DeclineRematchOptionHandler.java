@@ -2,7 +2,7 @@ package com.jtbdevelopment.games.rest.handlers;
 
 import com.jtbdevelopment.games.dao.AbstractGameRepository;
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
-import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.rest.exceptions.GameIsNotAvailableToRematchException;
 import com.jtbdevelopment.games.state.AbstractGame;
 import com.jtbdevelopment.games.state.GamePhase;
@@ -17,7 +17,7 @@ public class DeclineRematchOptionHandler<
     ID extends Serializable,
     FEATURES,
     IMPL extends AbstractGame<ID, FEATURES>,
-    P extends Player<ID>>
+    P extends AbstractPlayer<ID>>
     extends AbstractGameActionHandler<Object, ID, FEATURES, IMPL, P> {
 
   public DeclineRematchOptionHandler(

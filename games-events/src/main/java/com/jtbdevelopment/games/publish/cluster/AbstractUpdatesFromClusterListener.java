@@ -4,7 +4,7 @@ import com.jtbdevelopment.games.dao.AbstractGameRepository;
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.dao.StringToIDConverter;
 import com.jtbdevelopment.games.events.GamePublisher;
-import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.publish.PlayerPublisher;
 import com.jtbdevelopment.games.state.AbstractGame;
 import java.io.Serializable;
@@ -17,7 +17,7 @@ public abstract class AbstractUpdatesFromClusterListener<
     ID extends Serializable,
     FEATURES,
     IMPL extends AbstractGame<ID, FEATURES>,
-    P extends Player<ID>> {
+    P extends AbstractPlayer<ID>> {
 
   private final GamePublisher<IMPL, P> gamePublisher;
   private final PlayerPublisher playerPublisher;
@@ -59,8 +59,7 @@ public abstract class AbstractUpdatesFromClusterListener<
   private void receivePublishPlayer(final String id) {
     ID converted = stringToIDConverter.convert(id);
     if (converted != null) {
-      Optional<? extends Player<ID>> optional = playerRepository
-          .findById(converted);
+      Optional<P> optional = playerRepository.findById(converted);
       optional.ifPresent(player -> playerPublisher.publish(player, false));
     }
   }

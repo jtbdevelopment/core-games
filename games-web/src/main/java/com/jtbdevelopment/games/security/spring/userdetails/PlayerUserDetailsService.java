@@ -1,8 +1,8 @@
 package com.jtbdevelopment.games.security.spring.userdetails;
 
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.players.ManualPlayer;
-import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.security.spring.LastLoginUpdater;
 import com.jtbdevelopment.games.security.spring.PlayerUserDetails;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,7 +30,8 @@ public class PlayerUserDetailsService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-    Player player = playerRepository.findBySourceAndSourceId(ManualPlayer.MANUAL_SOURCE, username);
+    AbstractPlayer player = playerRepository
+        .findBySourceAndSourceId(ManualPlayer.MANUAL_SOURCE, username);
     if (player != null) {
       return new PlayerUserDetails(lastLoginUpdater.updatePlayerLastLogin(player));
     } else {

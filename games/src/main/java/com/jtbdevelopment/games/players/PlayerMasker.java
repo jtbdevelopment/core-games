@@ -1,5 +1,6 @@
 package com.jtbdevelopment.games.players;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,12 +12,12 @@ import org.springframework.stereotype.Component;
  * Date: 11/26/14 Time: 8:51 PM
  */
 @Component
-public class PlayerMasker {
+public class PlayerMasker<ID extends Serializable, P extends AbstractPlayer<ID>> {
 
   private static final String MASKED_MD5 = "md5";
   private static final String DISPLAY_NAME = "displayName";
 
-  public List<Map<String, String>> maskFriendsV2(final Set<? extends Player> friends) {
+  public List<Map<String, String>> maskFriendsV2(final Set<P> friends) {
     List<Map<String, String>> maskedFriends = new LinkedList<>();
     friends.forEach(friend -> {
       Map<String, String> maskedFriend = new HashMap<>();

@@ -2,7 +2,7 @@ package com.jtbdevelopment.games.rest.services;
 
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.dao.StringToIDConverter;
-import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.players.PlayerRoles;
 import com.jtbdevelopment.games.players.friendfinder.FriendFinder;
 import com.jtbdevelopment.games.state.AbstractGame;
@@ -35,7 +35,7 @@ public abstract class AbstractPlayerServices<
     FEATURES,
     IMPL extends AbstractGame<ID, FEATURES>,
     M extends AbstractMaskedGame<FEATURES>,
-    P extends Player<ID>>
+    P extends AbstractPlayer<ID>>
     implements ApplicationContextAware {
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractPlayerServices.class);

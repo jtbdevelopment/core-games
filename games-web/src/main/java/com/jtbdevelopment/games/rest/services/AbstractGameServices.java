@@ -1,6 +1,6 @@
 package com.jtbdevelopment.games.rest.services;
 
-import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.rest.handlers.ChallengeToRematchHandler;
 import com.jtbdevelopment.games.rest.handlers.DeclineRematchOptionHandler;
 import com.jtbdevelopment.games.rest.handlers.GameGetterHandler;
@@ -23,7 +23,7 @@ public abstract class AbstractGameServices<
     FEATURES,
     IMPL extends AbstractGame<ID, FEATURES>,
     M extends AbstractMaskedGame<FEATURES>,
-    P extends Player<ID>> {
+    P extends AbstractPlayer<ID>> {
 
   @Autowired
   protected GameGetterHandler<ID, FEATURES, IMPL, M, P> gameGetterHandler;

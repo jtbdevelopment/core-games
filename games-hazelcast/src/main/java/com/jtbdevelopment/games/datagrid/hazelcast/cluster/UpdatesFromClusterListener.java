@@ -8,7 +8,7 @@ import com.jtbdevelopment.games.dao.AbstractGameRepository;
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.dao.StringToIDConverter;
 import com.jtbdevelopment.games.events.GamePublisher;
-import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.publish.PlayerPublisher;
 import com.jtbdevelopment.games.publish.cluster.AbstractUpdatesFromClusterListener;
 import com.jtbdevelopment.games.publish.cluster.ClusterMessage;
@@ -24,7 +24,7 @@ public class UpdatesFromClusterListener<
     ID extends Serializable,
     FEATURES,
     IMPL extends AbstractGame<ID, FEATURES>,
-    P extends Player<ID>>
+    P extends AbstractPlayer<ID>>
     extends AbstractUpdatesFromClusterListener<ID, FEATURES, IMPL, P>
     implements MessageListener<ClusterMessage> {
 

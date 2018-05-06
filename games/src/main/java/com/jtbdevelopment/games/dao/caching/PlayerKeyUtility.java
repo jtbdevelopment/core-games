@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlayerKeyUtility {
 
-  private static AbstractPlayerRepository<? super Serializable, ? super Player<? super Serializable>> playerRepository;
+  private static AbstractPlayerRepository<? super Serializable, ? super AbstractPlayer<? super Serializable>> playerRepository;
 
   public PlayerKeyUtility(
       @SuppressWarnings("SpringJavaAutowiringInspection") final AbstractPlayerRepository playerRepository) {
@@ -78,7 +78,7 @@ public class PlayerKeyUtility {
   }
 
   public static String sourceAndSourceIDFromID(final Serializable id) {
-    Optional<? extends Player> optional = playerRepository.findById(id);
+    Optional<? extends AbstractPlayer> optional = playerRepository.findById(id);
     if (optional.isPresent()) {
       return optional.get().getSourceAndSourceId();
     }

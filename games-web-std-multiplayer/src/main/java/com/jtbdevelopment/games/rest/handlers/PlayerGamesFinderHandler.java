@@ -3,6 +3,7 @@ package com.jtbdevelopment.games.rest.handlers;
 import com.jtbdevelopment.games.dao.AbstractGameRepository;
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository;
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.state.AbstractMultiPlayerGame;
 import com.jtbdevelopment.games.state.GamePhase;
@@ -29,7 +30,7 @@ public class PlayerGamesFinderHandler<
     ID extends Serializable,
     FEATURES,
     IMPL extends AbstractMultiPlayerGame<ID, FEATURES>,
-    P extends Player<ID>>
+    P extends AbstractPlayer<ID>>
     extends AbstractGameGetterHandler<ID, FEATURES, IMPL, P> {
 
   private static final ZoneId GMT = ZoneId.of("GMT");

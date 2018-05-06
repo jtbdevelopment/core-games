@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import com.jtbdevelopment.games.GameCoreTestCase;
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
-import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.security.spring.LastLoginUpdater;
 import com.jtbdevelopment.games.security.spring.PlayerUserDetails;
 import com.jtbdevelopment.games.stringimpl.StringPlayer;
@@ -29,8 +28,8 @@ public class PlayerSocialUserDetailsServiceTest {
 
   @Test
   public void testReturnsWrappedPlayerIfFoundAfterCallingLoginUpdated() {
-    Player player = GameCoreTestCase.makeSimplePlayer("4524");
-    Player playerCopy = GameCoreTestCase.makeSimplePlayer("4524");
+    StringPlayer player = GameCoreTestCase.makeSimplePlayer("4524");
+    StringPlayer playerCopy = GameCoreTestCase.makeSimplePlayer("4524");
     when(playerRepository
         .findById(GameCoreTestCase.reverse(((StringPlayer) player).getIdAsString())))
         .thenReturn(Optional.of((StringPlayer) player));

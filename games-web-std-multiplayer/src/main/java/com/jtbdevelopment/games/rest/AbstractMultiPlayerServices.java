@@ -1,6 +1,6 @@
 package com.jtbdevelopment.games.rest;
 
-import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.rest.handlers.PlayerGamesFinderHandler;
 import com.jtbdevelopment.games.rest.services.AbstractPlayerServices;
 import com.jtbdevelopment.games.state.AbstractMultiPlayerGame;
@@ -25,7 +25,7 @@ public abstract class AbstractMultiPlayerServices<
     FEATURES,
     IMPL extends AbstractMultiPlayerGame<ID, FEATURES>,
     M extends AbstractMaskedMultiPlayerGame<FEATURES>,
-    P extends Player<ID>>
+    P extends AbstractPlayer<ID>>
     extends AbstractPlayerServices<ID, FEATURES, IMPL, M, P> {
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractMultiPlayerServices.class);

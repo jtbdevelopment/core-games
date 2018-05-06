@@ -4,7 +4,7 @@ import static com.jtbdevelopment.games.dao.caching.CacheConstants.PLAYER_ID_CACH
 import static com.jtbdevelopment.games.dao.caching.CacheConstants.PLAYER_MD5_CACHE;
 import static com.jtbdevelopment.games.dao.caching.CacheConstants.PLAYER_S_AND_SID_CACHE;
 
-import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Collection;
@@ -24,7 +24,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  */
 @SuppressWarnings("SpringCacheAnnotationsOnInterfaceInspection")
 @NoRepositoryBean
-public interface AbstractPlayerRepository<ID extends Serializable, P extends Player<ID>> extends
+public interface AbstractPlayerRepository<ID extends Serializable, P extends AbstractPlayer<ID>> extends
     PagingAndSortingRepository<P, ID> {
 
   @Override

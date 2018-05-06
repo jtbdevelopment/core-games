@@ -7,7 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
-import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
@@ -20,9 +20,9 @@ import org.junit.Test;
 public class PlayerKeyUtilityTest {
 
   private AbstractPlayerRepository playerRepository = mock(AbstractPlayerRepository.class);
-  private Player<Serializable> player = mock(Player.class);
-  private Player<Serializable> player2 = mock(Player.class);
-  private Player<Serializable> player3 = mock(Player.class);
+  private AbstractPlayer<Serializable> player = mock(AbstractPlayer.class);
+  private AbstractPlayer<Serializable> player2 = mock(AbstractPlayer.class);
+  private AbstractPlayer<Serializable> player3 = mock(AbstractPlayer.class);
   private PlayerKeyUtility playerKeyUtility = new PlayerKeyUtility(playerRepository);
 
   @Test
