@@ -30,7 +30,7 @@ public class GamePublisherImpl<
   final ExecutorService service;
   private final List<GameListener<IMPL>> subscribers;
 
-  //  Keep generic
+  // keep generric
   GamePublisherImpl(
       @Value("${publishing.threads:10}") final int threads,
       final List<GameListener> subscribers) {

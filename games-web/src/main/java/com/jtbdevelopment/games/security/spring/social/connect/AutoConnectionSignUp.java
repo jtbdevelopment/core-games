@@ -4,6 +4,7 @@ import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.players.PlayerFactory;
+import java.io.Serializable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.social.connect.Connection;
@@ -14,15 +15,16 @@ import org.springframework.stereotype.Component;
  * Date: 12/14/14 Time: 5:11 PM
  */
 @Component
-public class AutoConnectionSignUp implements ConnectionSignUp {
+public class AutoConnectionSignUp<ID extends Serializable, P extends AbstractPlayer<ID>> implements
+    ConnectionSignUp {
 
   private static final Logger logger = LoggerFactory.getLogger(AutoConnectionSignUp.class);
-  private final AbstractPlayerRepository playerRepository;
-  private final PlayerFactory playerFactory;
+  private final AbstractPlayerRepository<ID, P> playerRepository;
+  private final PlayerFactory<ID, P> playerFactory;
 
   public AutoConnectionSignUp(
-      final AbstractPlayerRepository playerRepository,
-      final PlayerFactory playerFactory) {
+      final AbstractPlayerRepository<ID, P> playerRepository,
+      final PlayerFactory<ID, P> playerFactory) {
     this.playerRepository = playerRepository;
     this.playerFactory = playerFactory;
   }
@@ -35,7 +37,7 @@ public class AutoConnectionSignUp implements ConnectionSignUp {
       if (player != null) {
         return player.getIdAsString();
       } else {
-        AbstractPlayer p = playerFactory.newPlayer();
+        P p = playerFactory.newPlayer();
         p.setDisabled(false);
         p.setDisplayName(connection.fetchUserProfile().getName());
         p.setSource(connection.getKey().getProviderId());

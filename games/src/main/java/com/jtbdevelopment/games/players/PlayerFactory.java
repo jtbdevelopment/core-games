@@ -5,11 +5,11 @@ import java.io.Serializable;
 /**
  * Date: 12/30/2014 Time: 7:11 PM
  */
-public interface PlayerFactory<ID extends Serializable> {
+public interface PlayerFactory<ID extends Serializable, P extends Player<ID>> {
 
-  AbstractPlayer<ID> newPlayer();
+  P newPlayer();
 
-  AbstractPlayer<ID> newManualPlayer();
+  P newManualPlayer();
 
-  AbstractPlayer<ID> newSystemPlayer();
+  P newSystemPlayer();
 }

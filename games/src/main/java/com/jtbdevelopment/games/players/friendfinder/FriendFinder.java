@@ -39,7 +39,7 @@ public class FriendFinder<ID extends Serializable, P extends AbstractPlayer<ID>>
   }
 
   public Map<String, Set<? super Object>> findFriendsV2(final ID playerId) {
-    Player<ID> player = getPlayer(playerId);
+    P player = getPlayer(playerId);
 
     Map<String, Set<? super Object>> combinedFriends = combine(getFriendsFromEachFinder(player));
 
@@ -75,7 +75,7 @@ public class FriendFinder<ID extends Serializable, P extends AbstractPlayer<ID>>
         .collect(Collectors.toList());
   }
 
-  private Player<ID> getPlayer(ID playerId) {
+  private P getPlayer(ID playerId) {
     Optional<P> optionalPlayer = playerRepository.findById(playerId);
     if (!optionalPlayer.isPresent() || optionalPlayer.get().isDisabled()) {
       throw new FailedToFindPlayersException();
