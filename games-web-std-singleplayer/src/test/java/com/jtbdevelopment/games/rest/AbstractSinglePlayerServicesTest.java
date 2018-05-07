@@ -24,7 +24,8 @@ import org.mockito.Mockito;
 public class AbstractSinglePlayerServicesTest {
 
   private static final String PID = "PID-122";
-  private AbstractSinglePlayerServices services = new AbstractSinglePlayerServices() {
+  private PlayerGamesFinderHandler finderHandler = Mockito.mock(PlayerGamesFinderHandler.class);
+  private AbstractSinglePlayerServices services = new AbstractSinglePlayerServices(finderHandler) {
   };
 
   @Before
@@ -39,9 +40,7 @@ public class AbstractSinglePlayerServicesTest {
         new StringMaskedSPGame(),
         new StringMaskedSPGame(),
         new StringMaskedSPGame());
-    PlayerGamesFinderHandler finderHandler = Mockito.mock(PlayerGamesFinderHandler.class);
     when(finderHandler.findGames(APLAYER)).thenReturn(results);
-    services.playerGamesFinderHandler = finderHandler;
     services.getPlayerID().set(APLAYER);
     Assert.assertSame(results, services.gamesForPlayer());
   }

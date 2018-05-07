@@ -11,7 +11,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Date: 4/8/2015 Time: 10:26 PM
@@ -24,8 +23,13 @@ public abstract class AbstractSinglePlayerServices<
     P extends AbstractPlayer<ID>>
     extends AbstractPlayerServices<ID, FEATURES, IMPL, M, P> {
 
-  @Autowired
-  protected PlayerGamesFinderHandler<ID, FEATURES, IMPL, P> playerGamesFinderHandler;
+  private final PlayerGamesFinderHandler<ID, FEATURES, IMPL, M, P> playerGamesFinderHandler;
+
+  @SuppressWarnings("WeakerAccess")
+  protected AbstractSinglePlayerServices(
+      final PlayerGamesFinderHandler<ID, FEATURES, IMPL, M, P> playerGamesFinderHandler) {
+    this.playerGamesFinderHandler = playerGamesFinderHandler;
+  }
 
   @GET
   @Path("games")

@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
  * Date: 11/4/2014 Time: 9:10 PM
  */
 @Component
-public class NewGameHandler<
+class NewGameHandler<
     ID extends Serializable,
     FEATURES,
     IMPL extends AbstractSinglePlayerGame<ID, FEATURES>,
@@ -40,7 +40,7 @@ public class NewGameHandler<
   private final GamePublisher<IMPL, P> gamePublisher;
   private final GameEligibilityTracker<PlayerGameEligibilityResult> gameTracker;
 
-  public NewGameHandler(
+  NewGameHandler(
       final AbstractPlayerRepository<ID, P> playerRepository,
       final AbstractSinglePlayerGameFactory<ID, FEATURES, IMPL> gameFactory,
       final AbstractSinglePlayerGameRepository<ID, FEATURES, IMPL> gameRepository,
@@ -57,12 +57,12 @@ public class NewGameHandler<
     this.gameTracker = gameTracker;
   }
 
-  public M handleCreateNewGame(final ID playerID, final Set<FEATURES> features) {
+  M handleCreateNewGame(final ID playerID, final Set<FEATURES> features) {
     P player = loadPlayer(playerID);//  Load as set to prevent dupes in initial setup
     IMPL game = setupGameWithEligibilityWrapper(features, player);
 
     gamePublisher.publish(game, player);
-    return (M) gameMasker.maskGameForPlayer(game, player);
+    return gameMasker.maskGameForPlayer(game, player);
   }
 
   private IMPL setupGameWithEligibilityWrapper(

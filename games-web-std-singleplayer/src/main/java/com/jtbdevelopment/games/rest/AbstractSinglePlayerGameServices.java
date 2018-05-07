@@ -9,6 +9,7 @@ import java.io.Serializable;
 /**
  * Date: 4/8/2015 Time: 10:26 PM
  */
+@SuppressWarnings("unused")
 public abstract class AbstractSinglePlayerGameServices<
     ID extends Serializable,
     FEATURES,
