@@ -28,13 +28,12 @@ public class AbstractMultiPlayerServicesTest {
 
   private static final String PID = "PID-122";
   private PlayerGamesFinderHandler finderHandler = Mockito.mock(PlayerGamesFinderHandler.class);
-  private AbstractMultiPlayerServices services = new AbstractMultiPlayerServices() {
+  private AbstractMultiPlayerServices services = new AbstractMultiPlayerServices(finderHandler) {
   };
 
   @Before
   public void setUp() throws Exception {
     services.getPlayerID().set(PID);
-    services.playerGamesFinderHandler = finderHandler;
   }
 
   @Test

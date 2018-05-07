@@ -31,14 +31,14 @@ public class AbstractMultiPlayerGameServicesTest {
   private final AbstractMaskedMultiPlayerGame result = new AbstractMaskedMultiPlayerGame() {
   };
   private ChallengeResponseHandler challengeResponseHandler = mock(ChallengeResponseHandler.class);
-  private AbstractMultiPlayerGameServices services = new AbstractMultiPlayerGameServices() {
+  private AbstractMultiPlayerGameServices services = new AbstractMultiPlayerGameServices(
+      challengeResponseHandler) {
   };
 
   @Before
   public void setUp() throws Exception {
     services.getPlayerID().set(PID);
     services.getGameID().set(GID);
-    services.responseHandler = challengeResponseHandler;
   }
 
   @Test

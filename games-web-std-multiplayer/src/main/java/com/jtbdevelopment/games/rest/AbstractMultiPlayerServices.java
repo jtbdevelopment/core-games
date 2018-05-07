@@ -15,7 +15,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Date: 4/8/2015 Time: 10:26 PM
@@ -30,8 +29,13 @@ public abstract class AbstractMultiPlayerServices<
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractMultiPlayerServices.class);
 
-  @Autowired
-  protected PlayerGamesFinderHandler<ID, FEATURES, IMPL, P> playerGamesFinderHandler;
+  private PlayerGamesFinderHandler<ID, FEATURES, IMPL, M, P> playerGamesFinderHandler;
+
+  @SuppressWarnings("WeakerAccess")
+  protected AbstractMultiPlayerServices(
+      final PlayerGamesFinderHandler<ID, FEATURES, IMPL, M, P> playerGamesFinderHandler) {
+    this.playerGamesFinderHandler = playerGamesFinderHandler;
+  }
 
   @GET
   @Path("games")

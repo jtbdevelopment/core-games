@@ -11,7 +11,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Date: 4/8/2015 Time: 10:26 PM
@@ -24,8 +23,12 @@ public abstract class AbstractMultiPlayerGameServices<
     P extends AbstractPlayer<ID>>
     extends AbstractGameServices<ID, FEATURES, IMPL, M, P> {
 
-  @Autowired
-  protected ChallengeResponseHandler<ID, FEATURES, IMPL, P> responseHandler;
+  private final ChallengeResponseHandler<ID, FEATURES, IMPL, P> responseHandler;
+
+  AbstractMultiPlayerGameServices(
+      final ChallengeResponseHandler<ID, FEATURES, IMPL, P> responseHandler) {
+    this.responseHandler = responseHandler;
+  }
 
   @PUT
   @Path("reject")

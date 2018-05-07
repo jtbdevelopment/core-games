@@ -7,7 +7,6 @@ import com.jtbdevelopment.games.exceptions.input.OutOfGamesForTodayException;
 import com.jtbdevelopment.games.factory.AbstractMultiPlayerGameFactory;
 import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.state.AbstractMultiPlayerGame;
-import com.jtbdevelopment.games.state.Game;
 import com.jtbdevelopment.games.state.masking.AbstractMaskedMultiPlayerGame;
 import com.jtbdevelopment.games.state.masking.GameMasker;
 import com.jtbdevelopment.games.state.transition.GameTransitionEngine;
@@ -27,30 +26,31 @@ import org.springframework.stereotype.Component;
  * Date: 11/4/2014 Time: 9:10 PM
  */
 @Component
-public class NewGameHandler<
+class NewGameHandler<
     ID extends Serializable,
     FEATURES,
     IMPL extends AbstractMultiPlayerGame<ID, FEATURES>,
     M extends AbstractMaskedMultiPlayerGame<FEATURES>,
-    P extends AbstractPlayer<ID>>
+    P extends AbstractPlayer<ID>,
+    T extends PlayerGameEligibilityResult>
     extends AbstractHandler<ID, P> {
 
   private static final Logger logger = LoggerFactory.getLogger(NewGameHandler.class);
-  private final AbstractMultiPlayerGameFactory gameFactory;
-  private final AbstractMultiPlayerGameRepository gameRepository;
-  private final GameTransitionEngine transitionEngine;
-  private final GameMasker gameMasker;
-  private final GamePublisher gamePublisher;
-  private final GameEligibilityTracker gameTracker;
+  private final AbstractMultiPlayerGameFactory<ID, FEATURES, IMPL> gameFactory;
+  private final AbstractMultiPlayerGameRepository<ID, FEATURES, IMPL> gameRepository;
+  private final GameTransitionEngine<IMPL> transitionEngine;
+  private final GameMasker<ID, IMPL, M> gameMasker;
+  private final GamePublisher<IMPL, P> gamePublisher;
+  private final GameEligibilityTracker<T> gameTracker;
 
-  public NewGameHandler(
+  NewGameHandler(
       final AbstractPlayerRepository<ID, P> playerRepository,
-      final AbstractMultiPlayerGameFactory gameFactory,
-      final AbstractMultiPlayerGameRepository gameRepository,
-      final GameTransitionEngine transitionEngine,
-      final GameMasker gameMasker,
-      final GamePublisher gamePublisher,
-      final GameEligibilityTracker gameTracker) {
+      final AbstractMultiPlayerGameFactory<ID, FEATURES, IMPL> gameFactory,
+      final AbstractMultiPlayerGameRepository<ID, FEATURES, IMPL> gameRepository,
+      final GameTransitionEngine<IMPL> transitionEngine,
+      final GameMasker<ID, IMPL, M> gameMasker,
+      final GamePublisher<IMPL, P> gamePublisher,
+      final GameEligibilityTracker<T> gameTracker) {
     super(playerRepository);
     this.gameFactory = gameFactory;
     this.gameRepository = gameRepository;
@@ -60,7 +60,7 @@ public class NewGameHandler<
     this.gameTracker = gameTracker;
   }
 
-  public M handleCreateNewGame(
+  M handleCreateNewGame(
       final ID initiatingPlayerID,
       final List<String> playersIDs,
       final Set<FEATURES> features) {
@@ -72,25 +72,23 @@ public class NewGameHandler<
         .findFirst();
     P initiatingPlayer = foundIP.orElseGet(() -> loadPlayer(initiatingPlayerID));
 
-    Game game = setupGameWithEligibilityWrapper(initiatingPlayer, features, players);
+    IMPL game = setupGameWithEligibilityWrapper(initiatingPlayer, features, players);
 
     gamePublisher.publish(game, initiatingPlayer);
 
-    return (M) gameMasker.maskGameForPlayer(game, initiatingPlayer);
+    return gameMasker.maskGameForPlayer(game, initiatingPlayer);
   }
 
-  private Game setupGameWithEligibilityWrapper(final P initiatingPlayer,
+  private IMPL setupGameWithEligibilityWrapper(final P initiatingPlayer,
       final Set<FEATURES> features, Set<P> players) {
-    PlayerGameEligibilityResult eligibilityResult = gameTracker
-        .getGameEligibility(initiatingPlayer);
-    ;
+    T eligibilityResult = gameTracker.getGameEligibility(initiatingPlayer);
 
     if (eligibilityResult != null &&
         PlayerGameEligibility.NoGamesAvailable == eligibilityResult.getEligibility()) {
       throw new OutOfGamesForTodayException();
     }
 
-    Game game;
+    IMPL game;
     try {
       game = setupGame(features, players, initiatingPlayer);
     } catch (Exception e) {
@@ -112,11 +110,11 @@ public class NewGameHandler<
 
   private IMPL setupGame(final Set<FEATURES> features, final Set<P> players,
       final P initiatingPlayer) {
-    IMPL game = (IMPL) gameFactory.createGame(
+    IMPL game = gameFactory.createGame(
         features,
         new LinkedList<>(players),
         initiatingPlayer);
-    game = ((IMPL) (transitionEngine.evaluateGame(game)));
-    return (IMPL) gameRepository.save(game);
+    game = transitionEngine.evaluateGame(game);
+    return gameRepository.save(game);
   }
 }
