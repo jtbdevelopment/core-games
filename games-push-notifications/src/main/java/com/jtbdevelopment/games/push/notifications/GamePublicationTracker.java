@@ -36,6 +36,7 @@ public class GamePublicationTracker<T extends Serializable> implements Serializa
     return "GamePublicationTracker{" + "pid=" + pid + ", gid=" + gid + "}";
   }
 
+  @SuppressWarnings("WeakerAccess")
   public T getPid() {
     return pid;
   }
@@ -44,6 +45,7 @@ public class GamePublicationTracker<T extends Serializable> implements Serializa
     this.pid = pid;
   }
 
+  @SuppressWarnings("WeakerAccess")
   public T getGid() {
     return gid;
   }

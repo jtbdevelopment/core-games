@@ -4,18 +4,24 @@ import static com.jtbdevelopment.games.GameCoreTestCase.PFOUR;
 import static com.jtbdevelopment.games.GameCoreTestCase.PONE;
 import static com.jtbdevelopment.games.GameCoreTestCase.PTHREE;
 import static com.jtbdevelopment.games.GameCoreTestCase.PTWO;
+import static com.jtbdevelopment.games.GameCoreTestCase.makeSimpleMPGame;
+import static com.jtbdevelopment.games.GameCoreTestCase.makeSimpleMaskedMPGame;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.jtbdevelopment.games.GameCoreTestCase;
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
-import com.jtbdevelopment.games.state.MultiPlayerGame;
 import com.jtbdevelopment.games.state.masking.GameMasker;
-import com.jtbdevelopment.games.state.masking.MaskedMultiPlayerGame;
+import com.jtbdevelopment.games.stringimpl.StringMPGame;
+import com.jtbdevelopment.games.stringimpl.StringMaskedMPGame;
+import com.jtbdevelopment.games.stringimpl.StringPlayer;
 import com.jtbdevelopment.games.stringimpl.StringToStringConverter;
 import com.jtbdevelopment.games.websocket.WebSocketMessage.MessageType;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -31,26 +37,31 @@ import org.mockito.Mockito;
  */
 public class AtmosphereListenerTest {
 
-  private AtmosphereListener listener;
-  private Broadcaster b2 = Mockito.mock(Broadcaster.class);
-  private Broadcaster b4 = Mockito.mock(Broadcaster.class);
-  private BroadcasterFactory factory = Mockito.mock(BroadcasterFactory.class);
-  private AtmosphereBroadcasterFactory factoryFactory = Mockito
-      .mock(AtmosphereBroadcasterFactory.class);
-  private WebSocketPublicationListener publicationListener = Mockito
-      .mock(WebSocketPublicationListener.class);
-  private AbstractPlayerRepository playerRepository = Mockito.mock(AbstractPlayerRepository.class);
+  private Broadcaster b2 = mock(Broadcaster.class);
+  private Broadcaster b4 = mock(Broadcaster.class);
+  private BroadcasterFactory factory = mock(BroadcasterFactory.class);
+  private AtmosphereBroadcasterFactory factoryFactory = mock(AtmosphereBroadcasterFactory.class);
+  private WebSocketPublicationListener publicationListener = mock(
+      WebSocketPublicationListener.class);
+  private AbstractPlayerRepository<String, StringPlayer> playerRepository = mock(
+      AbstractPlayerRepository.class);
+  private GameMasker<String, StringMPGame, StringMaskedMPGame> gameMasker = mock(GameMasker.class);
   private boolean initiatingServer = new Random().nextBoolean();
+  private List<WebSocketPublicationListener> publicationListeners = Collections
+      .singletonList(publicationListener);
+  private AtmosphereListener<String, Object, StringMPGame, StringPlayer, StringMaskedMPGame> listener = new AtmosphereListener<>(
+      publicationListeners,
+      gameMasker,
+      playerRepository,
+      new StringToStringConverter(),
+      factoryFactory,
+      300,
+      10,
+      2,
+      1);
 
   @Before
   public void setUp() throws Exception {
-    listener = new AtmosphereListener();
-    listener.stringToIDConverter = new StringToStringConverter();
-    listener.setThreads(10);
-    listener.setRetries(2);
-    listener.setRetryPause(1);
-    listener.setUp();
-    listener.publicationListeners = new ArrayList<>();
     when(b2.getID()).thenReturn(LiveFeedService.PATH_ROOT + PTWO.getIdAsString());
     when(b4.getID()).thenReturn(LiveFeedService.PATH_ROOT + PFOUR.getIdAsString());
     when(factory.lookup(LiveFeedService.PATH_ROOT + PTWO.getIdAsString())).thenReturn(b2);
@@ -59,9 +70,6 @@ public class AtmosphereListenerTest {
     when(factory.lookup(LiveFeedService.PATH_ROOT + PTHREE.getIdAsString()))
         .thenReturn(null);
     when(factoryFactory.getBroadcasterFactory()).thenReturn(factory);
-    listener.broadcasterFactory = factoryFactory;
-    listener.publicationListeners.add(publicationListener);
-    listener.playerRepository = playerRepository;
   }
 
   @Test
@@ -81,7 +89,7 @@ public class AtmosphereListenerTest {
 
   @Test
   public void testPublishRefreshPlayerToAllValidConnectedPlayers() throws InterruptedException {
-    Broadcaster junk = Mockito.mock(Broadcaster.class);
+    Broadcaster junk = mock(Broadcaster.class);
     when(junk.getID()).thenReturn(LiveFeedService.PATH_ROOT + "junk");
     when(factory.lookupAll())
         .thenReturn(new ArrayList<>(Arrays.asList(b2, b4, junk)));
@@ -106,20 +114,12 @@ public class AtmosphereListenerTest {
 
   @Test
   public void testPublishGameToConnectedNonInitiatingPlayers() throws InterruptedException {
-    MultiPlayerGame game = Mockito.mock(MultiPlayerGame.class);
-    when(game.getId()).thenReturn("An ID!");
-    when(game.getAllPlayers())
-        .thenReturn(new ArrayList<>(Arrays.asList(PONE, PTWO, PTHREE, PFOUR)));
-    when(game.getPlayers())
-        .thenReturn(new ArrayList<>(Arrays.asList(PONE, PTWO, PTHREE, PFOUR)));
-    MaskedMultiPlayerGame mg2 = Mockito.mock(MaskedMultiPlayerGame.class);
-    when(mg2.getId()).thenReturn("mg2");
-    MaskedMultiPlayerGame mg4 = Mockito.mock(MaskedMultiPlayerGame.class);
-    when(mg4.getId()).thenReturn("mg4");
-    GameMasker gameMasker = Mockito.mock(GameMasker.class);
+    StringMPGame game = makeSimpleMPGame("Game!");
+    game.setPlayers(Arrays.asList(PONE, PTWO, PTHREE, PFOUR));
+    StringMaskedMPGame mg2 = makeSimpleMaskedMPGame("MG2");
+    StringMaskedMPGame mg4 = makeSimpleMaskedMPGame("MG4");
     when(gameMasker.maskGameForPlayer(game, PTWO)).thenReturn(mg2);
     when(gameMasker.maskGameForPlayer(game, PFOUR)).thenReturn(mg4);
-    listener.gameMasker = gameMasker;
 
     listener.gameChanged(game, PONE, initiatingServer);
     listener.service.shutdown();

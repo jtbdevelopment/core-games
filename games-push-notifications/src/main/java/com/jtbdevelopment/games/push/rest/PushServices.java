@@ -1,7 +1,7 @@
 package com.jtbdevelopment.games.push.rest;
 
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
-import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.players.PlayerRoles;
 import com.jtbdevelopment.games.players.notifications.RegisteredDevice;
 import com.jtbdevelopment.games.push.PushProperties;
@@ -14,7 +14,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -24,12 +23,17 @@ import org.springframework.stereotype.Component;
 @Component
 @Path("notifications")
 @RolesAllowed(PlayerRoles.PLAYER)
-public class PushServices {
+public class PushServices<ID extends Serializable, P extends AbstractPlayer<ID>> {
 
-  @Autowired
-  protected PushProperties pushProperties;
-  @Autowired
-  protected AbstractPlayerRepository playerRepository;
+  private final PushProperties pushProperties;
+  private final AbstractPlayerRepository<ID, P> playerRepository;
+
+  PushServices(
+      final PushProperties pushProperties,
+      final AbstractPlayerRepository<ID, P> playerRepository) {
+    this.pushProperties = pushProperties;
+    this.playerRepository = playerRepository;
+  }
 
   @GET
   @Path("senderID")
@@ -47,7 +51,7 @@ public class PushServices {
 
     //  TODO - register client /update client in GCM
 
-    Player player = getPlayer();
+    P player = getPlayer();
 
     RegisteredDevice device = makeDevice(deviceID);
     player.updateRegisteredDevice(device);
@@ -58,7 +62,7 @@ public class PushServices {
   @Path("unregister/{deviceID}")
   @Produces(MediaType.APPLICATION_JSON)
   public Object unregisteredDevice(@PathParam("deviceID") final String deviceID) {
-    Player player = getPlayer();
+    P player = getPlayer();
 
     //  TODO - register client /update client in GCM
 
@@ -73,11 +77,13 @@ public class PushServices {
     return device;
   }
 
-  private Player getPlayer() {
-    Serializable id = ((SessionUserInfo<Serializable>) SecurityContextHolder.getContext()
+  private P getPlayer() {
+    //noinspection unchecked
+    SessionUserInfo<ID, P> principal = (SessionUserInfo<ID, P>) SecurityContextHolder.getContext()
         .getAuthentication()
-        .getPrincipal()).getEffectiveUser().getId();
-    return (Player) playerRepository.findById(id).get();
+        .getPrincipal();
+    ID id = principal.getEffectiveUser().getId();
+    return playerRepository.findById(id).orElseGet(null);
   }
 
 }

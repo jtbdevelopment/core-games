@@ -39,13 +39,14 @@ import org.springframework.security.core.context.SecurityContextImpl;
  */
 public class PushServicesTest {
 
+  private String SENDERID = "SENDERID";
   private AbstractPlayerRepository playerRepository = Mockito.mock(AbstractPlayerRepository.class);
+  private PushProperties properties = new PushProperties(SENDERID, "X");
   private SessionUserInfo session = Mockito.mock(SessionUserInfo.class);
-  private PushServices services = new PushServices();
+  private PushServices services = new PushServices(properties, playerRepository);
 
   @Before
   public void setup() {
-    services.playerRepository = playerRepository;
     SecurityContextHolder.setContext(new SecurityContextImpl());
     when(session.getEffectiveUser()).thenReturn(PONE);
     when(session.getSessionUser()).thenReturn(PONE);
@@ -75,9 +76,6 @@ public class PushServicesTest {
 
   @Test
   public void testSenderID() {
-    String SENDERID = "SENDERID";
-    PushProperties properties = new PushProperties(SENDERID, "X");
-    services.pushProperties = properties;
     assertEquals(SENDERID, services.senderID());
   }
 

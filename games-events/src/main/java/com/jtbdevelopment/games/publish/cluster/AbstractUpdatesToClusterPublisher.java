@@ -1,21 +1,28 @@
 package com.jtbdevelopment.games.publish.cluster;
 
-import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.publish.GameListener;
 import com.jtbdevelopment.games.publish.PlayerListener;
 import com.jtbdevelopment.games.publish.cluster.ClusterMessage.ClusterMessageType;
-import com.jtbdevelopment.games.state.Game;
+import com.jtbdevelopment.games.state.AbstractGame;
+import java.io.Serializable;
 
 /**
  * Date: 2/17/15 Time: 7:10 AM
  */
-public abstract class AbstractUpdatesToClusterPublisher
-    implements GameListener<Game>, PlayerListener {
+public abstract class AbstractUpdatesToClusterPublisher<
+    ID extends Serializable,
+    FEATURES,
+    IMPL extends AbstractGame<ID, FEATURES>,
+    P extends AbstractPlayer<ID>>
+    implements GameListener<IMPL, P>, PlayerListener<ID, P> {
 
   protected abstract void internalPublish(final ClusterMessage clusterMessage);
 
   @Override
-  public void gameChanged(final Game game, final Player initiatingPlayer,
+  public void gameChanged(
+      final IMPL game,
+      final P initiatingPlayer,
       final boolean initiatingServer) {
     if (initiatingServer) {
       ClusterMessage message = new ClusterMessage();
@@ -30,7 +37,7 @@ public abstract class AbstractUpdatesToClusterPublisher
   }
 
   @Override
-  public void playerChanged(final Player player, final boolean initiatingServer) {
+  public void playerChanged(final P player, final boolean initiatingServer) {
     if (initiatingServer) {
       ClusterMessage message = new ClusterMessage();
       message.setPlayerId(player.getIdAsString());

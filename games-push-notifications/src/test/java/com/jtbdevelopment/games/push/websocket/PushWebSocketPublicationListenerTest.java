@@ -11,7 +11,6 @@ import com.jtbdevelopment.games.stringimpl.StringMPGame;
 import com.jtbdevelopment.games.stringimpl.StringPlayer;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.concurrent.ConcurrentHashMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -26,12 +25,12 @@ public class PushWebSocketPublicationListenerTest {
   private IMap map = Mockito.mock(IMap.class);
   private HazelcastInstance hazelcastInstance = Mockito.mock(HazelcastInstance.class);
   private PushNotifierFilter pushNotifierFilter = Mockito.mock(PushNotifierFilter.class);
-  private PushWebSocketPublicationListener listener = new PushWebSocketPublicationListener();
   private String playerId = "345";
   private String gameId = "543";
   private StringPlayer player = GameCoreTestCase.makeSimplePlayer(playerId);
   private StringMPGame game = GameCoreTestCase.makeSimpleMPGame(gameId);
   private GamePublicationTracker tracker = new GamePublicationTracker();
+  private PushWebSocketPublicationListener listener;
 
   @Before
   public void setUp() throws Exception {
@@ -39,11 +38,9 @@ public class PushWebSocketPublicationListenerTest {
     tracker.setPid(playerId);
     Mockito.when(pushProperties.isEnabled()).thenReturn(true);
     PushWebSocketPublicationListener.computeRegistrationCutoff();
-    listener.pushProperties = pushProperties;
-    listener.pushNotifierFilter = pushNotifierFilter;
-    listener.hazelcastInstance = hazelcastInstance;
     Mockito.when(hazelcastInstance.getMap("PUSH_TRACKING_MAP")).thenReturn(map);
-    listener.setup();
+    listener = new PushWebSocketPublicationListener(hazelcastInstance, pushNotifierFilter,
+        pushProperties);
   }
 
   @Test
@@ -53,18 +50,16 @@ public class PushWebSocketPublicationListenerTest {
 
   @Test
   public void testSetupWithDisabledPushProperties() {
-    PushWebSocketPublicationListener listener = new PushWebSocketPublicationListener();
-    listener.pushProperties = pushProperties;
     Mockito.reset(pushProperties);
     Mockito.reset(map);
     Mockito.when(pushProperties.isEnabled()).thenReturn(false);
-    listener.setup();
+    listener = new PushWebSocketPublicationListener(hazelcastInstance, pushNotifierFilter,
+        pushProperties);
     Mockito.verify(map, Mockito.never()).addEntryListener(pushNotifierFilter, true);
   }
 
   @Test
   public void testIgnoresPlayerWithNoDevices() {
-    listener.trackingMap = new ConcurrentHashMap<GamePublicationTracker, Boolean>();
     listener.publishedGameUpdateToPlayer(player, game, true);
     Mockito.verify(map, Mockito.never()).put(Matchers.any(), Matchers.any());
     Mockito.verify(map, Mockito.never()).putIfAbsent(Matchers.any(), Matchers.any());

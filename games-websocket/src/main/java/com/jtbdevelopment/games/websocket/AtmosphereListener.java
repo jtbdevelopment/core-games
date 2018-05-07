@@ -2,10 +2,12 @@ package com.jtbdevelopment.games.websocket;
 
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.dao.StringToIDConverter;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.publish.GameListener;
 import com.jtbdevelopment.games.publish.PlayerListener;
-import com.jtbdevelopment.games.state.Game;
+import com.jtbdevelopment.games.state.AbstractMultiPlayerGame;
+import com.jtbdevelopment.games.state.masking.AbstractMaskedGame;
 import com.jtbdevelopment.games.state.masking.GameMasker;
 import com.jtbdevelopment.games.websocket.WebSocketMessage.MessageType;
 import java.io.Serializable;
@@ -20,7 +22,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
-import javax.annotation.PostConstruct;
 import org.atmosphere.cpr.Broadcaster;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,39 +35,56 @@ import org.springframework.stereotype.Component;
  * TODO - some tests for retry logic TODO - split into game and player?, smells a bit
  */
 @Component
-public class AtmosphereListener implements GameListener<Game>, PlayerListener {
+public class AtmosphereListener<ID extends Serializable,
+    FEATURES,
+    IMPL extends AbstractMultiPlayerGame<ID, FEATURES>,
+    P extends AbstractPlayer<ID>,
+    M extends AbstractMaskedGame<FEATURES>>
+    implements GameListener<IMPL, P>, PlayerListener<ID, P> {
 
   private static final Logger logger = LoggerFactory.getLogger(AtmosphereListener.class);
-  protected ExecutorService service;
-  @Autowired(required = false)
-  protected List<WebSocketPublicationListener> publicationListeners;
-  @Autowired
-  protected GameMasker gameMasker;
-  @Autowired
-  protected AbstractPlayerRepository playerRepository;
-  @Autowired
-  protected StringToIDConverter stringToIDConverter;
-  @Autowired
-  protected AtmosphereBroadcasterFactory broadcasterFactory;
-  @Value("${atmosphere.LRU.seconds:300}")
-  private int retryRetentionPeriod = 300;
-  @Value("${atmosphere.threads:10}")
-  private int threads = 10;
-  @Value("${atmosphere.retries:5}")
-  private int retries = 5;
-  @Value("${atmosphere.retryPause:500}")
-  private int retryPause = 500;
-  private Map<Player, Instant> recentPublishes = new LinkedHashMap<Player, Instant>() {
-    @Override
-    protected boolean removeEldestEntry(final Entry<Player, Instant> eldest) {
-      return Instant.now().compareTo(eldest.getValue().plusSeconds(getRetryRetentionPeriod())) > 0;
+  private final List<WebSocketPublicationListener<ID, Instant, FEATURES, IMPL, P>> publicationListeners;
+  private final GameMasker<ID, IMPL, M> gameMasker;
+  private final AbstractPlayerRepository<ID, P> playerRepository;
+  private final StringToIDConverter<ID> stringToIDConverter;
+  private final AtmosphereBroadcasterFactory broadcasterFactory;
+  private final Map<Player, Instant> recentPublishes;
+  private final int retries;
+  private final int retryPause;
+  ExecutorService service;
+
+  //  keep listeners generic for spring
+  @SuppressWarnings("SpringJavaAutowiringInspection")
+  public AtmosphereListener(
+      @Autowired(required = false) final List<WebSocketPublicationListener> publicationListeners,
+      final GameMasker<ID, IMPL, M> gameMasker,
+      final AbstractPlayerRepository<ID, P> playerRepository,
+      final StringToIDConverter<ID> stringToIDConverter,
+      final AtmosphereBroadcasterFactory broadcasterFactory,
+      @Value("${atmosphere.LRU.seconds:300}") final int retryRetentionPeriod,
+      @Value("${atmosphere.threads:10}") final int threads,
+      @Value("${atmosphere.retries:5}") final int retries,
+      @Value("${atmosphere.retryPause:500}") final int retryPause) {
+    this.publicationListeners = new LinkedList<>();
+    if (publicationListeners != null) {
+      //noinspection unchecked
+      publicationListeners.forEach(AtmosphereListener.this.publicationListeners::add);
     }
-
-  };
-
-  @PostConstruct
-  public void setUp() {
+    ;
+    this.gameMasker = gameMasker;
+    this.playerRepository = playerRepository;
+    this.stringToIDConverter = stringToIDConverter;
+    this.broadcasterFactory = broadcasterFactory;
+    this.retries = retries;
+    this.retryPause = retryPause;
     service = Executors.newFixedThreadPool(threads);
+    recentPublishes = new LinkedHashMap<Player, Instant>() {
+      @Override
+      protected boolean removeEldestEntry(final Entry<Player, Instant> eldest) {
+        return Instant.now().compareTo(eldest.getValue().plusSeconds(retryRetentionPeriod)) > 0;
+      }
+    };
+
   }
 
   @Override
@@ -80,8 +98,8 @@ public class AtmosphereListener implements GameListener<Game>, PlayerListener {
         broadcasters.forEach(broadcaster -> {
           try {
             logger.trace("Looking up player for feed " + broadcaster.getID());
-            Optional<? extends Player> optional = playerRepository.findById(
-                (Serializable) stringToIDConverter
+            Optional<P> optional = playerRepository.findById(
+                stringToIDConverter
                     .convert(broadcaster.getID().replace(LiveFeedService.PATH_ROOT, "")));
             if (optional.isPresent()) {
               logger
@@ -109,7 +127,7 @@ public class AtmosphereListener implements GameListener<Game>, PlayerListener {
   }
 
   @Override
-  public void playerChanged(final Player player, final boolean initiatingServer) {
+  public void playerChanged(final P player, final boolean initiatingServer) {
     if (broadcasterFactory.getBroadcasterFactory() != null) {
       publishWithRetry(new PlayerCallable() {
         @Override
@@ -125,7 +143,7 @@ public class AtmosphereListener implements GameListener<Game>, PlayerListener {
 
   }
 
-  private boolean publishPlayerUpdate(final Player player) {
+  private boolean publishPlayerUpdate(final P player) {
     final boolean[] status = new boolean[]{false};
     try {
       logger.trace("Publishing player changed to " + player.getId());
@@ -158,13 +176,15 @@ public class AtmosphereListener implements GameListener<Game>, PlayerListener {
   }
 
   @Override
-  public void gameChanged(final Game game, final Player initiatingPlayer,
+  public void gameChanged(final IMPL game, final P initiatingPlayer,
       final boolean initiatingServer) {
     if (broadcasterFactory.getBroadcasterFactory() != null) {
       try {
-        List<Player> players = (List<Player>) game.getAllPlayers().stream()
-            .filter(x -> initiatingPlayer == null || !x.equals(initiatingPlayer)).collect(
-                Collectors.toList());
+        //noinspection unchecked
+        List<P> players = game.getAllPlayers().stream()
+            .map(p -> (P) p)
+            .filter(x -> initiatingPlayer == null || !x.equals(initiatingPlayer))
+            .collect(Collectors.toList());
 
         logger.trace(
             "Publishing {} to {} players.",
@@ -186,7 +206,7 @@ public class AtmosphereListener implements GameListener<Game>, PlayerListener {
 
   }
 
-  private boolean publishGameToPlayer(final Player player, final Game game) {
+  private boolean publishGameToPlayer(final P player, final IMPL game) {
     logger.trace("Publishing game update on game " + game.getId() + " to player " + player.getId());
     final boolean[] status = new boolean[]{false};
     try {
@@ -228,7 +248,7 @@ public class AtmosphereListener implements GameListener<Game>, PlayerListener {
         try {
           if (playerCallable.getAttempts() > 0) {
             logger.trace("enter sleep for {}", playerCallable.getPlayer().getIdAsString());
-            Thread.sleep(getRetryPause());
+            Thread.sleep(retryPause);
             logger.trace("exit sleep for {}", playerCallable.getPlayer().getIdAsString());
           }
 
@@ -244,7 +264,7 @@ public class AtmosphereListener implements GameListener<Game>, PlayerListener {
 
           } else {
             if (recentPublishes.containsKey(playerCallable.getPlayer())) {
-              if (playerCallable.getAttempts() < getRetries()) {
+              if (playerCallable.getAttempts() < retries) {
                 logger.trace("submit retry for {}", playerCallable.getPlayer().getIdAsString());
                 service.submit(this);
               } else {
@@ -268,56 +288,20 @@ public class AtmosphereListener implements GameListener<Game>, PlayerListener {
     });
   }
 
-  public int getRetryRetentionPeriod() {
-    return retryRetentionPeriod;
-  }
-
-  public void setRetryRetentionPeriod(int retryRetentionPeriod) {
-    this.retryRetentionPeriod = retryRetentionPeriod;
-  }
-
-  public int getThreads() {
-    return threads;
-  }
-
-  public void setThreads(int threads) {
-    this.threads = threads;
-  }
-
-  public int getRetries() {
-    return retries;
-  }
-
-  public void setRetries(int retries) {
-    this.retries = retries;
-  }
-
-  public int getRetryPause() {
-    return retryPause;
-  }
-
-  public void setRetryPause(int retryPause) {
-    this.retryPause = retryPause;
-  }
-
   private static abstract class PlayerCallable implements Callable<Boolean> {
 
     private int attempts;
     private Player player;
 
-    public int getAttempts() {
+    int getAttempts() {
       return attempts;
     }
 
-    public void setAttempts(int attempts) {
-      this.attempts = attempts;
-    }
-
-    public Player getPlayer() {
+    Player getPlayer() {
       return player;
     }
 
-    public void setPlayer(Player player) {
+    void setPlayer(Player player) {
       this.player = player;
     }
   }

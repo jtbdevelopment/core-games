@@ -19,7 +19,7 @@ public class PushCachingConfigurer implements HazelcastConfigurer {
   @Override
   public void modifyConfiguration(final Config config) {
     Arrays.asList(
-        PushNotifierFilter.getPLAYER_PUSH_TRACKING_MAP(),
+        PushNotifierFilter.PLAYER_PUSH_TRACKING_MAP,
         PushWebSocketPublicationListener.getWEB_SOCKET_TRACKING_MAP()).forEach(cache -> {
 
       MapConfig mc = new MapConfig(cache);

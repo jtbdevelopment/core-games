@@ -3,10 +3,10 @@ package com.jtbdevelopment.games.security.spring;
 import static com.jtbdevelopment.games.GameCoreTestCase.PINACTIVE1;
 import static com.jtbdevelopment.games.GameCoreTestCase.PONE;
 import static com.jtbdevelopment.games.GameCoreTestCase.PTWO;
+import static com.jtbdevelopment.games.GameCoreTestCase.makeSimpleManualPlayer;
 
-import com.jtbdevelopment.games.GameCoreTestCase;
-import com.jtbdevelopment.games.players.ManualPlayer;
 import com.jtbdevelopment.games.players.PlayerRoles;
+import com.jtbdevelopment.games.stringimpl.StringManualPlayer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.junit.Assert;
@@ -18,12 +18,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
  */
 public class PlayerUserDetailsTest {
 
-  private static ManualPlayer adminPlayer = GameCoreTestCase
-      .makeSimpleManualPlayer("M1", "YAR!", true, false, true);
-  private static ManualPlayer manualPlayer = GameCoreTestCase
-      .makeSimpleManualPlayer("M2", "YAR!", true, false, false);
-  private static ManualPlayer nonVerifiedPlayer = GameCoreTestCase
-      .makeSimpleManualPlayer("M2", "YAR!", false, false, false);
+  private static StringManualPlayer adminPlayer = makeSimpleManualPlayer("M1", "YAR!", true, false,
+      true);
+  private static StringManualPlayer manualPlayer = makeSimpleManualPlayer("M2", "YAR!", true, false,
+      false);
+  private static StringManualPlayer nonVerifiedPlayer = makeSimpleManualPlayer("M2", "YAR!", false,
+      false, false);
 
   @Test
   public void testGetSessionUser() {

@@ -1,14 +1,20 @@
 package com.jtbdevelopment.games.websocket;
 
 import com.jtbdevelopment.games.players.Player;
-import com.jtbdevelopment.games.state.Game;
+import com.jtbdevelopment.games.state.MultiPlayerGame;
+import java.io.Serializable;
 
 /**
  * Date: 10/10/2015 Time: 2:54 PM
  */
-public interface WebSocketPublicationListener {
+public interface WebSocketPublicationListener<
+    ID extends Serializable,
+    TIMESTAMP,
+    FEATURES,
+    IMPL extends MultiPlayerGame<ID, TIMESTAMP, FEATURES>,
+    P extends Player<ID>> {
 
-  void publishedPlayerUpdate(final Player<?> player, boolean status);
+  void publishedPlayerUpdate(final P player, boolean status);
 
-  void publishedGameUpdateToPlayer(final Player<?> player, final Game game, boolean status);
+  void publishedGameUpdateToPlayer(final P player, final IMPL game, boolean status);
 }

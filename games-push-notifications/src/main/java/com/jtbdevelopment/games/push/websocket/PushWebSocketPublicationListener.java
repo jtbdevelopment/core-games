@@ -2,27 +2,31 @@ package com.jtbdevelopment.games.push.websocket;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.push.PushProperties;
 import com.jtbdevelopment.games.push.notifications.GamePublicationTracker;
 import com.jtbdevelopment.games.push.notifications.PushNotifierFilter;
-import com.jtbdevelopment.games.state.Game;
+import com.jtbdevelopment.games.state.AbstractMultiPlayerGame;
 import com.jtbdevelopment.games.websocket.WebSocketPublicationListener;
+import java.io.Serializable;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.concurrent.ConcurrentMap;
-import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
  * Date: 10/10/2015 Time: 3:35 PM
  */
 @Component
-public class PushWebSocketPublicationListener implements WebSocketPublicationListener {
+public class PushWebSocketPublicationListener<
+    ID extends Serializable,
+    FEATURES,
+    IMPL extends AbstractMultiPlayerGame<ID, FEATURES>,
+    P extends AbstractPlayer<ID>>
+    implements WebSocketPublicationListener<ID, Instant, FEATURES, IMPL, P> {
 
   private static final Logger logger = LoggerFactory
       .getLogger(PushWebSocketPublicationListener.class);
@@ -30,15 +34,21 @@ public class PushWebSocketPublicationListener implements WebSocketPublicationLis
   private static final ZoneId GMT = ZoneId.of("GMT");
   private static final int CUTOFF_DAYS = 30;
   private static Instant registeredCutoff;
-  @Autowired
-  protected HazelcastInstance hazelcastInstance;
-  @Autowired
-  protected PushNotifierFilter pushNotifierFilter;
-  @Autowired
-  protected PushProperties pushProperties;
-  protected ConcurrentMap<GamePublicationTracker, Boolean> trackingMap;
+  private final PushNotifierFilter<ID, FEATURES, IMPL, P> pushNotifierFilter;
+  private final PushProperties pushProperties;
+  private final ConcurrentMap<GamePublicationTracker, Boolean> trackingMap;
 
-  protected static void computeRegistrationCutoff() {
+  PushWebSocketPublicationListener(
+      final HazelcastInstance hazelcastInstance,
+      final PushNotifierFilter<ID, FEATURES, IMPL, P> pushNotifierFilter,
+      final PushProperties pushProperties) {
+    this.pushNotifierFilter = pushNotifierFilter;
+    this.pushProperties = pushProperties;
+    trackingMap = hazelcastInstance.getMap(WEB_SOCKET_TRACKING_MAP);
+    setup();
+  }
+
+  static void computeRegistrationCutoff() {
     registeredCutoff = ZonedDateTime.now(GMT).minusDays(CUTOFF_DAYS).toInstant();
   }
 
@@ -46,10 +56,8 @@ public class PushWebSocketPublicationListener implements WebSocketPublicationLis
     return WEB_SOCKET_TRACKING_MAP;
   }
 
-  @PostConstruct
-  public void setup() {
+  private void setup() {
     if (pushProperties.isEnabled()) {
-      trackingMap = hazelcastInstance.getMap(WEB_SOCKET_TRACKING_MAP);
       ((IMap) trackingMap).addEntryListener(pushNotifierFilter, true);
 
       computeRegistrationCutoff();
@@ -68,29 +76,31 @@ public class PushWebSocketPublicationListener implements WebSocketPublicationLis
   }
 
   @Override
-  public void publishedPlayerUpdate(final Player<?> player, final boolean status) {
+  public void publishedPlayerUpdate(final P player, final boolean status) {
     //  Ignore - if they are logged out, they will refresh on login
   }
 
   @Override
   public void publishedGameUpdateToPlayer(
-      final Player<?> player,
-      final Game game,
+      final P player,
+      final IMPL game,
       final boolean published) {
     if (pushProperties.isEnabled() &&
         player.getRegisteredDevices()
             .stream()
             .anyMatch(d -> d.getLastRegistered().compareTo(registeredCutoff) > 0)) {
-      GamePublicationTracker tracker = new GamePublicationTracker();
+      GamePublicationTracker<ID> tracker = new GamePublicationTracker<>();
       tracker.setPid(player.getId());
       tracker.setGid(game.getId());
       Boolean was;
       Boolean is;
       if (published) {
         logger.trace("Forcing published status on " + tracker);
+        //noinspection ConstantConditions
         was = trackingMap.put(tracker, published);
       } else {
         logger.trace("putIfAbsent publish status on " + tracker);
+        //noinspection ConstantConditions
         was = trackingMap.putIfAbsent(tracker, published);
       }
 

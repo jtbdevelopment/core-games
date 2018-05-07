@@ -1,5 +1,6 @@
 package com.jtbdevelopment.games.rest.services;
 
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.players.PlayerRoles;
 import com.jtbdevelopment.games.security.SessionUserInfo;
 import com.jtbdevelopment.games.state.GamePhase;
@@ -20,7 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * Date: 11/14/14 Time: 6:36 AM
  */
 @RolesAllowed({PlayerRoles.PLAYER})
-public abstract class AbstractPlayerGatewayService<ID extends Serializable> {
+public abstract class AbstractPlayerGatewayService<ID extends Serializable, P extends AbstractPlayer<ID>> {
 
   public static final String PING_RESULT = "Alive.";
   @Autowired
@@ -28,9 +29,10 @@ public abstract class AbstractPlayerGatewayService<ID extends Serializable> {
 
   @Path("player")
   public Object gameServices() {
-    playerServices.getPlayerID().set(
-        ((SessionUserInfo<ID>) SecurityContextHolder.getContext().getAuthentication()
-            .getPrincipal()).getEffectiveUser().getId());
+    P effectiveUser = ((SessionUserInfo<ID, P>) SecurityContextHolder.getContext()
+        .getAuthentication()
+        .getPrincipal()).getEffectiveUser();
+    playerServices.getPlayerID().set(effectiveUser.getId());
     return playerServices;
   }
 

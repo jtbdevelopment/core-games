@@ -1,7 +1,7 @@
 package com.jtbdevelopment.games.security.spring;
 
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.players.ManualPlayer;
-import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.players.PlayerRoles;
 import com.jtbdevelopment.games.security.SessionUserInfo;
 import java.io.Serializable;
@@ -17,16 +17,16 @@ import org.springframework.social.security.SocialUserDetails;
 /**
  * Date: 12/14/14 Time: 5:27 PM
  */
-public class PlayerUserDetails<ID extends Serializable> implements SocialUserDetails, UserDetails,
-    SessionUserInfo<ID> {
+public class PlayerUserDetails<ID extends Serializable, P extends AbstractPlayer<ID>>
+    implements SocialUserDetails, UserDetails, SessionUserInfo<ID, P> {
 
-  private final Player<ID> player;
+  private final P player;
   private final List<SimpleGrantedAuthority> grantedAuthorities = new LinkedList<>(
       Collections.singletonList(new SimpleGrantedAuthority(PlayerRoles.PLAYER))
   );
-  private Player<ID> effectivePlayer;
+  private P effectivePlayer;
 
-  public PlayerUserDetails(final Player<ID> player) {
+  public PlayerUserDetails(final P player) {
     this.player = player;
     this.effectivePlayer = player;
     if (player != null && player.isAdminUser()) {
@@ -36,17 +36,17 @@ public class PlayerUserDetails<ID extends Serializable> implements SocialUserDet
   }
 
   @Override
-  public Player<ID> getSessionUser() {
+  public P getSessionUser() {
     return player;
   }
 
   @Override
-  public Player<ID> getEffectiveUser() {
+  public P getEffectiveUser() {
     return effectivePlayer;
   }
 
   @Override
-  public void setEffectiveUser(final Player<ID> player) {
+  public void setEffectiveUser(final P player) {
     this.effectivePlayer = player;
   }
 

@@ -169,7 +169,7 @@ public class GamePublisherImplTest {
     Mockito.verify(mockListener).gameChanged(g2, p1, false);
   }
 
-  private static class LatchListener implements GameListener<StringMPGame> {
+  private static class LatchListener implements GameListener<StringMPGame, StringPlayer> {
 
     private static CountDownLatch latch;
     private Map<Game, Player> gamesPublished = new HashMap<>();
@@ -184,7 +184,8 @@ public class GamePublisherImplTest {
     }
 
     @Override
-    public void gameChanged(StringMPGame game, Player initiatingPlayer, boolean initiatingServer) {
+    public void gameChanged(StringMPGame game, StringPlayer initiatingPlayer,
+        boolean initiatingServer) {
       synchronized (this) {
         gamesPublished.put(game, initiatingPlayer);
         gamesInitiating.add(initiatingServer);

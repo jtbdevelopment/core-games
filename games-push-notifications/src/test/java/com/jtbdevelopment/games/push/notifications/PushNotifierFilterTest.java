@@ -27,25 +27,21 @@ public class PushNotifierFilterTest {
       .mock(AbstractMultiPlayerGameRepository.class);
   private PushNotifier pushNotifier = Mockito.mock(PushNotifier.class);
   private PushWorthyFilter pushWorthyFilter = Mockito.mock(PushWorthyFilter.class);
-  private PushNotifierFilter filter = new PushNotifierFilter();
   private String pid = "XY12";
   private String gid = "113";
   private StringMPGame game = new StringMPGame();
   private StringPlayer player = new StringPlayer();
+  private PushNotifierFilter filter;
 
   @Before
   public void setup() {
+    Mockito.when(hazelcastInstance.getMap(PushNotifierFilter.PLAYER_PUSH_TRACKING_MAP))
+        .thenReturn(map);
 
     game.setId(gid);
     player.setId(pid);
-    Mockito.when(hazelcastInstance.getMap(PushNotifierFilter.getPLAYER_PUSH_TRACKING_MAP()))
-        .thenReturn(map);
-    filter.hazelcastInstance = hazelcastInstance;
-    filter.gameRepository = gameRepository;
-    filter.playerRepository = playerRepository;
-    filter.pushNotifier = pushNotifier;
-    filter.filter = pushWorthyFilter;
-    filter.setup();
+    filter = new PushNotifierFilter(hazelcastInstance, pushWorthyFilter, gameRepository,
+        playerRepository, pushNotifier);
 
     Assert.assertSame(map, filter.recentlyPushedPlayers);
   }

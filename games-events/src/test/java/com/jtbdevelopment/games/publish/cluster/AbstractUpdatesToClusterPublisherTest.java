@@ -1,8 +1,8 @@
 package com.jtbdevelopment.games.publish.cluster;
 
-import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.publish.cluster.ClusterMessage.ClusterMessageType;
-import com.jtbdevelopment.games.state.MultiPlayerGame;
+import com.jtbdevelopment.games.state.AbstractMultiPlayerGame;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,8 +15,8 @@ public class AbstractUpdatesToClusterPublisherTest {
 
   private String playerId = "TTTT";
   private String gameId = "#4521x";
-  private MultiPlayerGame game = Mockito.mock(MultiPlayerGame.class);
-  private Player player = Mockito.mock(Player.class);
+  private AbstractMultiPlayerGame game = Mockito.mock(AbstractMultiPlayerGame.class);
+  private AbstractPlayer player = Mockito.mock(AbstractPlayer.class);
   private ClusterPublisher publisher = new ClusterPublisher();
 
   @Before

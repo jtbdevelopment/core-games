@@ -28,7 +28,7 @@ public class GamePublisherImpl<
 
   private static final Logger logger = LoggerFactory.getLogger(GamePublisherImpl.class);
   final ExecutorService service;
-  private final List<GameListener<IMPL>> subscribers;
+  private final List<GameListener<IMPL, P>> subscribers;
 
   // keep generric
   GamePublisherImpl(
@@ -36,7 +36,7 @@ public class GamePublisherImpl<
       final List<GameListener> subscribers) {
     service = Executors.newFixedThreadPool(threads);
     //noinspection unchecked
-    this.subscribers = subscribers.stream().map(s -> (GameListener<IMPL>) s)
+    this.subscribers = subscribers.stream().map(s -> (GameListener<IMPL, P>) s)
         .collect(Collectors.toList());
   }
 

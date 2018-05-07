@@ -11,6 +11,7 @@ public class ClusterMessage implements Serializable {
   private String gameId;
   private String playerId;
 
+  @SuppressWarnings("WeakerAccess")
   public ClusterMessageType getClusterMessageType() {
     return clusterMessageType;
   }
@@ -19,6 +20,7 @@ public class ClusterMessage implements Serializable {
     this.clusterMessageType = clusterMessageType;
   }
 
+  @SuppressWarnings("WeakerAccess")
   public String getGameId() {
     return gameId;
   }
@@ -27,6 +29,7 @@ public class ClusterMessage implements Serializable {
     this.gameId = gameId;
   }
 
+  @SuppressWarnings("WeakerAccess")
   public String getPlayerId() {
     return playerId;
   }
@@ -36,6 +39,6 @@ public class ClusterMessage implements Serializable {
   }
 
   public enum ClusterMessageType {
-    GameUpdate, PlayerUpdate, AllPlayersUpdate;
+    GameUpdate, PlayerUpdate, AllPlayersUpdate
   }
 }

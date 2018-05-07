@@ -3,10 +3,11 @@ package com.jtbdevelopment.games.push.notifications;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
-import com.jtbdevelopment.games.players.Player;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.players.notifications.RegisteredDevice;
 import com.jtbdevelopment.games.push.PushProperties;
-import com.jtbdevelopment.games.state.MultiPlayerGame;
+import com.jtbdevelopment.games.state.AbstractMultiPlayerGame;
+import java.io.Serializable;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,7 +38,7 @@ import org.springframework.util.StringUtils;
  * "registration_id": "32" },{ "error": "NotRegistered"}]}*
  */
 @Component
-public class PushNotifier {
+public class PushNotifier<ID extends Serializable, P extends AbstractPlayer<ID>> {
 
   private static final Logger logger = LoggerFactory.getLogger(PushNotifier.class);
   private static final String GCM_URL = "https://gcm-http.googleapis.com/gcm/send";
@@ -46,7 +47,7 @@ public class PushNotifier {
   private static int DEFAULT_TTL = 60 * 60 * 4;
   private final Builder builder;
   private final Map<String, Object> baseMessage;
-  private final AbstractPlayerRepository playerRepository;
+  private final AbstractPlayerRepository<ID, P> playerRepository;
   private final ObjectMapper objectMapper;
   private final Client client;
 
@@ -54,7 +55,7 @@ public class PushNotifier {
   public PushNotifier(
       final ObjectMapper objectMapper,
       final PushProperties pushProperties,
-      final AbstractPlayerRepository playerRepository) {
+      final AbstractPlayerRepository<ID, P> playerRepository) {
     this.playerRepository = playerRepository;
     this.objectMapper = objectMapper;
     client = ClientBuilder.newClient();
@@ -70,7 +71,7 @@ public class PushNotifier {
   @SuppressWarnings("WeakerAccess")
   PushNotifier(
       final ObjectMapper objectMapper,
-      final AbstractPlayerRepository playerRepository,
+      final AbstractPlayerRepository<ID, P> playerRepository,
       final Client client,
       final Builder builder) {
     this.builder = builder;
@@ -97,7 +98,8 @@ public class PushNotifier {
   }
 
   @SuppressWarnings("WeakerAccess")
-  public boolean notifyPlayer(final Player<?> player, final MultiPlayerGame game) {
+  public boolean notifyPlayer(final P player,
+      @SuppressWarnings("unused") final AbstractMultiPlayerGame game) {
     try {
       Map<String, Object> message = new HashMap<>(baseMessage);
       //  TODO - allow app greater control of message sent
@@ -118,6 +120,7 @@ public class PushNotifier {
       logger.trace("GCM posted with result " + result);
       if (!result.get("failure").equals(0) || !result.get("canonical_ids").equals(0)) {
         Set<String> devicesToRemove = new HashSet<>();
+        //noinspection unchecked
         List<Map<String, String>> results = (List<Map<String, String>>) result.get("results");
         for (int i = 0; i < results.size(); ++i) {
           Map<String, String> subResult = results.get(i);
