@@ -22,6 +22,6 @@ import org.springframework.core.annotation.Order;
 )
 @PropertySource(value = "classpath:twisted.properties", ignoreResourceNotFound = true)
 @Order(value = -1)
-public class SpringWebConfig {
+class SpringWebConfig {
 
 }

@@ -5,6 +5,7 @@ import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.players.ManualPlayer;
 import com.jtbdevelopment.games.security.spring.LastLoginUpdater;
 import com.jtbdevelopment.games.security.spring.PlayerUserDetails;
+import java.io.Serializable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,24 +17,24 @@ import org.springframework.stereotype.Component;
  * This is presumably only used by manual login where username = sourceId and source = MANUAL
  */
 @Component
-public class PlayerUserDetailsService implements UserDetailsService {
+public class PlayerUserDetailsService<ID extends Serializable, P extends AbstractPlayer<ID>>
+    implements UserDetailsService {
 
-  private final AbstractPlayerRepository playerRepository;
-  private final LastLoginUpdater lastLoginUpdater;
+  private final AbstractPlayerRepository<ID, P> playerRepository;
+  private final LastLoginUpdater<ID, P> lastLoginUpdater;
 
   public PlayerUserDetailsService(
-      final AbstractPlayerRepository playerRepository,
-      final LastLoginUpdater lastLoginUpdater) {
+      @SuppressWarnings("SpringJavaAutowiringInspection") final AbstractPlayerRepository<ID, P> playerRepository,
+      final LastLoginUpdater<ID, P> lastLoginUpdater) {
     this.playerRepository = playerRepository;
     this.lastLoginUpdater = lastLoginUpdater;
   }
 
   @Override
   public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-    AbstractPlayer player = playerRepository
-        .findBySourceAndSourceId(ManualPlayer.MANUAL_SOURCE, username);
+    P player = playerRepository.findBySourceAndSourceId(ManualPlayer.MANUAL_SOURCE, username);
     if (player != null) {
-      return new PlayerUserDetails(lastLoginUpdater.updatePlayerLastLogin(player));
+      return new PlayerUserDetails<>(lastLoginUpdater.updatePlayerLastLogin(player));
     } else {
       return null;
     }

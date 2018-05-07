@@ -17,7 +17,9 @@ public class LastLoginUpdater<ID extends Serializable, P extends AbstractPlayer<
 
   private final AbstractPlayerRepository<ID, P> playerRepository;
 
-  public LastLoginUpdater(final AbstractPlayerRepository<ID, P> playerRepository) {
+  public LastLoginUpdater(
+      @SuppressWarnings("SpringJavaAutowiringInspection") final AbstractPlayerRepository<ID, P> playerRepository
+  ) {
     this.playerRepository = playerRepository;
   }
 

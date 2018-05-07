@@ -17,16 +17,18 @@ import org.springframework.stereotype.Component;
  * Date: 12/13/14 Time: 9:36 PM
  */
 @Component
-public class PlayerSocialUserDetailsService implements SocialUserDetailsService {
+public class PlayerSocialUserDetailsService<ID extends Serializable, P extends AbstractPlayer<ID>>
+    implements SocialUserDetailsService {
 
-  private final AbstractPlayerRepository playerRepository;
-  private final StringToIDConverter<? extends Serializable> stringToIDConverter;
-  private final LastLoginUpdater lastLoginUpdater;
+  private final AbstractPlayerRepository<ID, P> playerRepository;
+  private final StringToIDConverter<ID> stringToIDConverter;
+  private final LastLoginUpdater<ID, P> lastLoginUpdater;
 
+  @SuppressWarnings("SpringJavaAutowiringInspection")
   public PlayerSocialUserDetailsService(
-      final AbstractPlayerRepository playerRepository,
-      final StringToIDConverter<? extends Serializable> stringToIDConverter,
-      final LastLoginUpdater lastLoginUpdater) {
+      final AbstractPlayerRepository<ID, P> playerRepository,
+      final StringToIDConverter<ID> stringToIDConverter,
+      final LastLoginUpdater<ID, P> lastLoginUpdater) {
     this.playerRepository = playerRepository;
     this.stringToIDConverter = stringToIDConverter;
     this.lastLoginUpdater = lastLoginUpdater;
@@ -35,13 +37,11 @@ public class PlayerSocialUserDetailsService implements SocialUserDetailsService 
   @Override
   public SocialUserDetails loadUserByUserId(final String userId)
       throws UsernameNotFoundException, DataAccessException {
-    Optional<? extends AbstractPlayer> optional = playerRepository.findById(
-        stringToIDConverter.convert(userId)
+    //noinspection ConstantConditions
+    Optional<P> optional = playerRepository.findById(stringToIDConverter.convert(userId)
     );
-    if (optional.isPresent()) {
-      return new PlayerUserDetails(lastLoginUpdater.updatePlayerLastLogin(optional.get()));
-    }
+    return optional.<SocialUserDetails>map(
+        p -> new PlayerUserDetails<>(lastLoginUpdater.updatePlayerLastLogin(p))).orElse(null);
 
-    return null;
   }
 }

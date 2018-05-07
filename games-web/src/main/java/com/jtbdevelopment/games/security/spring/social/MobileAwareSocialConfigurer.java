@@ -108,6 +108,7 @@ public class MobileAwareSocialConfigurer extends
 
   private <T> T getDependency(ApplicationContext applicationContext, Class<T> dependencyType) {
     try {
+      //noinspection UnnecessaryLocalVariable
       T dependency = applicationContext.getBean(dependencyType);
       return dependency;
     } catch (NoSuchBeanDefinitionException e) {
@@ -135,6 +136,7 @@ public class MobileAwareSocialConfigurer extends
    * @param userIdSource the UserIdSource to use when authenticating
    * @return this SpringSocialConfigurer for chained configuration
    */
+  @SuppressWarnings("unused")
   public MobileAwareSocialConfigurer userIdSource(UserIdSource userIdSource) {
     this.userIdSource = userIdSource;
     return this;
@@ -146,6 +148,7 @@ public class MobileAwareSocialConfigurer extends
    * @param postLoginUrl the URL to redirect to after a successful login
    * @return this SpringSocialConfigurer for chained configuration
    */
+  @SuppressWarnings("unused")
   public MobileAwareSocialConfigurer postLoginUrl(String postLoginUrl) {
     this.postLoginUrl = postLoginUrl;
     return this;
@@ -157,6 +160,7 @@ public class MobileAwareSocialConfigurer extends
    * @param alwaysUsePostLoginUrl if true, always redirect to the postLoginUrl
    * @return this SpringSocialConfigurer for chained configuration
    */
+  @SuppressWarnings("unused")
   public MobileAwareSocialConfigurer alwaysUsePostLoginUrl(boolean alwaysUsePostLoginUrl) {
     this.alwaysUsePostLoginUrl = alwaysUsePostLoginUrl;
     return this;
@@ -168,6 +172,7 @@ public class MobileAwareSocialConfigurer extends
    * @param postFailureUrl the URL to redirect to after a failed login
    * @return this SpringSocialConfigurer for chained configuration
    */
+  @SuppressWarnings("unused")
   public MobileAwareSocialConfigurer postFailureUrl(String postFailureUrl) {
     this.postFailureUrl = postFailureUrl;
     return this;
@@ -180,6 +185,7 @@ public class MobileAwareSocialConfigurer extends
    * @param signupUrl the URL to redirect to after an authentication failure
    * @return this SpringSocialConfigurer for chained configuration
    */
+  @SuppressWarnings("unused")
   public MobileAwareSocialConfigurer signupUrl(String signupUrl) {
     this.signupUrl = signupUrl;
     return this;
@@ -191,6 +197,7 @@ public class MobileAwareSocialConfigurer extends
    * @param connectionAddedRedirectUrl the URL to redirect after a connection was added
    * @return this SpringSocialConfigurer for chained configuration
    */
+  @SuppressWarnings("unused")
   public MobileAwareSocialConfigurer connectionAddedRedirectUrl(String connectionAddedRedirectUrl) {
     this.connectionAddedRedirectUrl = connectionAddedRedirectUrl;
     return this;
@@ -203,6 +210,7 @@ public class MobileAwareSocialConfigurer extends
    * deny
    * @return this SpringSocialConfigurer for chained configuration
    */
+  @SuppressWarnings("unused")
   public MobileAwareSocialConfigurer defaultFailureUrl(String defaultFailureUrl) {
     this.defaultFailureUrl = defaultFailureUrl;
     return this;

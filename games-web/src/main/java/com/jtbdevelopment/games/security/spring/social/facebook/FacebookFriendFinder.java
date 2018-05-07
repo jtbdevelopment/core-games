@@ -1,8 +1,10 @@
 package com.jtbdevelopment.games.security.spring.social.facebook;
 
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
+import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.players.friendfinder.SourceBasedFriendFinder;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -23,13 +25,14 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.INTERFACES)
-public class FacebookFriendFinder implements SourceBasedFriendFinder {
+public class FacebookFriendFinder<ID extends Serializable, P extends AbstractPlayer<ID>>
+    implements SourceBasedFriendFinder {
 
-  private final AbstractPlayerRepository playerRepository;
+  private final AbstractPlayerRepository<ID, P> playerRepository;
   private final Facebook facebook;
 
   public FacebookFriendFinder(
-      final AbstractPlayerRepository playerRepository,
+      @SuppressWarnings("SpringJavaAutowiringInspection") final AbstractPlayerRepository<ID, P> playerRepository,
       @Autowired(required = false) final Facebook facebook) {
     this.playerRepository = playerRepository;
     this.facebook = facebook;
@@ -52,11 +55,9 @@ public class FacebookFriendFinder implements SourceBasedFriendFinder {
         .map(Reference::getId)
         .collect(Collectors.toList());
 
-    List<Player<?>> players = playerRepository.findBySourceAndSourceIdIn(
-        "facebook",
-        friendSourceIds);
-    Map<String, Player<?>> sourceIdMap = players.stream()
-        .collect(Collectors.toMap(p -> p.getSourceId(), p -> p));
+    List<P> players = playerRepository.findBySourceAndSourceIdIn("facebook", friendSourceIds);
+    Map<String, P> sourceIdMap = players.stream()
+        .collect(Collectors.toMap(AbstractPlayer::getSourceId, p -> p));
     friends.forEach(friendReference -> {
       Player friend = sourceIdMap.get(friendReference.getId());
       if (friend != null) {

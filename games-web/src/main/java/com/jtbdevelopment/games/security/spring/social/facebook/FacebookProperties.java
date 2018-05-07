@@ -54,6 +54,7 @@ public class FacebookProperties {
     return clientID;
   }
 
+  @SuppressWarnings("WeakerAccess")
   public String getClientSecret() {
     return clientSecret;
   }

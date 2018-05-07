@@ -36,6 +36,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 /**
  * Almost complete cut-n-paste of SocialAuthenticationFilter - one change commented with JTB
  */
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class CustomSocialAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     private static final String DEFAULT_FAILURE_URL = "/signin";
@@ -179,7 +180,7 @@ public class CustomSocialAuthenticationFilter extends AbstractAuthenticationProc
     }
 
     protected Connection<?> addConnection(SocialAuthenticationService<?> authService, String userId, ConnectionData data) {
-        HashSet<String> userIdSet = new HashSet<String>();
+        Set<String> userIdSet = new HashSet<>();
         userIdSet.add(data.getProviderUserId());
         Set<String> connectedUserIds = usersConnectionRepository.findUserIdsConnectedTo(data.getProviderId(), userIdSet);
         if (connectedUserIds.contains(userId)) {
@@ -230,6 +231,7 @@ public class CustomSocialAuthenticationFilter extends AbstractAuthenticationProc
         final SocialAuthenticationToken token = authService.getAuthToken(request, response);
         if (token == null) return null;
 
+        //noinspection deprecation
         Assert.notNull(token.getConnection());
 
         Authentication auth = getAuthentication();
