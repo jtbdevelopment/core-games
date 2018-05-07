@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 /**
  * Date: 2/12/15 Time: 7:02 PM
  */
+@SuppressWarnings("unused")
 @Component
 public class GameCleanupScheduleFactoryBean extends CronTriggerFactoryBean {
 
@@ -17,6 +18,7 @@ public class GameCleanupScheduleFactoryBean extends CronTriggerFactoryBean {
 
   @PostConstruct
   public void setup() {
+    //noinspection ConstantConditions
     setJobDetail(jobDetail.getObject());
     setCronExpression("0 0 0 * * ?");
     setName("Delete Old Games");

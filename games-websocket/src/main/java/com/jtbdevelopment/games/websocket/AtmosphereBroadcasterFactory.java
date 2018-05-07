@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AtmosphereBroadcasterFactory {
 
-  public BroadcasterFactory getBroadcasterFactory() {
+  BroadcasterFactory getBroadcasterFactory() {
     return Universe.broadcasterFactory();
   }
 

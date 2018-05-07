@@ -21,15 +21,16 @@ import org.slf4j.LoggerFactory;
     HeartbeatInterceptor.class}, atmosphereConfig = {"supportSession=true"})
 public class LiveFeedService {
 
-  public static final String PATH_ROOT = "/livefeed/";
+  static final String PATH_ROOT = "/livefeed/";
   private static final Logger logger = LoggerFactory.getLogger(LiveFeedService.class);
   @PathParam("id")
   public String id;
 
-  public LiveFeedService() {
+  LiveFeedService() {
     logger.info("LiveFeedService instantiated");
   }
 
+  @SuppressWarnings("WeakerAccess")
   @Ready(encoders = {WebSocketJSONConverter.class})
   public WebSocketMessage onReady(final AtmosphereResource r) {
     logger.info("Browser {} connected to pathParam id {}.", r.uuid(), id);
@@ -40,6 +41,7 @@ public class LiveFeedService {
   }
 
   @Disconnect
+  @SuppressWarnings("WeakerAccess")
   public void onDisconnect(final AtmosphereResourceEvent event) {
     if (event.isCancelled()) {
       // We didn't get notified, so we remove the user.
@@ -59,6 +61,7 @@ public class LiveFeedService {
   }
 
   @Message(decoders = {WebSocketJSONConverter.class}, encoders = {WebSocketJSONConverter.class})
+  @SuppressWarnings("WeakerAccess")
   public WebSocketMessage onMessage(WebSocketMessage message) {
     return message;
   }

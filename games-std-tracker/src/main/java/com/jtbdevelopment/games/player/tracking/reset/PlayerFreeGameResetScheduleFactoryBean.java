@@ -11,12 +11,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlayerFreeGameResetScheduleFactoryBean extends CronTriggerFactoryBean {
 
-  @SuppressWarnings("SpringAutowiredFieldsWarningInspection")
+  @SuppressWarnings({"SpringAutowiredFieldsWarningInspection", "SpringJavaAutowiringInspection"})
   @Autowired
   protected PlayerFreeGameResetJobDetailFactoryBean resetJobDetailFactoryBean;
 
   @PostConstruct
   public void setup() {
+    //noinspection ConstantConditions
     setJobDetail(resetJobDetailFactoryBean.getObject());
     setCronExpression("0 0 0 * * ?");
     setName("Reset Free Games");

@@ -18,6 +18,7 @@ public class PlayerCleanupScheduleFactoryBean extends CronTriggerFactoryBean {
 
   @PostConstruct
   public void setup() {
+    //noinspection ConstantConditions
     setJobDetail(jobDetail.getObject());
     setCronExpression("0 0 0 * * ?");
     setName("Delete Inactive Players");

@@ -18,7 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  */
 public class SpringSecuritySessionInterceptor implements AtmosphereInterceptor {
 
-  public static final String SPRING__SECURITY__CONTEXT = "SPRING_SECURITY_CONTEXT";
+  static final String SPRING__SECURITY__CONTEXT = "SPRING_SECURITY_CONTEXT";
   private static final Logger logger = LoggerFactory
       .getLogger(SpringSecuritySessionInterceptor.class);
 

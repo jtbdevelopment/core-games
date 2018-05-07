@@ -13,11 +13,11 @@ public class WebSocketMessage {
   private Player player;
   private String message;
 
-  public WebSocketMessage() {
+  WebSocketMessage() {
 
   }
 
-  public WebSocketMessage(
+  WebSocketMessage(
       final MessageType messageType,
       final MaskedGame game,
       final Player player,
@@ -28,40 +28,36 @@ public class WebSocketMessage {
     this.game = game;
   }
 
-  public MessageType getMessageType() {
+  MessageType getMessageType() {
     return messageType;
   }
 
-  public void setMessageType(MessageType messageType) {
+  void setMessageType(MessageType messageType) {
     this.messageType = messageType;
   }
 
-  public MaskedGame getGame() {
+  MaskedGame getGame() {
     return game;
   }
 
-  public void setGame(MaskedGame game) {
+  void setGame(MaskedGame game) {
     this.game = game;
   }
 
-  public Player getPlayer() {
+  Player getPlayer() {
     return player;
   }
 
-  public void setPlayer(Player player) {
+  void setPlayer(Player player) {
     this.player = player;
   }
 
-  public String getMessage() {
+  String getMessage() {
     return message;
   }
 
-  public void setMessage(String message) {
+  void setMessage(String message) {
     this.message = message;
-  }
-
-  public enum MessageType {
-    Heartbeat, Game, Player, Alert;
   }
 
   @Override
@@ -75,16 +71,14 @@ public class WebSocketMessage {
 
     WebSocketMessage that = (WebSocketMessage) o;
 
-    if (messageType != that.messageType) {
-      return false;
-    }
-    if (game != null ? !game.equals(that.game) : that.game != null) {
-      return false;
-    }
-    if (player != null ? !player.equals(that.player) : that.player != null) {
-      return false;
-    }
-    return message != null ? message.equals(that.message) : that.message == null;
+    return messageType == that.messageType &&
+        (game != null ? game.equals(that.game) : that.game == null) &&
+        (player != null ? player.equals(that.player) : that.player == null) &&
+        (message != null ? message.equals(that.message) : that.message == null);
+  }
+
+  enum MessageType {
+    Heartbeat, Game, Player
   }
 
   @Override

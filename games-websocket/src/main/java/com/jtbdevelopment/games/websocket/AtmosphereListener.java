@@ -70,7 +70,6 @@ public class AtmosphereListener<ID extends Serializable,
       //noinspection unchecked
       publicationListeners.forEach(AtmosphereListener.this.publicationListeners::add);
     }
-    ;
     this.gameMasker = gameMasker;
     this.playerRepository = playerRepository;
     this.stringToIDConverter = stringToIDConverter;
@@ -98,9 +97,9 @@ public class AtmosphereListener<ID extends Serializable,
         broadcasters.forEach(broadcaster -> {
           try {
             logger.trace("Looking up player for feed " + broadcaster.getID());
-            Optional<P> optional = playerRepository.findById(
-                stringToIDConverter
-                    .convert(broadcaster.getID().replace(LiveFeedService.PATH_ROOT, "")));
+            String playerId = broadcaster.getID().replace(LiveFeedService.PATH_ROOT, "");
+            //noinspection ConstantConditions
+            Optional<P> optional = playerRepository.findById(stringToIDConverter.convert(playerId));
             if (optional.isPresent()) {
               logger
                   .trace("Publishing all player changed to " + optional.get().getId());
