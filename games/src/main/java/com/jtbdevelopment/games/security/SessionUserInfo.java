@@ -8,11 +8,11 @@ import java.io.Serializable;
  *
  * A generic holder that can be served up however possible
  */
-public interface SessionUserInfo<ID extends Serializable> {
+public interface SessionUserInfo<ID extends Serializable, P extends Player<ID>> {
 
-  Player<ID> getSessionUser();
+  P getSessionUser();
 
-  Player<ID> getEffectiveUser();
+  P getEffectiveUser();
 
-  void setEffectiveUser(final Player<ID> player);
+  void setEffectiveUser(final P player);
 }

@@ -17,6 +17,7 @@ public abstract class AbstractMultiPlayerGameFactory<
     IMPL extends AbstractMultiPlayerGame<ID, FEATURES>> extends
     AbstractGameFactory<ID, FEATURES, IMPL> implements MultiPlayerGameFactory<ID, FEATURES, IMPL> {
 
+  @SuppressWarnings("WeakerAccess")
   protected AbstractMultiPlayerGameFactory(
       final List<GameInitializer> gameInitializers,
       final List<GameValidator> gameValidators) {

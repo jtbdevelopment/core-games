@@ -13,8 +13,10 @@ public interface ManualPlayer<ID extends Serializable> extends Player<ID> {
 
   void setPassword(final String password);
 
+  @SuppressWarnings("unused")
   String getVerificationToken();
 
+  @SuppressWarnings("unused")
   void setVerificationToken(final String verificationToken);
 
   boolean isVerified();
