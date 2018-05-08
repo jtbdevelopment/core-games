@@ -2,7 +2,7 @@ package com.jtbdevelopment.games.dictionary;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -57,8 +57,8 @@ public class AspellUSEnglishCaseInsensitiveDictionary implements Dictionary {
 
   private void removeOffensiveWords(final String file) {
     log.info("Removing offensive/profane from " + file);
-    try (BufferedReader reader = Files.newBufferedReader(
-        new ClassPathResource("/aspell/" + file).getFile().toPath())
+    try (BufferedReader reader = new BufferedReader(
+        new InputStreamReader(new ClassPathResource("/aspell/" + file).getInputStream()))
     ) {
       final AtomicInteger counter = new AtomicInteger();
       reader.lines().forEach(line -> {
@@ -72,8 +72,8 @@ public class AspellUSEnglishCaseInsensitiveDictionary implements Dictionary {
   }
 
   private void readInWords(final String dictionaryFile) {
-    try (BufferedReader reader = Files.newBufferedReader(
-        new ClassPathResource(dictionaryFile).getFile().toPath())
+    try (BufferedReader reader = new BufferedReader(
+        new InputStreamReader(new ClassPathResource(dictionaryFile).getInputStream()))
     ) {
       final AtomicInteger counter = new AtomicInteger();
       final boolean[] foundStart = new boolean[]{false};
