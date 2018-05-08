@@ -8,6 +8,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.jtbdevelopment.games.rest.handlers.ChallengeResponseHandler;
+import com.jtbdevelopment.games.rest.handlers.ChallengeToRematchHandler;
+import com.jtbdevelopment.games.rest.handlers.QuitHandler;
 import com.jtbdevelopment.games.state.PlayerState;
 import com.jtbdevelopment.games.state.masking.AbstractMaskedMultiPlayerGame;
 import java.lang.reflect.Method;
@@ -18,8 +20,10 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
  * Date: 4/8/2015 Time: 10:28 PM
@@ -31,8 +35,13 @@ public class AbstractMultiPlayerGameServicesTest {
   private final AbstractMaskedMultiPlayerGame result = new AbstractMaskedMultiPlayerGame() {
   };
   private ChallengeResponseHandler challengeResponseHandler = mock(ChallengeResponseHandler.class);
+  private ChallengeToRematchHandler rematchHandler = Mockito.mock(ChallengeToRematchHandler.class);
+  private QuitHandler quitHandler = Mockito.mock(QuitHandler.class);
   private AbstractMultiPlayerGameServices services = new AbstractMultiPlayerGameServices(
-      challengeResponseHandler) {
+      null, null,
+      challengeResponseHandler,
+      rematchHandler,
+      quitHandler) {
   };
 
   @Before
@@ -46,6 +55,8 @@ public class AbstractMultiPlayerGameServicesTest {
     Map<String, String> methods = new HashMap<String, String>() {{
       put("rejectGame", "reject");
       put("acceptGame", "accept");
+      put("createRematch", "rematch");
+      put("quitGame", "quit");
     }};
     methods.forEach((method, path) -> {
       final Method m;
@@ -78,4 +89,17 @@ public class AbstractMultiPlayerGameServicesTest {
     when(challengeResponseHandler.handleAction(PID, GID, PlayerState.Accepted)).thenReturn(result);
     assertSame(result, services.acceptGame());
   }
+
+  @Test
+  public void testCreateRematch() {
+    Mockito.when(rematchHandler.handleAction(PID, GID)).thenReturn(result);
+    Assert.assertSame(result, services.createRematch());
+  }
+
+  @Test
+  public void testQuitGame() {
+    Mockito.when(quitHandler.handleAction(PID, GID)).thenReturn(result);
+    Assert.assertSame(result, services.quitGame());
+  }
+
 }

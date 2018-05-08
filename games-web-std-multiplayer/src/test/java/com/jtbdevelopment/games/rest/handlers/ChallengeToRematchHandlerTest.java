@@ -1,9 +1,9 @@
 package com.jtbdevelopment.games.rest.handlers;
 
 import static com.jtbdevelopment.games.GameCoreTestCase.PONE;
+import static com.jtbdevelopment.games.GameCoreTestCase.makeSimpleMPGame;
 import static org.mockito.Mockito.mock;
 
-import com.jtbdevelopment.games.GameCoreTestCase;
 import com.jtbdevelopment.games.dao.AbstractMultiPlayerGameRepository;
 import com.jtbdevelopment.games.events.GamePublisher;
 import com.jtbdevelopment.games.factory.AbstractMultiPlayerGameFactory;
@@ -15,7 +15,6 @@ import com.jtbdevelopment.games.stringimpl.StringMPGame;
 import java.time.Instant;
 import java.util.Arrays;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
@@ -32,14 +31,15 @@ public class ChallengeToRematchHandlerTest {
       AbstractMultiPlayerGameRepository.class);
   private AbstractMultiPlayerGameFactory gameFactory = mock(AbstractMultiPlayerGameFactory.class);
   private GamePublisher gamePublisher = mock(GamePublisher.class);
-  private ChallengeToRematchHandler handler = new ChallengeToRematchHandler(null, gameRepository,
-      gameFactory);
-
-  @Before
-  public void setup() {
-    handler.transitionEngine = transitionEngine;
-    handler.gamePublisher = gamePublisher;
-  }
+  private ChallengeToRematchHandler handler = new ChallengeToRematchHandler(
+      null,
+      gameRepository,
+      transitionEngine,
+      gamePublisher,
+      null,
+      null,
+      gameFactory
+  );
 
   @Test
   public void testEligibilityCheck() {
@@ -52,12 +52,12 @@ public class ChallengeToRematchHandlerTest {
   public void testSetsUpRematch() throws InterruptedException {
     final Instant now = Instant.now();
     Thread.sleep(100);
-    StringMPGame previous = GameCoreTestCase.makeSimpleMPGame("X");
+    StringMPGame previous = makeSimpleMPGame("X");
     previous.setGamePhase(GamePhase.RoundOver);
-    final StringMPGame previousT = GameCoreTestCase.makeSimpleMPGame("X");
-    StringMPGame previousS = GameCoreTestCase.makeSimpleMPGame("X");
-    StringMPGame previousP = GameCoreTestCase.makeSimpleMPGame("X");
-    StringMPGame newGame = GameCoreTestCase.makeSimpleMPGame("NEW");
+    final StringMPGame previousT = makeSimpleMPGame("X");
+    StringMPGame previousS = makeSimpleMPGame("X");
+    StringMPGame previousP = makeSimpleMPGame("X");
+    StringMPGame newGame = makeSimpleMPGame("NEW");
     newGame.setPreviousId(previous.getId());
     Mockito.when(gameFactory.createGame(previousP, PONE)).thenReturn(newGame);
     Mockito.when(transitionEngine.evaluateGame(previous)).then(new Answer<Object>() {
@@ -81,7 +81,7 @@ public class ChallengeToRematchHandlerTest {
     Arrays.stream(GamePhase.values())
         .filter(phase -> !GamePhase.RoundOver.equals(phase))
         .forEach(phase -> {
-          StringMPGame previous = GameCoreTestCase.makeSimpleMPGame("X");
+          StringMPGame previous = makeSimpleMPGame("X");
           previous.setGamePhase(phase);
           try {
             handler.handleActionInternal(PONE, previous, null);

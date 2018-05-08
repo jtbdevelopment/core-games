@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
  * Date: 2/4/15 Time: 7:02 PM
  */
 @Component
-public class PlayerGameTracker implements GameEligibilityTracker<PlayerGameEligibilityResult> {
+public class PlayerGameTracker implements GameEligibilityTracker {
 
   private static final Update UPDATE_FREE_GAMES = new Update()
       .inc(AbstractPlayerGameTrackingAttributes.FREE_GAMES_FIELD, 1);

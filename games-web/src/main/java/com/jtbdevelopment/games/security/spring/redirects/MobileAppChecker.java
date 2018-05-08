@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MobileAppChecker {
 
-  public boolean isMobileRequest(final HttpServletRequest request) {
+  boolean isMobileRequest(final HttpServletRequest request) {
     String origin = request != null ? request.getHeader("Origin") : null;
     return origin != null && origin.startsWith("file:");
   }

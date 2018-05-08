@@ -1,7 +1,11 @@
 package com.jtbdevelopment.games.rest;
 
+import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
+import com.jtbdevelopment.games.dao.StringToIDConverter;
 import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.rest.handlers.PlayerGamesFinderHandler;
+import com.jtbdevelopment.games.rest.services.AbstractAdminServices;
+import com.jtbdevelopment.games.rest.services.AbstractGameServices;
 import com.jtbdevelopment.games.rest.services.AbstractPlayerServices;
 import com.jtbdevelopment.games.state.AbstractMultiPlayerGame;
 import com.jtbdevelopment.games.state.masking.AbstractMaskedMultiPlayerGame;
@@ -33,7 +37,12 @@ public abstract class AbstractMultiPlayerServices<
 
   @SuppressWarnings("WeakerAccess")
   protected AbstractMultiPlayerServices(
+      final AbstractGameServices<ID, FEATURES, IMPL, M, P> gamePlayServices,
+      final AbstractPlayerRepository<ID, P> playerRepository,
+      final AbstractAdminServices<ID, FEATURES, IMPL, P> adminServices,
+      final StringToIDConverter<ID> stringToIDConverter,
       final PlayerGamesFinderHandler<ID, FEATURES, IMPL, M, P> playerGamesFinderHandler) {
+    super(gamePlayServices, playerRepository, adminServices, stringToIDConverter);
     this.playerGamesFinderHandler = playerGamesFinderHandler;
   }
 

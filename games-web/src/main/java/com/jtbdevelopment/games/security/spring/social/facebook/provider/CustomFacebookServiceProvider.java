@@ -14,7 +14,7 @@ public class CustomFacebookServiceProvider extends AbstractOAuth2ServiceProvider
 
   private String appNamespace;
 
-  public CustomFacebookServiceProvider(String appId, String appSecret, String appNamespace) {
+  CustomFacebookServiceProvider(String appId, String appSecret, String appNamespace) {
     super(getOAuth2Template(appId, appSecret));
     this.appNamespace = appNamespace;
   }

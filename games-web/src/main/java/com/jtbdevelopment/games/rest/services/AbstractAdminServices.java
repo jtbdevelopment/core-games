@@ -42,7 +42,8 @@ public abstract class AbstractAdminServices<
   private final AbstractGameRepository<ID, FEATURES, IMPL> gameRepository;
   private final StringToIDConverter<ID> stringToIDConverter;
 
-  public AbstractAdminServices(
+  @SuppressWarnings("WeakerAccess")
+  protected AbstractAdminServices(
       final AbstractPlayerRepository<ID, P> playerRepository,
       final AbstractGameRepository<ID, FEATURES, IMPL> gameRepository,
       final StringToIDConverter<ID> stringToIDConverter) {
@@ -102,11 +103,15 @@ public abstract class AbstractAdminServices<
   @Path("{playerID}")
   @Produces(MediaType.APPLICATION_JSON)
   public Object switchEffectiveUser(@PathParam("playerID") final String effectivePlayerID) {
+    //noinspection ConstantConditions
     Optional<P> optional = playerRepository
         .findById(stringToIDConverter.convert(effectivePlayerID));
     if (optional.isPresent()) {
       P player = optional.get();
-      ((SessionUserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+      //noinspection unchecked
+      SessionUserInfo<ID, P> principal = (SessionUserInfo<ID, P>) SecurityContextHolder.getContext()
+          .getAuthentication().getPrincipal();
+      principal
           .setEffectiveUser(player);
       return player;
     }

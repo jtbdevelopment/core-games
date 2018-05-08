@@ -13,8 +13,8 @@ import org.springframework.data.annotation.Version;
 /**
  * Date: 12/31/2014 Time: 5:25 PM
  */
-public abstract class AbstractGame<ID extends Serializable, FEATURES> implements
-    Game<ID, Instant, FEATURES>, Serializable {
+public abstract class AbstractGame<ID extends Serializable, FEATURES>
+    implements Game<ID, Instant, FEATURES>, Serializable {
 
   @Version
   private Integer version;

@@ -21,7 +21,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.security.authentication.TestingAuthenticationToken;
@@ -34,13 +33,9 @@ import org.springframework.security.core.context.SecurityContextImpl;
 public class AbstractPlayerGatewayServiceTest {
 
   private AbstractPlayerServices playerServices = Mockito.mock(AbstractPlayerServices.class);
-  private AbstractPlayerGatewayService playerGatewayService = new AbstractPlayerGatewayService() {
+  private AbstractPlayerGatewayService playerGatewayService = new AbstractPlayerGatewayService(
+      playerServices) {
   };
-
-  @Before
-  public void setup() {
-    playerGatewayService.playerServices = playerServices;
-  }
 
   @Test
   public void testClassAnnotations() {

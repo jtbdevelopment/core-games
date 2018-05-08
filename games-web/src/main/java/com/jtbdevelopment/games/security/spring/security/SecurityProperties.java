@@ -17,7 +17,7 @@ public class SecurityProperties {
     this.allowBasicAuth = allowBasicAuth;
   }
 
-  public String getAllowBasicAuth() {
+  String getAllowBasicAuth() {
     return allowBasicAuth;
   }
 

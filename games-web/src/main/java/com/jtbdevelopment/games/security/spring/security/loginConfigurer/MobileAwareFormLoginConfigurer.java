@@ -13,6 +13,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
  * Cut-n-paste of spring security class of same name to provide for overriding behaviour in
  * AbstractAuthenticationFilterConfigurer
  */
+@SuppressWarnings({"WeakerAccess", "UnusedReturnValue"})
 public class MobileAwareFormLoginConfigurer extends AbstractAuthenticationFilterConfigurer {
 
   public MobileAwareFormLoginConfigurer(MobileAppChecker mobileAppChecker) {

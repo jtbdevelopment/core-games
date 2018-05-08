@@ -13,12 +13,9 @@ import com.jtbdevelopment.games.security.spring.security.csrf.XSRFTokenCookieFil
 import com.jtbdevelopment.games.security.spring.security.facebook.FacebookCanvasAllowingProtectionMatcher;
 import com.jtbdevelopment.games.security.spring.security.loginConfigurer.MobileAwareFormLoginConfigurer;
 import com.jtbdevelopment.games.security.spring.social.MobileAwareSocialConfigurer;
-import com.jtbdevelopment.games.security.spring.social.security.PlayerSocialUserDetailsService;
 import com.jtbdevelopment.games.security.spring.userdetails.PlayerUserDetailsService;
-import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -48,35 +45,35 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   private static final String LOGGED_IN_URL = "/#/signedin";
   private static final String LOGOUT_PAGE = "/signout";
   private static final String AUTHENTICATE_PAGE = "/signin/authenticate";
-  @Autowired
-  protected PlayerUserDetailsService playerUserDetailsService;
-  @Autowired
-  protected PlayerSocialUserDetailsService playerSocialUserDetailsService;
-  @Autowired
-  protected PasswordEncoder injectedPasswordEncoder;
-  @Autowired
-  protected SecurityProperties securityProperties;
-  @Autowired
-  protected PersistentTokenRepository persistentTokenRepository;
-  @Autowired
-  protected AuthenticationManagerBuilder authenticationManagerBuilder;
-  @Autowired
-  protected MobileAppProperties mobileAppProperties;
-  @Autowired
-  protected MobileAppChecker mobileAppChecker;
+  private final PlayerUserDetailsService playerUserDetailsService;
+  private final SecurityProperties securityProperties;
+  private final PersistentTokenRepository persistentTokenRepository;
+  private final MobileAppProperties mobileAppProperties;
+  private final MobileAppChecker mobileAppChecker;
+
+  public SecurityConfig(
+      final PlayerUserDetailsService playerUserDetailsService,
+      final PasswordEncoder injectedPasswordEncoder,
+      final SecurityProperties securityProperties,
+      final PersistentTokenRepository persistentTokenRepository,
+      final AuthenticationManagerBuilder authenticationManagerBuilder,
+      final MobileAppProperties mobileAppProperties,
+      final MobileAppChecker mobileAppChecker) {
+    this.playerUserDetailsService = playerUserDetailsService;
+    this.securityProperties = securityProperties;
+    this.persistentTokenRepository = persistentTokenRepository;
+    this.mobileAppProperties = mobileAppProperties;
+    this.mobileAppChecker = mobileAppChecker;
+    DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+    daoAuthenticationProvider.setPasswordEncoder(injectedPasswordEncoder);
+    daoAuthenticationProvider.setUserDetailsService(playerUserDetailsService);
+    authenticationManagerBuilder.authenticationProvider(daoAuthenticationProvider);
+  }
 
   protected static CsrfTokenRepository csrfTokenRepository() {
     HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
     repository.setHeaderName("X-XSRF-TOKEN");
     return repository;
-  }
-
-  @PostConstruct
-  public void configureAuthenticationProvider() throws Exception {
-    DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-    daoAuthenticationProvider.setPasswordEncoder(injectedPasswordEncoder);
-    daoAuthenticationProvider.setUserDetailsService(playerUserDetailsService);
-    authenticationManagerBuilder.authenticationProvider(daoAuthenticationProvider);
   }
 
   @Override

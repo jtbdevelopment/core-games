@@ -10,6 +10,7 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
  *
  * Largely cut-n-paste of spring security class to enable override
  */
+@SuppressWarnings("unused")
 public abstract class AbstractHttpConfigurer extends
     SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
@@ -22,6 +23,7 @@ public abstract class AbstractHttpConfigurer extends
    */
   public HttpSecurity disable() {
     //  JTB - minor groovy change here
+    //noinspection unchecked
     getBuilder().removeConfigurer((Class<AbstractHttpConfigurer>) this.getClass());
     return getBuilder();
   }

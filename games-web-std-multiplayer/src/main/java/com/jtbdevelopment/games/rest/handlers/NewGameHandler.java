@@ -25,14 +25,14 @@ import org.springframework.stereotype.Component;
 /**
  * Date: 11/4/2014 Time: 9:10 PM
  */
+@SuppressWarnings("WeakerAccess")
 @Component
-class NewGameHandler<
+public class NewGameHandler<
     ID extends Serializable,
     FEATURES,
     IMPL extends AbstractMultiPlayerGame<ID, FEATURES>,
     M extends AbstractMaskedMultiPlayerGame<FEATURES>,
-    P extends AbstractPlayer<ID>,
-    T extends PlayerGameEligibilityResult>
+    P extends AbstractPlayer<ID>>
     extends AbstractHandler<ID, P> {
 
   private static final Logger logger = LoggerFactory.getLogger(NewGameHandler.class);
@@ -41,16 +41,17 @@ class NewGameHandler<
   private final GameTransitionEngine<IMPL> transitionEngine;
   private final GameMasker<ID, IMPL, M> gameMasker;
   private final GamePublisher<IMPL, P> gamePublisher;
-  private final GameEligibilityTracker<T> gameTracker;
+  private final GameEligibilityTracker gameTracker;
 
-  NewGameHandler(
+  @SuppressWarnings("WeakerAccess")
+  public NewGameHandler(
       final AbstractPlayerRepository<ID, P> playerRepository,
       final AbstractMultiPlayerGameFactory<ID, FEATURES, IMPL> gameFactory,
       final AbstractMultiPlayerGameRepository<ID, FEATURES, IMPL> gameRepository,
       final GameTransitionEngine<IMPL> transitionEngine,
       final GameMasker<ID, IMPL, M> gameMasker,
       final GamePublisher<IMPL, P> gamePublisher,
-      final GameEligibilityTracker<T> gameTracker) {
+      final GameEligibilityTracker gameTracker) {
     super(playerRepository);
     this.gameFactory = gameFactory;
     this.gameRepository = gameRepository;
@@ -60,7 +61,7 @@ class NewGameHandler<
     this.gameTracker = gameTracker;
   }
 
-  M handleCreateNewGame(
+  public M handleCreateNewGame(
       final ID initiatingPlayerID,
       final List<String> playersIDs,
       final Set<FEATURES> features) {
@@ -81,7 +82,8 @@ class NewGameHandler<
 
   private IMPL setupGameWithEligibilityWrapper(final P initiatingPlayer,
       final Set<FEATURES> features, Set<P> players) {
-    T eligibilityResult = gameTracker.getGameEligibility(initiatingPlayer);
+    PlayerGameEligibilityResult eligibilityResult = gameTracker
+        .getGameEligibility(initiatingPlayer);
 
     if (eligibilityResult != null &&
         PlayerGameEligibility.NoGamesAvailable == eligibilityResult.getEligibility()) {

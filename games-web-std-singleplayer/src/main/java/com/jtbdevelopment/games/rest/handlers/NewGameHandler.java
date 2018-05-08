@@ -23,8 +23,9 @@ import org.springframework.stereotype.Component;
 /**
  * Date: 11/4/2014 Time: 9:10 PM
  */
+@SuppressWarnings("WeakerAccess")
 @Component
-class NewGameHandler<
+public class NewGameHandler<
     ID extends Serializable,
     FEATURES,
     IMPL extends AbstractSinglePlayerGame<ID, FEATURES>,
@@ -38,16 +39,17 @@ class NewGameHandler<
   private final GameTransitionEngine<IMPL> transitionEngine;
   private final GameMasker<ID, IMPL, M> gameMasker;
   private final GamePublisher<IMPL, P> gamePublisher;
-  private final GameEligibilityTracker<PlayerGameEligibilityResult> gameTracker;
+  private final GameEligibilityTracker gameTracker;
 
-  NewGameHandler(
+  @SuppressWarnings("WeakerAccess")
+  public NewGameHandler(
       final AbstractPlayerRepository<ID, P> playerRepository,
       final AbstractSinglePlayerGameFactory<ID, FEATURES, IMPL> gameFactory,
       final AbstractSinglePlayerGameRepository<ID, FEATURES, IMPL> gameRepository,
       final GameTransitionEngine<IMPL> transitionEngine,
       final GameMasker<ID, IMPL, M> gameMasker,
       final GamePublisher<IMPL, P> gamePublisher,
-      final GameEligibilityTracker<PlayerGameEligibilityResult> gameTracker) {
+      final GameEligibilityTracker gameTracker) {
     super(playerRepository);
     this.gameFactory = gameFactory;
     this.gameRepository = gameRepository;
@@ -57,7 +59,7 @@ class NewGameHandler<
     this.gameTracker = gameTracker;
   }
 
-  M handleCreateNewGame(final ID playerID, final Set<FEATURES> features) {
+  public M handleCreateNewGame(final ID playerID, final Set<FEATURES> features) {
     P player = loadPlayer(playerID);//  Load as set to prevent dupes in initial setup
     IMPL game = setupGameWithEligibilityWrapper(features, player);
 

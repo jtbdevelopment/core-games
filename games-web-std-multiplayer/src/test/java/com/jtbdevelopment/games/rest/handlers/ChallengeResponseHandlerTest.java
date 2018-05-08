@@ -22,7 +22,8 @@ import org.junit.Test;
  */
 public class ChallengeResponseHandlerTest {
 
-  private ChallengeResponseHandler handler = new ChallengeResponseHandler(null, null);
+  private ChallengeResponseHandler handler = new ChallengeResponseHandler(null, null, null, null,
+      null, null);
 
   @Test
   public void testRequiresEligibilityForAcceptButNotOtherStates() {

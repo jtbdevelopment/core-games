@@ -10,12 +10,13 @@ import org.springframework.social.facebook.connect.FacebookAdapter;
  */
 public class CustomFacebookConnectionFactory extends OAuth2ConnectionFactory<Facebook> {
 
-  public CustomFacebookConnectionFactory(String appId, String appSecret) {
+  CustomFacebookConnectionFactory(String appId, String appSecret) {
     this(appId, appSecret, null);
   }
 
-  public CustomFacebookConnectionFactory(String appId, String appSecret, String appNamespace) {
-    super("facebook", new CustomFacebookServiceProvider(appId, appSecret, appNamespace),
+  CustomFacebookConnectionFactory(String appId, String appSecret, String appNamespace) {
+    super("facebook",
+        new CustomFacebookServiceProvider(appId, appSecret, appNamespace),
         new FacebookAdapter());
   }
 }

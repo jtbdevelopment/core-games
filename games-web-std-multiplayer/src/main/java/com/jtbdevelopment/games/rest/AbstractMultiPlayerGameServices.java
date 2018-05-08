@@ -2,6 +2,10 @@ package com.jtbdevelopment.games.rest;
 
 import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.rest.handlers.ChallengeResponseHandler;
+import com.jtbdevelopment.games.rest.handlers.ChallengeToRematchHandler;
+import com.jtbdevelopment.games.rest.handlers.DeclineRematchOptionHandler;
+import com.jtbdevelopment.games.rest.handlers.GameGetterHandler;
+import com.jtbdevelopment.games.rest.handlers.QuitHandler;
 import com.jtbdevelopment.games.rest.services.AbstractGameServices;
 import com.jtbdevelopment.games.state.AbstractMultiPlayerGame;
 import com.jtbdevelopment.games.state.PlayerState;
@@ -23,11 +27,21 @@ public abstract class AbstractMultiPlayerGameServices<
     P extends AbstractPlayer<ID>>
     extends AbstractGameServices<ID, FEATURES, IMPL, M, P> {
 
-  private final ChallengeResponseHandler<ID, FEATURES, IMPL, P> responseHandler;
+  private final ChallengeResponseHandler<ID, FEATURES, IMPL, M, P> responseHandler;
+  private final ChallengeToRematchHandler<ID, FEATURES, IMPL, M, P> rematchHandler;
+  private final QuitHandler<ID, FEATURES, IMPL, M, P> quitHandler;
 
-  AbstractMultiPlayerGameServices(
-      final ChallengeResponseHandler<ID, FEATURES, IMPL, P> responseHandler) {
+  @SuppressWarnings("WeakerAccess")
+  protected AbstractMultiPlayerGameServices(
+      final GameGetterHandler<ID, FEATURES, IMPL, M, P> gameGetterHandler,
+      final DeclineRematchOptionHandler<ID, FEATURES, IMPL, M, P> declineRematchOptionHandler,
+      final ChallengeResponseHandler<ID, FEATURES, IMPL, M, P> responseHandler,
+      final ChallengeToRematchHandler<ID, FEATURES, IMPL, M, P> rematchHandler,
+      final QuitHandler<ID, FEATURES, IMPL, M, P> quitHandler) {
+    super(gameGetterHandler, declineRematchOptionHandler);
     this.responseHandler = responseHandler;
+    this.rematchHandler = rematchHandler;
+    this.quitHandler = quitHandler;
   }
 
   @PUT
@@ -44,6 +58,20 @@ public abstract class AbstractMultiPlayerGameServices<
   public Object acceptGame() {
     return responseHandler
         .handleAction(getPlayerID().get(), getGameID().get(), PlayerState.Accepted);
+  }
+
+  @PUT
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("rematch")
+  public Object createRematch() {
+    return rematchHandler.handleAction(getPlayerID().get(), getGameID().get());
+  }
+
+  @PUT
+  @Path("quit")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Object quitGame() {
+    return quitHandler.handleAction(getPlayerID().get(), getGameID().get());
   }
 
 }

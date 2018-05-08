@@ -25,7 +25,8 @@ public class AbstractSinglePlayerServicesTest {
 
   private static final String PID = "PID-122";
   private PlayerGamesFinderHandler finderHandler = Mockito.mock(PlayerGamesFinderHandler.class);
-  private AbstractSinglePlayerServices services = new AbstractSinglePlayerServices(finderHandler) {
+  private AbstractSinglePlayerServices services = new AbstractSinglePlayerServices(null, null, null,
+      null, finderHandler) {
   };
 
   @Before

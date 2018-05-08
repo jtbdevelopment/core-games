@@ -1,6 +1,8 @@
 package com.jtbdevelopment.games.rest;
 
 import com.jtbdevelopment.games.players.AbstractPlayer;
+import com.jtbdevelopment.games.rest.handlers.DeclineRematchOptionHandler;
+import com.jtbdevelopment.games.rest.handlers.GameGetterHandler;
 import com.jtbdevelopment.games.rest.services.AbstractGameServices;
 import com.jtbdevelopment.games.state.AbstractSinglePlayerGame;
 import com.jtbdevelopment.games.state.masking.AbstractMaskedSinglePlayerGame;
@@ -18,4 +20,9 @@ public abstract class AbstractSinglePlayerGameServices<
     P extends AbstractPlayer<ID>>
     extends AbstractGameServices<ID, FEATURES, IMPL, M, P> {
 
+  public AbstractSinglePlayerGameServices(
+      final GameGetterHandler<ID, FEATURES, IMPL, M, P> gameGetterHandler,
+      final DeclineRematchOptionHandler<ID, FEATURES, IMPL, M, P> declineRematchOptionHandler) {
+    super(gameGetterHandler, declineRematchOptionHandler);
+  }
 }

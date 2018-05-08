@@ -19,7 +19,7 @@ import org.junit.Test;
  */
 public class QuitHandlerTest {
 
-  private QuitHandler handler = new QuitHandler<>(null, null);
+  private QuitHandler handler = new QuitHandler<>(null, null, null, null, null, null);
 
   @Test
   public void testExceptionsOnQuitRematchRematchedPhases() {

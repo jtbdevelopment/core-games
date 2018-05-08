@@ -22,6 +22,7 @@ public class AutoConnectionSignUp<ID extends Serializable, P extends AbstractPla
   private final AbstractPlayerRepository<ID, P> playerRepository;
   private final PlayerFactory<ID, P> playerFactory;
 
+  @SuppressWarnings("SpringJavaAutowiringInspection")
   public AutoConnectionSignUp(
       final AbstractPlayerRepository<ID, P> playerRepository,
       final PlayerFactory<ID, P> playerFactory) {

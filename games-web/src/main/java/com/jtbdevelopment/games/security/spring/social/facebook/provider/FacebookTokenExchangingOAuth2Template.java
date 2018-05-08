@@ -11,6 +11,7 @@ import org.springframework.util.MultiValueMap;
  * TODO - should we add a debug token call to prevent token hijacking?
  * https://developers.facebook.com/docs/facebook-login/access-tokens#debug
  */
+@SuppressWarnings("WeakerAccess")
 public class FacebookTokenExchangingOAuth2Template extends OAuth2Template {
 
   private String clientId;
@@ -31,7 +32,7 @@ public class FacebookTokenExchangingOAuth2Template extends OAuth2Template {
     try {
       return super.exchangeForAccess(authorizationCode, redirectUri, additionalParameters);
     } catch (Exception ignored) {
-      MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+      MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
       params.set("client_id", clientId);
       params.set("client_secret", clientSecret);
       params.set("fb_exchange_token", authorizationCode);

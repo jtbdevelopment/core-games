@@ -6,7 +6,7 @@ import com.jtbdevelopment.games.events.GamePublisher;
 import com.jtbdevelopment.games.exceptions.input.OutOfGamesForTodayException;
 import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.state.AbstractGame;
-import com.jtbdevelopment.games.state.Game;
+import com.jtbdevelopment.games.state.masking.AbstractMaskedGame;
 import com.jtbdevelopment.games.state.masking.GameMasker;
 import com.jtbdevelopment.games.state.transition.GameTransitionEngine;
 import com.jtbdevelopment.games.tracking.GameEligibilityTracker;
@@ -15,56 +15,63 @@ import com.jtbdevelopment.games.tracking.PlayerGameEligibilityResult;
 import java.io.Serializable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Date: 11/9/2014 Time: 8:36 PM
  */
 public abstract class AbstractGameActionHandler<
-    T,
+    PARAMTYPE,
     ID extends Serializable,
     FEATURES,
     IMPL extends AbstractGame<ID, FEATURES>,
+    M extends AbstractMaskedGame<FEATURES>,
     P extends AbstractPlayer<ID>> extends
     AbstractGameGetterHandler<ID, FEATURES, IMPL, P> {
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractGameActionHandler.class);
-  @Autowired
-  protected GameTransitionEngine transitionEngine;
-  @Autowired
-  protected GamePublisher gamePublisher;
-  @Autowired
-  protected GameEligibilityTracker gameTracker;
-  @Autowired
-  protected GameMasker gameMasker;
+  @SuppressWarnings("WeakerAccess")
+  protected final GameTransitionEngine<IMPL> transitionEngine;
+  @SuppressWarnings("WeakerAccess")
+  protected final GamePublisher<IMPL, P> gamePublisher;
+  private final GameEligibilityTracker gameTracker;
+  private final GameMasker<ID, IMPL, M> gameMasker;
 
   public AbstractGameActionHandler(
       final AbstractPlayerRepository<ID, P> playerRepository,
-      final AbstractGameRepository<ID, FEATURES, IMPL> gameRepository) {
+      final AbstractGameRepository<ID, FEATURES, IMPL> gameRepository,
+      final GameTransitionEngine<IMPL> transitionEngine,
+      final GamePublisher<IMPL, P> gamePublisher,
+      final GameEligibilityTracker gameTracker,
+      final GameMasker<ID, IMPL, M> gameMasker) {
     super(playerRepository, gameRepository);
+    this.transitionEngine = transitionEngine;
+    this.gamePublisher = gamePublisher;
+    this.gameTracker = gameTracker;
+    this.gameMasker = gameMasker;
   }
 
-  protected abstract IMPL handleActionInternal(final P player, final IMPL game, final T param);
+  protected abstract IMPL handleActionInternal(final P player, final IMPL game,
+      final PARAMTYPE param);
 
-  public Game handleAction(final ID playerID, final ID gameID, final T param) {
+  public M handleAction(final ID playerID, final ID gameID, final PARAMTYPE param) {
     P player = loadPlayer(playerID);
     IMPL game = loadGame(gameID);
     validatePlayerForGame(game, player);
-    Game updatedGame = updateGameWithEligibilityWrapper(player, game, param);
+    IMPL updatedGame = updateGameWithEligibilityWrapper(player, game, param);
 
     updatedGame = gamePublisher.publish(updatedGame, player);
     return gameMasker.maskGameForPlayer(updatedGame, player);
 
   }
 
-  public Game handleAction(final ID playerID, final ID gameID) {
+  public M handleAction(final ID playerID, final ID gameID) {
     return handleAction(playerID, gameID, null);
   }
 
   @SuppressWarnings("WeakerAccess")
-  protected Game updateGameWithEligibilityWrapper(final P player, final IMPL game,
-      final T param) {
-    Game updatedGame;
+  protected IMPL updateGameWithEligibilityWrapper(final P player, final IMPL game,
+      final PARAMTYPE param) {
+    IMPL updatedGame;
     PlayerGameEligibilityResult eligibilityResult = null;
     if (requiresEligibilityCheck(param)) {
       eligibilityResult = gameTracker.getGameEligibility(player);
@@ -93,9 +100,9 @@ public abstract class AbstractGameActionHandler<
     return updatedGame;
   }
 
-  protected Game updateGame(final P player, final IMPL game, final T param) {
+  private IMPL updateGame(final P player, final IMPL game, final PARAMTYPE param) {
     IMPL updated = rotateTurnBasedGame(handleActionInternal(player, game, param));
-    updated = ((IMPL) (transitionEngine.evaluateGame(updated)));
+    updated = transitionEngine.evaluateGame(updated);
     return gameRepository.save(updated);
   }
 
@@ -104,7 +111,7 @@ public abstract class AbstractGameActionHandler<
     return game;
   }
 
-  protected boolean requiresEligibilityCheck(final T param) {
+  protected boolean requiresEligibilityCheck(final PARAMTYPE param) {
     return false;
   }
 }

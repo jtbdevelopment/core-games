@@ -13,9 +13,9 @@ public class ObjectMapperContextResolver implements ContextResolver<ObjectMapper
 
   private final ObjectMapper objectMapper;
 
-  @SuppressWarnings("WeakerAccess")
+  @SuppressWarnings({"WeakerAccess", "SpringJavaAutowiredMembersInspection"})
   @Autowired
-  public ObjectMapperContextResolver(ObjectMapper objectMapper) {
+  public ObjectMapperContextResolver(final ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;
   }
 

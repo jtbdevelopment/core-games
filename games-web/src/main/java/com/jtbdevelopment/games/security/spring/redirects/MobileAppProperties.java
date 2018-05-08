@@ -20,11 +20,11 @@ public class MobileAppProperties {
   }
 
 
-  public String getMobileSuccessUrl() {
+  String getMobileSuccessUrl() {
     return mobileSuccessUrl;
   }
 
-  public String getMobileFailureUrl() {
+  String getMobileFailureUrl() {
     return mobileFailureUrl;
   }
 }

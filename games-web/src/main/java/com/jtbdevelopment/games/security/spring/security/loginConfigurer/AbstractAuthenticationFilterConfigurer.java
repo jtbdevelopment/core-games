@@ -29,6 +29,7 @@ import org.springframework.web.accept.HeaderContentNegotiationStrategy;
  * Largely cut-n-paste of spring security class of same name except permitAll references completely
  * removed and other JTB comments below
  */
+@SuppressWarnings({"WeakerAccess", "unused", "unchecked"})
 public abstract class AbstractAuthenticationFilterConfigurer extends AbstractHttpConfigurer {
 
   private final UsernamePasswordAuthenticationFilter authFilter;
@@ -88,6 +89,7 @@ public abstract class AbstractAuthenticationFilterConfigurer extends AbstractHtt
     return getSelf();
   }
 
+  @SuppressWarnings("UnusedReturnValue")
   public final MobileAwareFormLoginConfigurer failureUrl(String authenticationFailureUrl) {
     MobileAwareFormLoginConfigurer result = failureHandler(
         new SimpleUrlAuthenticationFailureHandler(authenticationFailureUrl));

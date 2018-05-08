@@ -46,17 +46,14 @@ public class AbstractPlayerServicesTest {
   private AbstractPlayerRepository playerRepository = Mockito.mock(AbstractPlayerRepository.class);
   private AbstractAdminServices adminServices = Mockito.mock(AbstractAdminServices.class);
   private ApplicationContext context = Mockito.mock(ApplicationContext.class);
-  private AbstractPlayerServices playerServices = new AbstractPlayerServices() {
+  private AbstractPlayerServices playerServices = new AbstractPlayerServices(gamePlayServices,
+      playerRepository, adminServices, new StringToStringConverter()) {
   };
   private ThreadLocal<String> playerID = new ThreadLocal<>();
   private ThreadLocal<String> gameID = new ThreadLocal<>();
 
   @Before
   public void setup() {
-    playerServices.playerRepository = playerRepository;
-    playerServices.stringToIDConverter = new StringToStringConverter();
-    playerServices.adminServices = adminServices;
-    playerServices.gamePlayServices = gamePlayServices;
     playerServices.setApplicationContext(context);
     Mockito.when(gamePlayServices.getPlayerID()).thenReturn(playerID);
     Mockito.when(gamePlayServices.getGameID()).thenReturn(gameID);

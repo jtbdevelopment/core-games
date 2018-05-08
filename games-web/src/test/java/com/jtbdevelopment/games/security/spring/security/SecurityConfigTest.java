@@ -1,12 +1,11 @@
 package com.jtbdevelopment.games.security.spring.security;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.jtbdevelopment.core.spring.security.crypto.password.InjectedBCryptPasswordEncoder;
 import com.jtbdevelopment.games.security.spring.userdetails.PlayerUserDetailsService;
-import java.lang.reflect.Method;
-import javax.annotation.PostConstruct;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -25,7 +24,7 @@ import org.springframework.test.util.ReflectionTestUtils;
  */
 public class SecurityConfigTest {
 
-  private SecurityConfig securityConfig = new SecurityConfig();
+  private SecurityConfig securityConfig;
 
   @Test
   public void testClassAnnotations() {
@@ -38,23 +37,13 @@ public class SecurityConfigTest {
 
   @Test
   public void testSetsUpAuthenticationDatabase() throws Exception {
-    Method m = SecurityConfig.class.getMethod("configureAuthenticationProvider");
-    assertNotNull(m);
-    assertTrue(m.isAnnotationPresent(PostConstruct.class));
+    InjectedBCryptPasswordEncoder passwordEncoder = mock(InjectedBCryptPasswordEncoder.class);
+    when(passwordEncoder.encode("userNotFoundPassword")).thenReturn("XYZ");
+    when(passwordEncoder.encode("test")).thenReturn("pass");
+    final PlayerUserDetailsService userDetailsService = mock(PlayerUserDetailsService.class);
 
-    InjectedBCryptPasswordEncoder passwordEncoder = Mockito
-        .mock(InjectedBCryptPasswordEncoder.class);
-    Mockito.when(passwordEncoder.encode("userNotFoundPassword")).thenReturn("XYZ");
-    Mockito.when(passwordEncoder.encode("test")).thenReturn("pass");
-    securityConfig.injectedPasswordEncoder = passwordEncoder;
-    final PlayerUserDetailsService userDetailsService = Mockito
-        .mock(PlayerUserDetailsService.class);
-    securityConfig.playerUserDetailsService = userDetailsService;
-
-    final AuthenticationManagerBuilder managerBuilder = Mockito
-        .mock(AuthenticationManagerBuilder.class);
-    Mockito
-        .when(managerBuilder.authenticationProvider(Matchers.isA(DaoAuthenticationProvider.class)))
+    final AuthenticationManagerBuilder managerBuilder = mock(AuthenticationManagerBuilder.class);
+    when(managerBuilder.authenticationProvider(Matchers.isA(DaoAuthenticationProvider.class)))
         .then(invocation -> {
           DaoAuthenticationProvider daoAuthenticationProvider = (DaoAuthenticationProvider) invocation
               .getArguments()[0];
@@ -65,10 +54,9 @@ public class SecurityConfigTest {
               ReflectionTestUtils.getField(daoAuthenticationProvider, "userDetailsService"));
           return managerBuilder;
         });
-    securityConfig.authenticationManagerBuilder = managerBuilder;
 
-    securityConfig.configureAuthenticationProvider();
-
+    securityConfig = new SecurityConfig(userDetailsService, passwordEncoder, null, null,
+        managerBuilder, null, null);
     Mockito.verify(managerBuilder)
         .authenticationProvider(Matchers.isA(DaoAuthenticationProvider.class));
   }

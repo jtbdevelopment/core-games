@@ -16,7 +16,8 @@ import org.junit.Test;
  */
 public class DeclineRematchOptionHandlerTest {
 
-  private DeclineRematchOptionHandler handler = new DeclineRematchOptionHandler(null, null);
+  private DeclineRematchOptionHandler handler = new DeclineRematchOptionHandler(null, null, null,
+      null, null, null);
 
   @Test
   public void testThrowsExceptionIfGameNotInRoundOverPhase() {

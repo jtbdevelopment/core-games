@@ -1,11 +1,12 @@
 package com.jtbdevelopment.games.rest.services;
 
-import com.jtbdevelopment.games.GameCoreTestCase;
-import com.jtbdevelopment.games.rest.handlers.ChallengeToRematchHandler;
+import static com.jtbdevelopment.games.GameCoreTestCase.makeSimpleMPGame;
+import static com.jtbdevelopment.games.GameCoreTestCase.makeSimpleMaskedMPGame;
+
 import com.jtbdevelopment.games.rest.handlers.DeclineRematchOptionHandler;
 import com.jtbdevelopment.games.rest.handlers.GameGetterHandler;
-import com.jtbdevelopment.games.rest.handlers.QuitHandler;
 import com.jtbdevelopment.games.stringimpl.StringMPGame;
+import com.jtbdevelopment.games.stringimpl.StringMaskedMPGame;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -26,23 +27,19 @@ public class AbstractGameServicesTest {
 
   private String PID = "4r3e";
   private String GID = "123d";
-  private StringMPGame game = GameCoreTestCase.makeSimpleMPGame("MP");
+  private StringMPGame game = makeSimpleMPGame("MP");
+  private StringMaskedMPGame maskedGame = makeSimpleMaskedMPGame("MMP");
   private GameGetterHandler gameGetterHandler = Mockito.mock(GameGetterHandler.class);
-  private ChallengeToRematchHandler rematchHandler = Mockito.mock(ChallengeToRematchHandler.class);
   private DeclineRematchOptionHandler declineRematchOptionHandler = Mockito
       .mock(DeclineRematchOptionHandler.class);
-  private QuitHandler quitHandler = Mockito.mock(QuitHandler.class);
-  private AbstractGameServices services = new AbstractGameServices() {
+  private AbstractGameServices services = new AbstractGameServices(gameGetterHandler,
+      declineRematchOptionHandler) {
   };
 
   @Before
   public void setUp() throws Exception {
     services.getPlayerID().set(PID);
     services.getGameID().set(GID);
-    services.quitHandler = quitHandler;
-    services.declineRematchOptionHandler = declineRematchOptionHandler;
-    services.rematchHandler = rematchHandler;
-    services.gameGetterHandler = gameGetterHandler;
   }
 
   @Test
@@ -65,10 +62,8 @@ public class AbstractGameServicesTest {
 
   @Test
   public void testActionAnnotations() {
-    LinkedHashMap<String, String> map = new LinkedHashMap<String, String>(3);
+    LinkedHashMap<String, String> map = new LinkedHashMap<>(3);
     map.put("endRematch", "endRematch");
-    map.put("createRematch", "rematch");
-    map.put("quitGame", "quit");
     map.forEach((method, path) -> {
       Method m = null;
       try {
@@ -88,20 +83,8 @@ public class AbstractGameServicesTest {
   }
 
   @Test
-  public void testCreateRematch() {
-    Mockito.when(rematchHandler.handleAction(PID, GID)).thenReturn(game);
-    Assert.assertSame(game, services.createRematch());
-  }
-
-  @Test
-  public void testQuitGame() {
-    Mockito.when(quitHandler.handleAction(PID, GID)).thenReturn(game);
-    Assert.assertSame(game, services.quitGame());
-  }
-
-  @Test
   public void testEndRematches() {
-    Mockito.when(declineRematchOptionHandler.handleAction(PID, GID)).thenReturn(game);
-    Assert.assertSame(game, services.endRematch());
+    Mockito.when(declineRematchOptionHandler.handleAction(PID, GID)).thenReturn(maskedGame);
+    Assert.assertSame(maskedGame, services.endRematch());
   }
 }

@@ -2,6 +2,7 @@ package com.jtbdevelopment.games.rest.services;
 
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.dao.StringToIDConverter;
+import com.jtbdevelopment.games.exceptions.input.PlayerNotPartOfGameException;
 import com.jtbdevelopment.games.players.AbstractPlayer;
 import com.jtbdevelopment.games.players.PlayerRoles;
 import com.jtbdevelopment.games.players.friendfinder.FriendFinder;
@@ -9,6 +10,7 @@ import com.jtbdevelopment.games.state.AbstractGame;
 import com.jtbdevelopment.games.state.masking.AbstractMaskedGame;
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.GET;
@@ -22,7 +24,6 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.StringUtils;
@@ -39,16 +40,24 @@ public abstract class AbstractPlayerServices<
     implements ApplicationContextAware {
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractPlayerServices.class);
-  @Autowired
-  protected AbstractGameServices<ID, FEATURES, IMPL, M, P> gamePlayServices;
-  @Autowired
-  protected AbstractPlayerRepository<ID, P> playerRepository;
-  @Autowired
-  protected AbstractAdminServices adminServices;
-  @Autowired
-  protected StringToIDConverter<ID> stringToIDConverter;
+  private final AbstractGameServices<ID, FEATURES, IMPL, M, P> gamePlayServices;
+  private final AbstractPlayerRepository<ID, P> playerRepository;
+  private final AbstractAdminServices<ID, FEATURES, IMPL, P> adminServices;
+  private final StringToIDConverter<ID> stringToIDConverter;
   private ThreadLocal<ID> playerID = new ThreadLocal<>();
   private ApplicationContext applicationContext;
+
+  @SuppressWarnings("WeakerAccess")
+  protected AbstractPlayerServices(
+      final AbstractGameServices<ID, FEATURES, IMPL, M, P> gamePlayServices,
+      final AbstractPlayerRepository<ID, P> playerRepository,
+      final AbstractAdminServices<ID, FEATURES, IMPL, P> adminServices,
+      final StringToIDConverter<ID> stringToIDConverter) {
+    this.gamePlayServices = gamePlayServices;
+    this.playerRepository = playerRepository;
+    this.adminServices = adminServices;
+    this.stringToIDConverter = stringToIDConverter;
+  }
 
   @Override
   public void setApplicationContext(final ApplicationContext applicationContext)
@@ -70,7 +79,7 @@ public abstract class AbstractPlayerServices<
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Object playerInfo() {
-    return playerRepository.findById(playerID.get()).get();
+    return playerRepository.findById(playerID.get()).orElseGet(null);
   }
 
   @GET
@@ -80,7 +89,8 @@ public abstract class AbstractPlayerServices<
     //  Social Media Requires Session Specific Requests
     if (applicationContext != null) {
       logger.info("Able to retrieve FriendFinder from application context");
-      FriendFinder friendFinder = applicationContext.getBean(FriendFinder.class);
+      //noinspection unchecked
+      FriendFinder<ID, P> friendFinder = applicationContext.getBean(FriendFinder.class);
       return friendFinder.findFriendsV2(playerID.get());
     } else {
       logger.warn("Unable to retrieve FriendFinder from application context");
@@ -93,9 +103,13 @@ public abstract class AbstractPlayerServices<
   @POST
   @Produces(MediaType.APPLICATION_JSON)
   public Object updateLastVersionNotes(@PathParam("versionNotes") final String lastVersionNotes) {
-    P player = playerRepository.findById((playerID.get())).get();
-    player.setLastVersionNotes(lastVersionNotes);
-    return playerRepository.save(player);
+    Optional<P> byId = playerRepository.findById((playerID.get()));
+    if (byId.isPresent()) {
+      P player = byId.get();
+      player.setLastVersionNotes(lastVersionNotes);
+      return playerRepository.save(player);
+    }
+    throw new PlayerNotPartOfGameException();
   }
 
   @Path("admin")

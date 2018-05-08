@@ -4,6 +4,7 @@ import static com.jtbdevelopment.games.GameCoreTestCase.PONE;
 import static com.jtbdevelopment.games.GameCoreTestCase.PTHREE;
 import static com.jtbdevelopment.games.GameCoreTestCase.PTWO;
 import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -20,7 +21,10 @@ import com.jtbdevelopment.games.state.masking.GameMasker;
 import com.jtbdevelopment.games.state.masking.MaskedGame;
 import com.jtbdevelopment.games.state.transition.AbstractMPGamePhaseTransitionEngine;
 import com.jtbdevelopment.games.state.transition.AbstractSPGamePhaseTransitionEngine;
+import com.jtbdevelopment.games.state.transition.GameTransitionEngine;
 import com.jtbdevelopment.games.stringimpl.StringMPGame;
+import com.jtbdevelopment.games.stringimpl.StringMaskedMPGame;
+import com.jtbdevelopment.games.stringimpl.StringMaskedSPGame;
 import com.jtbdevelopment.games.stringimpl.StringPlayer;
 import com.jtbdevelopment.games.stringimpl.StringSPGame;
 import com.jtbdevelopment.games.tracking.GameEligibilityTracker;
@@ -44,32 +48,26 @@ public class AbstractGameActionHandlerTest {
   private StringSPGame handledSPGame = GameCoreTestCase.makeSimpleSPGame("gameSP");
   private StringSPGame spGameParam = GameCoreTestCase.makeSimpleSPGame("paramSP");
   private String gameId = "238njcn33";
-  private GameEligibilityTracker eligibilityTracker = Mockito.mock(GameEligibilityTracker.class);
-  private AbstractPlayerRepository<String, StringPlayer> playerRepostiory = Mockito
-      .mock(AbstractPlayerRepository.class);
-  private AbstractSPGamePhaseTransitionEngine spTransitionEngine = Mockito
-      .mock(AbstractSPGamePhaseTransitionEngine.class);
-  private AbstractMPGamePhaseTransitionEngine mpTransitionEngine = Mockito
-      .mock(AbstractMPGamePhaseTransitionEngine.class);
-  private AbstractMultiPlayerGameRepository mpGameRepository = Mockito
-      .mock(AbstractMultiPlayerGameRepository.class);
-  private AbstractSinglePlayerGameRepository spGameRepository = Mockito
-      .mock(AbstractSinglePlayerGameRepository.class);
-  private GamePublisher gamePublisher = Mockito.mock(GamePublisher.class);
-  private GameMasker gameMasker = Mockito.mock(GameMasker.class);
-  private TestSPHandler handlerSP = new TestSPHandler(playerRepostiory, spGameRepository);
-  private TestMPHandler handlerMP = new TestMPHandler(playerRepostiory, mpGameRepository);
+  private GameEligibilityTracker eligibilityTracker = mock(GameEligibilityTracker.class);
+  private AbstractPlayerRepository<String, StringPlayer> playerRepostiory =
+      mock(AbstractPlayerRepository.class);
+  private AbstractSPGamePhaseTransitionEngine spTransitionEngine = mock(
+      AbstractSPGamePhaseTransitionEngine.class);
+  private AbstractMPGamePhaseTransitionEngine mpTransitionEngine =
+      mock(AbstractMPGamePhaseTransitionEngine.class);
+  private AbstractMultiPlayerGameRepository mpGameRepository =
+      mock(AbstractMultiPlayerGameRepository.class);
+  private AbstractSinglePlayerGameRepository spGameRepository =
+      mock(AbstractSinglePlayerGameRepository.class);
+  private GamePublisher gamePublisher = mock(GamePublisher.class);
+  private GameMasker gameMasker = mock(GameMasker.class);
+  private TestSPHandler handlerSP = new TestSPHandler(playerRepostiory, spGameRepository,
+      spTransitionEngine, gamePublisher, eligibilityTracker, gameMasker);
+  private TestMPHandler handlerMP = new TestMPHandler(playerRepostiory, mpGameRepository,
+      mpTransitionEngine, gamePublisher, eligibilityTracker, gameMasker);
 
   @Before
   public void setup() {
-    handlerSP.transitionEngine = spTransitionEngine;
-    handlerSP.gamePublisher = gamePublisher;
-    handlerSP.gameTracker = eligibilityTracker;
-    handlerSP.gameMasker = gameMasker;
-    handlerMP.transitionEngine = mpTransitionEngine;
-    handlerMP.gamePublisher = gamePublisher;
-    handlerMP.gameTracker = eligibilityTracker;
-    handlerMP.gameMasker = gameMasker;
     when(playerRepostiory.findById(PONE.getId())).thenReturn(Optional.of(PONE));
     mpGameParam.setPlayers(Arrays.asList(PONE, PTWO));
     spGameParam.setPlayer(PONE);
@@ -78,8 +76,8 @@ public class AbstractGameActionHandlerTest {
   @Test
   public void testDefaultDoesNotRequiresEligibility() {
     Assert.assertFalse(
-        new AbstractGameActionHandler<Object, String, Object, StringMPGame, StringPlayer>(
-            playerRepostiory, mpGameRepository) {
+        new AbstractGameActionHandler<Object, String, Object, StringMPGame, StringMaskedMPGame, StringPlayer>(
+            playerRepostiory, mpGameRepository, null, null, null, null) {
           protected StringMPGame handleActionInternal(final StringPlayer player,
               final StringMPGame game,
               final Object param) {
@@ -224,15 +222,20 @@ public class AbstractGameActionHandlerTest {
   }
 
   private class TestSPHandler extends
-      AbstractGameActionHandler<Object, String, Object, StringSPGame, StringPlayer> {
+      AbstractGameActionHandler<Object, String, Object, StringSPGame, StringMaskedSPGame, StringPlayer> {
 
     private boolean checkEligibility = false;
     private boolean internalException = false;
 
-    public TestSPHandler(
-        final AbstractPlayerRepository playerRepository,
-        final AbstractGameRepository gameRepository) {
-      super(playerRepository, gameRepository);
+    TestSPHandler(
+        AbstractPlayerRepository<String, StringPlayer> playerRepository,
+        AbstractGameRepository<String, Object, StringSPGame> gameRepository,
+        GameTransitionEngine<StringSPGame> transitionEngine,
+        GamePublisher<StringSPGame, StringPlayer> gamePublisher,
+        GameEligibilityTracker gameTracker,
+        GameMasker<String, StringSPGame, StringMaskedSPGame> gameMasker) {
+      super(playerRepository, gameRepository, transitionEngine, gamePublisher, gameTracker,
+          gameMasker);
     }
 
     @Override
@@ -262,15 +265,20 @@ public class AbstractGameActionHandlerTest {
   }
 
   private class TestMPHandler extends
-      AbstractGameActionHandler<Object, String, Object, StringMPGame, StringPlayer> {
+      AbstractGameActionHandler<Object, String, Object, StringMPGame, StringMaskedMPGame, StringPlayer> {
 
     private boolean checkEligibility = false;
     private boolean internalException = false;
 
-    public TestMPHandler(
-        final AbstractPlayerRepository playerRepository,
-        final AbstractGameRepository gameRepository) {
-      super(playerRepository, gameRepository);
+    TestMPHandler(
+        AbstractPlayerRepository<String, StringPlayer> playerRepository,
+        AbstractGameRepository<String, Object, StringMPGame> gameRepository,
+        GameTransitionEngine<StringMPGame> transitionEngine,
+        GamePublisher<StringMPGame, StringPlayer> gamePublisher,
+        GameEligibilityTracker gameTracker,
+        GameMasker<String, StringMPGame, StringMaskedMPGame> gameMasker) {
+      super(playerRepository, gameRepository, transitionEngine, gamePublisher, gameTracker,
+          gameMasker);
     }
 
     @Override

@@ -28,13 +28,11 @@ public class SocialService {
   @Produces(MediaType.APPLICATION_JSON)
   @Path("apis")
   public Map<String, String> apiInfo() {
-    Map<String, String> apis = new HashMap<String, String>() {{
+    return new HashMap<String, String>() {{
       if (facebookProperties != null && !facebookProperties.isWarnings()) {
         put("facebookAppId", facebookProperties.getClientID());
         put("facebookPermissions", facebookProperties.getPermissions());
       }
     }};
-
-    return apis;
   }
 }
