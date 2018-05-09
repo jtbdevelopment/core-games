@@ -26,7 +26,8 @@ public class LiveFeedService {
   @PathParam("id")
   public String id;
 
-  LiveFeedService() {
+  @SuppressWarnings("WeakerAccess")
+  public LiveFeedService() {
     logger.info("LiveFeedService instantiated");
   }
 
