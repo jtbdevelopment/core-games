@@ -14,6 +14,7 @@ public abstract class AbstractPlayerGameTrackingAttributes implements GameSpecif
   static final String PAID_GAMES_FIELD = "gameSpecificPlayerAttributes.availablePurchasedGames";
   private int freeGamesUsedToday = 0;
   private int availablePurchasedGames = 0;
+  @Transient
   private Player player;
 
   public abstract int getMaxDailyFreeGames();
