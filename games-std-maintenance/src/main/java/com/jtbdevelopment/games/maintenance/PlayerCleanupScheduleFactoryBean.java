@@ -1,0 +1,26 @@
+package com.jtbdevelopment.games.maintenance;
+
+import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
+import org.springframework.stereotype.Component;
+
+/**
+ * Date: 2/12/15 Time: 7:02 PM
+ */
+@SuppressWarnings("unused")
+@Component
+public class PlayerCleanupScheduleFactoryBean extends CronTriggerFactoryBean {
+
+  @SuppressWarnings("SpringAutowiredFieldsWarningInspection")
+  @Autowired
+  private PlayerCleanupJobDetailFactoryBean jobDetail;
+
+  @PostConstruct
+  public void setup() {
+    //noinspection ConstantConditions
+    setJobDetail(jobDetail.getObject());
+    setCronExpression("0 0 0 * * ?");
+    setName("Delete Inactive Players");
+  }
+}

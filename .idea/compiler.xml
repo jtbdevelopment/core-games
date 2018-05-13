@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <wildcardResourcePatterns>
+      <entry name="!?*.java" />
+      <entry name="!?*.form" />
+      <entry name="!?*.class" />
+      <entry name="!?*.groovy" />
+      <entry name="!?*.scala" />
+      <entry name="!?*.flex" />
+      <entry name="!?*.kt" />
+      <entry name="!?*.clj" />
+    </wildcardResourcePatterns>
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="games" />
+        <module name="games-core" />
+        <module name="games-core-mongo" />
+        <module name="games-dev-utilities" />
+        <module name="games-dictionaries" />
+        <module name="games-events" />
+        <module name="games-hazelcast" />
+        <module name="games-mongo" />
+        <module name="games-push-notifications" />
+        <module name="games-std-maintenance" />
+        <module name="games-std-tracker" />
+        <module name="games-web" />
+        <module name="games-web-std-multiplayer" />
+        <module name="games-web-std-singleplayer" />
+        <module name="games-websocket" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="core-games" target="1.8" />
+      <module name="games" target="1.8" />
+      <module name="games-dev-utilities" target="1.8" />
+      <module name="games-dictionaries" target="1.8" />
+      <module name="games-events" target="1.8" />
+      <module name="games-hazelcast" target="1.8" />
+      <module name="games-mongo" target="1.8" />
+      <module name="games-push-notifications" target="1.8" />
+      <module name="games-std-maintenance" target="1.8" />
+      <module name="games-std-tracker" target="1.8" />
+      <module name="games-web" target="1.8" />
+      <module name="games-web-std-multiplayer" target="1.8" />
+      <module name="games-web-std-singleplayer" target="1.8" />
+      <module name="games-websocket" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

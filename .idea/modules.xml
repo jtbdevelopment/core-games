@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/core-games.iml" filepath="$PROJECT_DIR$/core-games.iml" />
+      <module fileurl="file://$PROJECT_DIR$/games/games.iml" filepath="$PROJECT_DIR$/games/games.iml" />
+      <module fileurl="file://$PROJECT_DIR$/games-dev-utilities/games-dev-utilities.iml" filepath="$PROJECT_DIR$/games-dev-utilities/games-dev-utilities.iml" />
+      <module fileurl="file://$PROJECT_DIR$/games-dictionaries/games-dictionaries.iml" filepath="$PROJECT_DIR$/games-dictionaries/games-dictionaries.iml" />
+      <module fileurl="file://$PROJECT_DIR$/games-events/games-events.iml" filepath="$PROJECT_DIR$/games-events/games-events.iml" />
+      <module fileurl="file://$PROJECT_DIR$/games-hazelcast/games-hazelcast.iml" filepath="$PROJECT_DIR$/games-hazelcast/games-hazelcast.iml" />
+      <module fileurl="file://$PROJECT_DIR$/games-mongo/games-mongo.iml" filepath="$PROJECT_DIR$/games-mongo/games-mongo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/games-push-notifications/games-push-notifications.iml" filepath="$PROJECT_DIR$/games-push-notifications/games-push-notifications.iml" />
+      <module fileurl="file://$PROJECT_DIR$/games-std-maintenance/games-std-maintenance.iml" filepath="$PROJECT_DIR$/games-std-maintenance/games-std-maintenance.iml" />
+      <module fileurl="file://$PROJECT_DIR$/games-std-tracker/games-std-tracker.iml" filepath="$PROJECT_DIR$/games-std-tracker/games-std-tracker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/games-web/games-web.iml" filepath="$PROJECT_DIR$/games-web/games-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/games-web-std-multiplayer/games-web-std-multiplayer.iml" filepath="$PROJECT_DIR$/games-web-std-multiplayer/games-web-std-multiplayer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/games-web-std-singleplayer/games-web-std-singleplayer.iml" filepath="$PROJECT_DIR$/games-web-std-singleplayer/games-web-std-singleplayer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/games-websocket/games-websocket.iml" filepath="$PROJECT_DIR$/games-websocket/games-websocket.iml" />
+    </modules>
+  </component>
+</project>
