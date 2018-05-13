@@ -3,7 +3,7 @@
   <parent>
     <artifactId>core-games</artifactId>
     <groupId>com.jtbdevelopment.core-games</groupId>
-    <version>1.8</version>
+    <version>1.9-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -23,7 +23,7 @@
     <dependency>
       <groupId>com.jtbdevelopment.core-games</groupId>
       <artifactId>games</artifactId>
-      <version>1.8</version>
+      <version>1.9-SNAPSHOT</version>
     </dependency>
 
     <dependency>
@@ -48,7 +48,7 @@
     <dependency>
       <groupId>com.jtbdevelopment.core-games</groupId>
       <artifactId>games-hazelcast</artifactId>
-      <version>1.8</version>
+      <version>1.9-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
