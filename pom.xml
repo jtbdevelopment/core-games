@@ -28,7 +28,7 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
 
-    <core.common.version>1.10-SNAPSHOT</core.common.version>
+    <core.common.version>1.10</core.common.version>
     <spring.data.mongodb.version>2.0.5.RELEASE</spring.data.mongodb.version>
     <spring.data.common.version>2.0.5.RELEASE</spring.data.common.version>
     <spring.security.version>4.2.1.RELEASE</spring.security.version>

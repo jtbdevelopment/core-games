@@ -31,12 +31,12 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.6.1" level="project" />
     <orderEntry type="module" module-name="games-web" />
-    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-web:1.10-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring:1.10-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-web:1.10" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring:1.10" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-tx:5.0.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-web:4.2.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.social:spring-social-core:1.1.6.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-jackson:1.10-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-jackson:1.10" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.5" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.5" level="project" />
     <orderEntry type="module" module-name="games" />
@@ -94,7 +94,7 @@
     <orderEntry type="module" module-name="games-events" />
     <orderEntry type="library" name="Maven: org.atmosphere:atmosphere-runtime:2.4.9" level="project" />
     <orderEntry type="module" module-name="games-hazelcast" />
-    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-hazelcast:1.10-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-hazelcast:1.10" level="project" />
     <orderEntry type="library" name="Maven: com.hazelcast:hazelcast:3.9.3" level="project" />
     <orderEntry type="library" name="Maven: com.hazelcast:hazelcast-aws:2.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-core:1.11.311" level="project" />
@@ -105,7 +105,7 @@
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.8.1" level="project" />
     <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-ec2:1.11.311" level="project" />
     <orderEntry type="library" name="Maven: com.amazonaws:jmespath-java:1.11.311" level="project" />
-    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-web-hazelcast:1.10-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-web-hazelcast:1.10" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.session:spring-session-core:2.0.2.RELEASE" level="project" />
     <orderEntry type="module" module-name="games" scope="TEST" production-on-test="" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.10" level="project" />
