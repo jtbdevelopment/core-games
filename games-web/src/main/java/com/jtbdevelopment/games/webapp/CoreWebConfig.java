@@ -3,7 +3,6 @@ package com.jtbdevelopment.games.webapp;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration.Dynamic;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.springframework.core.annotation.Order;
@@ -17,7 +16,7 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 @Order(value = -100)
 public class CoreWebConfig implements WebApplicationInitializer {
 
-  public void onStartup(final ServletContext servletContext) throws ServletException {
+  public void onStartup(final ServletContext servletContext) {
     servletContext.setInitParameter("contextConfigLocation", "<NONE>");
     AnnotationConfigWebApplicationContext root = new AnnotationConfigWebApplicationContext();
     root.register(SpringWebConfig.class);

@@ -10,7 +10,7 @@
   <artifactId>games-dev-utilities</artifactId>
 
   <properties>
-    <jetty.version>9.3.10.v20160621</jetty.version>
+    <jetty.version>9.4.10.v20180503</jetty.version>
   </properties>
 
   <dependencies>
@@ -35,6 +35,11 @@
       <version>${core.common.version}</version>
       <type>test-jar</type>
     </dependency>
+    <dependency>
+      <groupId>com.jtbdevelopment.core-common</groupId>
+      <artifactId>core-spring-web-hazelcast</artifactId>
+      <version>${core.common.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
@@ -44,6 +49,21 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-webapp</artifactId>
+      <version>${jetty.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-annotations</artifactId>
+      <version>${jetty.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-plus</artifactId>
+      <version>${jetty.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-continuation</artifactId>
       <version>${jetty.version}</version>
     </dependency>
     <dependency>

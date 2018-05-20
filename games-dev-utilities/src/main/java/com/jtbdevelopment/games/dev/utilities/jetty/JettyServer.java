@@ -1,18 +1,17 @@
 package com.jtbdevelopment.games.dev.utilities.jetty;
 
-import java.util.EnumSet;
-import javax.servlet.DispatcherType;
-import org.atmosphere.cpr.AtmosphereServlet;
+import com.jtbdevelopment.core.hazelcast.sessions.SessionInitializer;
+import com.jtbdevelopment.games.security.spring.security.SecurityInitializer;
+import com.jtbdevelopment.games.webapp.CoreWebConfig;
+import com.jtbdevelopment.games.websocket.AtmosphereWebConfig;
+import java.util.HashSet;
+import org.eclipse.jetty.annotations.AnnotationConfiguration;
+import org.eclipse.jetty.annotations.ClassInheritanceHandler;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.FilterHolder;
-import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.log.Slf4jLog;
+import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.glassfish.jersey.servlet.ServletContainer;
-import org.springframework.web.context.ContextLoaderListener;
-import org.springframework.web.context.request.RequestContextListener;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.filter.DelegatingFilterProxy;
+import org.springframework.web.WebApplicationInitializer;
 
 /**
  * Date: 12/20/2014
@@ -27,55 +26,28 @@ public class JettyServer {
     Server server = new Server(port);
 
     WebAppContext webAppContext = new WebAppContext();
-    webAppContext.setInitParameter("contextConfigLocation", "<NONE>");
     webAppContext.setResourceBase(".");
     webAppContext.setContextPath("/");
-    webAppContext.setParentLoaderPriority(false);
-    AnnotationConfigWebApplicationContext root = new AnnotationConfigWebApplicationContext();
-    root.setConfigLocation("com.jtbdevelopment");
-    root.register(AppConfig.class);
-    webAppContext.addEventListener(new ContextLoaderListener(root));
-    webAppContext.addEventListener(new RequestContextListener());
+    webAppContext.setParentLoaderPriority(true);
+    webAppContext.setConfigurations(
+        new Configuration[]{new AnnotationConfiguration() {
+          public void preConfigure(WebAppContext context) {
+            final ClassInheritanceMap map = new ClassInheritanceMap();
+            final HashSet<String> set = new HashSet<>();
+            set.add(CoreWebConfig.class.getName());
+            set.add(AtmosphereWebConfig.class.getName());
+            set.add(SecurityInitializer.class.getName());
+            set.add(SessionInitializer.class.getName());
+            map.put(WebApplicationInitializer.class.getName(), set);
+            context.setAttribute(CLASS_INHERITANCE_MAP, map);
+            _classInheritanceHandler = new ClassInheritanceHandler(map);
+          }
+        }});
     webAppContext.setLogger(new Slf4jLog());
-
-    configureAtmosphere(webAppContext);
-
-    configureJersey(webAppContext);
-
-    webAppContext
-        .addFilter(new FilterHolder(new DelegatingFilterProxy("springSecurityFilterChain")), "/*",
-            EnumSet.allOf(DispatcherType.class));
 
     server.setHandler(webAppContext);
 
-    // Add Spring Security Filter by the name
     return server;
-  }
-
-  private static void configureJersey(WebAppContext webAppContext) {
-    ServletHolder jerseyServlet = webAppContext.addServlet(ServletContainer.class, "/api/*");
-    jerseyServlet.setInitOrder(2);
-    jerseyServlet.setInitParameter("jersey.config.server.provider.packages", "com.jtbdevelopment");
-    jerseyServlet.setInitParameter("jersey.config.server.provider.classnames",
-        "org.glassfish.jersey.filter.LoggingFilter");
-    jerseyServlet.setInitParameter("jersey.config.server.tracing", "ALL");
-  }
-
-  private static void configureAtmosphere(WebAppContext webAppContext) {
-    ServletHolder atmosphereServletHolder = webAppContext
-        .addServlet(AtmosphereServlet.class, "/livefeed/*");
-    atmosphereServletHolder.setInitOrder(1);
-    atmosphereServletHolder.setInitParameter("org.atmosphere.cpr.packages", "com.jtbdevelopment");
-    atmosphereServletHolder
-        .setInitParameter("org.atmosphere.websocket.messageContentType", "application/json");
-    atmosphereServletHolder
-        .setInitParameter("org.atmosphere.cpr.broadcasterLifeCyclePolicy", "EMPTY_DESTROY");
-    atmosphereServletHolder.setInitParameter("org.atmosphere.cpr.sessionSupport", "true");
-    atmosphereServletHolder.setInitParameter(
-        "org.atmosphere.interceptor.HeartbeatInterceptor.heartbeatFrequencyInSeconds", "20");
-    atmosphereServletHolder
-        .setInitParameter("org.atmosphere.cpr.dropAccessControlAllowOriginHeader", "true");
-    atmosphereServletHolder.setAsyncSupported(true);
   }
 
   public static void main(final String[] args) throws Exception {

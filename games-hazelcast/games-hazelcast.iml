@@ -23,6 +23,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-games:games:1.9-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.jtbdevelopment.core-games:games:test-jar:tests:1.9-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring-hazelcast:1.10" level="project" />
     <orderEntry type="library" name="Maven: com.jtbdevelopment.core-common:core-spring:1.10" level="project" />
     <orderEntry type="library" name="Maven: com.hazelcast:hazelcast:3.9.3" level="project" />
@@ -30,7 +32,6 @@
     <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-core:1.11.311" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.5.5" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.9" level="project" />
-    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.10" level="project" />
     <orderEntry type="library" name="Maven: software.amazon.ion:ion-java:1.0.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.6.7" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.8.1" level="project" />
@@ -43,9 +44,11 @@
     <orderEntry type="library" name="Maven: org.springframework.session:spring-session-core:2.0.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-web:5.0.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: javax.servlet:javax.servlet-api:3.1.0" level="project" />
-    <orderEntry type="library" name="Maven: com.jtbdevelopment.core-games:games:1.9-SNAPSHOT" level="project" />
+    <orderEntry type="module" module-name="games" />
+    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.10" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:2.0.5.RELEASE" level="project" />
     <orderEntry type="module" module-name="games-events" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.jtbdevelopment.core-games:games:test-jar:tests:1.9-SNAPSHOT" level="project" />
+    <orderEntry type="module" module-name="games" scope="TEST" production-on-test="" />
     <orderEntry type="library" name="Maven: org.springframework:spring-core:5.0.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.0.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context:5.0.5.RELEASE" level="project" />

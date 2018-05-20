@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
-import com.jtbdevelopment.core.mongo.spring.AbstractMongoDefaultSpringContextIntegration;
+import com.jtbdevelopment.core.mongo.spring.AbstractMongoNoSpringContextIntegration;
 import com.jtbdevelopment.games.dao.AbstractGameRepository;
 import com.jtbdevelopment.games.dev.utilities.jetty.JettyServer;
 import com.jtbdevelopment.games.mongo.dao.MongoPlayerRepository;
@@ -48,7 +48,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class AbstractGameIntegration<IMPL extends AbstractGame, RECEIVE extends AbstractMaskedGame> extends
-    AbstractMongoDefaultSpringContextIntegration {
+    AbstractMongoNoSpringContextIntegration {
 
   protected static final Entity EMPTY_PUT_POST = Entity.entity("", MediaType.TEXT_PLAIN);
   private static final int port = 8998;
@@ -78,6 +78,7 @@ public abstract class AbstractGameIntegration<IMPL extends AbstractGame, RECEIVE
 
   @BeforeClass
   public static void initialize() throws Exception {
+    setupMongo();
     SERVER = JettyServer.makeServer(port);
     SERVER.start();
 

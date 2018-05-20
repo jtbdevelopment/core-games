@@ -1,7 +1,7 @@
 package com.jtbdevelopment.games.mongo.dao;
 
 import com.jtbdevelopment.core.mongo.spring.converters.MongoConverter;
-import com.jtbdevelopment.games.state.GamePhase;
+import com.jtbdevelopment.games.state.PlayerState;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ReadingConverter
-public class StringToGamePhaseConverter implements MongoConverter<String, GamePhase> {
+public class StringToPlayerStateConverter implements MongoConverter<String, PlayerState> {
 
   @Override
-  public GamePhase convert(final String source) {
+  public PlayerState convert(final String source) {
     //noinspection ConstantConditions
-    return source != null ? GamePhase.valueOf(source) : null;
+    return source != null ? PlayerState.valueOf(source) : null;
   }
 
 }
