@@ -21,7 +21,7 @@ public class FacebookProperties {
   public FacebookProperties(
       @Value("${facebook.clientID:}") final String clientID,
       @Value("${facebook.clientSecret:}") final String clientSecret,
-      @Value("${facebook.permissions:public_profile,email,user_friends}") final String permissions) {
+      @Value("${facebook.permissions:public_profile,user_friends}") final String permissions) {
     this.clientID = clientID;
     this.clientSecret = clientSecret;
     this.permissions = permissions;

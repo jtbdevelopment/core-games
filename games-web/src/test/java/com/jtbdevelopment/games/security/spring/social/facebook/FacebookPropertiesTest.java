@@ -24,7 +24,7 @@ public class FacebookPropertiesTest {
     assertEquals(Value.class, annotations[2][0].annotationType());
     assertEquals("${facebook.clientID:}", ((Value) annotations[0][0]).value());
     assertEquals("${facebook.clientSecret:}", ((Value) annotations[1][0]).value());
-    assertEquals("${facebook.permissions:public_profile,email,user_friends}",
+    assertEquals("${facebook.permissions:public_profile,user_friends}",
         ((Value) annotations[2][0]).value());
   }
 
