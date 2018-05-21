@@ -11,7 +11,6 @@ public interface SourceBasedFriendFinder {
 
   String FRIENDS_KEY = "friends";
   String MASKED_FRIENDS_KEY = "maskedFriends";
-  String INVITABLE_FRIENDS_KEY = "invitableFriends";
   String NOT_FOUND_KEY = "notFoundFriends";
 
   boolean handlesSource(final String source);

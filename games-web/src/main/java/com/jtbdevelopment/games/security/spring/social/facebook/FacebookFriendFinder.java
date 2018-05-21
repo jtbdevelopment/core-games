@@ -48,7 +48,6 @@ public class FacebookFriendFinder<ID extends Serializable, P extends AbstractPla
     Map<String, Set<Object>> results = new HashMap<>();
     results.put(FRIENDS_KEY, new LinkedHashSet<>());
     results.put(NOT_FOUND_KEY, new LinkedHashSet<>());
-    results.put(INVITABLE_FRIENDS_KEY, new LinkedHashSet<>());
 
     PagedList<Reference> friends = facebook.friendOperations().getFriends();
     List<String> friendSourceIds = friends.stream()
@@ -66,9 +65,6 @@ public class FacebookFriendFinder<ID extends Serializable, P extends AbstractPla
         results.get(NOT_FOUND_KEY).add(friendReference);
       }
     });
-    PagedList<Reference> canInvite = facebook
-        .fetchConnections("me", "invitable_friends", Reference.class);
-    results.get(INVITABLE_FRIENDS_KEY).addAll(canInvite);
     return new HashMap<>(results);
   }
 }

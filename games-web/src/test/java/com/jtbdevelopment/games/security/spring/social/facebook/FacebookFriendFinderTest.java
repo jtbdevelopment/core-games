@@ -48,9 +48,6 @@ public class FacebookFriendFinderTest {
 
   @Test
   public void testFindFriends() {
-    Reference R1 = new Reference("1");
-    Reference R2 = new Reference("2");
-    Reference R3 = new Reference("4");
     Reference PTHREE_REF = new Reference(PTHREE.getSourceId());
     FriendOperations operations = Mockito.mock(FriendOperations.class);
     when(facebook.friendOperations()).thenReturn(operations);
@@ -62,11 +59,6 @@ public class FacebookFriendFinderTest {
             new Reference(PINACTIVE1.getSourceId())),
         new PagingParameters(0, 0, 0L, 0L),
         new PagingParameters(0, 0, 0L, 0L)));
-    when(facebook.fetchConnections("me", "invitable_friends", Reference.class))
-        .thenReturn(
-            new PagedList<>(Arrays.asList(R1, R2, R3),
-                new PagingParameters(0, 0, 0L, 0L),
-                new PagingParameters(0, 0, 0L, 0L)));
     when(playerRepository.findBySourceAndSourceIdIn("facebook", new ArrayList<>(
         Arrays
             .asList(PTWO.getSourceId(), PFOUR.getSourceId(), PTHREE.getSourceId(),
@@ -79,8 +71,6 @@ public class FacebookFriendFinderTest {
     map.put(SourceBasedFriendFinder.FRIENDS_KEY,
         new HashSet<>(Arrays.asList(PTWO, PFOUR, PINACTIVE1)));
     map.put(SourceBasedFriendFinder.NOT_FOUND_KEY, new HashSet<>(Arrays.asList(PTHREE_REF)));
-    map.put(SourceBasedFriendFinder.INVITABLE_FRIENDS_KEY,
-        new HashSet<>(Arrays.asList(R1, R2, R3)));
     Assert.assertEquals(friends, map);
   }
 }
