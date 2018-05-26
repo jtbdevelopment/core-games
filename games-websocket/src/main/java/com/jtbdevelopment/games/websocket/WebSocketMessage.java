@@ -6,6 +6,7 @@ import com.jtbdevelopment.games.state.masking.MaskedGame;
 /**
  * Date: 12/8/14 Time: 6:59 AM
  */
+@SuppressWarnings("WeakerAccess")
 public class WebSocketMessage {
 
   private MessageType messageType;
@@ -13,11 +14,11 @@ public class WebSocketMessage {
   private Player player;
   private String message;
 
-  WebSocketMessage() {
+  public WebSocketMessage() {
 
   }
 
-  WebSocketMessage(
+  public WebSocketMessage(
       final MessageType messageType,
       final MaskedGame game,
       final Player player,
@@ -28,35 +29,35 @@ public class WebSocketMessage {
     this.game = game;
   }
 
-  MessageType getMessageType() {
+  public MessageType getMessageType() {
     return messageType;
   }
 
-  void setMessageType(MessageType messageType) {
+  public void setMessageType(MessageType messageType) {
     this.messageType = messageType;
   }
 
-  MaskedGame getGame() {
+  public MaskedGame getGame() {
     return game;
   }
 
-  void setGame(MaskedGame game) {
+  public void setGame(MaskedGame game) {
     this.game = game;
   }
 
-  Player getPlayer() {
+  public Player getPlayer() {
     return player;
   }
 
-  void setPlayer(Player player) {
+  public void setPlayer(Player player) {
     this.player = player;
   }
 
-  String getMessage() {
+  public String getMessage() {
     return message;
   }
 
-  void setMessage(String message) {
+  public void setMessage(String message) {
     this.message = message;
   }
 
