@@ -10,7 +10,7 @@
   <artifactId>games-dev-utilities</artifactId>
 
   <properties>
-    <jetty.version>9.4.10.v20180503</jetty.version>
+    <jetty.version>9.3.10.v20160621</jetty.version>
   </properties>
 
   <dependencies>

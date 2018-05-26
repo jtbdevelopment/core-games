@@ -4,10 +4,10 @@ import com.jtbdevelopment.core.hazelcast.sessions.SessionInitializer;
 import com.jtbdevelopment.games.security.spring.security.SecurityInitializer;
 import com.jtbdevelopment.games.webapp.CoreWebConfig;
 import com.jtbdevelopment.games.websocket.AtmosphereWebConfig;
-import java.util.HashSet;
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.annotations.ClassInheritanceHandler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.util.ConcurrentHashSet;
 import org.eclipse.jetty.util.log.Slf4jLog;
 import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -33,7 +33,7 @@ public class JettyServer {
         new Configuration[]{new AnnotationConfiguration() {
           public void preConfigure(WebAppContext context) {
             final ClassInheritanceMap map = new ClassInheritanceMap();
-            final HashSet<String> set = new HashSet<>();
+            final ConcurrentHashSet<String> set = new ConcurrentHashSet<>();
             set.add(CoreWebConfig.class.getName());
             set.add(AtmosphereWebConfig.class.getName());
             set.add(SecurityInitializer.class.getName());

@@ -34,7 +34,7 @@
     <spring.facebook.version>2.0.3.RELEASE</spring.facebook.version>
     <spring.version>5.0.5.RELEASE</spring.version>
 
-    <atmosphere.version>2.4.9</atmosphere.version>
+    <atmosphere.version>2.4.24</atmosphere.version>
 
     <commons.codec.version>1.10</commons.codec.version>
     <jackson.version>2.9.5</jackson.version>

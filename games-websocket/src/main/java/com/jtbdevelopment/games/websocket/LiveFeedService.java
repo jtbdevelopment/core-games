@@ -41,8 +41,8 @@ public class LiveFeedService {
     return message;
   }
 
-  @Disconnect
   @SuppressWarnings("WeakerAccess")
+  @Disconnect
   public void onDisconnect(final AtmosphereResourceEvent event) {
     if (event.isCancelled()) {
       // We didn't get notified, so we remove the user.
@@ -61,8 +61,8 @@ public class LiveFeedService {
 
   }
 
-  @Message(decoders = {WebSocketJSONConverter.class}, encoders = {WebSocketJSONConverter.class})
   @SuppressWarnings("WeakerAccess")
+  @Message(decoders = {WebSocketJSONConverter.class}, encoders = {WebSocketJSONConverter.class})
   public WebSocketMessage onMessage(WebSocketMessage message) {
     return message;
   }

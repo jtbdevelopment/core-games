@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -13,7 +14,12 @@ import org.mockito.Mockito;
 public class WebSocketJSONConverterTest {
 
   private ObjectMapper mapper = Mockito.mock(ObjectMapper.class);
-  private WebSocketJSONConverter webSocketJsonConverter = new WebSocketJSONConverter(mapper);
+  private WebSocketJSONConverter webSocketJsonConverter = new WebSocketJSONConverter();
+
+  @Before
+  public void setup() {
+    webSocketJsonConverter.setMapper(mapper);
+  }
 
   @Test
   public void testEncodeCallsStaticMapper() throws JsonProcessingException {
