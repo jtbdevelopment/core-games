@@ -3,7 +3,7 @@
   <parent>
     <artifactId>core-games</artifactId>
     <groupId>com.jtbdevelopment.core-games</groupId>
-    <version>1.9</version>
+    <version>1.10-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -17,17 +17,17 @@
     <dependency>
       <groupId>com.jtbdevelopment.core-games</groupId>
       <artifactId>games</artifactId>
-      <version>1.9</version>
+      <version>1.10-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.jtbdevelopment.core-games</groupId>
       <artifactId>games-websocket</artifactId>
-      <version>1.9</version>
+      <version>1.10-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.jtbdevelopment.core-games</groupId>
       <artifactId>games-mongo</artifactId>
-      <version>1.9</version>
+      <version>1.10-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.jtbdevelopment.core-common</groupId>
