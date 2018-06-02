@@ -45,7 +45,7 @@ public abstract class AbstractGameMasker<
     playerMaskedGame
         .setFeatureData(game.getFeatureData().entrySet().stream().collect(Collectors.toMap(
             Entry::getKey,
-            entry -> idClass.isInstance(entry.getValue()) ? idMap.get(entry.getValue())
+            entry -> idClass.isInstance(entry.getValue()) ? idMap.get(entry.getValue()).getMd5()
                 : entry.getValue()
         )));
   }

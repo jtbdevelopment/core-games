@@ -35,7 +35,8 @@ public class AbstractGameGetterHandler<
     this.gameRepository = gameRepository;
   }
 
-  void validatePlayerForGame(final Game game, final Player player) {
+  @SuppressWarnings("WeakerAccess")
+  protected void validatePlayerForGame(final Game game, final Player player) {
     if (game instanceof MultiPlayerGame) {
       if (!game.getAllPlayers().contains(player)) {
         throw new PlayerNotPartOfGameException();
