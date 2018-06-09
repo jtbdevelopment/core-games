@@ -4,7 +4,6 @@ import com.jtbdevelopment.games.players.Player;
 import java.beans.Transient;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -49,12 +48,6 @@ public interface Game<ID extends Serializable, TIMESTAMP, FEATURES> {
   Set<FEATURES> getFeatures();
 
   void setFeatures(final Set<FEATURES> features);
-
-  @Deprecated
-  Map<FEATURES, Object> getFeatureData();
-
-  @Deprecated
-  void setFeatureData(final Map<FEATURES, Object> featureData);
 
   GamePhase getGamePhase();
 

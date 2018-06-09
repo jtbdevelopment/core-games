@@ -16,7 +16,6 @@ public class AbstractMaskedSinglePlayerGameTest {
     game.setId(ID);
     Assert.assertEquals(ID, game.getIdAsString());
     Assert.assertTrue(game.getFeatures().isEmpty());
-    Assert.assertTrue(game.getFeatureData().isEmpty());
     Assert.assertTrue(game.getPlayerImages().isEmpty());
     Assert.assertTrue(game.getPlayerProfiles().isEmpty());
     Assert.assertTrue(game.getPlayers().isEmpty());

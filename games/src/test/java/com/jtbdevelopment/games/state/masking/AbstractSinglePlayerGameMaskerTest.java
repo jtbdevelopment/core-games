@@ -64,7 +64,6 @@ public class AbstractSinglePlayerGameMaskerTest {
     game.setPlayer(PONE);
     game.setCreated(Instant.now());
     game.setCompletedTimestamp(Instant.now());
-    game.setFeatureData(featureMap);
     game.setFeatures(new HashSet<>(Arrays.asList(Features.FeatureA, Features.FeatureB)));
     game.setPreviousId(100);
     game.setId(101);
@@ -83,7 +82,6 @@ public class AbstractSinglePlayerGameMaskerTest {
     LinkedHashMap<String, String> map3 = new LinkedHashMap<String, String>(1);
     map3.put(PONE.getMd5(), PONE.getProfileUrl());
     assertEquals(map3, maskedGame.getPlayerProfiles());
-    assertEquals(game.getFeatureData(), maskedGame.getFeatureData());
   }
 
   private enum Features {

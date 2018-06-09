@@ -19,7 +19,6 @@ public class AbstractMaskedMultiPlayerGameTest {
 
     assertEquals(ID, game.getIdAsString());
     assertTrue(game.getFeatures().isEmpty());
-    assertTrue(game.getFeatureData().isEmpty());
     assertTrue(game.getPlayerImages().isEmpty());
     assertTrue(game.getPlayerProfiles().isEmpty());
     assertTrue(game.getPlayerStates().isEmpty());

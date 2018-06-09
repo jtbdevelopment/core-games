@@ -17,10 +17,8 @@ import com.mongodb.client.MongoCollection;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.StreamSupport;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -108,9 +106,6 @@ public class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringCont
     save.setStringValue("X");
     save.setPlayer(player1);
     save.setFeatures(new HashSet<>(Arrays.asList("GG", "A")));
-    Map<String, Object> featureData = new HashMap<>();
-    featureData.put("H", "N");
-    save.setFeatureData(featureData);
     assertNull(save.getId());
     assertNull(save.getCreated());
     assertNull(save.getLastUpdate());
@@ -124,7 +119,6 @@ public class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringCont
     assertEquals(save.getStringValue(), saved.getStringValue());
     assertEquals(save.getPlayer(), saved.getPlayer());
     assertNull(saved.getCompletedTimestamp());
-    assertEquals(save.getFeatureData(), saved.getFeatureData());
     assertEquals(save.getFeatures(), saved.getFeatures());
 
     loaded = (SimpleSinglePlayerGame) gameRepository.findById(saved.getId()).get();
@@ -136,7 +130,6 @@ public class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringCont
     assertEquals(save.getStringValue(), loaded.getStringValue());
     assertEquals(save.getPlayer(), loaded.getPlayer());
     assertNull(loaded.getCompletedTimestamp());
-    assertEquals(save.getFeatureData(), loaded.getFeatureData());
     assertEquals(save.getFeatures(), loaded.getFeatures());
 
     assertEquals(1, gameRepository.count());
@@ -160,7 +153,6 @@ public class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringCont
     update.setCompletedTimestamp(Instant.now());
     update.setIntValue(update.getIntValue() * 2);
     update.getFeatures().addAll(new ArrayList<>(Arrays.asList("HG", "34")));
-    update.getFeatureData().put("rr", new Long(3));
     updated = (SimpleSinglePlayerGame) gameRepository.save(update);
     Assert.assertNotNull(updated);
     assertEquals(initial.getId(), updated.getId());
@@ -170,7 +162,6 @@ public class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringCont
     assertEquals(update.getStringValue(), updated.getStringValue());
     assertEquals(update.getPlayer(), updated.getPlayer());
     assertEquals(update.getCompletedTimestamp(), updated.getCompletedTimestamp());
-    assertEquals(update.getFeatureData(), updated.getFeatureData());
     assertEquals(update.getFeatures(), updated.getFeatures());
 
     loaded = (SimpleSinglePlayerGame) gameRepository.findById(update.getId()).get();
@@ -182,7 +173,6 @@ public class MongoSinglePlayerGamesIntegration extends AbstractMongoNoSpringCont
     assertEquals(updated.getStringValue(), loaded.getStringValue());
     assertEquals(updated.getPlayer(), loaded.getPlayer());
     assertEquals(updated.getCompletedTimestamp(), loaded.getCompletedTimestamp());
-    assertEquals(update.getFeatureData(), updated.getFeatureData());
     assertEquals(update.getFeatures(), updated.getFeatures());
 
     assertEquals(1, gameRepository.count());

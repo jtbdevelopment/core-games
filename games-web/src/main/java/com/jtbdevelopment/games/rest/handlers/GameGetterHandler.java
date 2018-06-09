@@ -3,7 +3,6 @@ package com.jtbdevelopment.games.rest.handlers;
 import com.jtbdevelopment.games.dao.AbstractGameRepository;
 import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.players.AbstractPlayer;
-import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.state.AbstractGame;
 import com.jtbdevelopment.games.state.Game;
 import com.jtbdevelopment.games.state.masking.AbstractMaskedGame;
@@ -25,7 +24,7 @@ public class GameGetterHandler<
 
   private final GameMasker<ID, IMPL, M> gameMasker;
 
-  @SuppressWarnings("SpringJavaAutowiringInspection")
+  @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
   public GameGetterHandler(
       final AbstractPlayerRepository<ID, P> playerRepository,
       final AbstractGameRepository<ID, FEATURES, IMPL> gameRepository,
@@ -35,7 +34,7 @@ public class GameGetterHandler<
   }
 
   public Game getGame(final ID playerID, final ID gameID) {
-    Player<ID> player = loadPlayer(playerID);
+    P player = loadPlayer(playerID);
     IMPL game = loadGame(gameID);
     validatePlayerForGame(game, player);
     return gameMasker.maskGameForPlayer(game, player);

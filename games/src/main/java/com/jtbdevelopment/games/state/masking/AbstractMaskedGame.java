@@ -3,8 +3,8 @@ package com.jtbdevelopment.games.state.masking;
 import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.state.GamePhase;
 import java.beans.Transient;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,11 +22,10 @@ public abstract class AbstractMaskedGame<FEATURES> implements MaskedGame<FEATURE
   private Long lastUpdate;
   private Long completedTimestamp;
   private GamePhase gamePhase;
-  private Map<String, String> players = new LinkedHashMap<>();
-  private Map<String, String> playerImages = new LinkedHashMap<>();
-  private Map<String, String> playerProfiles = new LinkedHashMap<>();
+  private Map<String, String> players = new HashMap<>();
+  private Map<String, String> playerImages = new HashMap<>();
+  private Map<String, String> playerProfiles = new HashMap<>();
   private Set<FEATURES> features = new HashSet<>();
-  private Map<FEATURES, Object> featureData = new LinkedHashMap<>();
 
   @Override
   @Transient
@@ -145,11 +144,4 @@ public abstract class AbstractMaskedGame<FEATURES> implements MaskedGame<FEATURE
     this.features = features;
   }
 
-  public Map<FEATURES, Object> getFeatureData() {
-    return featureData;
-  }
-
-  public void setFeatureData(Map<FEATURES, Object> featureData) {
-    this.featureData = featureData;
-  }
 }

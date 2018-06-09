@@ -2,9 +2,7 @@ package com.jtbdevelopment.games.state;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -26,7 +24,6 @@ public abstract class AbstractGame<ID extends Serializable, FEATURES>
   private Instant completedTimestamp;
   private GamePhase gamePhase = GamePhase.Setup;
   private Set<FEATURES> features = new HashSet<>();
-  private Map<FEATURES, Object> featureData = new HashMap<>();
 
   public boolean equals(final Object o) {
     if (!(o instanceof Game)) {
@@ -100,11 +97,4 @@ public abstract class AbstractGame<ID extends Serializable, FEATURES>
     this.features = features;
   }
 
-  public Map<FEATURES, Object> getFeatureData() {
-    return featureData;
-  }
-
-  public void setFeatureData(Map<FEATURES, Object> featureData) {
-    this.featureData = featureData;
-  }
 }

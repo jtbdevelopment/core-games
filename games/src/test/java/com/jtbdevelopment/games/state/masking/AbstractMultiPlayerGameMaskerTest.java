@@ -79,7 +79,6 @@ public class AbstractMultiPlayerGameMaskerTest {
     game.setCreated(Instant.now());
     game.setCompletedTimestamp(Instant.now());
     game.setDeclinedTimestamp(Instant.now());
-    game.setFeatureData(featueMap);
     game.setFeatures(new HashSet<>(Arrays.asList(Features.FeatureA, Features.FeatureB)));
     game.setId(101);
     game.setInitiatingPlayer(PONE.getId());
@@ -105,56 +104,6 @@ public class AbstractMultiPlayerGameMaskerTest {
     Assert.assertEquals(map5, maskedGame.getPlayerStates());
     Assert.assertEquals(PONE.getIdAsString(), maskedGame.getMaskedForPlayerID());
     Assert.assertEquals(PONE.md5, maskedGame.getMaskedForPlayerMD5());
-    Assert.assertEquals(game.getFeatureData(), maskedGame.getFeatureData());
-  }
-
-  @Test
-  public void testMultiplePlayersWithSomePlayerIDFeatureData() {
-
-    Map<Features, Object> featureMap = new LinkedHashMap<>();
-    featureMap.put(Features.FeatureA, "");
-    featureMap.put(Features.FeatureB, PTWO.getId());
-
-    Map<Integer, PlayerState> stateMap = new LinkedHashMap<>();
-    stateMap.put(PONE.getId(), PlayerState.Accepted);
-    stateMap.put(PTWO.getId(), PlayerState.Rejected);
-
-    IntGame game = new IntGame();
-    game.setPlayers(Arrays.asList(PONE, PTWO));
-    game.setGamePhase(GamePhase.Challenged);
-    game.setCreated(Instant.now());
-    game.setCompletedTimestamp(Instant.now());
-    game.setDeclinedTimestamp(Instant.now());
-    game.setFeatureData(featureMap);
-    game.setFeatures(new HashSet<>(Arrays.asList(Features.FeatureA, Features.FeatureB)));
-    game.setId(105);
-    game.setInitiatingPlayer(PTWO.getId());
-    game.setLastUpdate(Instant.now());
-    game.setPlayerStates(stateMap);
-    game.setVersion(10);
-
-    MaskedIntGame maskedGame = masker.maskGameForPlayer(game, PONE);
-    checkUnmaskedGameFields(maskedGame, game);
-
-    Map<String, String> map2 = new LinkedHashMap<>();
-    map2.put(PONE.getMd5(), PONE.getDisplayName());
-    map2.put(PTWO.getMd5(), PTWO.getDisplayName());
-    Assert.assertEquals(map2, maskedGame.getPlayers());
-    Map<String, String> map3 = new LinkedHashMap<>();
-    map3.put(PONE.getMd5(), PONE.getImageUrl());
-    map3.put(PTWO.getMd5(), PTWO.getImageUrl());
-    Assert.assertEquals(map3, maskedGame.getPlayerImages());
-    Map<String, String> map4 = new LinkedHashMap<>();
-    map4.put(PONE.getMd5(), PONE.getProfileUrl());
-    map4.put(PTWO.getMd5(), PTWO.getProfileUrl());
-    Assert.assertEquals(map4, maskedGame.getPlayerProfiles());
-    Assert.assertEquals(PTWO.getMd5(), maskedGame.getInitiatingPlayer());
-    Map<String, PlayerState> map5 = new LinkedHashMap<>();
-    map5.put(PONE.getMd5(), PlayerState.Accepted);
-    map5.put(PTWO.getMd5(), PlayerState.Rejected);
-    Assert.assertEquals(map5, maskedGame.getPlayerStates());
-    Assert.assertEquals(PONE.getIdAsString(), maskedGame.getMaskedForPlayerID());
-    Assert.assertEquals(PONE.getMd5(), maskedGame.getMaskedForPlayerMD5());
   }
 
   private enum Features {

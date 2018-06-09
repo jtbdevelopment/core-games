@@ -79,7 +79,6 @@ public class AbstractGameTest {
     assertNull(game.getLastUpdate());
     assertNull(game.getCreated());
     assertNull(game.getCompletedTimestamp());
-    assertTrue(game.getFeatureData().isEmpty());
     assertTrue(game.getFeatures().isEmpty());
     assertEquals(0, game.getRound());
     assertNull(game.getPreviousId());

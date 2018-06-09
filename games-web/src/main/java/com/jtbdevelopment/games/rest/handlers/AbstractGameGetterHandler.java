@@ -5,9 +5,7 @@ import com.jtbdevelopment.games.dao.AbstractPlayerRepository;
 import com.jtbdevelopment.games.exceptions.input.PlayerNotPartOfGameException;
 import com.jtbdevelopment.games.exceptions.system.FailedToFindGameException;
 import com.jtbdevelopment.games.players.AbstractPlayer;
-import com.jtbdevelopment.games.players.Player;
 import com.jtbdevelopment.games.state.AbstractGame;
-import com.jtbdevelopment.games.state.Game;
 import com.jtbdevelopment.games.state.MultiPlayerGame;
 import com.jtbdevelopment.games.state.SinglePlayerGame;
 import java.io.Serializable;
@@ -36,7 +34,7 @@ public class AbstractGameGetterHandler<
   }
 
   @SuppressWarnings("WeakerAccess")
-  protected void validatePlayerForGame(final Game game, final Player player) {
+  protected void validatePlayerForGame(final IMPL game, final P player) {
     if (game instanceof MultiPlayerGame) {
       if (!game.getAllPlayers().contains(player)) {
         throw new PlayerNotPartOfGameException();

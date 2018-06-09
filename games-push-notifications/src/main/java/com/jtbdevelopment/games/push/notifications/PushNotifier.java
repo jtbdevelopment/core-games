@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -86,7 +85,7 @@ public class PushNotifier<ID extends Serializable, P extends AbstractPlayer<ID>>
     message.put("collapse_key", "YourTurn");
     message.put("time_to_live", DEFAULT_TTL);
     message.put("content_available", true);
-    Map<String, String> notification = new LinkedHashMap<>();
+    Map<String, String> notification = new HashMap<>();
     notification.put("title", "Your turn.");
     notification.put("body", "Your turn to play.");
     notification.put("icon", "icon");

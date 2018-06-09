@@ -20,7 +20,6 @@ import com.mongodb.client.MongoCollection;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -132,7 +131,6 @@ public class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringConte
     save.setPlayerStates(map);
     save.setPlayers(Arrays.asList(player1, player2));
     save.setFeatures(new HashSet<>(Arrays.asList("Y", "Z")));
-    save.setFeatureData(Collections.emptyMap());
     assertNull(save.getId());
     assertNull(save.getCreated());
     assertNull(save.getLastUpdate());
@@ -150,7 +148,6 @@ public class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringConte
     assertEquals(save.getInitiatingPlayer(), saved.getInitiatingPlayer());
     assertNull(saved.getCompletedTimestamp());
     assertNull(saved.getDeclinedTimestamp());
-    assertEquals(save.getFeatureData(), saved.getFeatureData());
     assertEquals(save.getFeatures(), saved.getFeatures());
 
     loaded = (SimpleMultiPlayerGame) gameRepository.findById(saved.getId()).get();
@@ -165,7 +162,6 @@ public class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringConte
     assertEquals(save.getInitiatingPlayer(), loaded.getInitiatingPlayer());
     assertNull(loaded.getDeclinedTimestamp());
     assertNull(loaded.getCompletedTimestamp());
-    assertEquals(save.getFeatureData(), loaded.getFeatureData());
     assertEquals(save.getFeatures(), loaded.getFeatures());
 
     assertEquals(1, gameRepository.count());
@@ -194,7 +190,6 @@ public class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringConte
     update = (SimpleMultiPlayerGame) gameRepository.findById(initial.getId()).get();
     update.setStringValue(update.getStringValue() + "Z");
     update.getFeatures().add("23");
-    update.getFeatureData().put("23", "23");
     update.setCompletedTimestamp(Instant.now());
     update.setIntValue(update.getIntValue() * 2);
     update.setInitiatingPlayer(player2.getId());
@@ -216,7 +211,6 @@ public class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringConte
     assertEquals(update.getInitiatingPlayer(), updated.getInitiatingPlayer());
     assertEquals(update.getDeclinedTimestamp(), updated.getDeclinedTimestamp());
     assertEquals(update.getCompletedTimestamp(), updated.getCompletedTimestamp());
-    assertEquals(update.getFeatureData(), updated.getFeatureData());
     assertEquals(updated.getFeatures(), updated.getFeatures());
 
     loaded = (SimpleMultiPlayerGame) gameRepository.findById(update.getId()).get();
@@ -231,7 +225,6 @@ public class MongoMultiPlayerGamesIntegration extends AbstractMongoNoSpringConte
     assertEquals(updated.getInitiatingPlayer(), loaded.getInitiatingPlayer());
     assertEquals(updated.getDeclinedTimestamp(), loaded.getDeclinedTimestamp());
     assertEquals(updated.getCompletedTimestamp(), loaded.getCompletedTimestamp());
-    assertEquals(update.getFeatureData(), loaded.getFeatureData());
     assertEquals(updated.getFeatures(), loaded.getFeatures());
 
     assertEquals(1, gameRepository.count());

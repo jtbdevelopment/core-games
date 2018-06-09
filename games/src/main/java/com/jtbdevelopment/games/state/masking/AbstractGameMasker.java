@@ -5,7 +5,6 @@ import com.jtbdevelopment.games.state.AbstractGame;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 /**
@@ -41,13 +40,6 @@ public abstract class AbstractGameMasker<
   protected void copyMaskedData(final U game, final Player<ID> player, final M playerMaskedGame,
       final Map<ID, Player<ID>> idMap) {
     final Class<ID> idClass = getIDClass();
-    //noinspection SuspiciousMethodCalls
-    playerMaskedGame
-        .setFeatureData(game.getFeatureData().entrySet().stream().collect(Collectors.toMap(
-            Entry::getKey,
-            entry -> idClass.isInstance(entry.getValue()) ? idMap.get(entry.getValue()).getMd5()
-                : entry.getValue()
-        )));
   }
 
   protected void copyUnmaskedData(final U game, final M playerMaskedGame) {
