@@ -78,7 +78,7 @@ public class WebSocketMessage {
         (message != null ? message.equals(that.message) : that.message == null);
   }
 
-  enum MessageType {
+  public enum MessageType {
     Heartbeat, Game, Player
   }
 
