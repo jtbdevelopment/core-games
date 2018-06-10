@@ -3,7 +3,7 @@
   <parent>
     <artifactId>core-games</artifactId>
     <groupId>com.jtbdevelopment.core-games</groupId>
-    <version>1.10-SNAPSHOT</version>
+    <version>1.10</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -13,23 +13,23 @@
     <dependency>
       <groupId>com.jtbdevelopment.core-games</groupId>
       <artifactId>games-web</artifactId>
-      <version>1.10-SNAPSHOT</version>
+      <version>1.10</version>
     </dependency>
     <dependency>
       <groupId>com.jtbdevelopment.core-games</groupId>
       <artifactId>games-websocket</artifactId>
-      <version>1.10-SNAPSHOT</version>
+      <version>1.10</version>
     </dependency>
     <dependency>
       <groupId>com.jtbdevelopment.core-games</groupId>
       <artifactId>games-hazelcast</artifactId>
-      <version>1.10-SNAPSHOT</version>
+      <version>1.10</version>
     </dependency>
 
     <dependency>
       <groupId>com.jtbdevelopment.core-games</groupId>
       <artifactId>games</artifactId>
-      <version>1.10-SNAPSHOT</version>
+      <version>1.10</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
