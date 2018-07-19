@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,7 +22,7 @@ public class PlayerPublisher {
 
   public PlayerPublisher(
       @Value("${publishing.threads:10}") final int threads,
-      final List<PlayerListener> subscribers) {
+      @Lazy final List<PlayerListener> subscribers) {
     this.service = Executors.newFixedThreadPool(threads);
     this.subscribers = subscribers;
   }
